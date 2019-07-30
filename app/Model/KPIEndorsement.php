@@ -13,7 +13,8 @@ class KPIEndorsement extends Model
     protected $table='kpiendorsements';
     protected $fillable=[
         'kpi_header_id','employee_id','verified'
-    ];  
+    ]; 
+    protected $casts=['id'=>'string'];
 
     public function employee(){
         return $this->belongsTo(Employee::class);
@@ -34,7 +35,7 @@ class KPIEndorsement extends Model
         $rand_num=rand(20,99);
 
         $a=5;
-        $code=add_zero($employee_index,1);
+        $code=add_zero($employee_index,1).$rand_num;
 
         return self::_generateID($a,$code);
     }

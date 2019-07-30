@@ -9,6 +9,7 @@ class KPIProcess extends Model
     //
     use MyTimeZone,DynamicID;
     protected $table='kpiprocesses';
+    protected $casts=['id'=>'string'];
 
     public function kpiheaders(){
         return $this->belongsToMany(KPIHeader::class,'kpiprocesses_kpiheaders','kpi_proccess_id','kpi_header_id');

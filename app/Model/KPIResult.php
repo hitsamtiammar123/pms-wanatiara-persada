@@ -16,6 +16,7 @@ class KPIResult extends Model
         'name','kpi_header_id','unit','pw_1','pw_2','pt_t1','pt_k1','pt_t2','pt_k2',
         'real_t1','real_k1','real_t2','real_k2'
     ];
+    protected $casts=['id'=>'string'];
 
     public static function generateID($employeeID){
         $employee=Employee::find($employeeID);
@@ -28,7 +29,7 @@ class KPIResult extends Model
         $rand_num=rand(10,99);
 
         $a=3;
-        $code=add_zero($employee_index,1);
+        $code=add_zero($employee_index,1).$rand_num;
 
         return self::_generateID($a,$code);
     }

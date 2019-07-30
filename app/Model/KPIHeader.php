@@ -15,6 +15,7 @@ class KPIHeader extends Model
         'period_start','period_end'
     ];
 
+    protected $casts=['id'=>'string'];
     public static function generateID($employeeID){
         $employee=Employee::find($employeeID);
         
@@ -26,14 +27,14 @@ class KPIHeader extends Model
         $header_count=$employee->kpiheaders()->count();
 
         $a=4;
-        $code=add_zero($employee_index,1);
+        $code=add_zero($employee_index,1).add_zero($header_count,1);
 
         return self::_generateID($a,$code);
 
     }
 
     public function employee(){
-        return $this->belongsTo(Employee::class);
+        return $this->belongsTo(Employee::class,'employee_id','id');
     }
 
     public function kpiendorsements(){
