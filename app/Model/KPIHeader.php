@@ -26,7 +26,7 @@ class KPIHeader extends Model
         $header_count=$employee->kpiheaders()->count();
 
         $a=4;
-        $code=add_zero($employee_index,1).''.add_zero($header_count,1);
+        $code=add_zero($employee_index,1);
 
         return self::_generateID($a,$code);
 

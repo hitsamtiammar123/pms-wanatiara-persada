@@ -28,7 +28,7 @@ class KPIResult extends Model
         $rand_num=rand(10,99);
 
         $a=3;
-        $code=add_zero($employee_index,1).''.add_zero($rand_num,1);
+        $code=add_zero($employee_index,1);
 
         return self::_generateID($a,$code);
     }
