@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Traits\DynamicID;
+
 class KPIHeader extends Model
 {
     //
@@ -16,9 +17,12 @@ class KPIHeader extends Model
     ];
 
     protected $casts=['id'=>'string'];
+
+    const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
+
     public static function generateID($employeeID){
         $employee=Employee::find($employeeID);
-        
+
         if(!$employee){
             return null;
         }

@@ -17,10 +17,11 @@ class KPIResult extends Model
         'real_t1','real_k1','real_t2','real_k2'
     ];
     protected $casts=['id'=>'string'];
+    const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
     public static function generateID($employeeID){
         $employee=Employee::find($employeeID);
-        
+
         if(!$employee){
             return null;
         }
@@ -37,5 +38,5 @@ class KPIResult extends Model
     public function kpiheader(){
         return $this->belongsTo(KPIHeader::class,'kpi_header_id','id');
     }
-    
+
 }

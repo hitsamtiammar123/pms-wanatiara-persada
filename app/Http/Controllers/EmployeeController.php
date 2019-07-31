@@ -33,20 +33,29 @@ class EmployeeController extends Controller
         //
         $employee=Employee::find($id);
 
+        if(!$employee){
+            return response()->json(['status'=>'Data karyawan dengan ID '.$id.' tidak ditemukan','error'=>1],404);
+        }
 
-        $employee->load('atasan.role');
-        $employee->load('bawahan.role');
+        if($employee->atasan!==null){
+            $employee->load('atasan.role');
+            $employee->atasan=$employee->atasan->makeHidden(Employee::HIDDEN_PROPERTY);
+            $employee->atasan->role=$employee->atasan->role->makeHidden(Role::HIDDEN_PROPERTY);
+        }
+
+        if($employee->bawahan!==null){
+            $employee->load('bawahan.role');
+            $employee->bawahan=$employee->bawahan->makeHidden(Employee::HIDDEN_PROPERTY);
+            $employee->bawahan->each(function($data,$key){
+                $data->role->makeHidden(Role::HIDDEN_PROPERTY);
+            });
+        }
+
+
+
         $employee->load('role');
-
-
         $employee=$employee->makeHidden(Employee::HIDDEN_PROPERTY);
-        $employee->atasan=$employee->atasan->makeHidden(Employee::HIDDEN_PROPERTY);
-        $employee->bawahan=$employee->bawahan->makeHidden(Employee::HIDDEN_PROPERTY);
         $employee->role=$employee->role->makeHidden(Role::HIDDEN_PROPERTY);
-        $employee->atasan->role=$employee->atasan->role->makeHidden(Role::HIDDEN_PROPERTY);
-        $employee->bawahan->each(function($data,$key){
-            $data->role->makeHidden(Role::HIDDEN_PROPERTY);
-        });
         //$employee->bawahan->role=$employee->bawahan->role->makeHidden(Role::HIDDEN_PROPERTY);
 
         return $employee;

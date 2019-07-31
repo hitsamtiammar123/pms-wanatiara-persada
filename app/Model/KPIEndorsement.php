@@ -13,8 +13,9 @@ class KPIEndorsement extends Model
     protected $table='kpiendorsements';
     protected $fillable=[
         'kpi_header_id','employee_id','verified'
-    ]; 
+    ];
     protected $casts=['id'=>'string'];
+    const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
     public function employee(){
         return $this->belongsTo(Employee::class);
@@ -26,7 +27,7 @@ class KPIEndorsement extends Model
 
     public static function generateID($employeeID){
         $employee=Employee::find($employeeID);
-        
+
         if(!$employee){
             return null;
         }

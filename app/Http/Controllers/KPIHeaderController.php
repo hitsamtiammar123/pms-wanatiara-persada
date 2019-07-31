@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\KPIHeader;
+use App\Model\Employee;
+use App\Model\KPIResult;
+use App\Model\KPIEndorsement;
 
 class KPIHeaderController extends Controller
 {
@@ -38,14 +41,30 @@ class KPIHeaderController extends Controller
     {
         //
         $kpiheader=KPIHeader::where('employee_id',$id)->first();
-        $kpiresults=$kpiheader->kpiresults;
-        $kpiendorsements=$kpiheader->kpiendorsements;
-        $kpiendorsements->load('employee');
+        if(!$kpiheader){
+            return response()->json(['status'=>'Data dengan ID '.$id.' tidak ditemukan','error'=>1],404);
+        }
+
+        $kpiheader->load('employee');
+        $kpiheader->employee=$kpiheader->employee->makeHidden(Employee::HIDDEN_PROPERTY);
+        $kpiheader->makeHidden(KPIHeader::HIDDEN_PROPERTY);
+
+        $kpiheader->kpiresults->each(function($data,$key){
+            $data->makeHidden(KPIResult::HIDDEN_PROPERTY);
+        });
+
+        $kpiheader->kpiendorsements->each(function($data,$key){
+            $data->load('employee');
+            $data->makeHidden(KPIEndorsement::HIDDEN_PROPERTY);
+            $data->employee->makeHidden(Employee::HIDDEN_PROPERTY);
+        });
 
         $kpiheader_arr=$kpiheader->toArray();
-        $kpiheader_arr['kpiresults']=$kpiresults->toArray();
-        $kpiheader_arr['kpiendorsements']=$kpiendorsements->toArray();
-        return $kpiheader;
+        $kpiheader_arr['kpiresults']=$kpiheader->kpiresults;
+        $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements;
+
+
+        return $kpiheader_arr;
     }
 
     /**
