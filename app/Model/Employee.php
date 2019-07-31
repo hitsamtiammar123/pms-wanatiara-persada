@@ -18,6 +18,7 @@ class Employee extends Model
     protected $fillable = [
         'name', 'dob', 'gender',
     ];
+    protected $casts=['id'=>'string'];
 
 
     public static function generateID(){

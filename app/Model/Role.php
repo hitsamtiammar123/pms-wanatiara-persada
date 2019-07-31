@@ -15,6 +15,7 @@ class Role extends Model
     protected $fillable = [
         'name', 'can_have_child', 'level',
     ];
+    protected $casts=['id'=>'string'];
 
     public static function generateID(){
         $a=2;
