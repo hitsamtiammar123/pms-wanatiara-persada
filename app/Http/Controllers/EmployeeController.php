@@ -75,6 +75,10 @@ class EmployeeController extends Controller
         //
     }
 
+    public function ikhtisar(Request $request){
+        return ['status'=>'Ini di halaman ikhtisar'];
+    }
+
     /**
      * Remove the specified resource from storage.
      *

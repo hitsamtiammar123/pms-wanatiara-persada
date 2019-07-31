@@ -25,6 +25,8 @@ Route::group(['prefix'=>'v1'],function(){
     Route::resource('employee', 'EmployeeController',[
         'except'=>['index','create','edit']
     ]);
+
+    Route::get('/ikhtisar','EmployeeController@ikhtisar');
 });
 
 
