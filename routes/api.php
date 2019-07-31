@@ -19,14 +19,14 @@ use Illuminate\Http\Request;
 
 Route::group(['prefix'=>'v1'],function(){
     Route::resource('kpiheader','KPIHeaderController',[
-        'except'=>['create','edit']
+        'only'=>['index','show']
     ]);
 
     Route::resource('employee', 'EmployeeController',[
-        'except'=>['index','create','edit']
+        'only'=>['show']
     ]);
 
-    Route::get('/ikhtisar','EmployeeController@ikhtisar');
+    Route::get('/ikhtisar','EmployeeController@ikhtisar')->name('employee.ikhtisar');
 });
 
 
