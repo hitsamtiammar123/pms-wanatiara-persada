@@ -19,7 +19,7 @@ class Role extends Model
 
     public static function generateID(){
         $a=2;
-        
+
         return self::_generateID($a);
     }
 
