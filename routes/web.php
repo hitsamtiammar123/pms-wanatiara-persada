@@ -9,7 +9,7 @@
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/ 
+*/
 
 use  App\Library\TestLib;
 
@@ -19,3 +19,5 @@ Route::get('/', function (TestLib $test) {
 });
 
 Route::get('/pdf-hehe','PDFController@bacoba')->name('pdf.hehe');
+
+Auth::routes();

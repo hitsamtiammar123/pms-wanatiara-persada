@@ -36,6 +36,11 @@ class LoginController extends Controller
 
     }
 
+    protected function loggedOut(Request $request)
+    {
+        //
+    }
+
     public function username(){
         return 'id';
     }
