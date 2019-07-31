@@ -3,19 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Model\KPIHeader;
+use App\Model\Employee;
+use App\Model\Role;
 
-class KPIHeaderController extends Controller
+class EmployeeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -37,16 +31,28 @@ class KPIHeaderController extends Controller
     public function show($id)
     {
         //
-        $kpiheader=KPIHeader::where('employee_id',$id)->first();
-        $kpiresults=$kpiheader->kpiresults;
-        $kpiendorsements=$kpiheader->kpiendorsements;
-        $kpiendorsements->load('employee');
+        $employee=Employee::find($id);
 
-        $kpiheader_arr=$kpiheader->toArray();
-        $kpiheader_arr['kpiresults']=$kpiresults->toArray();
-        $kpiheader_arr['kpiendorsements']=$kpiendorsements->toArray();
-        return $kpiheader;
+
+        $employee->load('atasan.role');
+        $employee->load('bawahan.role');
+        $employee->load('role');
+
+
+        $employee=$employee->makeHidden(Employee::HIDDEN_PROPERTY);
+        $employee->atasan=$employee->atasan->makeHidden(Employee::HIDDEN_PROPERTY);
+        $employee->bawahan=$employee->bawahan->makeHidden(Employee::HIDDEN_PROPERTY);
+        $employee->role=$employee->role->makeHidden(Role::HIDDEN_PROPERTY);
+        $employee->atasan->role=$employee->atasan->role->makeHidden(Role::HIDDEN_PROPERTY);
+        $employee->bawahan->each(function($data,$key){
+            $data->role->makeHidden(Role::HIDDEN_PROPERTY);
+        });
+        //$employee->bawahan->role=$employee->bawahan->role->makeHidden(Role::HIDDEN_PROPERTY);
+
+        return $employee;
     }
+
+
 
     /**
      * Update the specified resource in storage.

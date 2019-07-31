@@ -16,6 +16,7 @@ class Role extends Model
         'name', 'can_have_child', 'level',
     ];
     protected $casts=['id'=>'string'];
+    const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
     public static function generateID(){
         $a=2;

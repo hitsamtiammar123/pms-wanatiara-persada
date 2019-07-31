@@ -21,6 +21,10 @@ Route::group(['prefix'=>'v1'],function(){
     Route::resource('kpiheader','KPIHeaderController',[
         'except'=>['create','edit']
     ]);
+
+    Route::resource('employee', 'EmployeeController',[
+        'except'=>['index','create','edit']
+    ]);
 });
 
 
