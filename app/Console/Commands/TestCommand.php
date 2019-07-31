@@ -89,13 +89,16 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        $data=KPIHeader::where('employee_id','1915284140')->first();
-        $employee=$data->employee()->get();
+        $data=Employee::where('name','Feng Weibin')->first();
+        $kpiheader=$data->kpiheaders[0];
         // for($i=0;$i<100;$i++){
         //     $id=KPIResult::generateID('1951325166');
         //     $this->info("{$i} id= {$id}");
         // }
-        $result=$data->kpiresults;
+        $result=$kpiheader->kpiresults->toArray();
+        echo "TEST 123 \n";
+        sleep(2);
+        dd($result);
 
     }
 }
