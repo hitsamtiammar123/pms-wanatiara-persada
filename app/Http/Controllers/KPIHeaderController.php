@@ -63,7 +63,7 @@ class KPIHeaderController extends Controller
 
         $kpiheader_arr=$kpiheader->toArray();
         $kpiheader_arr['kpiresults']=$kpiheader->kpiresults;
-        $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements;
+        $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements->sortBy('level');
 
         return $kpiheader_arr;
     }

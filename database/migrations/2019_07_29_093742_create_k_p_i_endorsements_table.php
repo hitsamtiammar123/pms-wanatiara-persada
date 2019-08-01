@@ -19,6 +19,7 @@ class CreateKPIEndorsementsTable extends Migration
             $table->string('employee_id',15);
             $table->boolean('verified')->default(false);
             $table->primary('id');
+            $table->enum('level',[1,2,3])->default(1);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -40,11 +40,13 @@ class EndorsementSeeder extends Seeder
                     $endorse_3->employee_id=$atasan_2_id;
                     $endorse_3->kpi_header_id=$id;
                     $endorse_3->id=KPIEndorsement::generateID($atasan_2_id);
+                    $endorse_3->level=3;
                 }
 
                 $endorse_2->employee_id=$atasan_id;
                 $endorse_2->kpi_header_id=$id;
                 $endorse_2->id=KPIEndorsement::generateID($atasan_id);
+                $endorse_2->level=2;
 
             }
 
@@ -52,6 +54,7 @@ class EndorsementSeeder extends Seeder
             $endorse_1->employee_id=$employee_id;
             $endorse_1->kpi_header_id=$id;
             $endorse_1->id=KPIEndorsement::generateID($employee_id);
+            $endorse_1->level=1;
 
             try{
                 $endorse_1->save();
@@ -61,7 +64,7 @@ class EndorsementSeeder extends Seeder
                 printf("Terjadi error saat memasukan data pada id {$id}");
             }
         }
-        
+
 
     }
 }
