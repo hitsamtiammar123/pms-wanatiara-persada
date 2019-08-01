@@ -16,8 +16,8 @@ class CreateKPIHeadersTable extends Migration
         Schema::create('kpiheaders', function (Blueprint $table) {
             $table->string('id',18);
             $table->string('employee_id',15);
-            $table->datetime('period_start');
-            $table->datetime('period_end');
+            $table->date('period_start');
+            $table->date('period_end');
             $table->primary('id');
             $table->softDeletes();
             $table->timestamps();

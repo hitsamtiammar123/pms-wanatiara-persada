@@ -7,6 +7,7 @@ use App\Model\KPIHeader;
 use App\Model\Employee;
 use App\Model\KPIResult;
 use App\Model\KPIEndorsement;
+use App\Model\Role;
 
 class KPIHeaderController extends Controller
 {
@@ -40,7 +41,8 @@ class KPIHeaderController extends Controller
     public function show($id)
     {
         //
-        $kpiheader=KPIHeader::where('employee_id',$id)->first();
+        $curr_date=KPIHeader::getCurrentDate();
+        $kpiheader=KPIHeader::where('employee_id',$id)->where('period_start',$curr_date)->first();
         if(!$kpiheader){
             return response()->json(['status'=>'Data dengan ID '.$id.' tidak ditemukan','error'=>1],404);
         }
@@ -62,7 +64,6 @@ class KPIHeaderController extends Controller
         $kpiheader_arr=$kpiheader->toArray();
         $kpiheader_arr['kpiresults']=$kpiheader->kpiresults;
         $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements;
-
 
         return $kpiheader_arr;
     }

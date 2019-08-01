@@ -41,14 +41,14 @@ class TestCommand extends Command
 
     private function test1(){
         $p=add_zero(1);
-        $arr_result=[]; 
+        $arr_result=[];
         for($i=1;$i<=100;$i++){
             $a=1;
             $r=generate_id($a,23);
             while(in_array($r,$arr_result)){
                 $r=generate_id(++$a,23);
             }
-               
+
             $arr_result[]=$r;
             echo "Percobaan {$i}: {$r} -> {$a}\n";
         }
@@ -56,7 +56,7 @@ class TestCommand extends Command
 
     private function test2(){
         $p=add_zero(1);
-        $arr_result=[]; 
+        $arr_result=[];
         for($i=1;$i<=100;$i++){
             $id=User::generateID();
             $arr_result[]=$id;
@@ -89,16 +89,7 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        $data=Employee::where('name','Feng Weibin')->first();
-        $kpiheader=$data->kpiheaders[0];
-        // for($i=0;$i<100;$i++){
-        //     $id=KPIResult::generateID('1951325166');
-        //     $this->info("{$i} id= {$id}");
-        // }
-        $result=$kpiheader->kpiresults->toArray();
-        echo "TEST 123 \n";
-        sleep(2);
-        dd($result);
+        echo KPIHeader::getCurrentDate();
 
     }
 }

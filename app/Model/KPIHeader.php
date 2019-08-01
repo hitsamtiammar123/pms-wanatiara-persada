@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Traits\DynamicID;
+use Illuminate\Support\Carbon;
 
 class KPIHeader extends Model
 {
@@ -34,6 +35,16 @@ class KPIHeader extends Model
         $code=add_zero($employee_index,1).add_zero($header_count,1);
 
         return self::_generateID($a,$code);
+
+    }
+
+    public static function getCurrentDate(){
+        $curr=Carbon::now();
+        $year=$curr->year;
+        $month=$curr->month;
+        $date=16;
+        $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
+        return $curr_date;
 
     }
 
