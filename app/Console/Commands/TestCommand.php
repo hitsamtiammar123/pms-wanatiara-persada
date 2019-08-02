@@ -89,7 +89,7 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        echo KPIHeader::getCurrentDate();
+        echo KPIHeader::getDate(7);
 
     }
 }

@@ -38,13 +38,15 @@ class KPIHeaderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
         //
-        $curr_date=KPIHeader::getCurrentDate();
+
+        $month=$request->input('month');
+        $curr_date=isset($month)?KPIHeader::getDate($month):KPIHeader::getCurrentDate();
         $kpiheader=KPIHeader::where('employee_id',$id)->where('period_start',$curr_date)->first();
         if(!$kpiheader){
-            return response()->json(['status'=>'Data dengan ID '.$id.' tidak ditemukan','error'=>1],404);
+            return response()->json(['status'=>'Data tidak ditemukan','error'=>1],404);
         }
 
         $kpiheader->load('employee');
@@ -59,6 +61,8 @@ class KPIHeaderController extends Controller
             $data->load('employee');
             $data->makeHidden(KPIEndorsement::HIDDEN_PROPERTY);
             $data->employee->makeHidden(Employee::HIDDEN_PROPERTY);
+            $data->employee->load('role');
+            $data->employee->role->makeHidden(Role::HIDDEN_PROPERTY);
         });
 
         $kpiheader_arr=$kpiheader->toArray();

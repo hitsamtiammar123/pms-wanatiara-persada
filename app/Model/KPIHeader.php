@@ -38,6 +38,15 @@ class KPIHeader extends Model
 
     }
 
+    public static function getDate($month){
+        $curr=Carbon::now();
+        $year=$curr->year;
+        $month=$month;
+        $date=16;
+        $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
+        return $curr_date;
+    }
+
     public static function getCurrentDate(){
         $curr=Carbon::now();
         $year=$curr->year;
