@@ -15,6 +15,7 @@ class Employee extends Model
     protected $dates=['deleted_at'];
     protected static $listID=[];
 
+
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at','role_id','atasan_id'];
 
     protected $fillable = [

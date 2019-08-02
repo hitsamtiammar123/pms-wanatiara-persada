@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Employee;
 use App\Model\Role;
+use App\Model\KPIHeader;
+use App\Model\KPIResult;
 
 class EmployeeController extends Controller
 {
@@ -77,7 +79,21 @@ class EmployeeController extends Controller
     }
 
     public function ikhtisar(Request $request){
-        return ['status'=>'Ini di halaman ikhtisar'];
+        $employees=Employee::where('role_id','!=','1915283263')->paginate(10);
+        $items=$employees->items();
+        foreach($items as $item){
+            $item->load('role');
+            $item->load('kpiheaders');
+            $item->makeHidden(Employee::HIDDEN_PROPERTY);
+            if($item->role!==null)
+                $item->role->makeHidden(Role::HIDDEN_PROPERTY);
+            $item->kpiheaders->each(function($d){
+                $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
+                $d->kpi_results=KPIResult::where('kpi_header_id',$d->id)->get();
+            });
+        }
+        return $employees;
+
     }
 
     /**

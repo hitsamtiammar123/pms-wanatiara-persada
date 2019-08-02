@@ -17,6 +17,7 @@ class KPIResult extends Model
         'real_t1','real_k1','real_t2','real_k2'
     ];
     protected $casts=['id'=>'string'];
+    protected $hidden=['created_at','updated_at'];
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
     public static function generateID($employeeID){
