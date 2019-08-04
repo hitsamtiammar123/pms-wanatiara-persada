@@ -48,8 +48,8 @@ class EmployeeController extends Controller
         $employee=Employee::find($id);
 
         if(!$employee){
-            return response()->json(['status'=>'Data karyawan dengan ID '.$id.' tidak ditemukan',
-            'error'=>1],404);
+            $m='Data karyawan dengan ID '.$id.' tidak ditemukan';
+            return send_404_error($m);
         }
 
         if($employee->atasan!==null){

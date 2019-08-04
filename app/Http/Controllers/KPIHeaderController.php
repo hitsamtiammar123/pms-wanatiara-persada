@@ -46,7 +46,7 @@ class KPIHeaderController extends Controller
         $curr_date=isset($month)?KPIHeader::getDate($month):KPIHeader::getCurrentDate();
         $kpiheader=KPIHeader::where('employee_id',$id)->where('period_start',$curr_date)->first();
         if(!$kpiheader){
-            return response()->json(['status'=>'Data tidak ditemukan','error'=>1],404);
+            return send_404_error('Data tidak ditemukan');
         }
 
         $kpiheader->load('employee');

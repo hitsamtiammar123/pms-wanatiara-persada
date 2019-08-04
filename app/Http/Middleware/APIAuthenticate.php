@@ -20,9 +20,8 @@ class APIAuthenticate
     }
 
     protected function errorResponse(){
-        return response()->json(['error'=>1,
-        'status'=>'Anda tidak memiliki autentikasi untuk mengakses halaman ini']
-        ,403);
+        $m='Anda tidak memiliki autentikasi untuk mengakses halaman ini';
+        return send_403_error($m);
     }
 
     protected function authenticate($request, array $guards){
