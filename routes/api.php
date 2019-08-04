@@ -27,6 +27,7 @@ Route::group(['prefix'=>'v1','middleware'=>['cors']],function(){
     ]);
 
     Route::get('/ikhtisar','EmployeeController@ikhtisar')->name('employee.ikhtisar');
+    Route::get('/search/autocomplete','SearchController@autocomplete')->name('search.autocomplete');
 });
 
 
