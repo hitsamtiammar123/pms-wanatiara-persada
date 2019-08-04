@@ -12,6 +12,18 @@ class EmployeeController extends Controller
 {
 
 
+    private function fetchIkhtisar($item){
+        $item->load('role');
+        $item->load('kpiheaders');
+        $item->makeHidden(Employee::HIDDEN_PROPERTY);
+        if($item->role!==null)
+            $item->role->makeHidden(Role::HIDDEN_PROPERTY);
+        $item->kpiheaders->each(function($d){
+            $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
+            $d->kpi_results=KPIResult::where('kpi_header_id',$d->id)->get();
+        });
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -79,20 +91,22 @@ class EmployeeController extends Controller
     }
 
     public function ikhtisar(Request $request){
-        $employees=Employee::where('role_id','!=','1915283263')->paginate(10);
-        $items=$employees->items();
-        foreach($items as $item){
-            $item->load('role');
-            $item->load('kpiheaders');
-            $item->makeHidden(Employee::HIDDEN_PROPERTY);
-            if($item->role!==null)
-                $item->role->makeHidden(Role::HIDDEN_PROPERTY);
-            $item->kpiheaders->each(function($d){
-                $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
-                $d->kpi_results=KPIResult::where('kpi_header_id',$d->id)->get();
-            });
+        $employee_id=$request->input('employee');
+
+        if(!$employee_id){
+            $employees=Employee::where('role_id','!=','1915283263')->paginate(10);
+            $items=$employees->items();
+            foreach($items as $item){
+                $this->fetchIkhtisar($item);
+            }
+            return $employees;
         }
-        return $employees;
+        else{
+            $employee=Employee::find($employee_id);
+            $this->fetchIkhtisar($employee);
+
+            return ['data'=>[$employee]];
+        }
 
     }
 
