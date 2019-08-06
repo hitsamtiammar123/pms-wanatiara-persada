@@ -41,4 +41,19 @@ class KPIResultHeader extends Model
     public function kpiheader(){
         return $this->belongsTo(KPIHeader::class,'kpi_header_id','id');
     }
+
+    public function getNext(){
+        $kpiheader=$this->kpiheader;
+        $period=$kpiheader->period;
+
+        $carbon_p=Carbon::parse($period);
+        $next_p=$carbon_p->addMonth();
+
+        $next_kpiheader=KPIHeader::select('id')->where('employee_id',$kpiheader->employee_id)
+        ->where('period',$next_p)->first();
+
+        $next_kpiresultheader=self::where('kpi_header_id',$next_kpiheader->id)->where('kpi_result_id',$this->kpi_result_id)->first();
+
+        return $next_kpiresultheader;
+    }
 }

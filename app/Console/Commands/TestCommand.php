@@ -11,7 +11,7 @@ use App\Model\Employee;
 use App\Model\KPIHeader;
 use App\Model\KPIResult;
 use App\Model\KPIEndorsement;
-use App\Model\KPIResultDetail;
+use App\Model\KPIResultHeader;
 use DB;
 
 class TestCommand extends Command
@@ -90,8 +90,9 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        $this->info(KPIResultDetail::generateID('2019-08-16'));
-
+        //$this->info(KPIResultDetail::generateID('2019-08-16'));
+        $data=KPIResultHeader::find('19599576305059');
+        dd($data->getNext());
 
     }
 }

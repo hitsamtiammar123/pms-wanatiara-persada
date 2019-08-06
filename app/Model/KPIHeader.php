@@ -15,7 +15,7 @@ class KPIHeader extends Model
     protected static $listID=[];
     protected $table='kpiheaders';
     protected $fillable=[
-        'period_start','period_end'
+        'period'
     ];
 
     protected $casts=['id'=>'string'];
@@ -55,6 +55,48 @@ class KPIHeader extends Model
         $date=16;
         $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
         return $curr_date;
+
+    }
+
+    public function fetchFrontEndData(){
+        $result=[];
+
+        //$header_period_start=self::where('period',$period)->first();
+
+        $period_next_date=Carbon::parse($this->period);
+        $period_next_date->addMonth();
+
+        $header_period_end=self::select('id')->where('period',$period_next_date->format('Y-m-d'))->first();
+
+        $kpi_results_header_start=$this->kpiresultsheader;
+        $header_end_id=$header_period_end->id;
+
+        foreach($kpi_results_header_start as $kpiresultheader){
+            $r=[];
+            $kpiresult=KPIResult::find($kpiresultheader->kpi_result_id);
+            $kpiresultheaderend=$kpiresultheader->getNext();
+
+            $r['kpi_header_id']=$this->id;
+            $r['name']=$kpiresult->name;
+            $r['unit']=$kpiresult->unit;
+
+                $r['id']=$kpiresultheader->kpi_result_id;
+                $r['pw_1']=$kpiresultheader->pw;
+                $r['pw_2']=$kpiresultheaderend->pw;
+                $r['pt_t1']=$kpiresultheader->pt_t;
+                $r['pt_k1']=$kpiresultheader->pt_k;
+                $r['pt_t2']=$kpiresultheaderend->pt_t;
+                $r['pt_k2']=$kpiresultheaderend->pt_k;
+                $r['real_t1']=$kpiresultheader->real_t;
+                $r['real_k1']=$kpiresultheader->real_k;
+                $r['real_t2']=$kpiresultheaderend->real_t;
+                $r['real_k2']=$kpiresultheaderend->real_k;
+
+            $result[]=$r;
+
+        }
+
+        return $result;
 
     }
 

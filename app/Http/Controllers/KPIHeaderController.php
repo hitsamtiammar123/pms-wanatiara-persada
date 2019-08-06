@@ -8,6 +8,7 @@ use App\Model\Employee;
 use App\Model\KPIResult;
 use App\Model\KPIEndorsement;
 use App\Model\Role;
+use Illuminate\Support\Carbon;
 
 class KPIHeaderController extends Controller
 {
@@ -43,8 +44,14 @@ class KPIHeaderController extends Controller
         //
 
         $month=$request->input('month');
-        $curr_date=isset($month)?KPIHeader::getDate($month):KPIHeader::getCurrentDate();
-        $kpiheader=KPIHeader::where('employee_id',$id)->where('period_start',$curr_date)->first();
+        if(isset($month)){
+            $curr_date=KPIHeader::getDate($month);
+            $nc=new Carbon($curr_date);
+            $next_date=$nc->addMonth();
+        }
+
+        $kpiheaders=KPIHeader::where('employee_id',$id)->get();
+        $kpiheader=$kpiheaders->where('period',$curr_date)->first();
         if(!$kpiheader){
             return send_404_error('Data tidak ditemukan');
         }
@@ -53,9 +60,9 @@ class KPIHeaderController extends Controller
         $kpiheader->employee=$kpiheader->employee->makeHidden(Employee::HIDDEN_PROPERTY);
         $kpiheader->makeHidden(KPIHeader::HIDDEN_PROPERTY);
 
-        $kpiheader->kpiresults->each(function($data,$key){
-            $data->makeHidden(KPIResult::HIDDEN_PROPERTY);
-        });
+        // $kpiheader->kpiresults->each(function($data,$key){
+        //     $data->makeHidden(KPIHeaderResult::HIDDEN_PROPERTY);
+        // });
 
         $kpiheader->kpiendorsements->each(function($data,$key){
             $data->load('employee');
@@ -66,8 +73,12 @@ class KPIHeaderController extends Controller
         });
 
         $kpiheader_arr=$kpiheader->toArray();
-        $kpiheader_arr['kpiresults']=$kpiheader->kpiresults;
+        $kpiheader_arr['kpiresults']=$kpiheader->fetchFrontEndData();
         $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements->sortBy('level');
+        $kpiheader_arr['period_end']=$next_date->format('Y-m-d');
+        $kpiheader_arr['period_start']=$kpiheader_arr['period'];
+
+        unset($kpiheader_arr['period']);
 
         return $kpiheader_arr;
     }
