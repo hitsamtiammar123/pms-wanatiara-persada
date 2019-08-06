@@ -15,7 +15,7 @@ class SetForeignKeyKpiResult extends Migration
     {
         Schema::table('kpiresults', function (Blueprint $table) {
             //
-            $table->foreign('kpi_header_id')->references('id')->on('kpiheaders')->onDelete('cascade');
+            //$table->foreign('kpi_header_id')->references('id')->on('kpiheaders')->onDelete('cascade');
         });
     }
 
@@ -28,7 +28,7 @@ class SetForeignKeyKpiResult extends Migration
     {
         Schema::table('kpiresults', function (Blueprint $table) {
             //
-            $table->dropForeign('kpiresults_kpi_header_id_foreign');
+           // $table->dropForeign('kpiresults_kpi_header_id_foreign');
         });
     }
 }

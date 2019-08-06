@@ -13,8 +13,7 @@ class KPIResult extends Model
 
     protected $table='kpiresults';
     protected $fillable=[
-        'name','kpi_header_id','unit','pw_1','pw_2','pt_t1','pt_k1','pt_t2','pt_k2',
-        'real_t1','real_k1','real_t2','real_k2'
+        'name','kpi_header_id','unit'
     ];
     protected $casts=['id'=>'string'];
     protected $hidden=['created_at','updated_at'];
@@ -36,8 +35,8 @@ class KPIResult extends Model
         return self::_generateID($a,$code);
     }
 
-    public function kpiheader(){
-        return $this->belongsTo(KPIHeader::class,'kpi_header_id','id');
+    public function detail(){
+        return $this->hasMany(KPIResultDetail::class,'kpi_result_id','id');
     }
 
 }

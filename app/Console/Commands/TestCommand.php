@@ -11,6 +11,7 @@ use App\Model\Employee;
 use App\Model\KPIHeader;
 use App\Model\KPIResult;
 use App\Model\KPIEndorsement;
+use App\Model\KPIResultDetail;
 use DB;
 
 class TestCommand extends Command
@@ -89,7 +90,8 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        echo KPIHeader::getDate(7);
+        $this->info(KPIResultDetail::generateID('2019-08-16'));
+
 
     }
 }

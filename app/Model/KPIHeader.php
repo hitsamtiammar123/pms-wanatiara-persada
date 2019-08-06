@@ -5,11 +5,12 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Traits\DynamicID;
 use Illuminate\Support\Carbon;
+use App\Model\Traits\Indexable;
 
 class KPIHeader extends Model
 {
     //
-    use DynamicID;
+    use DynamicID,Indexable;
 
     protected static $listID=[];
     protected $table='kpiheaders';
@@ -65,8 +66,8 @@ class KPIHeader extends Model
         return $this->hasMany(KPIEndorsement::class,'kpi_header_id','id');
     }
 
-    public function kpiresults(){
-        return $this->hasMany(KPIResult::class,'kpi_header_id','id');
+    public function kpiresultsheader(){
+        return $this->hasMany(KPIResultHeader::class,'kpi_header_id','id');
     }
 
     public function kpiprocesses(){

@@ -17,12 +17,9 @@ class CreateKpiprocessKpiheaderTable extends Migration
             $table->string('kpi_proccess_id',18);
             $table->string('kpi_header_id',18);
             $table->string('unit',15)->default('规模 Skala');
-            $table->decimal('pw_1',10,2)->nullable();
-            $table->decimal('pw_2',10,2)->nullable();
-            $table->integer('pt_1')->nullable();
-            $table->integer('pt_2')->nullable();
-            $table->integer('real_1')->nullable();
-            $table->integer('real_2')->nullable();
+            $table->decimal('pw',10,2)->nullable();
+            $table->integer('pt')->nullable();
+            $table->integer('real')->nullable();
             $table->primary(['kpi_proccess_id','kpi_header_id']);
             $table->timestamps();
         });

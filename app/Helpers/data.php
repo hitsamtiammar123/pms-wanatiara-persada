@@ -31,19 +31,8 @@ if(!function_exists('generate_id')){
 
     function generate_id($code,$numb=null){
         $str=date("ys");
-        $micro=microtime(true).'';
-        preg_match('/\.(\d{1,3})/',$micro,$arr);
-        $b;
-        if(array_key_exists(1,$arr)){
-            if(strlen($arr[1])===3)
-                    $b=$arr[1];
-            else
-                $b=add_zero($arr[1]);
-        }
-        else
-            $b=rand(100,999);
-
-        $n;
+        $b=substr(microtime(),5,3);
+        $n='';
         if(is_null($numb))
             $n=rand(10,99);
         else
