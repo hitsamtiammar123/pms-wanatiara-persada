@@ -22,16 +22,6 @@ class KPIHeaderController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -44,11 +34,14 @@ class KPIHeaderController extends Controller
         //
 
         $month=$request->input('month');
-        if(isset($month)){
+        if($month){
             $curr_date=KPIHeader::getDate($month);
-            $nc=new Carbon($curr_date);
-            $next_date=$nc->addMonth();
         }
+        else{
+            $curr_date=KPIHeader::getCurrentDate();
+        }
+        $nc=new Carbon($curr_date);
+        $next_date=$nc->addMonth();
 
         $kpiheaders=KPIHeader::where('employee_id',$id)->get();
         $kpiheader=$kpiheaders->where('period',$curr_date)->first();
@@ -93,16 +86,8 @@ class KPIHeaderController extends Controller
     public function update(Request $request, $id)
     {
         //
+        return $request->all();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+
 }
