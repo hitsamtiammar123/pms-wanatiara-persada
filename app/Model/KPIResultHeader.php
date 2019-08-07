@@ -52,8 +52,12 @@ class KPIResultHeader extends Model
         $next_kpiheader=KPIHeader::select('id')->where('employee_id',$kpiheader->employee_id)
         ->where('period',$next_p)->first();
 
-        $next_kpiresultheader=self::where('kpi_header_id',$next_kpiheader->id)->where('kpi_result_id',$this->kpi_result_id)->first();
-
-        return $next_kpiresultheader;
+        if($next_kpiheader){
+            $next_kpiresultheader=self::where('kpi_header_id',$next_kpiheader->id)->where('kpi_result_id',$this->kpi_result_id)->first();
+            return $next_kpiresultheader;
+        }
+        else{
+            return null;
+        }
     }
 }

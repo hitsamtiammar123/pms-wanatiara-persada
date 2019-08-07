@@ -16,6 +16,7 @@ class CreateKPIProcessesTable extends Migration
         Schema::create('kpiprocesses', function (Blueprint $table) {
             $table->string('id',18);
             $table->string('name');
+            $table->string('unit',15)->default('规模 Skala');
             $table->primary('id');
             $table->timestamps();
         });

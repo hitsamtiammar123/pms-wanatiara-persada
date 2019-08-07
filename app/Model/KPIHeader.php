@@ -68,17 +68,18 @@ class KPIHeader extends Model
 
         $header_period_end=self::select('id')->where('period',$period_next_date->format('Y-m-d'))->first();
 
-        $kpi_results_header_start=$this->kpiresultsheader;
-        $header_end_id=$header_period_end->id;
+        $kpi_results_header_start=$this->kpiresultheaders;
+        //$header_end_id=$header_period_end->id;
 
         foreach($kpi_results_header_start as $kpiresultheader){
             $r=[];
             $kpiresult=KPIResult::find($kpiresultheader->kpi_result_id);
             $kpiresultheaderend=$kpiresultheader->getNext();
 
-            $r['kpi_header_id']=$this->id;
-            $r['name']=$kpiresult->name;
-            $r['unit']=$kpiresult->unit;
+            if($kpiresultheaderend){
+                $r['kpi_header_id']=$this->id;
+                $r['name']=$kpiresult->name;
+                $r['unit']=$kpiresult->unit;
 
                 $r['id']=$kpiresultheader->kpi_result_id;
                 $r['pw_1']=$kpiresultheader->pw;
@@ -92,7 +93,8 @@ class KPIHeader extends Model
                 $r['real_t2']=$kpiresultheaderend->real_t;
                 $r['real_k2']=$kpiresultheaderend->real_k;
 
-            $result[]=$r;
+                $result[]=$r;
+            }
 
         }
 
@@ -108,7 +110,7 @@ class KPIHeader extends Model
         return $this->hasMany(KPIEndorsement::class,'kpi_header_id','id');
     }
 
-    public function kpiresultsheader(){
+    public function kpiresultheaders(){
         return $this->hasMany(KPIResultHeader::class,'kpi_header_id','id');
     }
 

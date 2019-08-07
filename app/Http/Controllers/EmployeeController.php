@@ -12,6 +12,7 @@ class EmployeeController extends Controller
 {
 
 
+
     private function fetchIkhtisar($item){
         $item->load('role');
         $item->load('kpiheaders');
@@ -19,8 +20,10 @@ class EmployeeController extends Controller
         if($item->role!==null)
             $item->role->makeHidden(Role::HIDDEN_PROPERTY);
         $item->kpiheaders->each(function($d){
+            $d->kpiresultheaders;
+            //$d->kpi_results=$d->kpiresultheaders;
             $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
-            $d->kpi_results=KPIResult::where('kpi_header_id',$d->id)->get();
+           // $d->kpi_results=KPIResult::where('kpi_header_id',$d->id)->get();
         });
     }
 

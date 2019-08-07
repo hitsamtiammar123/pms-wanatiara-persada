@@ -16,7 +16,6 @@ class CreateKpiprocessKpiheaderTable extends Migration
         Schema::create('kpiprocesses_kpiheaders', function (Blueprint $table) {
             $table->string('kpi_proccess_id',18);
             $table->string('kpi_header_id',18);
-            $table->string('unit',15)->default('规模 Skala');
             $table->decimal('pw',10,2)->nullable();
             $table->integer('pt')->nullable();
             $table->integer('real')->nullable();
