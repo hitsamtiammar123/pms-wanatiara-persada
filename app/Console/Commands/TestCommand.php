@@ -40,48 +40,6 @@ class TestCommand extends Command
         parent::__construct();
     }
 
-    private function test1(){
-        $p=add_zero(1);
-        $arr_result=[];
-        for($i=1;$i<=100;$i++){
-            $a=1;
-            $r=generate_id($a,23);
-            while(in_array($r,$arr_result)){
-                $r=generate_id(++$a,23);
-            }
-
-            $arr_result[]=$r;
-            echo "Percobaan {$i}: {$r} -> {$a}\n";
-        }
-    }
-
-    private function test2(){
-        $p=add_zero(1);
-        $arr_result=[];
-        for($i=1;$i<=100;$i++){
-            $id=User::generateID();
-            $arr_result[]=$id;
-            echo "{$i}=>{$id}\n";
-        }
-
-        $c1=array_unique($arr_result);
-        if(count($arr_result)===count($c1)){
-            echo "Semua Element Dalam Array Tidak ada yang sama";
-        }
-        else
-            echo 'Ada Elemen yang nilainya sama';
-    }
-
-    private function test3(){
-        $c=Employee::all();
-
-        foreach($c as $i =>$data){
-            $id=$data->id;
-            $header_id=KPIResult::generateID($id);
-            printf("%d KPI Result dari %s adalah %s \n",$i,$id,$header_id);
-        }
-    }
-
     /**
      * Execute the console command.
      *
@@ -91,8 +49,15 @@ class TestCommand extends Command
     {
         //
         //$this->info(KPIResultDetail::generateID('2019-08-16'));
-        $data=KPIResultHeader::find('19599576305059');
-        dd($data->getNext());
+        $header=KPIHeader::find('192687041500');
+        $data=[
+            '1944340775'=>[
+                'pw'=>'10',
+                'pt'=>'3',
+                'real'=>'1'
+            ]
+        ];
+        $header->kpiprocesses()->attach($data);
 
     }
 }

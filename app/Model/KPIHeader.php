@@ -115,6 +115,7 @@ class KPIHeader extends Model
     }
 
     public function kpiprocesses(){
-        return $this->belongsToMany(KPIProcess::class,'kpiprocesses_kpiheaders','kpi_header_id','kpi_proccess_id');
+        return $this->belongsToMany(KPIProcess::class,'kpiprocesses_kpiheaders','kpi_header_id','kpi_proccess_id')
+        ->withTimestamps()->withPivot(['pw','pt','real']);
     }
 }

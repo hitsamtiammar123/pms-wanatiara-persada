@@ -8,6 +8,7 @@ use App\Model\Employee;
 use App\Model\KPIResult;
 use App\Model\KPIEndorsement;
 use App\Model\Role;
+use App\Model\KPIProcess;
 use Illuminate\Support\Carbon;
 
 class KPIHeaderController extends Controller
@@ -65,11 +66,17 @@ class KPIHeaderController extends Controller
             $data->employee->role->makeHidden(Role::HIDDEN_PROPERTY);
         });
 
+        $kpiheader->kpiprocesses->each(function($d){
+            $d->pivot->makeHidden(KPIProcess::HIDDEN_PIVOT_PROPERTY);
+        });
+
         $kpiheader_arr=$kpiheader->toArray();
         $kpiheader_arr['kpiresults']=$kpiheader->fetchFrontEndData();
         $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements;
+        $kpiheader_arr['kpiprocesses']=$kpiheader->kpiprocesses;
         $kpiheader_arr['period_end']=$next_date->format('Y-m-d');
         $kpiheader_arr['period_start']=$kpiheader_arr['period'];
+
 
         unset($kpiheader_arr['period']);
 
