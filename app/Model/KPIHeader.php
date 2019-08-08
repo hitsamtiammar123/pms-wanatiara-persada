@@ -22,54 +22,10 @@ class KPIHeader extends Model
 
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
-    public static function generateID($employeeID){
-        $employee=Employee::find($employeeID);
+    protected function fetchKPIResult(){
 
-        if(!$employee){
-            return null;
-        }
-
-        $employee_index=$employee->getIndex();
-        $header_count=$employee->kpiheaders()->count();
-
-        $a=4;
-        $code=add_zero($employee_index,1).add_zero($header_count,1);
-
-        return self::_generateID($a,$code);
-
-    }
-
-    public static function getDate($month){
-        $curr=Carbon::now();
-        $year=$curr->year;
-        $month=$month;
-        $date=16;
-        $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
-        return $curr_date;
-    }
-
-    public static function getCurrentDate(){
-        $curr=Carbon::now();
-        $year=$curr->year;
-        $month=$curr->month;
-        $date=16;
-        $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
-        return $curr_date;
-
-    }
-
-    public function fetchFrontEndData(){
         $result=[];
-
-        //$header_period_start=self::where('period',$period)->first();
-
-        $period_next_date=Carbon::parse($this->period);
-        $period_next_date->addMonth();
-
-        $header_period_end=self::select('id')->where('period',$period_next_date->format('Y-m-d'))->first();
-
         $kpi_results_header_start=$this->kpiresultheaders;
-        //$header_end_id=$header_period_end->id;
 
         foreach($kpi_results_header_start as $kpiresultheader){
             $r=[];
@@ -99,6 +55,77 @@ class KPIHeader extends Model
         }
 
         return $result;
+    }
+
+    protected function fetchKPIProcess(){
+        $result=[];
+        $kpi_proccess_start=$this->kpiprocesses;
+        $kpi_proccess_end=$this->getNext()->kpiprocesses;
+
+        for($i=0;$i<count($kpi_proccess_start);$i++){
+            $r=[];
+            $curr_s=$kpi_proccess_start[$i];
+            //$curr_e=array_key_exists($i,$kpi_proccess_end)?$kpi_proccess_end[$i]:null;
+            $curr_e=$kpi_proccess_end[$i];
+            if($curr_e){
+                $r['id']=$curr_s->id;
+                $r['name']=$curr_s->name;
+                $r['unit']=$curr_s->unit;
+                $r['pw_1']=$curr_s->pivot->pw;
+                $r['pw_2']=$curr_e->pivot->pw;
+                $r['pt_1']=$curr_s->pivot->pt;
+                $r['pt_2']=$curr_e->pivot->pt;
+                $r['real_1']=$curr_s->pivot->real;
+                $r['real_2']=$curr_e->pivot->real;
+                $result[]=$r;
+            }
+
+        }
+        return $result;
+    }
+
+    public static function generateID($employeeID){
+        $employee=Employee::find($employeeID);
+
+        if(!$employee){
+            return null;
+        }
+
+        $employee_index=$employee->getIndex();
+        $header_count=$employee->kpiheaders()->count();
+
+        $a=4;
+        $code=add_zero($employee_index,1).add_zero($header_count,1);
+
+        return self::_generateID($a,$code);
+
+    }
+
+    public static function getDate($month){
+        $curr=Carbon::now();
+        $year=$curr->year;
+        $month=$month;
+        $date=16;
+        $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
+        return $curr_date;
+    }
+
+    public static function getCurrentDate(){
+        $curr_date=self::getDate(Carbon::now()->month);
+        return $curr_date;
+
+    }
+
+    public function fetchFrontEndData($type){
+
+        if($type==='kpiresult'){
+            return $this->fetchKPIResult();
+        }
+        else if($type==='kpiprocess'){
+            return $this->fetchKPIProcess();
+        }
+        return null;
+
 
     }
 
@@ -117,5 +144,14 @@ class KPIHeader extends Model
     public function kpiprocesses(){
         return $this->belongsToMany(KPIProcess::class,'kpiprocesses_kpiheaders','kpi_header_id','kpi_proccess_id')
         ->withTimestamps()->withPivot(['pw','pt','real']);
+    }
+
+    public function getNext(){
+        $date=Carbon::parse($this->period);
+        $next_date=$date->addMonth();
+
+        $r=self::where('period',$next_date)->where('employee_id',$this->employee_id)->first();
+
+        return $r;
     }
 }
