@@ -21,9 +21,7 @@ class EmployeeController extends Controller
             $item->role->makeHidden(Role::HIDDEN_PROPERTY);
         $item->kpiheaders->each(function($d){
             $d->kpiresultheaders;
-            //$d->kpi_results=$d->kpiresultheaders;
             $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
-           // $d->kpi_results=KPIResult::where('kpi_header_id',$d->id)->get();
         });
     }
 
