@@ -12,7 +12,7 @@ class KpiProcessCreation extends Command
      *
      * @var string
      */
-    protected $signature = 'hitsam:create:kpiprocess {name?}';
+    protected $signature = 'hitsam:kpiprocess:create {name?} {--unit=规模 Skala}';
 
     /**
      * The console command description.
@@ -43,12 +43,14 @@ class KpiProcessCreation extends Command
         if(!$name){
             $name=$this->ask('Tolong masukan nama dari sasaran proses: ');
         }
+        $unit=$this->option('unit');
 
 
         try{
             $p=new KPIProcess();
             $p->id=KPIProcess::generateID();
             $p->name=$name;
+            $p->unit=$unit;
             $p->save();
         }catch(Exception $e){
             $this->error('Terdapat kesalahan saat memasukan data');

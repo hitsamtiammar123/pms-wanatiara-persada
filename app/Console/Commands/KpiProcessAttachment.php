@@ -17,14 +17,14 @@ class KpiProcessAttachment extends Command
      *
      * @var string
      */
-    protected $signature = 'hitsam:attach:kpiprocess {header_id} {p_name?} {--pw=10} {--pt=3} {--real=3}';
+    protected $signature = 'hitsam:kpiprocess:attach {header_id} {p_name?} {--pw=10} {--pt=3} {--real=3}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Perintah ini digunakan untuk melakukan penempelan ID KPIHeader dengan KPIProcess';
 
     /**
      * Create a new command instance.
