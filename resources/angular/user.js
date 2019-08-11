@@ -1,0 +1,1 @@
+app.constant('user',{user});

@@ -1,0 +1,45 @@
+<div id="target-manajemen">
+    <div class="row">
+            <h6 class="bold title">Pengguna</h6>
+            <div class="bottom-border"></div>
+        <table class="table table-beranda">
+            <thead>
+                <th>Nama</th>
+                <th>Jabatan</th>
+                <th>Nama Atasan</th>
+                <th>Jabatan Atasan</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="#!/realisasi/{{ user.id}}">{{ user.name }}</a> </td>
+                    <td>{{ user.role.name }}</td>
+                    <td>{{ user.atasan.name }}</td>
+                    <td>{{ user.atasan.role.name }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h6 class="bold title margin-1">Staff/Bawahan</h6>
+        <div class="bottom-border"></div>
+        <div class="user-list-box">   
+            <span ng-repeat="employee in employeeList">{{ $index!==0?'&rarr;':'' }} <a ng-click="expandEmployee(employee)">{{ employee.name }}</a> </span>
+        </div>
+        
+
+        <table class="table table-borderless table-beranda">
+            <thead>
+                <th>Nama</th>
+                <th>Jabatan</th>
+                <th>Aksi</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="bawahan in staffs">
+                    <td><a href="#!/realisasi/{{ bawahan.id}}">{{ bawahan.name }}</a> </td>
+                    <td>{{ bawahan.role.name }}</td>
+                    <td><button ng-click="expandEmployee(bawahan)" class="btn btn-primary">daftar bawahan</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>  
+

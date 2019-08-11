@@ -49,15 +49,9 @@ class TestCommand extends Command
     {
         //
         //$this->info(KPIResultDetail::generateID('2019-08-16'));
-        $header=KPIHeader::find('192687041500');
-        $data=[
-            '1944340775'=>[
-                'pw'=>'10',
-                'pt'=>'3',
-                'real'=>'1'
-            ]
-        ];
-        $header->kpiprocesses()->attach($data);
+        $disk=Storage::disk('web');
+        $files=$disk->allfiles('controller');
+        dd($files);
 
     }
 }

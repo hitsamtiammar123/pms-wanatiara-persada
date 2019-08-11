@@ -1,0 +1,28 @@
+<div class="padding-elem"></div>
+<div id="pencarian">
+    <div class="row">
+        <div class="col-sm-4">
+            <md-autocomplete
+            md-search-text-change="searchTextChange(searchText)"
+            md-search-text="searchText"
+            md-selected-item-change="selectedItemChange(item)"
+            md-items="item in queryResult()"
+            md-no-cache="cache"
+            md-selected-item="selectedItem"
+            md-item-text="item.item">
+            <md-item-template>
+                <span md-highlight-text="searchText">{{item.item}}</span>
+              </md-item-template>
+        </md-autocomplete>
+        <p>{{ loadingMessage }}</p>
+        <div>
+            <button class="btn btn-primary" ng-click="toPMSPage()" ng-hide="hasSearch">PMS</button> <button  ng-click="toIkhtisarPage()" ng-hide="hasSearch" class="btn btn-primary">Ikhtisar</button>
+        </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <button class="btn btn-primary btn-cari" ng-click="cari()">Cari</button>
+            </div>
+        </div>
+      </div>
+</div>

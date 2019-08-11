@@ -1,0 +1,35 @@
+.dropdown-item{
+    display:block;
+}
+
+.dropdown-menu{
+    top:initial;
+    left:initial;
+}
+
+.table-beranda{
+    margin-top:20px;
+    width: 1100px;
+}
+ 
+.table-beranda thead th,.table-beranda tbody tr td{
+    text-align: left;
+}
+
+.title{
+    font-size: 20px;
+    color:grey;
+}
+
+.bottom-border{
+    border-bottom:solid #adacac;
+    width: 1100px;
+}
+
+.user-list-box{
+    margin-top:20px;
+}
+
+.margin-1{
+    margin-top:80px;
+}

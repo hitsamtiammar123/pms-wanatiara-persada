@@ -1,0 +1,57 @@
+<link rel="stylesheet" href="css/target-manajemen.css">
+<link rel="stylesheet" href="css/realisasi.css">
+<link rel="stylesheet" href="css/ikhtisar.css">
+<link rel="stylesheet" href="css/pencarian.css">
+<div ng-controller="FrontController">
+  <div class="row web-header index-bar nav-bar-fixed" >
+      <div class="col-sm-12">
+              <nav class="navbar navbar-default navbar-wanatiara">
+                  <ul class="nav navbar-nav">
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Berkas<span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a >Unduh</a></li>
+                            <li><a >Cetak</a></li>
+                            <li><a >Kirim Ke Surel</a></li>
+                            <li><a >Keluar</a></li>
+                          </ul>
+                        </li>
+                  </ul>
+              </nav>
+      </div> 
+      <div class="col-sm-12 margin-top-20" style="margin-top:-20px">
+              <div class="col-sm-2">
+                      <img src="img/logo.png" alt="" class="logo">
+                  </div>
+                  <div class="col-sm-6">
+                      <div class="row">
+                          <h3 class="title1">Sistem Manajemen Kinerja (PMS) 绩效考核管理体系 </h3>
+                          <h4 class="title2">PT Wanatiara Persada <span belong-to="tahunkiwari" contenteditable="true">2018</span> </h4>
+                      </div>
+                  </div> 
+                  <div class="col-sm-4 header-right">
+                      <div class="row">
+                          <div class="col-sm-4">
+                                  Pilih Bulan: 
+                                 <select ng-change="changed()" ng-options="m.value for m in months" ng-model="currentMonth"></select> 
+                          </div>
+
+                      </div>
+                  </div>
+      </div>
+      <div class="col-sm-9 navigation margin-top-20" style="margin-top: -20px;">
+        <ul class="nav-bar">
+            <li><a href="#!target-manajemen" tab-target="#target-manajemen" >Beranda</a></li>
+            <li><a href="{{ '#!realisasi/'+pmsIndex}}"tab-target="#realisasi">PMS</a></li>
+            <li><a href="" tab-target="#pms-perusahaan">PMS Perusahaan</a></li> 
+            <li><a href="#!ikhtisar" tab-target="#ikhtisar" >Ikhtisar</a></li>
+            <li><a href="#!pencarian" tab-target="#pencarian" >Pencarian</a></li>
+        </ul> 
+      </div>
+
+  </div>
+
+  <div class="c-container"> 
+      <div class="content margin-top-content" ng-view></div>
+  </div>
+
+</div> 

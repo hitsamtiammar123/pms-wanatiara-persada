@@ -55,10 +55,19 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
         ],
-        'public_html'=>[
+        'public'=>[
             'driver'=>'local',
             'root'=>public_path(),
             'visibility'=>'public'
+        ],
+        'web'=>[
+            'driver'=>'local',
+            'root'=>public_path('/web'),
+            'visibility'=>'public'
+        ],
+        'angular'=>[
+            'driver'=>'local',
+            'root'=>resource_path('/angular')
         ]
 
     ],

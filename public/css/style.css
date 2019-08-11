@@ -1,0 +1,292 @@
+.title1{
+    color:springgreen;
+    font-weight: bold;
+} 
+
+.title2{
+    color:blue;
+}
+ 
+body{
+    width:1362px;
+}
+
+table{
+    font-size: 11px;
+}
+
+table th{
+    text-align: center;
+}
+
+.logo{
+    width: 100px;
+    height: 80px;
+    margin-top: 10px;
+    margin-left: 30px;
+}
+
+.web-header{
+    margin-top:10px;
+}
+
+.header-right{
+    margin-top:20px;
+}
+
+.header-box{
+    margin-left: 15px;
+    width: 55%;
+    margin-top:5px;
+}
+
+.nav-bar{
+    list-style: none;
+    margin-top:20px;
+    font-family:calibri;
+    font-size:20px;
+    border-bottom: 2px grey solid
+}
+
+.navigation{
+    margin-left: 90px
+}
+
+.nav-bar li{
+    display:inline;
+    margin-left:50px;
+}
+
+.nav-bar li a{
+    color:grey;
+}
+
+ a:hover,a:focus{
+    text-decoration: none;
+}
+
+.tab-selected{
+    border-bottom:3px springgreen solid;
+    color:black !important;
+}
+
+.content{
+    color: slategray;
+    margin-top:20px;
+
+}
+ 
+.target-link{
+    display:block;
+    width:100%;
+    margin-top:5px;
+    margin-left:10px;
+    float:left;
+}
+
+.target-anchor{
+    color:black;
+    float: left;
+    width: 250px;
+    margin-left: 20px;
+}
+
+.sub-data{
+    display:none;
+}
+
+.no-border{
+    border: none !important;
+}
+
+.plus-link{
+    width:1%;
+    float:left;
+    font-size:16px;
+}
+
+.table-5{
+    width:5%;
+}
+
+.table-20{
+    width:20%;
+}
+
+.table-30{
+    width:30%;
+}
+
+.table-10{
+    width:10%;
+}
+
+.table-50{
+    width:50%;
+}
+
+.table-70{
+    width:70%; 
+}
+
+.table-content{
+    width:100%;
+    overflow: auto;
+    height:auto;
+}
+
+.center-text{
+    text-align:center;
+}
+
+.left-text{
+    text-align: left;
+}
+
+.right-text{
+    text-align: right;
+}
+
+
+.table-5,.table-20,.table-30,.table-10,.table-50,.table-70{
+    float:left;
+}
+
+.table-right{
+    margin-left:-10px;
+}
+
+.table-left{
+    margin-top:20px;
+}
+
+.r-header{
+    font-weight: bold;
+    text-align:center;
+
+}
+
+.tab-content{
+    display:none;
+}
+
+.tab-content-selected{
+    display:block !important;
+}
+
+td{ 
+    font-size: 13px;
+}
+
+.q-column{
+    width:500px;
+    float:left;
+}
+
+
+
+
+.bold{
+    font-weight: bold;
+}
+
+/* Form */
+
+
+
+.form-15{
+    width:15%;
+}
+
+.form-20{
+    width:20%;
+}
+
+.form-25{
+    width:20%;
+}
+
+.form-10{
+    width:10%;
+}
+
+.form-5{
+    width:5%;
+}
+
+.form-30{
+    width:30%;
+}
+
+.navbar-wanatiara{
+    margin-top: -10px;
+}
+
+[belong-to]{
+    height: 30px;
+    overflow: hidden;
+}
+
+.light-grey{
+    background-color: #FDE9D9
+}
+
+.light-blue{
+    background-color: rgb(183, 222, 232);
+}
+
+
+
+/* Cari User */
+
+.row-user{
+    margin-top:15px;
+}
+
+/* nav-bar */
+
+.nav-bar-fixed{
+    position: fixed;
+    width: 110%;
+    background-color: white;
+    top: 1;
+    top: -20px;
+    z-index: 1;
+    margin-top: 30px;
+    margin-left: -20px;
+} 
+
+.c-container{
+    margin-top: 17%;
+    margin-left: 4%
+}
+
+.margin-top-20{
+    margin-top: -20px;
+}
+
+.margin-top-40{
+    margin-top: -40px;
+}
+
+.margin-top-content{
+    margin-top: -49px;
+    margin-right: 15px;
+}
+
+/* Jabatan*/
+
+
+
+/*Padding Elemen*/
+
+.padding-elem{
+    height: 30px;
+}
+
+
+
+
+
+
+

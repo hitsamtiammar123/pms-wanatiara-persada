@@ -1,0 +1,31 @@
+<div id="ikhtisar" >
+    <div class="table-100">
+        <table class="table table-ikhtisar">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="f-column">No.</th>
+                    <th rowspan="2" class="f-column">Nama</th>
+                    <th rowspan="2" class="f-column">Divisi</th>
+                    <th colspan="12">Pencapaian Performa (KPI Achievement)</th>
+                    <th colspan="12">Index</th>
+                </tr>
+                <tr>
+                    <th ng-repeat="m in f" class="light-grey">{{ m}}</th>
+                    <th ng-repeat="m in f" class="light-blue">{{ m}}</th>
+                </tr>
+            </thead>
+            <tbody>  
+                <tr ng-repeat="employee in ikhsCtrl.ikhtisar">
+                    <td>{{ $index+1 }}</td>
+                    <td>{{ employee.name }}</td>
+                    <td>{{ employee.role.name }}</td>
+                    <td ng-repeat="i in []|range:12" ng-class="employee.kpia[i]?employee.kpia[i].bColor:'' ">{{ employee.kpia[i]?employee.kpia[i].kpia:'' }}</td>
+                    <td ng-repeat="i in []|range:12">{{ employee.index[i]?employee.index[i]:'' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="table-100">
+        <button class="btn btn-primary load-more-btn" ng-hide="hide_load_btn" ng-click="loadMore()" ng-disabled="disable_load_btn">Muat Lebih</button>
+    </div>
+</div>

@@ -19,5 +19,9 @@ Route::get('/', function (TestLib $test) {
 });
 
 Route::get('/pdf-hehe','PDFController@bacoba')->name('pdf.hehe');
+Route::get('/app','PageController@app')->name('app');
+Route::get('/javascript/app','JavascriptController@appJS')->name('js.app');
+Route::get('/javascript/config','JavascriptController@configJS')->name('js.config');
+Route::get('/javascript/routing','JavascriptController@routingJS')->name('js.routing');
 
 Auth::routes();
