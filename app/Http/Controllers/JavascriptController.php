@@ -95,13 +95,7 @@ class JavascriptController extends Controller
         $routelist=$this->angular->get('route.js');
         $routingJS=$this->angular->get('routing.js');
 
-        $routeData=json_decode($routelist,true);
-        foreach($routeData as $route){
-            $t=$route['config']['template_url'];
-            $route['config']['template_url']=env('APP_URL').$t;
-        }
-
-        $routingJS=str_replace('{routelist}',$routelist,json_encode($routeData,JSON_PRETTY_PRINT));
+        $routingJS=str_replace('{routelist}',$routelist,$routingJS);
 
         return response($routingJS,200,['Content-Type'=>'text/javascript']);
     }
