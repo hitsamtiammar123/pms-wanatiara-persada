@@ -10,4 +10,8 @@ if(!function_exists('style')){
         return $template;
 
     }
+
+    function res_url($d){
+       return env('APP_RES').$d;
+    }
 }

@@ -30,13 +30,13 @@ class FrontEndVendorServiceProvider extends ServiceProvider
             $css_list=config('frontend.css_vendor');
 
             $js_vendors=array_map(function($d){
-                return env('APP_RES').$d;
+                return res_url($d);
             },$js_vendors);
 
             $css_list=array_map(function($d){
-                return env('APP_RES').$d;
+                return res_url($d);
             },$css_list);
-            return $view->with(['js_vendors'=>$js_vendors,'css_vendors'=>$css_list]);
+            return $view->with(['js_vendors'=>collect($js_vendors),'css_vendors'=>collect($css_list)]);
         });
     }
 }
