@@ -12,6 +12,7 @@ class JavascriptController extends Controller
     protected $web;
     protected $angular;
     protected $res_url='http://localhost/pms-wanatiara-persada-v1-angular';
+    protected $header_arr=['Content-Type'=>'text/javascript'];
 
     public function __construct()
     {
@@ -72,7 +73,7 @@ class JavascriptController extends Controller
         $appJS=str_replace('{countBoot}',count($listfiles['boot']),$appJS);
         $appJS=str_replace('{frontview}', "'".route('app.frontview')."'",$appJS);
 
-        return response($appJS,200,['Content-Type'=>'text/javascript']);
+        return response($appJS,200,$this->header_arr);
 
     }
 
@@ -89,7 +90,7 @@ class JavascriptController extends Controller
         $configJS=$this->angular->get('config.js');
         $configJS=str_replace('{providers}',implode(',',$providers),$configJS);
 
-        return response($configJS,200,['Content-Type'=>'text/javascript']);
+        return response($configJS,200,$this->header_arr);
     }
 
     public function routingJS(Request $request){
@@ -98,6 +99,24 @@ class JavascriptController extends Controller
 
         $routingJS=str_replace('{routelist}',$routelist,$routingJS);
 
-        return response($routingJS,200,['Content-Type'=>'text/javascript']);
+        return response($routingJS,200,$this->header_arr);
+    }
+
+    public function user(Request $request){
+        $userJS=$this->angular->get('user.js');
+
+        $auth_user=$request->session()->get('auth_user');
+
+        if($auth_user){
+            $user_arr=$auth_user->toArray();
+            $userJS=str_replace('{user}',json_encode($user_arr),$userJS);
+        }
+        else{
+            $userJS=str_replace('{user}','{}',$userJS);
+        }
+
+        return response($userJS,200,$this->header_arr);
+
+
     }
 }

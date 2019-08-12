@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Library\TestLib;
 use Storage;
 use App\Model\Role;
-use App\User;
+use App\Model\User;
 use App\Model\Employee;
 use App\Model\KPIHeader;
 use App\Model\KPIResult;
@@ -49,8 +49,9 @@ class TestCommand extends Command
     {
         //
         //$this->info(KPIResultDetail::generateID('2019-08-16'));
-        $userID=User::generateID();
-        dd($userID);
+        $user=User::first();
+        $user->employee;
+        dd($user->toArray());
 
     }
 }

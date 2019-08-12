@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Auth;
+use Session;
 use App\Model\User;
 
 class LoginController extends Controller
@@ -36,12 +36,15 @@ class LoginController extends Controller
      * @return void
      */
     protected function authenticated(Request $request,$user){
-
+        //Session::put('hehe','Hahahaha');
+        $user->employee;
+        $request->session()->put('auth_user',$user);
     }
 
     protected function loggedOut(Request $request)
     {
         //
+       $request->session()->forget('auth_user');
     }
 
     protected function redirectTo(){
@@ -65,13 +68,15 @@ class LoginController extends Controller
     protected function attemptLogin(Request $request)
     {
         $credentials=$this->credentials($request);
-        $user=User::where('id',$credentials['id'])->where('password',$credentials['password'])->first();
-        if($user){
-            Auth::login($user,true);
-            return $user;
-        }
-        else
-            return null;
+        //$user=User::where('id',$credentials['id'])->where('password',$credentials['password'])->first();
+
+        $loggedIn=\Auth::attempt([
+                'id' => $credentials['id'],
+                'password' => $credentials['password']],true);
+
+        return $loggedIn;
+
+
     }
 
     protected function credentials(Request $request)

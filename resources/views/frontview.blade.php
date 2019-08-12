@@ -16,7 +16,7 @@
                             <li><a >Unduh</a></li>
                             <li><a >Cetak</a></li>
                             <li><a >Kirim Ke Surel</a></li>
-                            <li><a ng-click="logout">Keluar</a></li>
+                            <li><a ng-click="logout()">Keluar</a></li>
                           </ul>
                         </li>
                   </ul>
