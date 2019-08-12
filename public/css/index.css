@@ -1,0 +1,64 @@
+body{
+    background-image:url('../img/bg.png');
+    background-repeat: repeat-x;
+}
+
+/*Head Section*/
+.head-title{
+    font-family: 'Cambria';
+    color:purple;
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.head-img{
+    margin-left: -15px;
+}
+
+/*Middle Section*/
+.p1,.p2{
+    font-family: 'Abadi MT Condensed Extra Bold'
+}
+
+.p1{
+    font-size: 32px;
+}
+
+.p2{
+    font-size: 24px;
+}
+
+
+
+/*Footer Section*/
+
+footer#footer{
+    margin-top:25%;
+    font-family: 'Al Bayan Plain';
+}
+.f1,.f2{
+    font-style: italic;
+}
+
+.f1{
+    font-size: 20px;
+}
+
+.f2{
+    font-size:18px;
+}
+
+.login-t{
+    margin-top:60px;
+}
+
+.login-href{
+    color:white;
+    font-size: 18px;
+    margin-left:40%;
+}
+
+.login-href:focus, .login-href:hover{
+    color:white;
+    text-decoration: none;
+}

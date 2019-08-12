@@ -13,10 +13,7 @@
 
 use  App\Library\TestLib;
 
-Route::get('/', function (TestLib $test) {
-    //echo style('app.css');
-    return view('welcome');
-});
+Route::get('/', 'PageController@index')->name('index');
 
 Route::get('/pdf-hehe','PDFController@bacoba')->name('pdf.hehe');
 Route::get('/app','PageController@app')->name('app');
@@ -25,3 +22,7 @@ Route::get('/javascript/config','JavascriptController@configJS')->name('js.confi
 Route::get('/javascript/routing','JavascriptController@routingJS')->name('js.routing');
 
 Auth::routes();
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
