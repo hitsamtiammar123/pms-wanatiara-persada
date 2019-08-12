@@ -45,7 +45,7 @@
       <div class="col-sm-9 navigation margin-top-20" style="margin-top: -20px;">
         <ul class="nav-bar">
             <li><a href="#!target-manajemen" tab-target="#target-manajemen" >Beranda</a></li>
-            <li><a href="{{ $pmsIndex }}"tab-target="#realisasi">PMS</a></li>
+            <li><a href="{!! $pmsIndex !!}"tab-target="#realisasi">PMS</a></li>
             <li><a href="" tab-target="#pms-perusahaan">PMS Perusahaan</a></li>
             <li><a href="#!ikhtisar" tab-target="#ikhtisar" >Ikhtisar</a></li>
             <li><a href="#!pencarian" tab-target="#pencarian" >Pencarian</a></li>
