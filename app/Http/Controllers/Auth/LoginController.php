@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Auth;
+use App\Model\User;
 
 class LoginController extends Controller
 {
@@ -41,6 +44,10 @@ class LoginController extends Controller
         //
     }
 
+    protected function redirectTo(){
+        return '/app';
+    }
+
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -53,6 +60,23 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         return view('login');
+    }
+
+    protected function attemptLogin(Request $request)
+    {
+        $credentials=$this->credentials($request);
+        $user=User::where('id',$credentials['id'])->where('password',$credentials['password'])->first();
+        if($user){
+            Auth::login($user,true);
+            return $user;
+        }
+        else
+            return null;
+    }
+
+    protected function credentials(Request $request)
+    {
+        return $request->only($this->username(), 'password');
     }
 
 

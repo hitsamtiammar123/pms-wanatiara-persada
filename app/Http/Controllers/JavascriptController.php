@@ -70,6 +70,7 @@ class JavascriptController extends Controller
 
         $appJS=str_replace('{count}',$count,$appJS);
         $appJS=str_replace('{countBoot}',count($listfiles['boot']),$appJS);
+        $appJS=str_replace('{frontview}', "'".route('app.frontview')."'",$appJS);
 
         return response($appJS,200,['Content-Type'=>'text/javascript']);
 

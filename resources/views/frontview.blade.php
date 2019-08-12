@@ -1,3 +1,7 @@
+@php
+    $pmsIndex='{{ "#!realisasi/"+pmsIndex}}';
+@endphp
+
 <link rel="stylesheet" href="css/target-manajemen.css">
 <link rel="stylesheet" href="css/realisasi.css">
 <link rel="stylesheet" href="css/ikhtisar.css">
@@ -41,7 +45,7 @@
       <div class="col-sm-9 navigation margin-top-20" style="margin-top: -20px;">
         <ul class="nav-bar">
             <li><a href="#!target-manajemen" tab-target="#target-manajemen" >Beranda</a></li>
-            <li><a href="{{ '#!realisasi/'+pmsIndex}}"tab-target="#realisasi">PMS</a></li>
+            <li><a href="{{ $pmsIndex }}"tab-target="#realisasi">PMS</a></li>
             <li><a href="" tab-target="#pms-perusahaan">PMS Perusahaan</a></li>
             <li><a href="#!ikhtisar" tab-target="#ikhtisar" >Ikhtisar</a></li>
             <li><a href="#!pencarian" tab-target="#pencarian" >Pencarian</a></li>
@@ -53,5 +57,7 @@
   <div class="c-container">
       <div class="content margin-top-content" ng-view></div>
   </div>
-
+  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+    </form>
 </div>

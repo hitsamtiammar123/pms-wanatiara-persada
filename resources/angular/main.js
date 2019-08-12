@@ -55,7 +55,7 @@
         if(count===total+totalBoot){
             //angular.bootstrap(document,['app']);
             appElem=$('#app');
-            E.get('web/view/frontView.html',viewSuccess).fail(viewFail).always(viewDone)
+            E.get({frontview},viewSuccess).fail(viewFail).always(viewDone)
             appElem.append('<p id="wait">Mohon Tunggu....</p>');
             //console.log('app',app);
         }

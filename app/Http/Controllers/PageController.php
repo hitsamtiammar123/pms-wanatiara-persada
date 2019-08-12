@@ -14,7 +14,10 @@ class PageController extends Controller
 
     //
     public function app(Request $request){
-        $appJS=env('APP_RES').'/web/app.js';
-        return view('app',['appJS'=>$appJS]);
+        return view('app');
+    }
+
+    public function appfront(){
+        return view('frontview');
     }
 }

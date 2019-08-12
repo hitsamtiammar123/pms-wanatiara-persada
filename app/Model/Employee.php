@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Model\Traits\Indexable;
 use App\Model\Traits\DynamicID;
+use App\User;
 
 class Employee extends Model
 {
