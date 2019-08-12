@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-@include('include.pms')
+@include('include.head')
 <link rel="stylesheet" href="css/style.css">
 <script src="{{$appJS}}"></script>
 </head>
