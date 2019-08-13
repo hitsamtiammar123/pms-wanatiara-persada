@@ -78,7 +78,7 @@ class JavascriptController extends Controller
     }
 
     public function configJS(Request $request){
-        $providerBI=['cPProvider','$routeProvider','$locationProvider','routingProvider','$rootScopeProvider'];
+        $providerBI=config('frontend.angular_provider');
         $providerUI=array_map(function($data){
             $str=str_replace('.js','',$data).'Provider';
             $filter_str=preg_replace('/(\w+\/)+/','',$str);

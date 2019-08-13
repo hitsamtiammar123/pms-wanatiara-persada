@@ -18,5 +18,6 @@ return [
         '/vendor/css/bootstrap.min.css',
         "/vendor/css/bootstrap-theme.min.css",
         "/vendor/css/angular-material.min.css"
-    ]
+    ],
+    'angular_provider'=>['cPProvider','$routeProvider','$locationProvider','routingProvider','$rootScopeProvider']
 ];
