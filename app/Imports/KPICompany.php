@@ -32,7 +32,8 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
                     else{
                         $rowspans[$cnum]++;
                     }
-                    $row['realisasi_rt']=round($row['realisasi_rt'],3);
+                    if($row['realisasi_rt'])
+                        $row['realisasi_rt']=(round($row['realisasi_rt'],3)*100).'%';
                     $result[]=$row;
                 }
             }
