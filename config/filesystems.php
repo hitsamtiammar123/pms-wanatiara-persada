@@ -68,6 +68,10 @@ return [
         'angular'=>[
             'driver'=>'local',
             'root'=>resource_path('/angular')
+        ],
+        'resource'=>[
+            'driver'=>'local',
+            'root'=>resource_path()
         ]
 
     ],

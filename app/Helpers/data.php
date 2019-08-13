@@ -43,3 +43,18 @@ if(!function_exists('generate_id')){
 
     }
 }
+
+if(!function_exists('kpi_company')){
+
+    function kpi_company($year=null){
+        $disk=Storage::disk('local');
+
+        $_year=is_null($year)?date('Y'):$year;
+        $file="kpicompany/$_year";
+
+        $real_path=$disk->getAdapter()->getPathPrefix().'/'.$file;
+        $kpi_company=file_get_contents($real_path);
+
+        return json_decode($kpi_company,true);
+    }
+}

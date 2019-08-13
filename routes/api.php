@@ -30,6 +30,7 @@ Route::group(['prefix'=>'v1','middleware'=>['cors']],function(){
     Route::get('/ikhtisar','EmployeeController@ikhtisar')->name('employee.ikhtisar');
     Route::get('/search/autocomplete','SearchController@autocomplete')->name('search.autocomplete');
     Route::get('/search/result','SearchController@result')->name('search.result');
+    Route::get('/kpicompany','KPICompanyController@getCurrentKPICompany')->name('kpicompany.get');
 });
 
 
