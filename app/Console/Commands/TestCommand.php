@@ -3,16 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Library\TestLib;
-use Storage;
-use App\Model\Role;
-use App\Model\User;
-use App\Model\Employee;
-use App\Model\KPIHeader;
-use App\Model\KPIResult;
-use App\Model\KPIEndorsement;
-use App\Model\KPIResultHeader;
-use DB;
+use Excel;
+use App\Imports\ArrayImport;
 
 class TestCommand extends Command
 {
@@ -49,9 +41,8 @@ class TestCommand extends Command
     {
         //
         //$this->info(KPIResultDetail::generateID('2019-08-16'));
-        $user=User::first();
-        $user->employee;
-        dd($user->toArray());
+        $path='C:\\xampp\\htdocs\\pms-wanatiara-persada-v1-laravel\\storage\\requirement\\Target Managemen 2019.xlsx';
+        Excel::import(new ArrayImport,$path);
 
     }
 }

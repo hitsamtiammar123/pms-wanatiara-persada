@@ -12,11 +12,17 @@
 */
 
 use Illuminate\Http\Request;
+use App\Imports\ArrayImport;
 
 Route::get('/', 'PageController@index')->name('index');
 Route::get('/auth-user',function(Request $request){
     $user=Auth::user();
     return $user;
+});
+
+Route::get('/excl-hehe',function(){
+    $path='C:\\xampp\\htdocs\\pms-wanatiara-persada-v1-laravel\\storage\\requirement\\Target Managemen 2019.xlsx';
+    Excel::import(new ArrayImport,$path);
 });
 
 Route::get('/pdf-hehe','PDFController@bacoba')->name('pdf.hehe');

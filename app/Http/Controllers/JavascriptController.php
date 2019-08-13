@@ -13,20 +13,37 @@ class JavascriptController extends Controller
     protected $angular;
     protected $res_url='http://localhost/pms-wanatiara-persada-v1-angular';
     protected $header_arr=['Content-Type'=>'text/javascript'];
+    protected $except_files;
 
     public function __construct()
     {
         $this->web=Storage::disk('web');
         $this->angular=Storage::disk('angular');
+        $this->except_files=config('frontend.except');
+    }
+
+    public function mapNameDFiles($data){
+        return env('APP_RES')."/web/$data";
     }
 
 
 
     protected function loadDynamically($dir){
+        if($dir==='values'){
+            $j=0;
+        }
         $disk=$this->web;
-        return array_map(function($data){
-            return env('APP_RES')."/web/$data";
-        },$disk->allfiles($dir));
+        $except_files=$this->except_files;
+        $collection_files=collect($disk->allfiles($dir));
+        $collection_files=$collection_files->filter(function($data)use($dir,$except_files){
+            if(!in_array($data,$except_files))
+                return $data;
+        })->map(array($this,'mapNameDFiles'));
+        return $collection_files->toArray();
+        // return array_map(function($data)use($except_files,$dir){
+        //     if(!in_array(str_replace($dir.'/','',$data),$except_files))
+        //         return env('APP_RES')."/web/$data";
+        // },$disk->allfiles($dir));
     }
 
     protected function loadStatiscally($dir,$list){

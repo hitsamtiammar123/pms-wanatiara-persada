@@ -19,5 +19,8 @@ return [
         "/vendor/css/bootstrap-theme.min.css",
         "/vendor/css/angular-material.min.css"
     ],
-    'angular_provider'=>['cPProvider','$routeProvider','$locationProvider','routingProvider','$rootScopeProvider']
+    'angular_provider'=>['cPProvider','$routeProvider','$locationProvider','routingProvider','$rootScopeProvider'],
+    'except'=>[
+        // 'values/user.js'
+    ]
 ];
