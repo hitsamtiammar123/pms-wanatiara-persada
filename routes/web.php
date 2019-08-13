@@ -14,7 +14,7 @@
 use Illuminate\Http\Request;
 use App\Imports\KPICompany;
 
-Route::get('/', 'PageController@index')->name('index');
+Route::get('/', 'PageController@index')->name('index')->middleware('guest');
 Route::get('/auth-user',function(Request $request){
     $user=Auth::user();
     return $user;
@@ -25,11 +25,10 @@ Route::get('/excl-hehe',function(){
     $import=new KPICompany();
     $import->import($path);
     return $import->frontEndData();
-
 });
 
 Route::get('/pdf-hehe','PDFController@bacoba')->name('pdf.hehe');
-Route::get('/app','PageController@app')->name('app');
+Route::get('/app','PageController@app')->name('app')->middleware('auth');;
 Route::get('/javascript/app','JavascriptController@appJS')->name('js.app');
 Route::get('/javascript/config','JavascriptController@configJS')->name('js.config');
 Route::get('/javascript/routing','JavascriptController@routingJS')->name('js.routing');

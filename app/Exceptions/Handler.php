@@ -50,14 +50,8 @@ class Handler extends ExceptionHandler
         if($exception instanceof \Illuminate\Foundation\Http\Exceptions\MaintenanceModeException){
             return response('Lagi Maintenance Hehe',503);
         }
-        else if($exception instanceof \Illuminate\Auth\AuthenticationException ){
-            return $this->handleAuthenticateError($request,$exception);
-        }
 
         return parent::render($request, $exception);
     }
 
-    private function handleAuthenticateError($request,$exception){
-        return response()->json(['error'=>1,'status'=>'Anda tidak memiliki autentikasi untuk mengakses halaman ini'],403);
-    }
 }
