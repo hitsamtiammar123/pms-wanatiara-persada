@@ -1,5 +1,6 @@
 @php
-    $pmsIndex='{{ "#!realisasi/"+pmsIndex}}';
+    $user=Session::get('auth_user');
+    $pmsIndex='#!realisasi/'.$user->employee->id;
 @endphp
 
 <link rel="stylesheet" href="css/target-manajemen.css">

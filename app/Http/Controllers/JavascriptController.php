@@ -46,7 +46,7 @@ class JavascriptController extends Controller
             'factory'=>[],
             'directive'=>[],
             'filter'=>[],
-            'values'=>[],
+            'values'=>[route('js.user')],
             'provider'=>['formModal.js'],
             'boot'=>['resolve.js','routing.js',"providerConf.js",'config.js',"run.js"]
         ];
@@ -108,8 +108,13 @@ class JavascriptController extends Controller
         $auth_user=$request->session()->get('auth_user');
 
         if($auth_user){
-            $user_arr=$auth_user->toArray();
-            $userJS=str_replace('{user}',json_encode($user_arr),$userJS);
+            $auth_user->employee->atasan;
+            $auth_user->employee->bawahan;
+            $auth_user->employee->role;
+            $auth_user->employee->bawahan->each(function($d){
+                $d->load('role');
+            });
+            $userJS=str_replace('{user}',$auth_user->toJSON(),$userJS);
         }
         else{
             $userJS=str_replace('{user}','{}',$userJS);
