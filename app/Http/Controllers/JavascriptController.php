@@ -39,11 +39,9 @@ class JavascriptController extends Controller
             if(!in_array($data,$except_files))
                 return $data;
         })->map(array($this,'mapNameDFiles'));
+
         return $collection_files->toArray();
-        // return array_map(function($data)use($except_files,$dir){
-        //     if(!in_array(str_replace($dir.'/','',$data),$except_files))
-        //         return env('APP_RES')."/web/$data";
-        // },$disk->allfiles($dir));
+
     }
 
     protected function loadStatiscally($dir,$list){

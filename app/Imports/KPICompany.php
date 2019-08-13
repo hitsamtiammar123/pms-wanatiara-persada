@@ -59,7 +59,6 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
     {
         //
         $this->raw=$collection;
-        //dd($collection->toArray());
     }
 
 }
