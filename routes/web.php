@@ -13,9 +13,10 @@
 
 use Illuminate\Http\Request;
 
-Route::get('/', 'PageController@index')->name('index')->middleware('guest');
+Route::get('/', 'PageController@index')->name('index');
 Route::get('/auth-user',function(Request $request){
-    return $request->session()->get('auth_user');
+    $user=Auth::user();
+    return $user;
 });
 
 Route::get('/pdf-hehe','PDFController@bacoba')->name('pdf.hehe');

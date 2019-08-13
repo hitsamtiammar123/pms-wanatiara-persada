@@ -1,6 +1,9 @@
 @php
-    $user=Session::get('auth_user');
-    $pmsIndex='#!realisasi/'.$user->employee->id;
+    $user=Auth::user();
+    if($user)
+        $pmsIndex='#!realisasi/'.$user->employee->id;
+    else
+        $pmsIndex='';
 @endphp
 
 <link rel="stylesheet" href="css/target-manajemen.css">
