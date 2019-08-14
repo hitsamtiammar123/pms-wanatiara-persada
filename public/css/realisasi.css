@@ -150,3 +150,25 @@
 .realisasi-perusahaan-table{
     width: 2000px !important;
 }
+
+.realisasi-perusahaan-table tbody {
+    height:350px;
+}
+
+.realisasi-perusahaan-table tbody tr td.kpi,
+.realisasi-perusahaan-table thead tr th.kpi{
+    width: 230px;
+}
+
+.row-head{
+    background-color: rgb(226, 239, 218);
+    font-weight: bold;
+}
+
+.kpi-num{
+    width:150px;
+}
+
+.excl-btn-upload{
+    margin-top: 15px;
+}

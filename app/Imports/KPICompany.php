@@ -14,6 +14,14 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
 
     protected $raw;
 
+    protected function filterNum($row){
+        foreach($row as $key=>$r){
+            if(is_numeric($r))
+                $row[$key]=number_format($r,2);
+        }
+        return $row;
+    }
+
     public function frontEndData(){
         if($this->raw){
             $result=[];
@@ -34,6 +42,7 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
                     }
                     if($row['realisasi_rt'])
                         $row['realisasi_rt']=(round($row['realisasi_rt'],3)*100).'%';
+                    $row=$this->filterNum($row);
                     $result[]=$row;
                 }
             }

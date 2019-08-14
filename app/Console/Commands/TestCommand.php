@@ -42,7 +42,7 @@ class TestCommand extends Command
         //
         //$this->info(KPIResultDetail::generateID('2019-08-16'));
         $path='C:\\xampp\\htdocs\\pms-wanatiara-persada-v1-laravel\\storage\\requirement\\Target Managemen 2019.xlsx';
-        Excel::import(new ArrayImport,$path);
+
 
     }
 }
