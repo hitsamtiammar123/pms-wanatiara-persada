@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     @include($head)
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css-laravel/index.css">
 </head>
 <body>
     <div class="container">

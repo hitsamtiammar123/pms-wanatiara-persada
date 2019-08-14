@@ -3,6 +3,7 @@
 <head>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @include('include.head-app')
+
 <link rel="stylesheet" href="css/style.css">
 <script src="{{route('js.app')}}"></script>
 </head>
