@@ -15,7 +15,8 @@ class SetForeignKeyKpiHeaders extends Migration
     {
         Schema::table('kpiheaders', function (Blueprint $table) {
             //
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')
+            ->on('employees')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

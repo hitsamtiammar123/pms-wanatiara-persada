@@ -15,8 +15,10 @@ class SetForeignKeyKpiEndorsement extends Migration
     {
         Schema::table('kpiendorsements', function (Blueprint $table) {
             //
-            $table->foreign('kpi_header_id')->references('id')->on('kpiheaders')->onDelete('cascade');
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('kpi_header_id')->references('id')->on('kpiheaders')
+            ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')
+            ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
