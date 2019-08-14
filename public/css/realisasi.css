@@ -157,7 +157,7 @@
 
 .realisasi-perusahaan-table tbody tr td.kpi,
 .realisasi-perusahaan-table thead tr th.kpi{
-    width: 230px;
+    width:250px
 }
 
 .row-head{
@@ -171,4 +171,8 @@
 
 .excl-btn-upload{
     margin-top: 15px;
+}
+
+.ol-color{
+    font-weight: bold;
 }

@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             <tr ng-class="getRowClass(data)" ng-repeat="data in kpicompanydata track by $index">
-                <td ng-repeat="i in headers" belong-to="data[i]" contenteditable="false" auto-fill="true" ng-class="getClass(i,$index)"></td>
+                <td ng-repeat="i in headers" format="{{data[i+'_filter']}}" belong-to="data[i]" contenteditable="false" auto-fill="true" ng-class="getClass(i,data[i])"></td>
             </tr>
         </tbody>
     </table>
