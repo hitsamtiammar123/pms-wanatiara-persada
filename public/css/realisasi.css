@@ -144,3 +144,9 @@
 .green-font{
     color: green;
 }
+
+/*Realisasi Perusahaan*/
+
+.realisasi-perusahaan-table{
+    width: 2000px !important;
+}
