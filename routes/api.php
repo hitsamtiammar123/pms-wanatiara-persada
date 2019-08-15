@@ -31,6 +31,7 @@ Route::group(['prefix'=>'v1','middleware'=>['cors']],function(){
     Route::get('/search/autocomplete','SearchController@autocomplete')->name('search.autocomplete');
     Route::get('/search/result','SearchController@result')->name('search.result');
     Route::get('/kpicompany','KPICompanyController@getCurrentKPICompany')->name('kpicompany.get');
+    Route::post('/kpicompany','KPICompanyController@postKPICompany')->name('kpicompany.post');
 });
 
 

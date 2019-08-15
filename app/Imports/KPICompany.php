@@ -13,6 +13,12 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
     use Importable;
 
     protected $raw;
+    protected $dir;
+    protected $storage;
+
+    public function __construct(){
+        $this->storage=\Storage::disk('local');
+    }
 
     protected function filterNum($row){
         foreach($row as $key=>$r){
@@ -20,6 +26,19 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
                 $row[$key]=number_format($r,2);
         }
         return $row;
+    }
+
+    public function save(){
+        $dir='kpicompany/';
+        $filename=$dir.date('Y');
+
+        $data=$this->frontEndData();
+
+        if($data){
+            $str_data=json_encode($data);
+            $this->storage->put($filename,$str_data);
+        }
+
     }
 
     public function frontEndData(){
