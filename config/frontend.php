@@ -21,6 +21,7 @@ return [
     ],
     'angular_provider'=>['cPProvider','$routeProvider','$locationProvider','routingProvider','$rootScopeProvider'],
     'except'=>[
-        // 'values/user.js'
-    ]
+        'values/user.js'
+    ],
+
 ];

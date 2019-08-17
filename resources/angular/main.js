@@ -21,6 +21,8 @@
     var count=0;
     var total={count};
     var totalBoot={countBoot};
+    var totalDynamic={countDynamic};
+    var totalStatic={countStatic};
     var appElem;
 
 
@@ -49,15 +51,26 @@
         appElem.append('Terjadi kesalahan saat memuat halaman');
     }
 
+    function hasLoad(){
+        appElem=$('#app');
+        E.get({frontview},viewSuccess).fail(viewFail).always(viewDone)
+        appElem.append('<p id="wait">Mohon Tunggu....</p>');
+    }
+
     function incrementC(){
         count++;
-        //console.log("total Files: "+(total+totalBoot)+" total :"+total+" totalBoot :"+totalBoot+" count: "+count);
-        if(count===total+totalBoot){
-            //angular.bootstrap(document,['app']);
-            appElem=$('#app');
-            E.get({frontview},viewSuccess).fail(viewFail).always(viewDone)
-            appElem.append('<p id="wait">Mohon Tunggu....</p>');
-            //console.log('app',app);
+        if(count===totalDynamic){
+            loadFilesSync(providerlist);
+            loadFilesSync(bootlist);
+        }
+
+    }
+
+    function incrementD(){
+        count++;
+        if(count===totalDynamic+totalStatic){
+            $(document).ajaxSuccess(null);
+            hasLoad();
         }
     }
 
@@ -70,6 +83,16 @@
             appendScript(file,incrementC);
         }
     }
+
+    function loadFilesSync(list){
+        for(var l in list){
+            var file=list[l];
+            var s=$('<script>').attr({src:file,type:'text/javascript'});
+            $.get(file,[],incrementD);
+
+        }
+    }
+
     function boot(){
         var configFile='config.js.php';
         var routingFile='js/web/boot/routing.js';
@@ -101,16 +124,16 @@
         window.location.replace(url)
     }
 
+    $(document).ajaxSuccess(incrementD);
 
 
     loadFiles(controllerlist);
     loadFiles(directivelist);
     loadFiles(factorylist);
     loadFiles(filterlist);
-    loadFiles(providerlist);
     loadFiles(servicelist);
     loadFiles(valueList);
-    loadFiles(bootlist);
+
 
 
     $(document).ready(function(){

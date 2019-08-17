@@ -50,7 +50,8 @@ class KPIEndorsementController extends Controller
             $endorse->save();
             return [
                 'status'=>1,
-                'message'=>'Sudah disahkan'
+                'message'=>'Sudah disahkan',
+                'user'=>$endorse->kpiheader->employee
             ];
         }
         return send_404_error('Data tidak ditemukan');

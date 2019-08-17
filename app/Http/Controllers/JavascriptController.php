@@ -69,13 +69,19 @@ class JavascriptController extends Controller
         $dynamic_list=['controller','filter','service','factory','values','directive'];
         $appJS=$this->angular->get('main.js');
         $count=0;
+        $countDynamic=0;
+        $countStatic=0;
 
         foreach($listfiles as $key=>$d){
 
-            if(in_array($key,$dynamic_list))
+            if(in_array($key,$dynamic_list)){
                 $d=array_merge($listfiles[$key],$this->loadDynamically($key));
-            else
+                $countDynamic+=count($d);
+            }
+            else{
                 $d=$this->loadStatiscally($key,$d);
+                $countStatic+=count($d);
+            }
 
             $key_a='{'.$key.'_key}';
             $appJS=str_replace($key_a,json_encode($d,JSON_UNESCAPED_SLASHES),$appJS);
@@ -85,6 +91,8 @@ class JavascriptController extends Controller
         }
 
         $appJS=str_replace('{count}',$count,$appJS);
+        $appJS=str_replace('{countDynamic}',$countDynamic,$appJS);
+        $appJS=str_replace('{countStatic}',$countStatic,$appJS);
         $appJS=str_replace('{countBoot}',count($listfiles['boot']),$appJS);
         $appJS=str_replace('{frontview}', "'".route('app.frontview')."'",$appJS);
 
@@ -124,6 +132,7 @@ class JavascriptController extends Controller
 
         if($auth_user){
             $auth_user->employee->atasan;
+            $auth_user->employee->atasan->role;
             $auth_user->employee->bawahan;
             $auth_user->employee->role;
             $auth_user->employee->bawahan->each(function($d){
