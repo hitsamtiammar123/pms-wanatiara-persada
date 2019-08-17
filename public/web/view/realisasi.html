@@ -170,12 +170,12 @@
             <div class="col-sm-12"> 
                 <div ng-repeat="endorse in kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-sm-4">
                     {{ endorse.employee.role.name}}:
-                    <input type="checkbox" ng-change="endorse.employee.id===user.employee.id?setEndorse(endorse):null" ng-disabled="endorse.employee.id!==user.employee.id" ng-model="endorse.verified">
+                    <input type="checkbox" ng-change="endorse.employee.id===user.employee.id?setEndorse(endorse):null" ng-disabled="endorse.employee.id!==user.employee.id" ng-model="aggrements[endorse.id]">
                 </div>
             </div>
             <div class="col-sm-12 tanda-tangan"></div>
             <div class="col-sm-12">
-                <div ng-repeat="endorse in kpiendorsements" ng-class="{'blue-check':endorse.verified,'pengesahan1':$index===0}" class="col-sm-4">
+                <div ng-repeat="endorse in kpiendorsements" ng-class="{'blue-check':aggrements[endorse.id],'pengesahan1':$index===0}" class="col-sm-4">
                     {{ endorse.employee.name}}
                 </div>
             </div>

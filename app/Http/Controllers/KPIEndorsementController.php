@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Model\KPIEndorsement;
 
 class KPIEndorsementController extends Controller
 {
@@ -43,6 +44,12 @@ class KPIEndorsementController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $endorse=KPIEndorsement::find($id);
+        if($endorse){
+            $endorse->verified=$request->verified;
+            $endorse->save();
+            return $request->all();
+        }
     }
 
 }
