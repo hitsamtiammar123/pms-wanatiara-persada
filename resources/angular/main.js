@@ -88,43 +88,11 @@
         for(var l in list){
             var file=list[l];
             var s=$('<script>').attr({src:file,type:'text/javascript'});
+           // head.append(s);
             $.get(file,[],incrementD);
 
         }
     }
-
-    function boot(){
-        var configFile='config.js.php';
-        var routingFile='js/web/boot/routing.js';
-        var runFile='js/web/boot/run.js';
-        var cpFile='js/web/boot/providerConf.js';
-
-        var cScript=script_string;
-        var rScript=script_string;
-        var runScript=script_string;
-        var cpScript=script_string;
-
-        cScript=cScript.replace('{path}',configFile);
-        rScript=rScript.replace('{path}',routingFile);
-        runScript=runScript.replace('{path}',runFile);
-        cpScript=cpScript.replace('{path}',cpFile);
-
-
-
-        appendScript(configFile,incrementC);
-        appendScript(routingFile,incrementC);
-        appendScript(runFile,incrementC);
-        appendScript(cpFile,incrementC);
-
-
-    }
-
-    function redirect(){
-        var url=$(this).attr('data-href')
-        window.location.replace(url)
-    }
-
-    $(document).ajaxSuccess(incrementD);
 
 
     loadFiles(controllerlist);
