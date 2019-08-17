@@ -2,8 +2,8 @@
 <div id="realisasi"> 
         <div class="table-100"> 
                 <div class="row">
-                        <div class="col-sm-3">{{ user.role.name}}</div>
-                        <div class="col-sm-2">: {{user.name}}</div>
+                        <div class="col-sm-3">{{ employee.role.name}}</div>
+                        <div class="col-sm-2">: {{employee.name}}</div>
                         <div class="col-sm-4">当月考核期 Periode bulan berjalan</div>
                         <div class="col-sm-3">: {{ pb.start }} - {{ pb.end }}</div> 
                 </div>
@@ -170,12 +170,12 @@
             <div class="col-sm-12"> 
                 <div ng-repeat="endorse in kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-sm-4">
                     {{ endorse.employee.role.name}}:
-                    <input type="checkbox" ng-model="aggrements['user_'+endorse.employee.id]">
+                    <input type="checkbox" ng-change="endorse.employee.id===user.employee.id?setEndorse(endorse):null" ng-disabled="endorse.employee.id!==user.employee.id" ng-model="endorse.verified">
                 </div>
             </div>
             <div class="col-sm-12 tanda-tangan"></div>
             <div class="col-sm-12">
-                <div ng-repeat="endorse in kpiendorsements" ng-class="{'blue-check':aggrements['user_'+endorse.employee.id],'pengesahan1':$index===0}" class="col-sm-4">
+                <div ng-repeat="endorse in kpiendorsements" ng-class="{'blue-check':endorse.verified,'pengesahan1':$index===0}" class="col-sm-4">
                     {{ endorse.employee.name}}
                 </div>
             </div>

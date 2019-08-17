@@ -13,4 +13,6 @@ if(!function_exists('send_406')){
     function send_403_error($message="Anda tidak memiliki hak untuk mengakses halaman ini"){
         return response()->json(["error"=>403,"message"=>$message],403);
     }
+
+
 };

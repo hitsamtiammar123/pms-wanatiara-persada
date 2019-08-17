@@ -28,11 +28,10 @@ class KPICompanyController extends Controller
             $import->save();
 
             return ['status'=>1,
-                    'message'=>'Berkas berhasil disimpan'];
+                    'message'=>'Berkas berhasil disimpan',];
 
 
         }
-        return ['status'=>0,
-                'message'=>'Tolong masukan berkas yang mau diunggah'];
+        return send_406_error('Tolong masukan berkas yang mau diunggah');
     }
 }

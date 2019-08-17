@@ -27,6 +27,10 @@ Route::group(['prefix'=>'v1','middleware'=>['cors']],function(){
         'only'=>['index']
     ]);
 
+    Route::resource('kpiendorsement', 'KPIEndorsementController',[
+        'only'=>['update']
+    ]);
+
     Route::get('/ikhtisar','EmployeeController@ikhtisar')->name('employee.ikhtisar');
     Route::get('/search/autocomplete','SearchController@autocomplete')->name('search.autocomplete');
     Route::get('/search/result','SearchController@result')->name('search.result');
