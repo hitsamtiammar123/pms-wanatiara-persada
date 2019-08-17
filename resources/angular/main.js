@@ -11,8 +11,7 @@
     const directivelist={directive_key};
     const factorylist={factory_key};
     const filterlist={filter_key};
-    const providerlist={provider_key};
-    const bootlist={boot_key};
+    const pfile='{pfile}';
 
     var script_string='<script src="{path}"></script>';
 
@@ -20,9 +19,7 @@
     var h=document.querySelector('head');
     var count=0;
     var total={count};
-    var totalBoot={countBoot};
     var totalDynamic={countDynamic};
-    var totalStatic={countStatic};
     var appElem;
 
 
@@ -60,18 +57,11 @@
     function incrementC(){
         count++;
         if(count===totalDynamic){
-            loadFilesSync(providerlist);
-            loadFilesSync(bootlist);
+            appendScript(pfile,function(){
+                hasLoad();
+            });
         }
 
-    }
-
-    function incrementD(){
-        count++;
-        if(count===totalDynamic+totalStatic){
-            $(document).ajaxSuccess(null);
-            hasLoad();
-        }
     }
 
     function loadFiles(list){
@@ -83,17 +73,6 @@
             appendScript(file,incrementC);
         }
     }
-
-    function loadFilesSync(list){
-        for(var l in list){
-            var file=list[l];
-            var s=$('<script>').attr({src:file,type:'text/javascript'});
-           // head.append(s);
-            $.get(file,[],incrementD);
-
-        }
-    }
-
 
     loadFiles(controllerlist);
     loadFiles(directivelist);

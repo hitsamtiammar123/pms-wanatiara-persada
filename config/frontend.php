@@ -24,4 +24,6 @@ return [
         'values/user.js'
     ],
 
+    'dynamic'=>['controller','filter','service','factory','values','directive']
+
 ];

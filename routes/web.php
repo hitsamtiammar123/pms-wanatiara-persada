@@ -33,6 +33,7 @@ Route::get('/javascript/app','JavascriptController@appJS')->name('js.app');
 Route::get('/javascript/config','JavascriptController@configJS')->name('js.config');
 Route::get('/javascript/routing','JavascriptController@routingJS')->name('js.routing');
 Route::get('/javascript/user','JavascriptController@user')->name('js.user');
+Route::get('/javascript/provider','JavascriptController@provider')->name('js.provider');
 Route::get('/app/front-view','PageController@appfront')->name('app.frontview');
 
 
