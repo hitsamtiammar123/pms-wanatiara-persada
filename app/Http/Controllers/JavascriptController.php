@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Storage;
 use Illuminate\Http\Request;
+use MatthiasMullie\Minify;
 
 class JavascriptController extends Controller
 {
@@ -29,7 +30,7 @@ class JavascriptController extends Controller
             'filter'=>[],
             'values'=>[route('js.user')],
             'provider'=>['formModal.js'],
-            'boot'=>['resolve.js','routing.js',"providerConf.js",'config.js',"run.js"]
+            'boot'=>['resolve.js','routing.js',"providerConf.js",route('js.config'),"run.js"]
         ];
     }
 
@@ -154,9 +155,14 @@ class JavascriptController extends Controller
         $providers_list=array_merge($provider,$bootlist);
         $providerJS='';
 
+        $minifier=new Minify\JS;
+
         foreach($providers_list as $js){
             $providerJS.=file_get_contents($js);
         }
+
+        $minifier->add($providerJS);
+        $mJS=$minifier->minify();
 
         return response($providerJS,200,$this->header_arr);
 
