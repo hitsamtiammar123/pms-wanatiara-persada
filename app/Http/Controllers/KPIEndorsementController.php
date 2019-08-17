@@ -48,8 +48,12 @@ class KPIEndorsementController extends Controller
         if($endorse){
             $endorse->verified=$request->verified;
             $endorse->save();
-            return $request->all();
+            return [
+                'status'=>1,
+                'message'=>'Sudah disahkan'
+            ];
         }
+        return send_404_error('Data tidak ditemukan');
     }
 
 }
