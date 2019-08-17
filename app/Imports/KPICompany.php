@@ -30,7 +30,7 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
 
     public function save(){
         $dir='kpicompany/';
-        $filename=$dir.date('Y');
+        $filename=$dir.'kpicompany_'.date('Y').'_'.date('M');
 
         $data=$this->frontEndData();
 

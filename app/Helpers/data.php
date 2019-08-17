@@ -46,11 +46,12 @@ if(!function_exists('generate_id')){
 
 if(!function_exists('kpi_company')){
 
-    function kpi_company($year=null){
+    function kpi_company($year=null,$month=null){
         $disk=Storage::disk('local');
 
         $_year=is_null($year)?date('Y'):$year;
-        $file="kpicompany/$_year";
+        $_month=is_null($month)?date('M'):$month;
+        $file="kpicompany/kpicompany_{$_year}_{$_month}";
 
         $real_path=$disk->getAdapter()->getPathPrefix().'/'.$file;
         $kpi_company=file_get_contents($real_path);
