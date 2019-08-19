@@ -164,9 +164,16 @@
         <br>
         
         <div class="col-sm-12 footer-pengesahan">
-                <div class="col-sm-12"> 
-                        <p class="bold">Pengesahan</p>
+            <div class="row pengesahan-header">
+                    <div class="col-sm-6"> 
+                            <p class="bold">Pengesahan</p>
+                        </div>
+                    <div class="col-sm-6">
+                            <p ng-class="aggrementCount!==0?'blue-font':'red-font'" class="bold right-text">{{aggrementStr}}</p>
                     </div> 
+            </div>
+
+                
             <div class="col-sm-12"> 
                 <div ng-repeat="endorse in kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-sm-4">
                     {{ endorse.employee.role.name}}:
