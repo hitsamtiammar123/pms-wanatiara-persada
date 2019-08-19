@@ -4,6 +4,8 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Traits\DynamicID;
+
+
 class KPIProcess extends Model
 {
     //
@@ -23,5 +25,15 @@ class KPIProcess extends Model
 
     public function kpiheaders(){
         return $this->belongsToMany(KPIHeader::class,'kpiprocesses_kpiheaders','kpi_proccess_id','kpi_header_id');
+    }
+
+    public function getNext(){
+        $kpiheader=KPIHeader::find($this->pivot->kpi_header_id);
+        if($kpiheader){
+            $kpiheadernext=$kpiheader->getNext();
+            $kpiprocessNext=$kpiheadernext->kpiprocesses->where('id',$this->id)->first();
+            return $kpiprocessNext;
+        }
+        return null;
     }
 }

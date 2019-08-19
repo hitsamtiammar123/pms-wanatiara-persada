@@ -37,7 +37,7 @@ class KPIHeader extends Model
                 $r['name']=$kpiresult->name;
                 $r['unit']=$kpiresult->unit;
 
-                $r['id']=$kpiresultheader->kpi_result_id;
+                $r['id']=$kpiresultheader->id;
                 $r['pw_1']=$kpiresultheader->pw;
                 $r['pw_2']=$kpiresultheaderend->pw;
                 $r['pt_t1']=$kpiresultheader->pt_t;
@@ -60,13 +60,11 @@ class KPIHeader extends Model
     protected function fetchKPIProcess(){
         $result=[];
         $kpi_proccess_start=$this->kpiprocesses;
-        $kpi_proccess_end=$this->getNext()->kpiprocesses;
 
-        for($i=0;$i<count($kpi_proccess_start);$i++){
+        foreach($kpi_proccess_start as $curr_s){
             $r=[];
-            $curr_s=$kpi_proccess_start[$i];
-            //$curr_e=array_key_exists($i,$kpi_proccess_end)?$kpi_proccess_end[$i]:null;
-            $curr_e=$kpi_proccess_end[$i];
+            $curr_e=$curr_s->getNext();
+
             if($curr_e){
                 $r['id']=$curr_s->id;
                 $r['name']=$curr_s->name;
