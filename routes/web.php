@@ -15,17 +15,9 @@ use Illuminate\Http\Request;
 use App\Imports\KPICompany;
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');
-Route::get('/auth-user',function(Request $request){
-    $user=Auth::user();
-    return $user;
-});
+Route::get('/auth-user','Auth\\LoginController@auth_user')->name('authuser');
 
-Route::get('/excl-hehe',function(){
-    $path='C:\\xampp\\htdocs\\pms-wanatiara-persada-v1-laravel\\storage\\requirement\\Target Managemen 2019.xlsx';
-    $import=new KPICompany();
-    $import->import($path);
-    return $import->frontEndData();
-});
+Route::get('/excl-hehe','KPICompanyController@exclHehe')->name('exclhehe');
 
 Route::get('/pdf-hehe','PDFController@bacoba')->name('pdf.hehe');
 Route::get('/app','PageController@app')->name('app')->middleware('auth');;

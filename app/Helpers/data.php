@@ -59,3 +59,15 @@ if(!function_exists('kpi_company')){
         return json_decode($kpi_company,true);
     }
 }
+
+if(!function_exists('auth_user')){
+
+    function auth_user(){
+        $user=Auth::user();
+        if(!$user){
+            $user=Session::get('auth_user');
+        }
+        return $user;
+    }
+
+}

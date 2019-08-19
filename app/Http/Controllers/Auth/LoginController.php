@@ -36,7 +36,6 @@ class LoginController extends Controller
      * @return void
      */
     protected function authenticated(Request $request,$user){
-        //Session::put('hehe','Hahahaha');
         $user->employee;
         $request->session()->put('auth_user',$user);
     }
@@ -68,7 +67,6 @@ class LoginController extends Controller
     protected function attemptLogin(Request $request)
     {
         $credentials=$this->credentials($request);
-        //$user=User::where('id',$credentials['id'])->where('password',$credentials['password'])->first();
 
         $loggedIn=\Auth::attempt([
                 'id' => $credentials['id'],
@@ -77,6 +75,10 @@ class LoginController extends Controller
         return $loggedIn;
 
 
+    }
+
+    public function auth_user(Request $request){
+        return auth_user($request);
     }
 
     protected function credentials(Request $request)

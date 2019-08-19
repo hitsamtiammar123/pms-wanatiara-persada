@@ -128,7 +128,7 @@ class JavascriptController extends Controller
     public function user(Request $request){
         $userJS=$this->angular->get('user.js');
 
-        $auth_user=$request->session()->get('auth_user');
+        $auth_user=auth_user();
 
         if($auth_user){
             $auth_user->employee->atasan;

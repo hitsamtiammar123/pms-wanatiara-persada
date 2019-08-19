@@ -13,6 +13,13 @@ class KPICompanyController extends Controller
         return kpi_company();
     }
 
+    public function exclHehe(){
+        $path='C:\\xampp\\htdocs\\pms-wanatiara-persada-v1-laravel\\storage\\requirement\\Target Managemen 2019.xlsx';
+        $import=new KPICompany();
+        $import->import($path);
+        return $import->frontEndData();
+    }
+
     public function postKPICompany(Request $request){
         if($request->hasFile('file')){
             $dir=date('Y').'_'.date('M');
