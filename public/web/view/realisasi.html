@@ -169,7 +169,7 @@
                             <p class="bold">Pengesahan</p>
                         </div>
                     <div class="col-sm-6">
-                            <p ng-class="aggrementCount!==0?'blue-font':'red-font'" class="bold right-text">{{aggrementStr}}</p>
+                            <p ng-class="aggrementCount!==0?'blue-font':'red-font'" ng-bind-html="aggrementStr" class="bold right-text"></p>
                     </div> 
             </div>
 
