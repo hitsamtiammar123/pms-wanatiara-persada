@@ -35,8 +35,8 @@ class KPIResult extends Model
         return self::_generateID($a,$code);
     }
 
-    public function detail(){
-        return $this->hasMany(KPIResultDetail::class,'kpi_result_id','id');
+    public function kpiresultheaders(){
+        return $this->hasMany(KPIResultHeader::class,'kpi_result_id','id');
     }
 
 }

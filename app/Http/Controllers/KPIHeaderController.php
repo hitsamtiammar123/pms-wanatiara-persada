@@ -108,8 +108,9 @@ class KPIHeaderController extends Controller
         $errors=[];
 
         foreach($kpiresults as $kpiresult){
-            $curr_result=KPIResultHeader::find($kpiresult['id']);
-            if($curr_result){
+            if(!is_null($kpiresult['id'])){
+                $curr_result=KPIResultHeader::find($kpiresult['id']);
+
                 $curr_result_next=$curr_result->getNext();
                 $curr_result->pw=$kpiresult['pw_1'];
                 $curr_result->pt_t=$kpiresult['pt_t1'];
@@ -126,14 +127,59 @@ class KPIHeaderController extends Controller
                 $curr_result->kpiresult->name=$kpiresult['name'];
                 $curr_result->kpiresult->unit=$kpiresult['unit'];
 
+
                 try{
-                    $curr_result->save();
+                    $curr_result->push();
                     $curr_result_next->save();
-                    $curr_result->kpiresult->save();
+
                 }catch(Exception $err){
                     $errors[]=$err->getMessage();
                 }
+
             }
+            else{
+                $curr_result=new KPIResultHeader();
+                $curr_result->id=KPIResultHeader::generateID($header->employee->id,$header->id);
+                $curr_result->kpi_header_id=$header->id;
+
+                $curr_result_next=new KPIResultHeader();
+                $curr_result_next->id=KPIResultHeader::generateID($header_next->employee->id,$header_next->id);
+                $curr_result_next->kpi_header_id=$header_next->id;
+
+                $new_result=new KPIResult();
+                $new_result_id=KPIResult::generateID($header->employee->id);
+                $new_result->id=$new_result_id;
+                $new_result->name=$kpiresult['name'];
+                $new_result->unit=$kpiresult['unit'];
+
+                $curr_result->kpi_result_id=$new_result_id;
+                $curr_result_next->kpi_result_id=$new_result_id;
+
+
+                $curr_result->pw=$kpiresult['pw_1'];
+                $curr_result->pt_t=$kpiresult['pt_t1'];
+                $curr_result->pt_k=$kpiresult['pt_k1'];
+                $curr_result->real_t=$kpiresult['real_t1'];
+                $curr_result->real_k=$kpiresult['real_k1'];
+
+                $curr_result_next->pw=$kpiresult['pw_2'];
+                $curr_result_next->pt_t=$kpiresult['pt_t2'];
+                $curr_result_next->pt_k=$kpiresult['pt_k2'];
+                $curr_result_next->real_t=$kpiresult['real_t2'];
+                $curr_result_next->real_k=$kpiresult['real_k2'];
+
+                try{
+                    $new_result->save();
+                    $curr_result->save();
+                    $curr_result_next->save();
+                    //$curr_result->kpiresult->save();
+                }catch(Exception $err){
+                    $errors[]=$err->getMessage();
+                }
+
+            }
+
+
 
         }
 
@@ -172,7 +218,11 @@ class KPIHeaderController extends Controller
 
         return [
             'message'=>count($errors)===0?'Berhasil':'Ada error',
-            'errors'=>$errors
+            'errors'=>$errors,
+            'body'=>[
+                'kpiresult'=>$header->fetchFrontEndData('kpiresult'),
+                'kpiprocess'=>$header->fetchFrontEndData('kpiprocess')
+            ]
         ];
     }
 }
