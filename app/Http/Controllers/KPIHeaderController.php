@@ -113,12 +113,10 @@ class KPIHeaderController extends Controller
             $curr_delete=KPIResultHeader::find($todelete);
             if($curr_delete){
                 $curr_delete_next=$curr_delete->getNext();
-                try{
+
                     $curr_delete->delete();
                     $curr_delete_next?$curr_delete_next->delete():null;
-                }catch(Exception $err){
-                    $errors[]=$err->getMessage();
-                }
+
             }
         }
 
@@ -143,13 +141,8 @@ class KPIHeaderController extends Controller
                 $curr_result->kpiresult->unit=$kpiresult['unit'];
 
 
-                try{
                     $curr_result->push();
                     $curr_result_next->save();
-
-                }catch(Exception $err){
-                    $errors[]=$err->getMessage();
-                }
 
             }
             else{
@@ -183,14 +176,11 @@ class KPIHeaderController extends Controller
                 $curr_result_next->real_t=$kpiresult['real_t2'];
                 $curr_result_next->real_k=$kpiresult['real_k2'];
 
-                try{
                     $new_result->save();
                     $curr_result->save();
                     $curr_result_next->save();
                     //$curr_result->kpiresult->save();
-                }catch(Exception $err){
-                    $errors[]=$err->getMessage();
-                }
+
 
             }
 
@@ -216,24 +206,16 @@ class KPIHeaderController extends Controller
                     'real'=>$kpiprocess['real_2']
                 ];
 
-                try{
                     $curr_process->save();
-                }catch(Exception $err){
-                    $errors[]=$err->getMessage();
-                }
+
             }
         }
 
-        try{
             $header->kpiprocesses()->sync($kpiprocess_save);
             $header_next->kpiprocesses()->sync($kpiprocess_save_n);
-        }catch(Exception $err){
-            $errors[]=$err->getMessage();
-        }
 
         return [
-            'message'=>count($errors)===0?'Berhasil':'Ada error',
-            'errors'=>$errors
+            'message'=>'Berhasil'
         ];
     }
 }
