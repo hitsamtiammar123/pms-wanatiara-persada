@@ -34,6 +34,7 @@ class KPIHeader extends Model
 
             if($kpiresultheaderend){
                 $r['kpi_header_id']=$this->id;
+                $r['kpi_result_id']=$kpiresultheader->kpi_result_id;
                 $r['name']=$kpiresult->name;
                 $r['unit']=$kpiresult->unit;
 
@@ -125,22 +126,6 @@ class KPIHeader extends Model
         return null;
 
 
-    }
-
-    public function pushNewKPIResult($kpiresult_id){
-        $next_header=$this->getNext();
-
-        $kpi_result_header=new KPIResultHeader();
-        $kpi_result_header_2=new KPIResultHeader();
-
-        $kpi_result_header->id=KPIResultHeader::generateID($this->employee->id,$this->id);
-        $kpi_result_header->kpi_result_id=$kpiresult_id;
-
-        $kpi_result_header_2->id=KPIResultHeader::generateID($this->employee->id,$this->id);
-        $kpi_result_header_2->kpi_result_id=$kpiresult_id;
-
-        $this->kpiresultheaders()->save($kpi_result_header);
-        $next_header?$next_header->kpiresultheaders()->save($kpi_result_header_2):'';
     }
 
     public function employee(){

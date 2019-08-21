@@ -105,7 +105,22 @@ class KPIHeaderController extends Controller
 
         $kpiresults=json_decode($res_data['kpiresult'],true);
         $kpiprocesses=json_decode($res_data['kpiprocesses'],true);
+        $kpiresultdeletelist=json_decode($res_data['kpiresultdeletelist'],true);
+        $kpiprocessdeletelist=json_decode($res_data['kpiprocessdeletelist'],true);
         $errors=[];
+
+        foreach($kpiresultdeletelist as $todelete){
+            $curr_delete=KPIResultHeader::find($todelete);
+            if($curr_delete){
+                $curr_delete_next=$curr_delete->getNext();
+                try{
+                    $curr_delete->delete();
+                    $curr_delete_next?$curr_delete_next->delete():null;
+                }catch(Exception $err){
+                    $errors[]=$err->getMessage();
+                }
+            }
+        }
 
         foreach($kpiresults as $kpiresult){
             if(!is_null($kpiresult['id'])){
@@ -179,8 +194,6 @@ class KPIHeaderController extends Controller
 
             }
 
-
-
         }
 
         $kpiprocess_save=[];
@@ -191,21 +204,23 @@ class KPIHeaderController extends Controller
             $curr_process_id=$kpiprocess['id'];
             $curr_process=KPIProcess::find($curr_process_id);
             $curr_process->unit=$kpiprocess['unit'];
-            $kpiprocess_save[$curr_process_id]=[
-                'pw'=>$kpiprocess['pw_1'],
-                'pt'=>$kpiprocess['pt_1'],
-                'real'=>$kpiprocess['real_1']
-            ];
-            $kpiprocess_save_n[$curr_process_id]=[
-                'pw'=>$kpiprocess['pw_2'],
-                'pt'=>$kpiprocess['pt_2'],
-                'real'=>$kpiprocess['real_2']
-            ];
+            if(!in_array($curr_process_id,$kpiprocessdeletelist)){
+                $kpiprocess_save[$curr_process_id]=[
+                    'pw'=>$kpiprocess['pw_1'],
+                    'pt'=>$kpiprocess['pt_1'],
+                    'real'=>$kpiprocess['real_1']
+                ];
+                $kpiprocess_save_n[$curr_process_id]=[
+                    'pw'=>$kpiprocess['pw_2'],
+                    'pt'=>$kpiprocess['pt_2'],
+                    'real'=>$kpiprocess['real_2']
+                ];
 
-            try{
-                $curr_process->save();
-            }catch(Exception $err){
-                $errors[]=$err->getMessage();
+                try{
+                    $curr_process->save();
+                }catch(Exception $err){
+                    $errors[]=$err->getMessage();
+                }
             }
         }
 
@@ -218,11 +233,7 @@ class KPIHeaderController extends Controller
 
         return [
             'message'=>count($errors)===0?'Berhasil':'Ada error',
-            'errors'=>$errors,
-            'body'=>[
-                'kpiresult'=>$header->fetchFrontEndData('kpiresult'),
-                'kpiprocess'=>$header->fetchFrontEndData('kpiprocess')
-            ]
+            'errors'=>$errors
         ];
     }
 }
