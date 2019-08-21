@@ -20,7 +20,8 @@ Route::get('/auth-user','Auth\\LoginController@auth_user')->name('authuser');
 Route::get('/excl-hehe','KPICompanyController@exclHehe')->name('exclhehe');
 
 Route::get('/pdf-hehe','PDFController@bacoba')->name('pdf.hehe');
-Route::get('/app','PageController@app')->name('app')->middleware('auth');;
+Route::get('/app','PageController@app')->name('app')->middleware('auth');
+Route::get('/pdf/pms/{kpiheaderid}','PDFController@pms')->name('pdf.pms');
 Route::get('/javascript/app','JavascriptController@appJS')->name('js.app');
 Route::get('/javascript/config','JavascriptController@configJS')->name('js.config');
 Route::get('/javascript/routing','JavascriptController@routingJS')->name('js.routing');
