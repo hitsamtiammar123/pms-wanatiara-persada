@@ -4,12 +4,15 @@
         $pmsIndex='#!realisasi/'.$user->employee->id;
     else
         $pmsIndex='';
+
+    $tahunkiwari='{{tahunkiwari}}'
 @endphp
 
 <link rel="stylesheet" href="css/target-manajemen.css">
 <link rel="stylesheet" href="css/realisasi.css">
 <link rel="stylesheet" href="css/ikhtisar.css">
 <link rel="stylesheet" href="css/pencarian.css">
+<link rel="stylesheet" href="css/pengesahan.css">
 <div ng-controller="FrontController">
   <div class="row web-header index-bar nav-bar-fixed" >
       <div class="col-sm-12">
@@ -23,6 +26,12 @@
                             <li><a ng-click="logout()">Keluar</a></li>
                           </ul>
                         </li>
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Pengesahan<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                              <li><a href="#!pengesahan/baru">Permintaan Perubahan Status Pengesahan</a></li>
+                              <li><a href="#!pengesahan/notifikasi">Notifikasi Pengesahan</a></li>
+                            </ul>
+                          </li>
                   </ul>
               </nav>
       </div>
@@ -33,7 +42,7 @@
                   <div class="col-sm-6">
                       <div class="row">
                           <h3 class="title1">Sistem Manajemen Kinerja (PMS) 绩效考核管理体系 </h3>
-                          <h4 class="title2">PT Wanatiara Persada <span belong-to="tahunkiwari" contenteditable="true">2018</span> </h4>
+                          <h4 class="title2">PT Wanatiara Persada <span>{{ $tahunkiwari }}</span> </h4>
                       </div>
                   </div>
                   <div class="col-sm-4 header-right">
