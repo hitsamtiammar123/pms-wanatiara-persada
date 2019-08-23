@@ -15,6 +15,7 @@ class KPIProcess extends Model
     protected $hidden=['created_at','updated_at'];
 
     const HIDDEN_PIVOT_PROPERTY=['created_at','updated_at','kpi_header_id','kpi_proccess_id'];
+    const FRONT_END_PROPERTY=['pw_1','pw_2','pt_1','pt_2','real_1','real_2'];
 
     public static function generateID(){
         $a=7;

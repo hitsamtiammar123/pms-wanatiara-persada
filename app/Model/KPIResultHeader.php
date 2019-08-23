@@ -17,6 +17,8 @@ class KPIResultHeader extends Model
     protected $hidden=['created_at','updated_at'];
     protected $fillable=['pw','pt_t','pt_k','real_t','real_k'];
 
+    const FRONT_END_PROPERTY=['pw_1','pw_2','pt_t1','pt_k1','pt_t2','pt_k2','real_t1','real_k1','real_t2','real_k2'];
+
     public static function generateID($employeeID,$headerID){
         $employee=Employee::find($employeeID);
         $header=KPIHeader::find($headerID);

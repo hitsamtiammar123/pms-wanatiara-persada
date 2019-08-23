@@ -121,6 +121,7 @@ class KPIHeaderController extends Controller
         }
 
         foreach($kpiresults as $kpiresult){
+            $kpiresult=filter_is_number($kpiresult,KPIResultHeader::FRONT_END_PROPERTY);
             if(!is_null($kpiresult['id'])){
                 $curr_result=KPIResultHeader::find($kpiresult['id']);
 
@@ -194,6 +195,8 @@ class KPIHeaderController extends Controller
             $curr_process_id=$kpiprocess['id'];
             $curr_process=KPIProcess::find($curr_process_id);
             $curr_process->unit=$kpiprocess['unit'];
+            $kpiprocess=filter_is_number($kpiprocess,KPIProcess::FRONT_END_PROPERTY);
+
             if(!in_array($curr_process_id,$kpiprocessdeletelist)){
                 $kpiprocess_save[$curr_process_id]=[
                     'pw'=>$kpiprocess['pw_1'],

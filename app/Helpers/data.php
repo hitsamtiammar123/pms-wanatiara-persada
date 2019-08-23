@@ -1,6 +1,7 @@
 <?php
 
 if(!function_exists('add_zero')){
+
     function add_zero($number,$count=2){
         $check_number=pow(10,$count);
         if($number>$check_number)
@@ -68,6 +69,20 @@ if(!function_exists('auth_user')){
             $user=Session::get('auth_user');
         }
         return $user;
+    }
+}
+
+if(!function_exists('filter_not_empty')){
+
+    function filter_is_number($data,$keys,$default=null){
+
+        foreach($keys as $key){
+            $d=$data[$key];
+            if(!is_numeric($d))
+                $d=$default;
+            $data[$key]=$d;
+        }
+        return $data;
     }
 
 }
