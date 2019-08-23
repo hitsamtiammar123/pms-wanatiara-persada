@@ -72,7 +72,7 @@ if(!function_exists('auth_user')){
     }
 }
 
-if(!function_exists('filter_not_empty')){
+if(!function_exists('filter_is_number')){
 
     function filter_is_number($data,$keys,$default=null){
 
