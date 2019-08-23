@@ -26,9 +26,9 @@
                             <li><a ng-click="logout()">Keluar</a></li>
                           </ul>
                         </li>
-                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Pengesahan<span class="caret"></span></a>
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Pengesahan <span class="notification-label">(10)</span> <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#!pengesahan/notifikasi">Notifikasi</a></li>
+                                <li><a href="#!pengesahan/notifikasi">Notifikasi <span class="notification-label">(10)</span> </a></li>
                               <li><a href="#!pengesahan/baru">Perubahan Pengesahan</a></li>
 
                             </ul>

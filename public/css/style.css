@@ -1,12 +1,12 @@
 .title1{
     color:springgreen;
     font-weight: bold;
-} 
+}
 
 .title2{
     color:blue;
 }
- 
+
 body{
     width:1362px;
 }
@@ -75,7 +75,7 @@ table th{
     margin-top:20px;
 
 }
- 
+
 .target-link{
     display:block;
     width:100%;
@@ -126,7 +126,7 @@ table th{
 }
 
 .table-70{
-    width:70%; 
+    width:70%;
 }
 
 .table-content{
@@ -174,7 +174,7 @@ table th{
     display:block !important;
 }
 
-td{ 
+td{
     font-size: 13px;
 }
 
@@ -254,7 +254,7 @@ td{
     z-index: 1;
     margin-top: 30px;
     margin-left: -20px;
-} 
+}
 
 .c-container{
     margin-top: 17%;
@@ -274,9 +274,9 @@ td{
     margin-right: 15px;
 }
 
-/* Jabatan*/
-
-
+.notification-label{
+    font-weight: bold;
+}
 
 /*Padding Elemen*/
 

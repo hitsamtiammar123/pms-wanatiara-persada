@@ -42,9 +42,9 @@ class TestCommand extends Command
         //
         $user=User::find('1950300028');
 
-        for($i=0;$i<10;$i++)
-            $user->notify(new EndorsementNotification);
+        $notification=$user->unreadNotifications->where('id','6dfac035-99c9-439e-b047-3fc9345cba9d')->first();
 
-        $this->info('done hehe');
+        dd($notification->toArray());
+
     }
 }

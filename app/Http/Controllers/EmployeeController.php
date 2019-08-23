@@ -116,10 +116,20 @@ class EmployeeController extends Controller
         $employee=Employee::find($employeeID);
 
         if($employee && $employee->isUser() ){
-            $user=$employee->user;
-            $notifications=$user->notifications;
+            $page=$request->input('page');
+            $page=$page?intval($page):1;
 
-            return $notifications->makeHidden(User::HIDDEN_PROPERTY_NOTIFICATION);
+            $skip=($page-1)*5;
+
+            $user=$employee->user;
+            $notifications=$user->notifications->sortBy('created_at')->splice($skip)->take(5);
+
+            return[
+                'unread'=>$user->unreadNotifications->count(),
+                'data'=>$notifications->makeHidden(User::HIDDEN_PROPERTY_NOTIFICATION)
+            ];
+
+
         }
 
         return null;
