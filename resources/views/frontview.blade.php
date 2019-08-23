@@ -28,8 +28,9 @@
                         </li>
                         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Pengesahan<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                              <li><a href="#!pengesahan/baru">Permintaan Perubahan Status Pengesahan</a></li>
-                              <li><a href="#!pengesahan/notifikasi">Notifikasi Pengesahan</a></li>
+                                <li><a href="#!pengesahan/notifikasi">Notifikasi</a></li>
+                              <li><a href="#!pengesahan/baru">Perubahan Pengesahan</a></li>
+
                             </ul>
                           </li>
                   </ul>
