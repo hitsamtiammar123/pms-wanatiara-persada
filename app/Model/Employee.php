@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Model\Traits\Indexable;
 use App\Model\Traits\DynamicID;
-use App\User;
+use App\Model\User;
 
 class Employee extends Model
 {
@@ -28,6 +28,10 @@ class Employee extends Model
     public static function generateID(){
         $a=1;
         return self::_generateID($a);
+    }
+
+    public function isUser(){
+        return !is_null($this->user);
     }
 
     public function user(){
