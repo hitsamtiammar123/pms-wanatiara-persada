@@ -7,6 +7,7 @@ use App\Model\Employee;
 use App\Model\Role;
 use App\Model\KPIHeader;
 use App\Model\KPIResult;
+use App\Model\User;
 
 class EmployeeController extends Controller
 {
@@ -108,6 +109,20 @@ class EmployeeController extends Controller
 
             return ['data'=>[$employee]];
         }
+
+    }
+
+    public function getNotification(Request $request,$employeeID){
+        $employee=Employee::find($employeeID);
+
+        if($employee && $employee->isUser() ){
+            $user=$employee->user;
+            $notifications=$user->notifications;
+
+            return $notifications->makeHidden(User::HIDDEN_PROPERTY_NOTIFICATION);
+        }
+
+        return null;
 
     }
 

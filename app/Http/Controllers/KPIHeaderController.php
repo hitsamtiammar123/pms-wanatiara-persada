@@ -69,7 +69,7 @@ class KPIHeaderController extends Controller
 
         $kpiheader_arr=$kpiheader->toArray();
         $kpiheader_arr['kpiresults']=$kpiheader->fetchFrontEndData('kpiresult');
-        $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements;
+        $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements->keyBy('level');
         $kpiheader_arr['kpiprocesses']=$kpiheader->fetchFrontEndData('kpiprocess');
         $kpiheader_arr['period_end']=$next_date->format('Y-m-d');
         $kpiheader_arr['period_start']=$kpiheader_arr['period'];

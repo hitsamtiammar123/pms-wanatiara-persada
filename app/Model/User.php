@@ -13,6 +13,8 @@ class User extends Authenticatable
 {
     use Notifiable,SoftDeletes,Indexable,DynamicID;
 
+    const HIDDEN_PROPERTY_NOTIFICATION=['created_at','updated_at','notifiable_type','type'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -42,6 +44,7 @@ class User extends Authenticatable
     ];
 
     protected $dates=['deleted_at'];
+
 
     public static function generateID(){
         $a=0;

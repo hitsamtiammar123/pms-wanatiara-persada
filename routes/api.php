@@ -37,6 +37,8 @@ Route::group(['prefix'=>'v1','middleware'=>['cors']
     Route::get('/search/result','SearchController@result')->name('search.result');
     Route::get('/kpicompany','KPICompanyController@getCurrentKPICompany')->name('kpicompany.get');
     Route::post('/kpicompany','KPICompanyController@postKPICompany')->name('kpicompany.post');
+    Route::get('/get-notification/{employeeID}','EmployeeController@getNotification')->name('notification.get');
+
 });
 
 

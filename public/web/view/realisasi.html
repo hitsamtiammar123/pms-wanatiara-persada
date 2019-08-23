@@ -15,17 +15,17 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-3">
-                        <button class="btn btn-success save-change-btn" ng-click="saveChanged()" ng-disabled="hasChanged || toogle_delete">Simpan Perubahan</button>
+                        <button class="btn btn-success save-change-btn" ng-hide="hasEndorse" ng-click="saveChanged()" ng-disabled="hasChanged || toogle_delete">Simpan Perubahan</button>
                     </div>
                 </div>   
                  
         </div>   
     <div class="table-100">
         <p class="bold table-title">1. Sasaran Hasil {{ header.weight_result?(header.weight_result*100)+'%':'' }}</p>
-        <button class="btn btn-primary" ng-click="copyData()">Salin</button>
-        <button class="btn btn-primary" ng-click="pasteData()">Tempel</button>
-        <button class="btn btn-primary" ng-click="undoData()">Batal</button>
-        <button class="btn btn-primary" ng-click="redoData()">Balik</button>
+        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="copyData()">Salin</button>
+        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="pasteData()">Tempel</button>
+        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="undoData()">Batal</button>
+        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="redoData()">Balik</button>
         <table class="table realisasi-table">
                 <thead>
                         <tr>
@@ -45,11 +45,11 @@
                     <tbody> 
                             <tr ng-repeat="d in data track by $index" ng-init="c_index=0;outerIndex=$index">
                                 <td><span ng-if="!dlt_result.toogle_delete">{{$index+1}}</span><button class="btn btn-danger" ng-if="dlt_result.toogle_delete" ng-click="deleteRow($index)">X</button></td> 
-                                <td class="kpi" belong-to="d.name" after-edit="setKPI" contenteditable="true" data-flag="name"
+                                <td class="kpi" belong-to="d.name" after-edit="setKPI" contenteditable="{{d.name_contentEditable}}" data-flag="name"
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 notify-g-label="realisasi-content:kpi-{{outerIndex}}" ng-class="d.kpiColor" i-index="name" c-index="{{c_index}}" d-index="{{$index}}"></td> 
 
-                                <td belong-to="d.unit" after-edit="setDataFilter" contenteditable="true" data-flag="unit" 
+                                <td belong-to="d.unit" after-edit="setDataFilter" contenteditable="{{d.unit_contentEditable}}" data-flag="unit" 
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 notify-g-label="realisasi-content:unit-{{outerIndex}}" ng-class="d.unitColor" i-index="unit" c-index="{{c_index+1}}" d-index="{{$index}}"></td>
 
@@ -100,15 +100,15 @@
                             </tr>
                     </tbody>
         </table>
-        <button class="btn btn-success" ng-click="addRow()" ng-disabled="hasChanged || dlt_result.toogle_delete">Tambah Baris</button>
-        <button class="btn btn-danger" ng-click="toogleDelete(dlt_result)" ng-disabled="hasChanged">{{dlt_result.dlt_message}}</button>
+        <button class="btn btn-success" ng-hide="hasEndorse" ng-click="addRow()" ng-disabled="hasChanged || dlt_result.toogle_delete">Tambah Baris</button>
+        <button class="btn btn-danger" ng-hide="hasEndorse" ng-click="toogleDelete(dlt_result)" ng-disabled="hasChanged">{{dlt_result.dlt_message}}</button>
         <div>{{changedMessage}}</div>
                 
         <p class="bold table-title">2. Sasaran Proses {{ header.weight_process?(header.weight_process*100)+'%':'' }}</p>
-        <button class="btn btn-primary" ng-click="copyDataP()">Salin</button>
-        <button class="btn btn-primary" ng-click="pasteDataP()">Tempel</button>
-        <button class="btn btn-primary" ng-click="undoDataP()">Batal</button>
-        <button class="btn btn-primary" ng-click="redoDataP()">Balik</button>
+        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="copyDataP()">Salin</button>
+        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="pasteDataP()">Tempel</button>
+        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="undoDataP()">Batal</button>
+        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="redoDataP()">Balik</button>
         <table class="table realisasi-table">
                 <thead>
                         <tr>
@@ -129,17 +129,17 @@
                             <tr ng-repeat="p in kpiprocesses">
                                  <td><span ng-if="!dlt_process.toogle_delete">{{$index+1}}</span><button class="btn btn-danger" ng-if="dlt_process.toogle_delete" ng-click="deleteRowP($index,false)">X</button></td> 
                                  <td class="kpi-process" d-index="{{$index}}"  belong-to="p.name" auto-fill="true" contenteditable="false"></td>
-                                 <td belong-to="p.unit" d-index="{{$index}}" on-data-paste="dataPasteP" on-data-escaped="dataEscapedP" on-data-copy="dataCopyP" notify-g-label="realisasi-content" on-data-selected="dataSelectedP" c-index="0" auto-fill="true" contenteditable="true"></td>
-                                 <td belong-to="p.pw_1" after-edit="setBColorP|setTotalW_P" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP"  c-index="1" data-flag="pw" format="{{p.pw_filter}}" auto-fill="true" contenteditable="true"></td>
-                                 <td belong-to="p.pw_2" after-edit="setBColorP|setTotalW_P" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="2" data-flag="pw" format="{{p.pw_filter}}" auto-fill="true" contenteditable="true"></td>
-                                 <td belong-to="p.pt_1" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="3" auto-fill="true" data-flag="pt" contenteditable="true"></td>
-                                 <td belong-to="p.pt_2" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="4" auto-fill="true" data-flag="pt" contenteditable="true"></td>
-                                 <td belong-to="p.real_1" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="5" auto-fill="true" data-flag="real" contenteditable="true"></td>
-                                 <td belong-to="p.real_2" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP"  c-index="6" auto-fill="true" data-flag="real" contenteditable="true"></td>
-                                 <td belong-to="p.kpia_1" ng-class="p.bColor_kpia_1" on-data-paste="dataPasteP" auto-fill="true" data-flag="kpia" notify-g-label="realisasi-content" format="{{p.kpia_filter}}"></td>
-                                 <td belong-to="p.kpia_2" ng-class="p.bColor_kpia_2" on-data-paste="dataPasteP" auto-fill="true" data-flag="kpia" notify-g-label="realisasi-content" format="{{p.kpia_filter}}"></td>
-                                 <td belong-to="p.aw_1" auto-fill="true" data-flag="aw" on-data-paste="dataPasteP" notify-g-label="realisasi-content" format="{{p.aw_filter}}"></td>
-                                 <td belong-to="p.aw_2"auto-fill="true" data-flag="aw" on-data-paste="dataPasteP" notify-g-label="realisasi-content" format="{{p.aw_filter}}"></td>
+                                 <td belong-to="p.unit" d-index="{{$index}}" on-data-paste="dataPasteP" on-data-escaped="dataEscapedP" on-data-copy="dataCopyP" notify-g-label="realisasi-content" on-data-selected="dataSelectedP" c-index="0" auto-fill="true" contenteditable="{{p.contentEditable.unit}}"></td>
+                                 <td belong-to="p.pw_1" after-edit="setBColorP|setTotalW_P" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP"  c-index="1" data-flag="pw" format="{{p.pw_filter}}" auto-fill="true" contenteditable="{{p.contentEditable.pw_1}}"></td>
+                                 <td belong-to="p.pw_2" after-edit="setBColorP|setTotalW_P" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="2" data-flag="pw" format="{{p.pw_filter}}" auto-fill="true" contenteditable="{{p.contentEditable.pw_2}}"></td>
+                                 <td belong-to="p.pt_1" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="3" auto-fill="true" data-flag="pt" contenteditable="{{p.contentEditable.pt_1}}"></td>
+                                 <td belong-to="p.pt_2" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="4" auto-fill="true" data-flag="pt" contenteditable="{{p.contentEditable.pt_2}}"></td>
+                                 <td belong-to="p.real_1" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="5" auto-fill="true" data-flag="real" contenteditable="{{p.contentEditable.real_1}}"></td>
+                                 <td belong-to="p.real_2" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP"  c-index="6" auto-fill="true" data-flag="real" contenteditable="{{p.contentEditable.real_2}}"></td>
+                                 <td belong-to="p.kpia_1" ng-class="p.bColor_kpia_1" on-data-paste="dataPasteP" auto-fill="true" data-flag="kpia" notify-g-label="realisasi-content" format="{{p.kpia_filter}}" contenteditable="{{p.contentEditable.kpia_1}}"></td>
+                                 <td belong-to="p.kpia_2" ng-class="p.bColor_kpia_2" on-data-paste="dataPasteP" auto-fill="true" data-flag="kpia" notify-g-label="realisasi-content" format="{{p.kpia_filter}}" contenteditable="{{p.contentEditable.kpia_2}}"></td>
+                                 <td belong-to="p.aw_1" auto-fill="true" data-flag="aw" on-data-paste="dataPasteP" notify-g-label="realisasi-content" contenteditable="{{p.contentEditable.aw_1}}" format="{{p.aw_filter}}"></td>
+                                 <td belong-to="p.aw_2"auto-fill="true" data-flag="aw" on-data-paste="dataPasteP" notify-g-label="realisasi-content" contenteditable="{{p.contentEditable.aw_2}}" format="{{p.aw_filter}}"></td>
                             </tr>
                                 <tr>
                                     <td colspan="4" class="center-text bold">责任权重总数 TOTAL BOBOT :</td>
@@ -159,8 +159,8 @@
                     </tbody>
         </table>
 
-        <button class="btn btn-success" ng-click="addPRow()" ng-disabled="hasChanged || dlt_process.toogle_delete">Tambah Baris</button>
-        <button class="btn btn-danger" ng-click="toogleDelete(dlt_process)" ng-disabled="hasChanged">{{dlt_process.dlt_message}}</button>
+        <button class="btn btn-success" ng-hide="hasEndorse" ng-click="addPRow()" ng-disabled="hasChanged || dlt_process.toogle_delete">Tambah Baris</button>
+        <button class="btn btn-danger" ng-hide="hasEndorse" ng-click="toogleDelete(dlt_process)" ng-disabled="hasChanged">{{dlt_process.dlt_message}}</button>
         <br>
         
         <div class="col-sm-12 footer-pengesahan">
@@ -177,7 +177,7 @@
             <div class="col-sm-12"> 
                 <div ng-repeat="endorse in kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-sm-4">
                     {{ endorse.employee.role.name}}:
-                    <input type="checkbox" ng-change="endorse.employee.id===user.employee.id?setEndorse(endorse):null" ng-disabled="endorse.employee.id!==user.employee.id" ng-model="aggrements[endorse.id]">
+                    <input type="checkbox" ng-change="!isEndorseDisable(endorse)?setEndorse(endorse):null" ng-disabled="isEndorseDisable(endorse)" ng-model="aggrements[endorse.id]">
                 </div>
             </div>
             <div class="col-sm-12 tanda-tangan"></div>

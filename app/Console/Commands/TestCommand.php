@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Excel;
-use App\Imports\ArrayImport;
+use App\Notifications\EndorsementNotification;
+use App\Model\User;
 
 class TestCommand extends Command
 {
@@ -40,9 +40,11 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        //$this->info(KPIResultDetail::generateID('2019-08-16'));
-        $path='C:\\xampp\\htdocs\\pms-wanatiara-persada-v1-laravel\\storage\\requirement\\Target Managemen 2019.xlsx';
+        $user=User::find('1950300028');
 
+        for($i=0;$i<10;$i++)
+            $user->notify(new EndorsementNotification);
 
+        $this->info('done hehe');
     }
 }
