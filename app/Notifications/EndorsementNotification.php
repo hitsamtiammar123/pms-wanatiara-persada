@@ -6,54 +6,70 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Carbon\Carbon;
 
 class EndorsementNotification extends Notification
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
+    protected $header;
+    protected $employee;
+
+    protected function getRedirectLink(){
+        $header_id=$this->header->employee->id;
+        $link="realisasi/$header_id";
+
+        return $link;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
+    protected function getMessage(){
+        $message="%s sudah mengesahkan %s untuk periode %s";
+        $header=$this->header;
+
+        $employee_name=$this->employee->name;
+        $headerTo='';
+
+        if($header->employee->id === $this->employee->id){
+            $headerTo='PMS nya sendiri';
+        }
+        else{
+            $headerTo='PMS dari '.$header->employee->name;
+        }
+
+
+        $period=Carbon::parse($header->period)->format('M Y');
+
+        $result=sprintf($message,$employee_name,$headerTo,$period);
+        return $result;
+
+    }
+
+    public function __construct($header,$employee)
+    {
+        $this->header=$header;
+        $this->employee=$employee;
+    }
+
+
     public function via($notifiable)
     {
         return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
+
     public function toMail($notifiable)
     {
 
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
+
     public function toArray($notifiable)
     {
         return [
             'type'=>'redirect',
-            'subject'=>'Test Subject'
+            'subject'=>$this->getMessage(),
+            'redirectTo'=>$this->getRedirectLink(),
+            'from'=>$this->employee->name
         ];
     }
 }

@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-class="!notification.read_at?'bold':''" ng-repeat="notification in notifications.data track by $index">
+                <tr ng-class="!notification.read_at?'bold':''" ng-repeat="notification in notifications track by $index">
                     <td>{{notification.from}}</td>
                     <td> <a ng-click="toNotification(notification)" class="a-pengesahan">{{notification.subject}}</a></td>
                     <td>{{notification.date}}</td>
@@ -22,7 +22,7 @@
             </tbody>
         </table>
 
-        <span ng-show="hasLoad" >  
+        <span ng-show="hasLoad && totalPage!==0 " >  
             <button class="btn btn-default" ng-click="prevPage()" ng-disabled="isLoading || page===1 "> < </button>
             <span> Halaman {{page}} dari {{totalPage}} </span>
             <button class="btn btn-default" ng-click="nextPage()" ng-disabled="isLoading || page===totalPage"> > </button>

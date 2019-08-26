@@ -131,8 +131,10 @@ class JavascriptController extends Controller
         $auth_user=auth_user();
 
         if($auth_user){
-            $auth_user->employee->atasan;
-            $auth_user->employee->atasan->role;
+            if($auth_user->employee->atasan){
+                $auth_user->employee->atasan;
+                $auth_user->employee->atasan->role;
+            }
             $auth_user->employee->bawahan;
             $auth_user->employee->role;
             $auth_user->employee->bawahan->each(function($d){

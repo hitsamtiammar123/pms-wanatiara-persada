@@ -19,7 +19,7 @@ class NotificationController extends Controller
             $skip=($page-1)*5;
 
             $user=$employee->user;
-            $notifications=$user->notifications->sortBy('created_at')->splice($skip)->take(5);
+            $notifications=$user->notifications->sortByDesc('created_at')->splice($skip)->take(5);
 
             return[
                 'total'=>$user->notifications->count(),
@@ -39,7 +39,8 @@ class NotificationController extends Controller
             $notifications=$employee->user->notifications;
             $n=$notifications->where('id',$id)->first();
 
-            $n->markAsRead();
+            if(!$n->read_at)
+                $n->markAsRead();
             return [
                 'message'=>'Notifikasi sudah dilabel sebagai sudah dibaca',
                 'data'=>$n

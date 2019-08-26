@@ -4,29 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\KPIEndorsement;
+use App\Notifications\EndorsementNotification;
 
 class KPIEndorsementController extends Controller
 {
 
 
+    protected function fireEndorsementEvent($endorse){
+        $auth_user=auth_user();
+        $header=$endorse->kpiheader;
+        $employee=$auth_user->employee;
+        $userToSend=$endorse->employee->atasan->user;
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+        $userToSend->notify(new EndorsementNotification($header,$employee));
+
+    }
+
+
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         //
@@ -34,13 +34,6 @@ class KPIEndorsementController extends Controller
 
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
@@ -48,6 +41,8 @@ class KPIEndorsementController extends Controller
         if($endorse){
             $endorse->verified=$request->verified;
             $endorse->save();
+            $this->fireEndorsementEvent($endorse);
+
             return [
                 'status'=>1,
                 'message'=>'Sudah disahkan',

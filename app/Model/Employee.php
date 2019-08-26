@@ -36,11 +36,20 @@ class Employee extends Model
 
         foreach($notifications as $notification){
             $r=[];
+            $data=$notification->data;
             $r['id']=$notification->id;
             $r['read_at']=$notification->read_at;
             $r['date']=Carbon::parse($notification->created_at)->format('d M Y');
-            $r['subject']=$notification->data['subject'];
-            $r['from']='Zhang Hehe';
+            $r['subject']=$data['subject'];
+            $r['type']=$data['type'];
+            if($r['type']==='redirect'){
+                $r['redirectTo']=array_key_exists('redirectTo',$data)?
+                $notification->data['redirectTo']:'/';
+            }
+            if(array_key_exists('from',$data))
+                $r['from']=$data['from'];
+            else
+                $r['from']='System';
 
             $result[]=$r;
         }

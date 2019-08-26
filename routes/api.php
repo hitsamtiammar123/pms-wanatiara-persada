@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 
-Route::group(['prefix'=>'v1','middleware'=>['cors']
+Route::group(['prefix'=>'v1','middleware'=>['cors','web']
 ],function(){
     Route::resource('kpiheader','KPIHeaderController',[
         'only'=>['index','show','update']

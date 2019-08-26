@@ -40,11 +40,13 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        $user=User::find('1950300028');
+        $s='test';
+        $t='234';
+        $str="ini hasil dari test %s, ini hasil dari t %s";
 
-        $notification=$user->unreadNotifications->where('id','6dfac035-99c9-439e-b047-3fc9345cba9d')->first();
+        $result=sprintf($str,$s,$t);
 
-        dd($notification->toArray());
+        echo $result;
 
     }
 }
