@@ -62,7 +62,7 @@ class SearchController extends Controller
             
             if($result){
                 $result->load('employee');
-                $result=$result->employee[0];
+                $result=$result->employee->count()!==0?$result->employee[0]:null;
             }
         }
         else if($type==='employee'){
