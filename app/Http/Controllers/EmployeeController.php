@@ -27,23 +27,13 @@ class EmployeeController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         //
@@ -80,13 +70,7 @@ class EmployeeController extends Controller
 
 
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         //
@@ -112,36 +96,9 @@ class EmployeeController extends Controller
 
     }
 
-    public function getNotification(Request $request,$employeeID){
-        $employee=Employee::find($employeeID);
-
-        if($employee && $employee->isUser() ){
-            $page=$request->input('page');
-            $page=$page?intval($page):1;
-
-            $skip=($page-1)*5;
-
-            $user=$employee->user;
-            $notifications=$user->notifications->sortBy('created_at')->splice($skip)->take(5);
-
-            return[
-                'unread'=>$user->unreadNotifications->count(),
-                'data'=>$notifications->makeHidden(User::HIDDEN_PROPERTY_NOTIFICATION)
-            ];
 
 
-        }
 
-        return null;
-
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //

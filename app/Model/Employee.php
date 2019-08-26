@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Model\Traits\Indexable;
 use App\Model\Traits\DynamicID;
 use App\Model\User;
+use Carbon\Carbon;
 
 class Employee extends Model
 {
@@ -29,6 +30,23 @@ class Employee extends Model
         $a=1;
         return self::_generateID($a);
     }
+
+    public static function frontEndNotifications($notifications){
+        $result=[];
+
+        foreach($notifications as $notification){
+            $r=[];
+            $r['id']=$notification->id;
+            $r['read_at']=$notification->read_at;
+            $r['date']=Carbon::parse($notification->created_at)->format('d M Y');
+            $r['subject']=$notification->data['subject'];
+            $r['from']='Zhang Hehe';
+
+            $result[]=$r;
+        }
+        return $result;
+    }
+
 
     public function isUser(){
         return !is_null($this->user);

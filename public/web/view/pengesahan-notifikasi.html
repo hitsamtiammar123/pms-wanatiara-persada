@@ -10,36 +10,25 @@
                     <th>Dari</th>
                     <th>Subjek</th>
                     <th>Tanggal</th>
-                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                <tr class="bold">
-                    <td>Zhang Hehe</td>
-                    <td> <a href="#!pengesahan/detail">Permintaan perubahan notifikasi hehe</a></td>
-                    <td>15 Agustus 2019</td>
-                    <td>Belum disetujui</td>
+                <tr class="bold" ng-repeat="notification in notifications.data track by $index">
+                    <td>{{notification.from}}</td>
+                    <td> <a ng-click="toNotification(notification)" class="a-pengesahan">{{notification.subject}}</a></td>
+                    <td>{{notification.date}}</td>
                 </tr>
-                <tr>
-                    <td>Zhang Hehe</td>
-                    <td>Permintaan perubahan notifikasi hehe</td>
-                    <td>15 Agustus 2019</td>
-                    <td>Belum disetujui</td>
-                </tr>
-                <tr>
-                    <td>Zhang Hehe</td>
-                    <td>Permintaan perubahan notifikasi hehe</td>
-                    <td>15 Agustus 2019</td>
-                    <td>Belum disetujui</td>
-                </tr>
-                <tr>
-                    <td>Zhang Hehe</td>
-                    <td>Permintaan perubahan notifikasi hehe</td>
-                    <td>15 Agustus 2019</td>
-                    <td>Belum disetujui</td>
-                </tr>
+
             </tbody>
         </table>
+
+        <span ng-show="hasLoad" >  
+            <button class="btn btn-default" ng-click="prevPage()" ng-disabled="isLoading || page===1 "> < </button>
+            <span> Halaman {{page}} dari {{totalPage}} </span>
+            <button class="btn btn-default" ng-click="nextPage()" ng-disabled="isLoading || page===totalPage"> > </button>
+        </span>
+            
+
     </div>
 
 </div>
