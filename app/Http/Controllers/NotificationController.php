@@ -28,10 +28,24 @@ class NotificationController extends Controller
                 'data'=>Employee::frontEndNotifications($notifications)
             ];
 
-
         }
 
         return null;
+    }
 
+    public function markAsRead(Request $request,$employeeID,$id){
+        $employee=Employee::find($employeeID);
+        if($employee && $employee->isUser()){
+            $notifications=$employee->user->notifications;
+            $n=$notifications->where('id',$id)->first();
+
+            $n->markAsRead();
+            return [
+                'message'=>'Notifikasi sudah dilabel sebagai sudah dibaca',
+                'data'=>$n
+            ];
+        }
+
+        return null;
     }
 }

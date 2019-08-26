@@ -13,7 +13,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="bold" ng-repeat="notification in notifications.data track by $index">
+                <tr ng-class="!notification.read_at?'bold':''" ng-repeat="notification in notifications.data track by $index">
                     <td>{{notification.from}}</td>
                     <td> <a ng-click="toNotification(notification)" class="a-pengesahan">{{notification.subject}}</a></td>
                     <td>{{notification.date}}</td>

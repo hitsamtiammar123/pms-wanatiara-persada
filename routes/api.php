@@ -38,6 +38,7 @@ Route::group(['prefix'=>'v1','middleware'=>['cors']
     Route::get('/kpicompany','KPICompanyController@getCurrentKPICompany')->name('kpicompany.get');
     Route::post('/kpicompany','KPICompanyController@postKPICompany')->name('kpicompany.post');
     Route::get('/notification/get/{employeeID}','NotificationController@getNotification')->name('notification.get');
+    Route::get('/notification/mark-as-read/{employeeID}/{id}','NotificationController@markAsRead')->name('notification.mark-as-read');
 
 });
 
