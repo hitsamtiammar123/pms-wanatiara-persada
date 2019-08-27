@@ -40,13 +40,9 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        $s='test';
-        $t='234';
-        $str="ini hasil dari test %s, ini hasil dari t %s";
+        $user=User::first();
 
-        $result=sprintf($str,$s,$t);
-
-        echo $result;
+        echo $user['id'];
 
     }
 }
