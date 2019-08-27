@@ -19,7 +19,7 @@ class Role extends Model
     ];
     protected $casts=['id'=>'string'];
 
-    protected $hidden=['created_at','updated_at','deleted_at'];
+    protected $hidden=['created_at','updated_at','deleted_at','tier','level','can_have_child'];
 
     public static function generateID(){
         $a=2;
