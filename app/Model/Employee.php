@@ -39,26 +39,32 @@ class Employee extends Model
         return self::_generateID($a);
     }
 
+    public static function frontEndNotification($notification){
+        $r=[];
+
+        $data=$notification->data;
+        $r['id']=$notification->id;
+        $r['read_at']=$notification->read_at;
+        $r['date']=Carbon::parse($notification->created_at)->format('d M Y');
+        $r['subject']=$data['subject'];
+        $r['type']=$data['type'];
+        if($r['type']==='redirect'){
+            $r['redirectTo']=array_key_exists('redirectTo',$data)?
+            $notification->data['redirectTo']:'/';
+        }
+        if(array_key_exists('from',$data))
+            $r['from']=$data['from'];
+        else
+            $r['from']='System';
+
+        return $r;
+    }
+
     public static function frontEndNotifications($notifications){
         $result=[];
 
         foreach($notifications as $notification){
-            $r=[];
-            $data=$notification->data;
-            $r['id']=$notification->id;
-            $r['read_at']=$notification->read_at;
-            $r['date']=Carbon::parse($notification->created_at)->format('d M Y');
-            $r['subject']=$data['subject'];
-            $r['type']=$data['type'];
-            if($r['type']==='redirect'){
-                $r['redirectTo']=array_key_exists('redirectTo',$data)?
-                $notification->data['redirectTo']:'/';
-            }
-            if(array_key_exists('from',$data))
-                $r['from']=$data['from'];
-            else
-                $r['from']='System';
-
+            $r=self::frontEndNotification($notification);
             $result[]=$r;
         }
         return $result;

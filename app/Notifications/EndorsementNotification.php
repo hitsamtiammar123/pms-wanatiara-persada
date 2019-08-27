@@ -62,14 +62,18 @@ class EndorsementNotification extends Notification
 
     }
 
-
-    public function toArray($notifiable)
-    {
+    public function getArrayData(){
         return [
             'type'=>'redirect',
             'subject'=>$this->getMessage(),
             'redirectTo'=>$this->getRedirectLink(),
             'from'=>$this->employee->name
         ];
+    }
+
+
+    public function toArray($notifiable)
+    {
+        return $this->getArrayData();
     }
 }

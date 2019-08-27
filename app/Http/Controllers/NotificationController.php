@@ -9,7 +9,46 @@ use App\Model\User;
 class NotificationController extends Controller
 {
     //
-    public function getNotification(Request $request,$employeeID){
+
+    protected function sendNotFound($id){
+        return send_404_error('Notifikasi dengan id '.$id.' tidak ditemukan');
+    }
+
+    protected function sendUserNotFound($employeeID){
+        return send_404_error('Pengguna dengan id '.$employeeID.' tidak ditemukan');
+    }
+
+    protected function sendMarkAsReadArray($n){
+        return [
+            'message'=>'Notifikasi sudah dilabel sebagai sudah dibaca',
+            'data'=>$n
+        ];
+    }
+
+    protected function sendHasReadArray($n){
+        return [
+            'message'=>'Notifikasi sudah dibaca sebelumnya',
+            'data'=>$n
+        ];
+    }
+
+    public function getNotification($employeeID,$id){
+        $employee=Employee::find($employeeID);
+
+        if($employee && $employee->isUser()){
+            $notification=$employee->user->notifications->where('id',$id)->first();
+
+            if($notification)
+                return Employee::frontEndNotification($notification);
+            else
+                return $this->sendNotFound($id);
+
+        }
+
+        return $this->sendUserNotFound($employeeID);
+    }
+
+    public function getNotifications(Request $request,$employeeID){
         $employee=Employee::find($employeeID);
 
         if($employee && $employee->isUser() ){
@@ -30,7 +69,7 @@ class NotificationController extends Controller
 
         }
 
-        return send_404_error('Karyawan dengan id '.$employeeID,' tidak ditemukan');
+        return $this->sendUserNotFound($employeeID);
     }
 
     public function markAsRead(Request $request,$employeeID,$id){
@@ -40,25 +79,18 @@ class NotificationController extends Controller
             $n=$notifications->where('id',$id)->first();
 
             if(!$n)
-               return send_404_error('Notifikasi dengan id '.$id,' tidak ditemukan');
+                return $this->sendNotFound($id);
 
             if(is_null($n->read_at)){
                 $n->markAsRead();
-
-                return [
-                    'message'=>'Notifikasi sudah dilabel sebagai sudah dibaca',
-                    'data'=>$n
-                ];
+                return $this->sendMarkAsReadArray($n);
             }
             else
-                return [
-                    'message'=>'Notifikasi sudah dibaca sebelumnya',
-                    'data'=>$n
-                ];;
+                return $this->sendHasReadArray($n);
 
         }
 
-        return send_404_error('Karyawan dengan id '.$employeeID,' tidak ditemukan');
+        return $this->sendUserNotFound($employeeID);
     }
 
     public function getRequestableUsers($employeeID){
@@ -84,6 +116,6 @@ class NotificationController extends Controller
             return $result;
         }
 
-        return send_404_error('Data pengguna dengan id '.$employeeID.' tidak ditemukan');
+        return $this->sendUserNotFound($employeeID);
     }
 }
