@@ -60,6 +60,12 @@ Route::group(['prefix'=>'v1','middleware'=>['cors','web']
     Route::get('/notification/requestableusers/{employeeID}','NotificationController@getRequestableUsers')
     ->name('notification.requestable-user');
 
+    Route::post('/notification/request-change/{employeeID}','NotificationController@requestChange')
+    ->name('notification.request-change');
+
+    Route::put('/kpiendorsement/{employeeID}/reset','KPIEndorsementController@reset')
+    ->name('kpiendorsement.reset');
+
 });
 
 

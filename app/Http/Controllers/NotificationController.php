@@ -5,17 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\Employee;
 use App\Model\User;
+use App\Notifications\RequestChange;
+use App\Notifications\SendMessage;
+use Carbon\Carbon;
+use App\Model\Traits\ErrorMessages;
 
 class NotificationController extends Controller
 {
     //
 
-    protected function sendNotFound($id){
-        return send_404_error('Notifikasi dengan id '.$id.' tidak ditemukan');
-    }
+    use ErrorMessages;
 
-    protected function sendUserNotFound($employeeID){
-        return send_404_error('Pengguna dengan id '.$employeeID.' tidak ditemukan');
+    protected function getRequestMessage($fromUser){
+        return sprintf("%s sudah mengirimkan permintaan perubahan pengesahan untuk periode %s",
+        $fromUser->employee->name,
+        Carbon::now()->format('M Y'));
     }
 
     protected function sendMarkAsReadArray($n){
@@ -104,7 +108,7 @@ class NotificationController extends Controller
                 $header=$curr->getCurrentHeader();
                 $self_endorse=$header->getSelfEndorse();
 
-                if($self_endorse->verified===1){
+                if($self_endorse->verified===1 && !$curr->hasRequestChange()){
                     $r=[];
                     $r['id']=$curr->id;
                     $r['name']=$curr->name;
@@ -117,5 +121,36 @@ class NotificationController extends Controller
         }
 
         return $this->sendUserNotFound($employeeID);
+    }
+
+    public function requestChange(Request $request,$employeeID){
+
+        $forUser=Employee::find($employeeID);
+
+        if($forUser){
+            $to=$request->to;
+            $toUser=Employee::find($request->to);
+            if($toUser){
+                $fromUser=auth_user();
+                if($fromUser){
+                    $toUser->user->notify(new RequestChange($forUser,$fromUser,$request->message,$request->subject));
+                    $forUser->user->notify(new SendMessage($fromUser,$this->getRequestMessage($fromUser)));
+
+                    return [
+                        'status'=>'Permintaan Perubahan status sudah dikirim'
+                    ];
+                }
+                else
+                    $this->sendAuthUserNotFound();
+
+            }
+            else
+                $this->sendUserNotFound($to);
+
+        }
+        else
+            $this->sendUserNotFound($employeeID);
+
+
     }
 }

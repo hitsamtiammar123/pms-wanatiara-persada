@@ -8,6 +8,7 @@ use App\Model\Traits\Indexable;
 use App\Model\Traits\DynamicID;
 use App\Model\User;
 use Carbon\Carbon;
+use App\Notifications\RequestChange;
 
 class Employee extends Model
 {
@@ -45,13 +46,20 @@ class Employee extends Model
         $data=$notification->data;
         $r['id']=$notification->id;
         $r['read_at']=$notification->read_at;
-        $r['date']=Carbon::parse($notification->created_at)->format('d M Y');
-        $r['subject']=$data['subject'];
+        $r['date']=Carbon::parse($notification->created_at)->format('d M Y H:i:s');
         $r['type']=$data['type'];
         if($r['type']==='redirect'){
             $r['redirectTo']=array_key_exists('redirectTo',$data)?
             $notification->data['redirectTo']:'/';
         }
+        else if($r['type']==='request-change'){
+            $r['to']=$data['to'];
+            $r['message']=$data['message'];
+            $r['approved']=$data['approved'];
+        }
+        
+        $r['subject']=$data['subject'];
+
         if(array_key_exists('from',$data))
             $r['from']=$data['from'];
         else
@@ -104,6 +112,21 @@ class Employee extends Model
 
         return $request_send_to;
 
+    }
+
+    public function hasRequestChange(){
+        if(!$this->isUser())
+            return true;
+
+        $notifications=$this->user->notifications;
+        $requests=$notifications->where('type',RequestChange::class)->all();
+
+        foreach($requests as $request){
+            if(!$request->data['approved'])
+                return true;
+        }
+
+        return false;
     }
 
 
