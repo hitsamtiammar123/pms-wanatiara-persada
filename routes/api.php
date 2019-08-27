@@ -32,13 +32,29 @@ Route::group(['prefix'=>'v1','middleware'=>['cors','web']
         'only'=>['update']
     ]);
 
-    Route::get('/ikhtisar','EmployeeController@ikhtisar')->name('employee.ikhtisar');
-    Route::get('/search/autocomplete','SearchController@autocomplete')->name('search.autocomplete');
-    Route::get('/search/result','SearchController@result')->name('search.result');
-    Route::get('/kpicompany','KPICompanyController@getCurrentKPICompany')->name('kpicompany.get');
-    Route::post('/kpicompany','KPICompanyController@postKPICompany')->name('kpicompany.post');
-    Route::get('/notification/get/{employeeID}','NotificationController@getNotification')->name('notification.get');
-    Route::get('/notification/mark-as-read/{employeeID}/{id}','NotificationController@markAsRead')->name('notification.mark-as-read');
+    Route::get('/ikhtisar','EmployeeController@ikhtisar')
+    ->name('employee.ikhtisar');
+
+    Route::get('/search/autocomplete','SearchController@autocomplete')
+    ->name('search.autocomplete');
+
+    Route::get('/search/result','SearchController@result')
+    ->name('search.result');
+
+    Route::get('/kpicompany','KPICompanyController@getCurrentKPICompany')
+    ->name('kpicompany.get');
+
+    Route::post('/kpicompany','KPICompanyController@postKPICompany')
+    ->name('kpicompany.post');
+
+    Route::get('/notification/get/{employeeID}','NotificationController@getNotification')
+    ->name('notification.get');
+
+    Route::get('/notification/mark-as-read/{employeeID}/{id}','NotificationController@markAsRead')
+    ->name('notification.mark-as-read');
+
+    Route::get('/notification/requestableusers/{employeeID}','NotificationController@getRequestableUsers')
+    ->name('notification.requestable-user');
 
 });
 

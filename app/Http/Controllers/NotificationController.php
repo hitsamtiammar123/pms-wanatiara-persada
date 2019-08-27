@@ -49,4 +49,25 @@ class NotificationController extends Controller
 
         return null;
     }
+
+    public function getRequestableUsers($employeeID){
+        $employee=Employee::find($employeeID);
+
+        if($employee){
+            $result=[];
+            $bawahan=$employee->bawahan;
+
+            foreach($bawahan as $curr){
+                $header=$curr->getCurrentHeader();
+                $self_endorse=$header->getSelfEndorse();
+
+                if($self_endorse->verified===1)
+                    $result[]=$curr->makeHidden(Employee::HIDDEN_PROPERTY);
+            }
+
+            return $result;
+        }
+
+        return null;
+    }
 }

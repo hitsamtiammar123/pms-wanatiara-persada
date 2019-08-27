@@ -338,4 +338,18 @@ class KPIHeader extends Model
 
         return $r;
     }
+
+    public function getEndorse($employee){
+        $endorsements=$this->kpiendorsements;
+
+        foreach($endorsements as $endorse){
+            if($endorse->employee->id===$employee->id)
+                return $endorse;
+        }
+        return null;
+    }
+
+    public function getSelfEndorse(){
+        return $this->getEndorse($this->employee);
+    }
 }

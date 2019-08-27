@@ -56,6 +56,14 @@ class Employee extends Model
         return $result;
     }
 
+    public function getCurrentHeader(){
+        $headers=$this->kpiheaders;
+        $currDate=KPIHeader::getCurrentDate();
+        $curr_header=$headers->where('period',$currDate)->first();
+
+        return $curr_header;
+    }
+
 
     public function isUser(){
         return !is_null($this->user);
