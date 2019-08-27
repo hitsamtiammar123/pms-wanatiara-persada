@@ -13,3 +13,11 @@
 .notifikasi-content{
     height: 250px;
 }
+
+.subject-column{
+    width: 60%;
+}
+
+.other-column{
+    width: 20%;
+}

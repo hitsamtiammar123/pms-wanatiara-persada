@@ -8,16 +8,16 @@
                 <table class="table table-hover table-beranda">
                         <thead>
                             <tr>
-                                <th>Dari</th>
-                                <th>Subjek</th>
-                                <th>Tanggal</th>
+                                <th class="other-column">Dari</th>
+                                <th class="subject-column">Subjek</th>
+                                <th class="other-column">Tanggal</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-class="!notification.read_at?'bold':''" ng-repeat="notification in notifications track by $index">
-                                <td>{{notification.from}}</td>
-                                <td> <a ng-click="toNotification(notification)" class="a-pengesahan">{{notification.subject}}</a></td>
-                                <td>{{notification.date}}</td>
+                                <td class="other-column">{{notification.from}}</td>
+                                <td class="subject-column"> <a ng-click="toNotification(notification)" class="a-pengesahan">{{notification.subject}}</a></td>
+                                <td class="other-column">{{notification.date}}</td>
                             </tr>
             
                         </tbody>

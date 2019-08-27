@@ -30,7 +30,7 @@ class NotificationController extends Controller
 
         }
 
-        return null;
+        return send_404_error('Karyawan dengan id '.$employeeID,' tidak ditemukan');
     }
 
     public function markAsRead(Request $request,$employeeID,$id){
@@ -39,15 +39,26 @@ class NotificationController extends Controller
             $notifications=$employee->user->notifications;
             $n=$notifications->where('id',$id)->first();
 
-            if(!$n->read_at)
+            if(!$n)
+               return send_404_error('Notifikasi dengan id '.$id,' tidak ditemukan');
+
+            if(is_null($n->read_at)){
                 $n->markAsRead();
-            return [
-                'message'=>'Notifikasi sudah dilabel sebagai sudah dibaca',
-                'data'=>$n
-            ];
+
+                return [
+                    'message'=>'Notifikasi sudah dilabel sebagai sudah dibaca',
+                    'data'=>$n
+                ];
+            }
+            else
+                return [
+                    'message'=>'Notifikasi sudah dibaca sebelumnya',
+                    'data'=>$n
+                ];;
+
         }
 
-        return null;
+        return send_404_error('Karyawan dengan id '.$employeeID,' tidak ditemukan');
     }
 
     public function getRequestableUsers($employeeID){
