@@ -4,23 +4,26 @@
         <h6 class="bold title">Notifikasi</h6>
         <div class="bottom-border"></div>
 
-        <table class="table table-hover table-beranda">
-            <thead>
-                <tr>
-                    <th>Dari</th>
-                    <th>Subjek</th>
-                    <th>Tanggal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-class="!notification.read_at?'bold':''" ng-repeat="notification in notifications track by $index">
-                    <td>{{notification.from}}</td>
-                    <td> <a ng-click="toNotification(notification)" class="a-pengesahan">{{notification.subject}}</a></td>
-                    <td>{{notification.date}}</td>
-                </tr>
+        <div class="notifikasi-content">
+                <table class="table table-hover table-beranda">
+                        <thead>
+                            <tr>
+                                <th>Dari</th>
+                                <th>Subjek</th>
+                                <th>Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-class="!notification.read_at?'bold':''" ng-repeat="notification in notifications track by $index">
+                                <td>{{notification.from}}</td>
+                                <td> <a ng-click="toNotification(notification)" class="a-pengesahan">{{notification.subject}}</a></td>
+                                <td>{{notification.date}}</td>
+                            </tr>
+            
+                        </tbody>
+                    </table>
+        </div>
 
-            </tbody>
-        </table>
 
         <span ng-show="hasLoad && totalPage!==0 " >  
             <button class="btn btn-default" ng-click="prevPage()" ng-disabled="isLoading || page===1 "> < </button>
