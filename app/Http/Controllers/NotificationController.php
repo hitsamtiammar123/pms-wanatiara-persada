@@ -61,13 +61,18 @@ class NotificationController extends Controller
                 $header=$curr->getCurrentHeader();
                 $self_endorse=$header->getSelfEndorse();
 
-                if($self_endorse->verified===1)
-                    $result[]=$curr->makeHidden(Employee::HIDDEN_PROPERTY);
+                if($self_endorse->verified===1){
+                    $r=[];
+                    $r['id']=$curr->id;
+                    $r['name']=$curr->name;
+                    $r['sendTo']=$curr->getSendToUser();
+                    $result[]=$r;
+                }
             }
 
             return $result;
         }
 
-        return null;
+        return send_404_error('Data pengguna dengan id '.$employeeID.' tidak ditemukan');
     }
 }

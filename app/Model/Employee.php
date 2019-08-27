@@ -24,6 +24,14 @@ class Employee extends Model
         'name', 'dob', 'gender',
     ];
     protected $casts=['id'=>'string'];
+    protected $hidden=['created_at','updated_at','deleted_at'];
+
+    protected $sendToRoleList=[
+        0=>'1915282279',
+        1=>'1915282265',
+        2=>'1915282223',
+        3=>'1915282288'
+    ];
 
 
     public static function generateID(){
@@ -62,6 +70,34 @@ class Employee extends Model
         $curr_header=$headers->where('period',$currDate)->first();
 
         return $curr_header;
+    }
+
+    public function getSendToUser(){
+        $level=$this->role->level;
+        $index_r=-1;
+
+        if($level===2){
+            $index_r=2;
+        }
+        else if($level===1){
+            if($this->role->id===$this->sendToRoleList[1])
+                $index_r=0;
+            else
+                $index_r=1;
+
+        }
+        else if($level<=0){
+            $index_r=1;
+        }
+        else if($level>2){
+            $index_r=3;
+        }
+
+        $request_send_to=Employee::where('role_id',$this->sendToRoleList[$index_r])->first();
+        $request_send_to->role;
+
+        return $request_send_to;
+
     }
 
 

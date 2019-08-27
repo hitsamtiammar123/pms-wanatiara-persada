@@ -7,28 +7,25 @@
     </div>
     <div class="row pengesahan-form">
         <div class="col-sm-8">
+            <p class="note">{{note}}</p>
                 <div class="form-group">
                         <label for="subjek">Subjek:</label>
-                        <input type="text" id="subjek" class="form-control">
+                        <input type="text" ng-disabled="noRequestable" id="subjek" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="kepada">Perubahan untuk:</label>
-                        <select class="form-control" id="kepada">
-                            <option>Zhang Hehe</option>
-                            <option>Zhang Haha</option>
-                            <option>Zhang Komar</option>
-                            <option>Zhang Liu Bei</option>
-                          </select>
+                        <select ng-disabled="noRequestable" ng-model="curr_user"
+                        ng-options="user.name for user in requestable_users" class="form-control" id="kepada"></select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-hide="!curr_user">
                         <label for="to">Kirim Ke:</label>
-                        <p>Zhang Hoho</p>
+                        <p>{{curr_user.sendTo.name}}, {{curr_user.sendTo.role.name}}</p>
                     </div>
                     <div class="form-group">
                         <label for="pesan">Pesan:</label>
-                        <textarea id="pesan" class="form-control" rows="5"></textarea>
+                        <textarea ng-disabled="noRequestable" id="pesan" class="form-control" rows="5"></textarea>
                     </div>
-                    <button class="btn btn-success">Kirim</button>
+                    <button ng-disabled="noRequestable" class="btn btn-success">Kirim</button>
         </div>
 
     </div>
