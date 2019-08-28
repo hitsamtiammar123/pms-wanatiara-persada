@@ -10,11 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use App\Events\NewNotification;
+use App\Events\PMSHasChanged;
 
 Route::get('/event',function(){
     $user=auth_user();
-    event(new NewNotification($user,['test'=>'ini data']));
+    event(new PMSHasChanged($user));
 
 });
 
