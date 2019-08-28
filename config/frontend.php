@@ -12,6 +12,7 @@ return [
             '/vendor/js/angular-aria.min.js',
             '/vendor/js/angular-messages.min.js',
             '/vendor/js/angular-material.min.js',
+            '/vendor/js/pusher.min.js',
             '/prototype.js'
     ],
     'css_vendor'=>[
@@ -19,7 +20,13 @@ return [
         "/vendor/css/bootstrap-theme.min.css",
         "/vendor/css/angular-material.min.css"
     ],
-    'angular_provider'=>['cPProvider','$routeProvider','$locationProvider','routingProvider','$rootScopeProvider'],
+    'angular_provider'=>[
+        'cPProvider',
+        '$routeProvider',
+        '$locationProvider',
+        'routingProvider',
+        '$rootScopeProvider'
+    ],
     'except'=>[
         'values/user.js'
     ],

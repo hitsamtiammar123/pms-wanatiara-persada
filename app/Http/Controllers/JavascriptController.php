@@ -28,7 +28,7 @@ class JavascriptController extends Controller
             'factory'=>[],
             'directive'=>[],
             'filter'=>[],
-            'values'=>[route('js.user')],
+            'values'=>[route('js.user'),route('js.token')],
             'provider'=>['formModal.js'],
             'boot'=>['resolve.js','routing.js',"providerConf.js",route('js.config'),"run.js"]
         ];
@@ -125,6 +125,8 @@ class JavascriptController extends Controller
         return response($routingJS,200,$this->header_arr);
     }
 
+
+
     public function user(Request $request){
         $userJS=$this->angular->get('user.js');
 
@@ -147,6 +149,13 @@ class JavascriptController extends Controller
         }
 
         return response($userJS,200,$this->header_arr);
+    }
+
+    public function token(){
+        $tokenJS=$this->angular->get('csrf_token.js');
+
+        $tokenJS=str_replace('{token}',csrf_token(),$tokenJS);
+        return response($tokenJS,200,$this->header_arr);
     }
 
     public function provider(){

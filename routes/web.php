@@ -10,9 +10,13 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use App\Events\NewNotification;
 
-use Illuminate\Http\Request;
-use App\Imports\KPICompany;
+Route::get('/event',function(){
+    $user=auth_user();
+    event(new NewNotification($user,['test'=>'ini data']));
+
+});
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');
 Route::get('/auth-user','Auth\\LoginController@auth_user')->name('authuser');
@@ -27,6 +31,7 @@ Route::get('/javascript/config','JavascriptController@configJS')->name('js.confi
 Route::get('/javascript/routing','JavascriptController@routingJS')->name('js.routing');
 Route::get('/javascript/user','JavascriptController@user')->name('js.user');
 Route::get('/javascript/provider','JavascriptController@provider')->name('js.provider');
+Route::get('/javascript/csrf-token','JavascriptController@token')->name('js.token');
 Route::get('/app/front-view','PageController@appfront')->name('app.frontview');
 
 

@@ -13,13 +13,14 @@ class User extends Authenticatable
 {
     use Notifiable,SoftDeletes,Indexable,DynamicID;
 
-    const HIDDEN_PROPERTY_NOTIFICATION=['created_at','updated_at','notifiable_type','type'];
+    const HIDDEN_PROPERTY_NOTIFICATION=[
+        'created_at',
+        'updated_at',
+        'notifiable_type',
+        'type'
+    ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+
     protected $fillable = [
         'name', 'email', 'password',
     ];
@@ -53,5 +54,9 @@ class User extends Authenticatable
 
     public function employee(){
         return $this->belongsTo(Employee::class,'employee_id','id');
+    }
+
+    public function getChannel(){
+        return 'user-'.$this->id;
     }
 }
