@@ -6,7 +6,7 @@ use App\Model\Employee;
 use Illuminate\Http\Request;
 use App\Model\KPIEndorsement;
 use App\Notifications\EndorsementNotification;
-use App\Model\Traits\ErrorMessages;
+use App\Controllers\Traits\ErrorMessages;
 use App\Notifications\SendMessage;
 
 class KPIEndorsementController extends Controller
@@ -82,7 +82,7 @@ class KPIEndorsementController extends Controller
 
         }
         else
-            return $this->sendUserNotFound($employeeID); 
+            return $this->sendUserNotFound($employeeID);
 
     }
 
