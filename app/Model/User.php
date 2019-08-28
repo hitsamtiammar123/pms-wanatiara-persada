@@ -25,20 +25,11 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'id'=>'string'
@@ -59,4 +50,12 @@ class User extends Authenticatable
     public function getChannel(){
         return 'user-'.$this->id;
     }
+
+    public function getLatestNotification(){
+        $notifications=$this->notifications;
+
+        $n=$notifications->sortByDesc('created_at')->first();
+        return $n;
+    }
+
 }

@@ -6,14 +6,14 @@ use App\Model\Employee;
 use Illuminate\Http\Request;
 use App\Model\KPIEndorsement;
 use App\Notifications\EndorsementNotification;
-use App\Controllers\Traits\ErrorMessages;
+use App\Http\Controllers\Traits\ErrorMessages;
 use App\Notifications\SendMessage;
-use App\Controllers\Traits\BroadcastPMSChange;
+use App\Http\Controllers\Traits\BroadcastPMSChange;
 
 class KPIEndorsementController extends Controller
 {
 
-    use ErrorMessages;
+    use ErrorMessages,BroadcastPMSChange;
 
 
     protected function fireEndorsementEvent($endorse){
