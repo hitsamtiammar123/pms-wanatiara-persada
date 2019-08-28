@@ -8,7 +8,7 @@ use App\Model\User;
 use App\Notifications\RequestChange;
 use App\Notifications\SendMessage;
 use Carbon\Carbon;
-use App\Controllers\Traits\ErrorMessages;
+use App\Http\Controllers\Traits\ErrorMessages;
 
 class NotificationController extends Controller
 {

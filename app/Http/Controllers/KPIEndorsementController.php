@@ -8,6 +8,7 @@ use App\Model\KPIEndorsement;
 use App\Notifications\EndorsementNotification;
 use App\Controllers\Traits\ErrorMessages;
 use App\Notifications\SendMessage;
+use App\Controllers\Traits\BroadcastPMSChange;
 
 class KPIEndorsementController extends Controller
 {
@@ -20,8 +21,10 @@ class KPIEndorsementController extends Controller
         $header=$endorse->kpiheader;
         $employee=$auth_user->employee;
         $userToSend=$endorse->employee->atasan->user;
-
         $userToSend->notify(new EndorsementNotification($header,$employee));
+
+        $employee=$header->employee;
+        $this->broadcastChange($employee);
 
     }
 
@@ -39,6 +42,7 @@ class KPIEndorsementController extends Controller
         $n->save();
 
     }
+
 
     protected function sendApprovalRequest($employee,$header){
         if($employee->isUser()){

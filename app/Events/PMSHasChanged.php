@@ -15,15 +15,17 @@ class PMSHasChanged implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected $user;
+    protected $for_employee;
 
-    public function __construct($user)
+    public function __construct($user,$for_employee)
     {
         $this->user=$user;
+        $this->for_employee=$for_employee;
     }
 
     public function broadcastAs()
     {
-        return 'pms-has-changed';
+        return 'pms-has-changed-'.$this->for_employee->id;
     }
 
     public function broadcastOn()

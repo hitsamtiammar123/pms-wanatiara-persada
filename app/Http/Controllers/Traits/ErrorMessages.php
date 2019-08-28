@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Traits;
+namespace App\Http\Controllers\Traits;
 
 trait ErrorMessages{
     protected function sendNotFound($id){

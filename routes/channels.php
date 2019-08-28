@@ -13,4 +13,4 @@
 
 Broadcast::channel('user-{id}', function ($user, $id) {
     return true;
-},['guards' => ['web']]);
+});

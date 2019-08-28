@@ -11,9 +11,12 @@ use App\Model\Role;
 use App\Model\KPIProcess;
 use App\Model\KPIResultHeader;
 use Illuminate\Support\Carbon;
+use App\Http\Controllers\Traits\BroadcastPMSChange;
 
 class KPIHeaderController extends Controller
 {
+
+    use BroadcastPMSChange;
 
     public function index()
     {
@@ -200,6 +203,10 @@ class KPIHeaderController extends Controller
 
             $header->kpiprocesses()->sync($kpiprocess_save);
             $header_next->kpiprocesses()->sync($kpiprocess_save_n);
+
+        $employee=$header->employee;
+        $this->broadcastChange($employee);
+
 
         return [
             'message'=>'Berhasil'
