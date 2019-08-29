@@ -60,7 +60,7 @@
         <table class="table realisasi-table">
                 <thead>
                         <tr>
-                            <th class="f-column" class="num" rowspan="2">序号 No.</th>
+                            <th class="f-column-num f-column" rowspan="2">序号 No.</th>
                             <th class="kpi f-column" rowspan="2">绩效考核关键指标 Key Performance Indicator</th>
                             <th class="f-column" rowspan="2">单位 Unit</th>
                             <th colspan="2">2019年责任权重 Performance Wighing 2019</th>
@@ -80,7 +80,7 @@
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 notify-g-label="realisasi-content:kpi-{{outerIndex}}" ng-class="d.kpiColor" i-index="name" c-index="{{c_index}}" d-index="{{$index}}"></td> 
 
-                                <td belong-to="d.unit" after-edit="setDataFilter" contenteditable="{{d.unit_contentEditable}}" data-flag="unit" 
+                                <td class="center-text" belong-to="d.unit" after-edit="setDataFilter" contenteditable="{{d.unit_contentEditable}}" data-flag="unit" 
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 notify-g-label="realisasi-content:unit-{{outerIndex}}" ng-class="d.unitColor" i-index="unit" c-index="{{c_index+1}}" d-index="{{$index}}"></td>
 
@@ -116,7 +116,8 @@
                                 d-index="{{$parent.$index}}"></td>
                             </tr>
                             <tr>
-                                <td colspan="4" class="center-text bold">责任权重总数 TOTAL BOBOT :</td>
+                                <td class="num"></td>
+                                <td colspan="3" class="center-text bold">责任权重总数 TOTAL BOBOT :</td>
                                 <td ng-repeat="i in [] |range:2" notify-g-label="add-content">{{totalW[i]}}%</td>
                                 <td colspan="7"></td>
                                 <td colspan="2" class="right-text bold">Total Achievement: </td>
@@ -124,7 +125,8 @@
                                 <td class="center-text" notify-g-label="add-content" belong-to="totalAchieveMent.t2"></td>
                             </tr>
                             <tr>
-                                <td colspan="13"></td>
+                                <td class="num"></td>
+                                <td colspan="12"></td>
                                 <td colspan="2" class="right-text bold">Index:</td>
                                 <td class="center-text" notify-g-label="add-content" belong-to="IndexAchieveMent.t1"></td>
                                 <td class="center-text" notify-g-label="add-content" belong-to="IndexAchieveMent.t2"></td>
@@ -179,7 +181,7 @@
         <table class="table realisasi-table">
                 <thead>
                         <tr>
-                            <th class="f-column" rowspan="2">序号 No.</th>
+                            <th class="f-column f-column-num" rowspan="2">序号 No.</th>
                             <th class="kpi-process f-column" rowspan="2">核心竞争力 Kompetensi Inti</th>
                             <th class="f-column" rowspan="2">单位 Unit</th>
                             <th colspan="2">2019年责任权重 Performance Wighing 2019</th>
@@ -194,7 +196,7 @@
                     </thead> 
                     <tbody> 
                             <tr ng-repeat="p in kpiprocesses">
-                                 <td><span ng-if="!dlt_process.toogle_delete">{{$index+1}}</span><button class="btn btn-danger" ng-if="dlt_process.toogle_delete" ng-click="deleteRowP($index,false)">X</button></td> 
+                                 <td class="num"><span ng-if="!dlt_process.toogle_delete">{{$index+1}}</span><button class="btn btn-danger" ng-if="dlt_process.toogle_delete" ng-click="deleteRowP($index,false)">X</button></td> 
                                  <td class="kpi-process" d-index="{{$index}}"  belong-to="p.name" auto-fill="true" contenteditable="false"></td>
                                  <td belong-to="p.unit" d-index="{{$index}}" on-data-paste="dataPasteP" on-data-escaped="dataEscapedP" on-data-copy="dataCopyP" notify-g-label="realisasi-content" on-data-selected="dataSelectedP" c-index="0" auto-fill="true" contenteditable="{{p.contentEditable.unit}}"></td>
                                  <td belong-to="p.pw_1" after-edit="setBColorP|setTotalW_P" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP"  c-index="1" data-flag="pw" format="{{p.pw_filter}}" auto-fill="true" contenteditable="{{p.contentEditable.pw_1}}"></td>
@@ -209,7 +211,10 @@
                                  <td belong-to="p.aw_2"auto-fill="true" data-flag="aw" on-data-paste="dataPasteP" notify-g-label="realisasi-content" contenteditable="{{p.contentEditable.aw_2}}" format="{{p.aw_filter}}"></td>
                             </tr>
                                 <tr>
-                                    <td colspan="4" class="center-text bold">责任权重总数 TOTAL BOBOT :</td>
+                                    <td class="num"></td>
+                                    <td class="kpi-process bold">责任权重总数 TOTAL BOBOT :</td>
+                                    <!-- <td class="center-text bold"></td> -->
+                                    <td></td>
                                     <td ng-repeat="i in [] |range:2">{{totalW_P[i]}}%</td>
                                     <td colspan="4"></td>
                                     <td colspan="2" class="right-text bold">Total Achievement: </td>
@@ -217,7 +222,8 @@
                                     <td notify-g-label="add-content" belong-to="totalAchieveMentP.t2" ></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="10"></td>
+                                    <td class="num"></td>
+                                    <td colspan="9"></td>
                                     <td colspan="2" class="right-text bold">Index:</td>
                                     <td notify-g-label="add-content" belong-to="IndexAchieveMentP.t1"></td>
                                     <td notify-g-label="add-content" belong-to="IndexAchieveMentP.t2"></td>

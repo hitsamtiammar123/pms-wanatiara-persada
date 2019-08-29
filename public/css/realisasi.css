@@ -30,12 +30,9 @@
     text-align: left;
 }
 
-.realisasi-table thead tr th.num{
-    width: 30 !important;
-} 
 
-.realisasi-table tbody tr td.num{
-    width: 40;
+.realisasi-table tbody tr td.num,.f-column-num{
+    width: 40px;
 }
 
 
@@ -69,6 +66,8 @@
 .f-column{
     padding-bottom: 30px !important;
 }
+
+
 
 .table-title{
     margin-top:60px;
