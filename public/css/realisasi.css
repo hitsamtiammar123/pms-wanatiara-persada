@@ -7,13 +7,14 @@
 .realisasi-table{
     width: 1700px;
     margin-left: -10px;
+
 }
 
 /*Table*/
 
 .realisasi-table tbody {
     display:block;
-    height:250px;
+    max-height:250px;
     overflow:auto;
 }
 .realisasi-table thead, .realisasi-table tbody tr {
@@ -28,6 +29,15 @@
 .realisasi-table thead tr:nth-child(2) th{
     text-align: left;
 }
+
+.realisasi-table thead tr th.num{
+    width: 30 !important;
+} 
+
+.realisasi-table tbody tr td.num{
+    width: 40;
+}
+
 
 .realisasi-table thead tr th.kpi{
     width:200px !important;
@@ -45,6 +55,8 @@
     width: 236px;
 }
 
+
+
 .num-column{
     width:100px;
     text-align: left;
@@ -59,7 +71,7 @@
 }
 
 .table-title{
-    margin-top:25px;
+    margin-top:60px;
 }
 
 /*Pengesahan*/

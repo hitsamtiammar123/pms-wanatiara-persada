@@ -13,23 +13,54 @@
                         <div class="col-sm-4">当月累计考核期 Periode Kumulatif sampai bulan berjalan</div>
                         <div class="col-sm-3">: {{ pb.startB }} - {{ pb.endB }}</div> 
                 </div>
-                <div class="row">
-                    <div class="col-sm-3">
-                        <button class="btn btn-success save-change-btn" ng-hide="hasEndorse" ng-click="saveChanged()" ng-disabled="hasChanged || toogle_delete">Simpan Perubahan</button>
-                    </div>
-                </div>   
+ 
                  
         </div>   
     <div class="table-100">
-        <p class="bold table-title">1. Sasaran Hasil {{ header.weight_result?(header.weight_result*100)+'%':'' }}</p>
-        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="copyData()">Salin</button>
-        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="pasteData()">Tempel</button>
-        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="undoData()">Batal</button>
-        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="redoData()">Balik</button>
+        <p class="bold table-title">
+            <md-menu ng-hide="hasEndorse">
+                <span class="glyphicon glyphicon-option-vertical" ng-click="openMenu($mdMenu,$event)"></span>
+                <md-menu-content class="md-dense" width="3">
+                    <md-menu-item>
+                        <md-button ng-click="addRow()" ng-disabled="hasChanged || dlt_result.toogle_delete">
+                            <span class="glyphicon glyphicon-plus"></span>  Tambah Baris
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="toogleDelete(dlt_result)" ng-disabled="hasChanged">
+                            <span class="glyphicon glyphicon-minus"></span> {{dlt_result.dlt_message}}
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-divider></md-menu-divider>
+                    <md-menu-item>
+                        <md-button ng-click="copyData()"> 
+                            <span class="glyphicon glyphicon-copy"></span>    Salin
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="pasteData()">
+                            <span class="glyphicon glyphicon-paste"></span>    Tempel
+                        </md-button>
+                    </md-menu-item>                      
+                    <md-menu-item>
+                        <md-button ng-click="undoData()">
+                            <span class="glyphicon glyphicon-chevron-left"></span>    Batal
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="redoData()">
+                            <span class="glyphicon glyphicon-chevron-right"></span>    Balik
+                        </md-button>
+                    </md-menu-item>    
+                </md-menu-content>
+            </md-menu>
+           
+        1. Sasaran Hasil {{ header.weight_result?(header.weight_result*100)+'%':'' }}
+        </p>
         <table class="table realisasi-table">
                 <thead>
                         <tr>
-                            <th class="f-column" rowspan="2">序号 No.</th>
+                            <th class="f-column" class="num" rowspan="2">序号 No.</th>
                             <th class="kpi f-column" rowspan="2">绩效考核关键指标 Key Performance Indicator</th>
                             <th class="f-column" rowspan="2">单位 Unit</th>
                             <th colspan="2">2019年责任权重 Performance Wighing 2019</th>
@@ -44,7 +75,7 @@
                     </thead> 
                     <tbody> 
                             <tr ng-repeat="d in data track by $index" ng-init="c_index=0;outerIndex=$index">
-                                <td><span ng-if="!dlt_result.toogle_delete">{{$index+1}}</span><button class="btn btn-danger" ng-if="dlt_result.toogle_delete" ng-click="deleteRow($index)">X</button></td> 
+                                <td class="num"><span ng-if="!dlt_result.toogle_delete">{{$index+1}}</span><button class="btn btn-danger" ng-if="dlt_result.toogle_delete" ng-click="deleteRow($index)">X</button></td> 
                                 <td class="kpi" belong-to="d.name" after-edit="setKPI" contenteditable="{{d.name_contentEditable}}" data-flag="name"
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 notify-g-label="realisasi-content:kpi-{{outerIndex}}" ng-class="d.kpiColor" i-index="name" c-index="{{c_index}}" d-index="{{$index}}"></td> 
@@ -100,15 +131,51 @@
                             </tr>
                     </tbody>
         </table>
-        <button class="btn btn-success" ng-hide="hasEndorse" ng-click="addRow()" ng-disabled="hasChanged || dlt_result.toogle_delete">Tambah Baris</button>
-        <button class="btn btn-danger" ng-hide="hasEndorse" ng-click="toogleDelete(dlt_result)" ng-disabled="hasChanged">{{dlt_result.dlt_message}}</button>
+        <div flex="30">
+                <button class="btn btn-danger" ng-hide="hasEndorse || !dlt_result.toogle_delete" ng-click="toogleDelete(dlt_result)" ng-disabled="hasChanged">{{dlt_result.dlt_message}}</button>
+        </div>
+        
         <div>{{changedMessage}}</div>
                 
-        <p class="bold table-title">2. Sasaran Proses {{ header.weight_process?(header.weight_process*100)+'%':'' }}</p>
-        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="copyDataP()">Salin</button>
-        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="pasteDataP()">Tempel</button>
-        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="undoDataP()">Batal</button>
-        <button class="btn btn-primary" ng-hide="hasEndorse" ng-click="redoDataP()">Balik</button>
+        <p class="bold table-title">
+                <md-menu ng-hide="hasEndorse">
+                        <span class="glyphicon glyphicon-option-vertical" ng-click="openMenu($mdMenu,$event)"></span>
+                        <md-menu-content class="md-dense" width="3">
+                            <md-menu-item>
+                                <md-button ng-click="addPRow()" ng-disabled="hasChanged || dlt_process.toogle_delete">
+                                    <span class="glyphicon glyphicon-plus"></span>  Tambah Baris
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="toogleDelete(dlt_process)" ng-disabled="hasChanged">
+                                    <span class="glyphicon glyphicon-minus"></span> {{dlt_process.dlt_message}}
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-divider></md-menu-divider>
+                            <md-menu-item>
+                                <md-button ng-click="copyDataP()"> 
+                                    <span class="glyphicon glyphicon-copy"></span>    Salin
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="pasteDataP()">
+                                    <span class="glyphicon glyphicon-paste"></span>    Tempel
+                                </md-button>
+                            </md-menu-item>                      
+                            <md-menu-item>
+                                <md-button ng-click="undoDataP()">
+                                    <span class="glyphicon glyphicon-chevron-left"></span>    Batal
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="redoDataP()">
+                                    <span class="glyphicon glyphicon-chevron-right"></span>    {{dlt_process.dlt_message}}
+                                </md-button>
+                            </md-menu-item>    
+                        </md-menu-content>
+                    </md-menu>
+            2. Sasaran Proses {{ header.weight_process?(header.weight_process*100)+'%':'' }}
+        </p>
         <table class="table realisasi-table">
                 <thead>
                         <tr>
@@ -159,10 +226,12 @@
                     </tbody>
         </table>
 
-        <button class="btn btn-success" ng-hide="hasEndorse" ng-click="addPRow()" ng-disabled="hasChanged || dlt_process.toogle_delete">Tambah Baris</button>
-        <button class="btn btn-danger" ng-hide="hasEndorse" ng-click="toogleDelete(dlt_process)" ng-disabled="hasChanged">{{dlt_process.dlt_message}}</button>
-        <br>
-        
+        <div flex="30">
+                <button class="btn btn-danger" ng-hide="hasEndorse || !dlt_process.toogle_delete " ng-click="toogleDelete(dlt_process)" ng-disabled="hasChanged">{{dlt_process.dlt_message}}</button>
+                <br>
+                <button class="btn btn-success save-change-btn" ng-hide="hasEndorse" ng-click="saveChanged()" ng-disabled="hasChanged || toogle_delete">Simpan Perubahan</button>        
+        </div>
+       
         <div class="col-sm-12 footer-pengesahan">
             <div class="row pengesahan-header">
                     <div class="col-sm-6"> 
@@ -186,8 +255,10 @@
                     {{ endorse.employee.name}}
                 </div>
             </div>
+
         </div>
 
     </div>
+
 
 </div>
