@@ -14,15 +14,16 @@ class PDFController extends Controller
         return $pdf->setPaper('a4','portrait')->stream('ini-pdf.pdf');
     }
 
-    public function pms($kpiheaderid){
-        $kpiheader=KPIHeader::find($kpiheaderid);
-        $kpiresults=$kpiheader->fetchAccumulatedData('kpiresult');
-        $kpiprocesses=$kpiheader->fetchAccumulatedData('kpiprocess');
-        $data=[
-            'kpiresult'=>$kpiresults,
-            'kpiprocess'=>$kpiprocesses
-        ];
+    public function pms(){
+        // $kpiheader=KPIHeader::find($kpiheaderid);
+        // $kpiresults=$kpiheader->fetchAccumulatedData('kpiresult');
+        // $kpiprocesses=$kpiheader->fetchAccumulatedData('kpiprocess');
+        // $data=[
+        //     'kpiresult'=>$kpiresults,
+        //     'kpiprocess'=>$kpiprocesses
+        // ];
 
-        return $data;
+        $pdf=PDF::loadView('pdf.pdf-pms');
+        return $pdf->setPaper('a4','landscape')->stream('test.pdf');
     }
 }

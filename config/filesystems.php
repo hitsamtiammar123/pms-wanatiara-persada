@@ -65,6 +65,10 @@ return [
             'root'=>base_path('../pms-wanatiara-persada-v1-angular/web'),
             'visibility'=>'public'
         ],
+        'angular_resource'=>[
+            'driver'=>'local',
+            'root'=>base_path('../pms-wanatiara-persada-v1-angular/'),
+        ],
         'angular'=>[
             'driver'=>'local',
             'root'=>resource_path('/angular')

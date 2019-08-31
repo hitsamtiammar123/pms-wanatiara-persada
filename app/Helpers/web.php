@@ -2,7 +2,8 @@
 
 
 if(!function_exists('style')){
-    function style($file,$dir='/css',$disk='public_html'){
+
+    function style($file,$dir='/css',$disk='angular_resource'){
         $disk=Storage::disk($disk);
         $filename=$dir.'/'.$file;
         $content=$disk->get($filename);
