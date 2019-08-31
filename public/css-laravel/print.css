@@ -1,0 +1,54 @@
+.title1{
+    color:springgreen;
+    font-weight: bold;
+}
+
+.title2{
+    color:blue;
+}
+
+.pms-title{
+    margin-top:20px;
+    font-weight: bold;
+}
+
+.title-row{
+    margin-top: 20px;
+}
+
+.table-print tbody{
+    width: 100%;
+}
+
+.table-print thead tr th{
+    text-align: center;
+}
+
+.table-content{
+    margin-left:-5px;
+}
+
+.page-break {
+    page-break-after: always;
+
+}
+
+.bold{
+    font-weight: bold;
+}
+
+.num-content{
+    width: 100px;
+}
+
+.center-text{
+    text-align: center;
+}
+
+.ta-content{
+    text-align: left;
+}
+
+.table-18{
+    width:18%;
+}

@@ -20,4 +20,8 @@ class PageController extends Controller
     public function appfront(){
         return view('frontview');
     }
+
+    public function printPms(){
+        return view('print.pms');
+    }
 }

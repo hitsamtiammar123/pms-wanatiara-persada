@@ -17,22 +17,22 @@
         </div>
 
         <div class="row margin-heading">
-                <div class="col-xs-2">Jabatan</div>
-                <div class="col-xs-3">: Nama Orang</div>
-                <div class="col-xs-2">年责任权重 Periode bulan berjalan</div>
-                <div class="col-xs-3">: 16 Agustus 2019 - 16 September 2019</div>
+                <div class="col-xs-2">董事长、总裁 President Director</div>
+                <div class="col-xs-2">: Nama Orang</div>
+                <div class="col-xs-3">年责任权重 Periode bulan berjalan</div>
+                <div class="col-xs-3">: 16 Aug 2019 - 16 Sept 2019</div>
         </div>
         <div class="row" style="margin-top:10px;">
-                <div class="col-xs-2">Jabatan</div>
-                <div class="col-xs-3">: Nama Orang</div>
-                <div class="col-xs-2">年绩效目标 Periode Kumulatif sampai bulan berjalan</div>
-                <div class="col-xs-3">: 16 Agustus 2019 - 16 September 2019</div>
+                <div class="col-xs-2">监事 Commisioner</div>
+                <div class="col-xs-2">: Nama Orang</div>
+                <div class="col-xs-3">年绩效目标 Periode Kumulatif sampai bulan berjalan</div>
+                <div class="col-xs-3">: 16 Aug 2019 - 16 Sept 2019</div>
         </div>
         <div class="row">
             <p class="pms-title">1. Sasaran Hasil: 60%</p>
         </div>
         <div class="row table-content">
-            <table class="table table-pdf">
+            <table class="table table-bordered table-pdf">
                 <thead>
                     <tr>
                         <th rowspan="2">No</th>
@@ -63,7 +63,7 @@
 
                 </thead>
                 <tbody>
-                    @for ($i = 0; $i < 10; $i++)
+                    @for ($i = 0; $i < 5; $i++)
                         <tr>
                                 <td>{{$i+1}}</td>
                                 <td>Ini KPI</td>
@@ -106,7 +106,7 @@
                 <p class="pms-title">2. Sasaran Proses: 40%</p>
             </div>
         <div class="row table-content">
-                <table class="table table-pdf">
+                <table class="table table-bordered table-pdf">
                     <thead>
                         <tr>
                             <th rowspan="2">序号 No.</th>
@@ -137,7 +137,7 @@
 
                     </thead>
                     <tbody>
-                        @for ($i = 0; $i < 10; $i++)
+                        @for ($i = 0; $i < 3; $i++)
                             <tr>
                                     <td>{{$i+1}}</td>
                                     <td>Ini KPI</td>
@@ -177,27 +177,7 @@
                 </table>
         </div>
         <div class="row">
-            <p class="pms-title" style="font-weight: bold;">Pengesahan</p>
+            <p class="pms-title" style="font-weight: bold;">PMS ini suda disahkan secara elektronik.</p>
         </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="col-xs-4">
-                    Jabatan 1 <span class="glyphicon glyphicon-ok"></span>
-                </div>
-                <div class="col-xs-4">
-                    Jabatan 2 <span class="glyphicon glyphicon-ok"></span>
-                </div>
-            </div>
-            <div class="col-xs-12 tanda-tangan"></div>
-            <div class="col-xs-12">
-                <div class="col-xs-4">
-                    Orang 1
-                </div>
-                <div class="col-xs-4">
-                    Orang 2
-                </div>
-            </div>
-        </div>
-
     </div>
 @endsection

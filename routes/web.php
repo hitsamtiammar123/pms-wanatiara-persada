@@ -10,14 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use App\Events\PMSHasChanged;
-
-Route::get('/event',function(){
-    $user=auth_user();
-    //event(new PMSHasChanged($user));
-
-});
-
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');
 Route::get('/auth-user','Auth\\LoginController@auth_user')->name('authuser');
 Route::get('/app','PageController@app')->name('app')->middleware('auth');
@@ -35,6 +27,7 @@ Route::get('/javascript/provider','JavascriptController@provider')->name('js.pro
 Route::get('/javascript/csrf-token','JavascriptController@token')->name('js.token');
 Route::get('/app/front-view','PageController@appfront')->name('app.frontview');
 
+Route::get('/print/pms','PageController@printPms')->name('print.pms');
 
 Auth::routes();
 
