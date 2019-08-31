@@ -1,5 +1,10 @@
 /*Halaman PDF PMS*/
 
+body{
+    font-family:'msyh';
+}
+
+
 
 .head-title{
     font-family: 'Cambria';
@@ -17,4 +22,17 @@
 
 .margin-heading{
     margin-top:25px;
+}
+
+.table-content{
+    margin-top:50px;
+}
+
+.table-pdf{
+    font-size:10px;
+}
+
+.table-pdf thead tr th,
+.table-pdf tbody tr td.num-content{
+    text-align: center;
 }
