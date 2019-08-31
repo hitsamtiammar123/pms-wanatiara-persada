@@ -24,7 +24,7 @@ class PDFController extends Controller
         // ];
 
         $pdf=PDF::loadView('pdf.pdf-pms');
-        // return $pdf->setPaper('a4','landscape')->stream('test.pdf');
+        //return $pdf->setPaper('a4','landscape')->stream('test.pdf');
         return $pdf->stream('test.pdf');
     }
 }
