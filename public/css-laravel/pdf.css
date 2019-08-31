@@ -34,3 +34,12 @@
 .table-pdf tbody tr td.num-content{
     text-align: center;
 }
+
+.table-pdf thead tr th{
+    font-weight: bold;
+}
+
+/*Halaman Pengesahan*/
+.tanda-tangan{
+    height: 50px;
+}
