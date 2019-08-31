@@ -53,7 +53,7 @@
 
                 </thead>
                 <tbody>
-                    @for ($i = 0; $i < 100; $i++)
+                    @for ($i = 0; $i < 20; $i++)
                         <tr>
                                 <td>{{$i+1}}</td>
                                 <td>Ini KPI</td>
@@ -63,10 +63,10 @@
                                 <td class="num-content">10%</td>
                                 <td class="num-content">10%</td>
                                 <td class="num-content">10%</td>
-                                <td class="num-content">10%</td>
-                                <td class="num-content">10%</td>
-                                <td class="num-content">10%</td>
-                                <td class="num-content">10%</td>
+                                <td class="num-content">1,000,000</td>
+                                <td class="num-content">1,000,000</td>
+                                <td class="num-content">1,000,000%</td>
+                                <td class="num-content">1,000,000</td>
                                 <td class="num-content">10%</td>
                                 <td class="num-content">10%</td>
                                 <td class="num-content">10%</td>
