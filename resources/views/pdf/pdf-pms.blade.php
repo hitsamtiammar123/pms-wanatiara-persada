@@ -9,6 +9,9 @@
         return $carry+intval($item['pw_2']);
     }
 
+    $cPeriod=$header->cPeriod();
+    $cNextPeriod=$header->cNextPeriod();
+    $cCumPeriod=$header->cCumStartPeriod();
 @endphp
     <style>
         body{
@@ -30,13 +33,13 @@
                 <div class="col-xs-2">{{$employee->role->name}}</div>
                 <div class="col-xs-2">: {{$employee->name}}</div>
                 <div class="col-xs-3">年责任权重 Periode bulan berjalan</div>
-                <div class="col-xs-3">: {{$header->cPeriod()->format('d M Y')}} - {{$header->cNextPeriod()->format('d M Y')}}</div>
+                <div class="col-xs-3">: {{$cPeriod->format('d M Y')}} - {{$cNextPeriod->format('d M Y')}}</div>
         </div>
         <div class="row" style="margin-top:10px;">
                 <div class="col-xs-2">{{$employee->atasan->role->name}}</div>
                 <div class="col-xs-2">: {{$employee->atasan->name}}</div>
                 <div class="col-xs-3">年绩效目标 Periode Kumulatif sampai bulan berjalan</div>
-                <div class="col-xs-3">: {{$header->cCumStartPeriod()->format('d M Y')}} - {{$header->cPeriod()->format('d M Y')}}</div>
+                <div class="col-xs-3">: {{$cCumPeriod->format('d M Y')}} - {{$cPeriod->format('d M Y')}}</div>
         </div>
         <div class="row">
             <p class="pms-title">1. Sasaran Hasil: {{$header->weight_result*100}}%</p>
@@ -48,10 +51,10 @@
                         <th rowspan="2">No</th>
                         <th rowspan="2">Key Performance Indicator</th>
                         <th rowspan="2">Unit</th>
-                        <th colspan="2">Performance Wighing 2019</th>
-                        <th colspan="4">Performance Target 2019</th>
-                        <th colspan="4">Realization 2019</th>
-                        <th colspan="2">KPI Achievement 2019</th>
+                        <th colspan="2">Performance Wighing {{$cPeriod->format('Y')}}</th>
+                        <th colspan="4">Performance Target {{$cPeriod->format('Y')}}</th>
+                        <th colspan="4">Realization {{$cPeriod->format('Y')}}</th>
+                        <th colspan="2">KPI Achievement {{$cPeriod->format('Y')}}</th>
                         <th colspan="2">Achievement x Weighing</th>
                     </tr>
                     <tr>
@@ -111,10 +114,10 @@
                             <th rowspan="2">序号 No.</th>
                             <th rowspan="2">核心竞争力 Kompetensi Inti</th>
                             <th rowspan="2">单位 Unit</th>
-                            <th colspan="2">Performance Wighing 2019</th>
-                            <th colspan="2">Performance Target 2019</th>
-                            <th colspan="2">Realization 2019</th>
-                            <th colspan="2">KPI Achievement 2019</th>
+                            <th colspan="2">Performance Wighing {{$cPeriod->format('Y')}}</th>
+                            <th colspan="2">Performance Target {{$cPeriod->format('Y')}}</th>
+                            <th colspan="2">Realization {{$cPeriod->format('Y')}}</th>
+                            <th colspan="2">KPI Achievement {{$cPeriod->format('Y')}}</th>
                             <th colspan="2">Achievement x Weighing</th>
                         </tr>
                         <tr>

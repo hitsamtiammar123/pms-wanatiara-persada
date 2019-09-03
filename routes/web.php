@@ -34,7 +34,7 @@ Route::get('/javascript/provider','JavascriptController@provider')->name('js.pro
 Route::get('/javascript/csrf-token','JavascriptController@token')->name('js.token');
 Route::get('/app/front-view','PageController@appfront')->name('app.frontview');
 
-Route::get('/print/pms','PageController@printPms')->name('print.pms');
+Route::get('/print/pms/{employeeID}','PageController@printPms')->name('print.pms');
 
 Auth::routes();
 
