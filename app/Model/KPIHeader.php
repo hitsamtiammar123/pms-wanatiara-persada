@@ -19,6 +19,7 @@ class KPIHeader extends Model
     ];
 
     protected $casts=['id'=>'string'];
+    protected $kpiResultDKeys=['pt_t1','pt_k1','pt_t2','pt_k2','real_t1','real_k1','real_t2','real_k2'];
 
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
@@ -175,6 +176,39 @@ class KPIHeader extends Model
         ];
     }
 
+    protected function filterData($result,$type){
+        for($i=0;$i<count($result);$i++){
+            $curr=&$result[$i];
+            $curr['pw_1']=$curr['pw_1'].'%';
+            $curr['pw_2']=$curr['pw_2'].'%';
+            $curr['kpia_1']=$curr['kpia_1'].'%';
+            $curr['kpia_2']=$curr['kpia_2'].'%';
+            $curr['aw_1']=$curr['aw_1'].'%';
+            $curr['aw_2']=$curr['aw_2'].'%';
+
+            if($type==='kpiresult'){
+                $unit=$curr['unit'];
+                foreach($this->kpiResultDKeys as $key){
+                    switch($unit){
+                        case '$':
+                        case 'WMT':
+                            $curr[$key]=number_format($curr[$key]);
+                        break;
+                        case '%':
+                        case 'MV':
+                            $curr[$key]=$curr[$key].'%';
+                        break;
+                    }
+                }
+
+            }
+
+        }
+
+
+        return $result;
+    }
+
     protected function fetchAccumulatedKPIResult(){
         $kpiresults=$this->fetchKPIResult();
         $result=[];
@@ -221,7 +255,7 @@ class KPIHeader extends Model
         }
 
         $accumulated=$this->accumulateTotalAchievement($result);
-
+        $result=$this->filterData($result,'kpiresult');
         return [
             'data'=>$result,
             'totalAchievement'=>$accumulated['totalAchievement'],
@@ -258,6 +292,7 @@ class KPIHeader extends Model
         }
 
         $accumulated=$this->accumulateTotalAchievement($result);
+        $result=$this->filterData($result,'kpiprocess');
 
         return [
             'data'=>$result,

@@ -70,20 +70,20 @@
                                 <td class="index-content">{{$loop->index+1}}</td>
                                 <td class="kpi-content">{{$kpiresult['name']}}</td>
                                 <td class="text-center">{{$kpiresult['unit']}}</td>
-                                <td class="num-content">{{number_format($kpiresult['pw_1'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['pw_2'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['pt_t1'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['pt_k1'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['pt_t2'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['pt_k2'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['real_t1'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['real_k1'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['real_t2'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['real_k2'])}}</td>
-                                <td class="num-content {{$kpiresult['bColor_kpia_1']}}">{{number_format($kpiresult['kpia_1'])}}</td>
-                                <td class="num-content {{$kpiresult['bColor_kpia_2']}}">{{number_format($kpiresult['kpia_2'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['aw_1'])}}</td>
-                                <td class="num-content">{{number_format($kpiresult['aw_2'])}}</td>
+                                <td class="num-content">{{$kpiresult['pw_1']}}</td>
+                                <td class="num-content">{{$kpiresult['pw_2']}}</td>
+                                <td class="num-content">{{$kpiresult['pt_t1']}}</td>
+                                <td class="num-content">{{$kpiresult['pt_k1']}}</td>
+                                <td class="num-content">{{$kpiresult['pt_t2']}}</td>
+                                <td class="num-content">{{$kpiresult['pt_k2']}}</td>
+                                <td class="num-content">{{$kpiresult['real_t1']}}</td>
+                                <td class="num-content">{{$kpiresult['real_k1']}}</td>
+                                <td class="num-content">{{$kpiresult['real_t2']}}</td>
+                                <td class="num-content">{{$kpiresult['real_k2']}}</td>
+                                <td class="num-content {{$kpiresult['bColor_kpia_1']}}">{{$kpiresult['kpia_1']}}</td>
+                                <td class="num-content {{$kpiresult['bColor_kpia_2']}}">{{$kpiresult['kpia_2']}}</td>
+                                <td class="num-content">{{$kpiresult['aw_1']}}</td>
+                                <td class="num-content">{{$kpiresult['aw_2']}}</td>
                             </tr>
                     @endforeach
                         <tr>
@@ -133,16 +133,16 @@
                                     <td class="index-content">{{$loop->index+1}}</td>
                                     <td class="kpi-content">{{$kpiprocess['name']}}</td>
                                     <td class="text-center">{{$kpiprocess['unit']}}</td>
-                                    <td class="num-content">{{number_format($kpiprocess['pw_1'])}}</td>
-                                    <td class="num-content">{{number_format($kpiprocess['pw_2'])}}</td>
-                                    <td class="num-content">{{number_format($kpiprocess['pt_1'])}}</td>
-                                    <td class="num-content">{{number_format($kpiprocess['pt_2'])}}</td>
-                                    <td class="num-content">{{number_format($kpiprocess['real_1'])}}</td>
-                                    <td class="num-content">{{number_format($kpiprocess['real_2'])}}</td>
-                                    <td class="num-content {{$kpiprocess['bColor_kpia_1']}}">{{number_format($kpiprocess['kpia_1'])}}</td>
-                                    <td class="num-content {{$kpiprocess['bColor_kpia_2']}}">{{number_format($kpiprocess['kpia_2'])}}</td>
-                                    <td class="num-content">{{number_format($kpiprocess['aw_1'])}}</td>
-                                    <td class="num-content">{{number_format($kpiprocess['aw_2'])}}</td>
+                                    <td class="num-content">{{$kpiprocess['pw_1']}}</td>
+                                    <td class="num-content">{{$kpiprocess['pw_2']}}</td>
+                                    <td class="num-content">{{$kpiprocess['pt_1']}}</td>
+                                    <td class="num-content">{{$kpiprocess['pt_2']}}</td>
+                                    <td class="num-content">{{$kpiprocess['real_1']}}</td>
+                                    <td class="num-content">{{$kpiprocess['real_2']}}</td>
+                                    <td class="num-content {{$kpiprocess['bColor_kpia_1']}}">{{$kpiprocess['kpia_1']}}</td>
+                                    <td class="num-content {{$kpiprocess['bColor_kpia_2']}}">{{$kpiprocess['kpia_2']}}</td>
+                                    <td class="num-content">{{$kpiprocess['aw_1']}}</td>
+                                    <td class="num-content">{{$kpiprocess['aw_2']}}</td>
                                 </tr>
                         @endforeach
                         <tr>

@@ -7,17 +7,12 @@ use Illuminate\Http\Request;
 use App\Model\KPIHeader;
 use Carbon\Carbon;
 use PDF;
+use App\Http\Controllers\Traits\HeaderFetch;
 
 class PDFController extends Controller
 {
-    protected function fetchInputHeader(Request $request,$employee){
-        $now=Carbon::now();
 
-        $month=$request->has('month')?$request->month:$now->month;
-        $year=$request->has('year')?$request->year:$now->year;
-
-        return $employee->getHeader($month,$year);
-    }
+    use HeaderFetch;
 
     public function bacoba(){
         $pdf=PDF::loadView('pdf.pdf-hehe');

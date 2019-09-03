@@ -1,7 +1,20 @@
 @extends('layouts.print')
 @section('content')
+@php
+    function get_totalW_pw1($carry,$item){
+        return $carry+intval($item['pw_1']);
+    }
+
+    function get_totalW_pw2($carry,$item){
+        return $carry+intval($item['pw_2']);
+    }
+
+    $cPeriod=$header->cPeriod();
+    $cNextPeriod=$header->cNextPeriod();
+    $cCumPeriod=$header->cCumStartPeriod();
+@endphp
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
+    <div class="container">
             <div class="navbar-header">
                     <a class="navbar-brand" href="#">Tekan Ctrl+P untuk mencetak halaman</a>
                   </div>
@@ -20,22 +33,22 @@
                     </div>
         </div>
         <div class="row title-row">
-                <div class="col-sm-3">Jabaran 1: </div>
-                <div class="col-sm-2"> Orang 1</div>
+                <div class="col-sm-3">{{$employee->role->name}}: </div>
+                <div class="col-sm-2"> {{$employee->name}}</div>
                 <div class="col-sm-4">当月考核期 Periode bulan berjalan:</div>
-                <div class="col-sm-3"> 19 Agustus 2019 - 19 Oktober 2019</div>
+                <div class="col-sm-3"> {{$cPeriod->format('d M Y')}} - {{$cNextPeriod->format('d M Y')}}</div>
         </div>
         <div class="row" style="margin-top:10px;">
-                <div class="col-sm-3">Jabaran 2:</div>
-                <div class="col-sm-2"> Orang 2</div>
+                <div class="col-sm-3">{{$employee->atasan->role->name}}:</div>
+                <div class="col-sm-2"> {{$employee->atasan->name}}</div>
                 <div class="col-sm-4">当月考核期 Periode bulan berjalan:</div>
-                <div class="col-sm-3"> 19 Agustus 2019 - 19 Oktober 2019</div>
+                <div class="col-sm-3"> {{$cCumPeriod->format('d M Y')}} - {{$cPeriod->format('d M Y')}}</div>
         </div>
         <div class="row title-row">
-                <p class="pms-title">1. Sasaran Hasil: 60%</p>
+                <p class="pms-title">1. Sasaran Hasil: {{$header->weight_result*100}}%</p>
         </div>
-                <div class="row table-content">
-                    <div class="table-responsive">
+                <div class="table-content">
+                    <div class="col-sm-12">
                             <table class="table table-print">
                                     <thead>
                                         <tr>
@@ -45,129 +58,111 @@
                                             <th colspan="4">Performance Target 2019</th>
                                             <th colspan="4">Realization 2019</th>
                                             <th colspan="2">KPI Achievement 2019</th>
-                                            <th colspan="2">AW</th>
+                                            <th colspan="2">Achievement x Weighing</th>
                                         </tr>
                                         <tr>
-                                            <th>July</th>
-                                            <th>August</th>
-                                            <th>Target July</th>
-                                            <th>Target July</th>
-                                            <th>Target July</th>
-                                            <th>Target July</th>
-                                            <th>Target July</th>
-                                            <th>Target July</th>
-                                            <th>Target July</th>
-                                            <th>July</th>
-                                            <th>July</th>
-                                            <th>July</th>
-                                            <th>July</th>
-                                            <th>July</th>
+                                            @foreach ($header->getResultHeading() as $h)
+                                            <th>{{$h}}</th>
+                                        @endforeach
                                         </tr>
 
                                     </thead>
                                     <tbody>
-                                        @for ($i = 0; $i < 7; $i++)
+                                        @foreach ($kpiresults['data'] as $kpiresult)
                                             <tr>
-                                                    <td>Ini KPI 123456789904040404</td>
-                                                    <td>%</td>
-                                                    <td class="num-content">10%</td>
-                                                    <td class="num-content">10%</td>
-                                                    <td class="num-content">10%</td>
-                                                    <td class="num-content">10%</td>
-                                                    <td class="num-content">10%</td>
-                                                    <td class="num-content">1,000,000</td>
-                                                    <td class="num-content">1,000,000</td>
-                                                    <td class="num-content">1,000,000%</td>
-                                                    <td class="num-content">1,000,000</td>
-                                                    <td class="num-content">10%</td>
-                                                    <td class="num-content">10%</td>
-                                                    <td class="num-content">10%</td>
-                                                    <td class="num-content">10%</td>
-                                                    <td class="num-content">10%</td>
+                                                    <td class="kpi-content">{{$kpiresult['name']}}</td>
+                                                    <td>{{$kpiresult['unit']}}</td>
+                                                    <td class="num-content">{{$kpiresult['pw_1']}}</td>
+                                                    <td class="num-content">{{$kpiresult['pw_2']}}</td>
+                                                    <td class="num-content">{{$kpiresult['pt_t1']}}</td>
+                                                    <td class="num-content">{{$kpiresult['pt_k1']}}</td>
+                                                    <td class="num-content">{{$kpiresult['pt_t2']}}</td>
+                                                    <td class="num-content">{{$kpiresult['pt_k2']}}</td>
+                                                    <td class="num-content">{{$kpiresult['real_t1']}}</td>
+                                                    <td class="num-content">{{$kpiresult['real_k1']}}</td>
+                                                    <td class="num-content">{{$kpiresult['real_t2']}}</td>
+                                                    <td class="num-content">{{$kpiresult['real_k2']}}</td>
+                                                    <td class="num-content {{$kpiresult['bColor_kpia_1']}}">{{$kpiresult['kpia_1']}}</td>
+                                                    <td class="num-content {{$kpiresult['bColor_kpia_2']}}">{{$kpiresult['kpia_2']}}</td>
+                                                    <td class="num-content">{{$kpiresult['aw_1']}}</td>
+                                                    <td class="num-content">{{$kpiresult['aw_2']}}</td>
                                                 </tr>
-                                        @endfor
+                                        @endforeach
                                             <tr>
                                                 <td colspan="2" class="bold">Total Bobot: </td>
-                                                <td class="num-content">100%</td>
-                                                <td class="num-content">100%</td>
+                                                <td class="num-content">{{array_reduce($kpiresults['data'],'get_totalW_pw1',0)}}%</td>
+                                                <td class="num-content">{{array_reduce($kpiresults['data'],'get_totalW_pw2',0)}}%</td>
                                                 <td colspan="8"></td>
-                                                <td colspan="2">Total Achievement:</td>
-                                                <td class="num-content center-text">100%</td>
-                                                <td class="num-content center-text">100%</td>
+                                                <td colspan="2" class="bold">Total Achievement:</td>
+                                                <td class="num-content center-text">{{$kpiresults['totalAchievement']['t1']}}</td>
+                                                <td class="num-content center-text">{{$kpiresults['totalAchievement']['t2']}}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="12"></td>
-                                                <td colspan="2" class="bold">Total Achievement:</td>
-                                                <td class="num-content center-text">D</td>
-                                                <td class="num-content center-text">D</td>
+                                                <td colspan="2" class="bold">Index Achievement:</td>
+                                                <td class="num-content center-text">{{$kpiresults['indexAchievement']['t1']}}</td>
+                                                <td class="num-content center-text">{{$kpiresults['indexAchievement']['t2']}}</td>
                                             </tr>
                                     </tbody>
-                                </table>
+                            </table>
                     </div>
 
                 </div>
 
-                <div class="row  title-row">
-                        <p class="pms-title">2. Sasaran Proses: 40%</p>
+                <div class="title-row">
+                        <p class="pms-title">2. Sasaran Proses: {{$header->weight_process*100}}%</p>
                 </div>
-                <div class="row table-content">
-                        <div class="table-responsive">
+                <div class="table-content">
+                        <div class="col-sm-12">
                                 <table class="table table-print">
                                         <thead>
                                             <tr>
                                                 <th rowspan="2">Kompetensi Inti</th>
                                                 <th rowspan="2">Unit</th>
-                                                <th colspan="2">Performance weighting 2019</th>
-                                                <th colspan="2">Performance Target 2019</th>
-                                                <th colspan="2">Realization 2019</th>
-                                                <th colspan="2">KPI Achievement 2019</th>
-                                                <th colspan="2">AW</th>
+                                                <th colspan="2">Performance weighting {{$cPeriod->format('Y')}}</th>
+                                                <th colspan="2">Performance Target {{$cPeriod->format('Y')}}</th>
+                                                <th colspan="2">Realization {{$cPeriod->format('Y')}}</th>
+                                                <th colspan="2">KPI Achievement {{$cPeriod->format('Y')}}</th>
+                                                <th colspan="2">Achievement x Weighing</th>
                                             </tr>
                                             <tr>
-                                                <th>July</th>
-                                                <th>August</th>
-                                                <th>Target July</th>
-                                                <th>Target July</th>
-                                                <th>Target July</th>
-                                                <th>July</th>
-                                                <th>July</th>
-                                                <th>July</th>
-                                                <th>July</th>
-                                                <th>July</th>
+                                                @foreach ($header->getProcessHeading() as $h)
+                                                <th>{{$h}}</th>
+                                                @endforeach
                                             </tr>
 
                                         </thead>
                                         <tbody>
-                                            @for ($i = 0; $i < 5; $i++)
+                                            @foreach ($kpiprocesses['data'] as $kpiprocess)
                                                 <tr>
-                                                        <td>Ini KPI 123456789904040404</td>
-                                                        <td>%</td>
-                                                        <td class="num-content">10%</td>
-                                                        <td class="num-content">10%</td>
-                                                        <td class="num-content">10%</td>
-                                                        <td class="num-content">10%</td>
-                                                        <td class="num-content">10%</td>
-                                                        <td class="num-content">10%</td>
-                                                        <td class="num-content">10%</td>
-                                                        <td class="num-content">10%</td>
-                                                        <td class="num-content">10%</td>
-                                                        <td class="num-content">10%</td>
+                                                        <td>{{$kpiprocess['name']}}</td>
+                                                        <td>{{$kpiprocess['unit']}}</td>
+                                                        <td class="num-content">{{$kpiprocess['pw_1']}}</td>
+                                                        <td class="num-content">{{$kpiprocess['pw_1']}}</td>
+                                                         <td class="num-content">{{$kpiprocess['pt_1']}}</td>
+                                                         <td class="num-content">{{$kpiprocess['pt_2']}}</td>
+                                                         <td class="num-content">{{$kpiprocess['real_1']}}</td>
+                                                         <td class="num-content">{{$kpiprocess['real_2']}}</td>
+                                                         <td class="num-content {{$kpiresult['bColor_kpia_1']}}">{{$kpiprocess['kpia_1']}}</td>
+                                                         <td class="num-content {{$kpiresult['bColor_kpia_2']}}">{{$kpiprocess['kpia_2']}}</td>
+                                                         <td class="num-content">{{$kpiprocess['aw_1']}}</td>
+                                                         <td class="num-content">{{$kpiprocess['aw_2']}}</td>
                                                     </tr>
-                                            @endfor
+                                            @endforeach
                                                 <tr>
                                                     <td colspan="2" class="bold">Total Bobot: </td>
-                                                    <td class="num-content">100%</td>
-                                                    <td class="num-content">100%</td>
+                                                    <td class="num-content">{{array_reduce($kpiprocesses['data'],'get_totalW_pw1',0)}}%</td>
+                                                    <td class="num-content">{{array_reduce($kpiprocesses['data'],'get_totalW_pw2',0)}}%</td>
                                                     <td colspan="4"></td>
-                                                    <td colspan="2">Total Achievement:</td>
-                                                    <td class="num-content center-text">100%</td>
-                                                    <td class="num-content center-text">100%</td>
+                                                    <td colspan="2" class="bold">Total Achievement:</td>
+                                                    <td class="num-content center-text">{{$kpiprocesses['totalAchievement']['t1']}}</td>
+                                                    <td class="num-content center-text">{{$kpiprocesses['totalAchievement']['t2']}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="8"></td>
-                                                    <td colspan="2" class="bold">Total Achievement:</td>
-                                                    <td class="num-content center-text">D</td>
-                                                    <td class="num-content center-text">D</td>
+                                                    <td colspan="2" class="bold">Index Achievement:</td>
+                                                    <td class="num-content center-text">{{$kpiprocesses['indexAchievement']['t1']}}</td>
+                                                    <td class="num-content center-text">{{$kpiprocesses['indexAchievement']['t2']}}</td>
                                                 </tr>
                                         </tbody>
                                     </table>

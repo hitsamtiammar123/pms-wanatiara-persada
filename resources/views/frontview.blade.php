@@ -22,7 +22,7 @@
                         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Berkas<span class="caret"></span></a>
                           <ul class="dropdown-menu">
                             <li><a ng-click="downloadPDF()">Unduh</a></li>
-                            <li><a >Cetak</a></li>
+                            <li><a ng-click="toPrint()">Cetak</a></li>
                             <li><a >Kirim Ke Surel</a></li>
                             <li><a ng-click="logout()">Keluar</a></li>
                           </ul>

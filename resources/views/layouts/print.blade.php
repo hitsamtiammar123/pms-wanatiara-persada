@@ -1,3 +1,6 @@
+@php
+    $title=isset($title)?$title:'Halaman Print';
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +10,7 @@
     <link rel="icon" href="{{asset('img/logo-removebg.png')}}">
     {!!style('bootstrap.min.css','/vendor/css','angular_resource')!!}
     {!!style('print.css','/css-laravel','public')!!}
-    <title>Halaman Print</title>
+    <title>{{$title}}</title>
     <script>
         window.onload=function(){
             window.print();

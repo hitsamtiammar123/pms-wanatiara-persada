@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\HeaderFetch;
+use App\Model\Employee;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
+
+    use HeaderFetch;
 
     public function index(){
         return view('index');
     }
 
 
-    //
     public function app(Request $request){
         return view('app');
     }
@@ -31,7 +34,8 @@ class PageController extends Controller
             'kpiresults'=>$kpiresults,
             'kpiprocesses'=>$kpiprocesses,
             'employee'=>$employee,
-            'header'=>$kpiheader
+            'header'=>$kpiheader,
+            'title'=>'Performance Management System (PMS) - '.$employee->name.' - Periode: '.$kpiheader->cPeriod()->format('d F Y')
         ];
         return view('print.pms',$data);
     }

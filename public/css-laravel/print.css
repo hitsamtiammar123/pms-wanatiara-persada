@@ -16,9 +16,6 @@
     margin-top: 20px;
 }
 
-.table-print tbody{
-    width: 100%;
-}
 
 .table-print thead tr th{
     text-align: center;
@@ -38,7 +35,11 @@
 }
 
 .num-content{
-    width: 100px;
+    width: 50px;
+}
+
+tbody tr td.kpi-content{
+    width:300px !important;
 }
 
 .center-text{
@@ -51,4 +52,23 @@
 
 .table-18{
     width:18%;
+}
+
+/*Table color*/
+
+
+.red-column{
+    color: red;
+}
+
+.blue-column{
+    color: blue;
+}
+
+.green-column{
+    color: green;
+}
+
+.black-column{
+    color: black;
 }
