@@ -41,7 +41,7 @@
                 <div class="col-xs-3">年绩效目标 Periode Kumulatif sampai bulan berjalan</div>
                 <div class="col-xs-3">: {{$cCumPeriod->format('d M Y')}} - {{$cPeriod->format('d M Y')}}</div>
         </div>
-        <div class="row">
+        <div class="row title-row">
             <p class="pms-title">1. Sasaran Hasil: {{$header->weight_result*100}}%</p>
         </div>
         <div class="row table-content">

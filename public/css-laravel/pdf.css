@@ -8,6 +8,10 @@
     text-align: center;
 }
 
+.title-row{
+    margin-top: 20px;
+}
+
 .head-title{
     font-family: 'Cambria';
     color:black;
