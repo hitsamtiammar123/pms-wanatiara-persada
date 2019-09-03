@@ -86,6 +86,14 @@ class Employee extends Model
         return $curr_header;
     }
 
+    public function getHeader($month,$year){
+        $headers=$this->kpiheaders;
+        $currDate=KPIHeader::getDate($month,$year);
+        $curr_header=$headers->where('period',$currDate)->first();
+
+        return $curr_header;
+    }
+
     public function checkHeader($period){
         $headers=$this->kpiheaders;
 

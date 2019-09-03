@@ -236,8 +236,16 @@ class KPIHeader extends Model
 
         foreach($kpiprocesses as $curr){
 
-            $kt_1=intval($curr['real_1'])-intval($curr['pt_1']);
-            $kt_2=intval($curr['real_2'])-intval($curr['pt_2']);
+            if(!is_null($curr['real_1'])&&!is_null($curr['pt_1']))
+                $kt_1=intval($curr['real_1'])-intval($curr['pt_1']);
+            else
+                $kt_1=-1;
+
+            if(!is_null($curr['real_2'])&&!is_null($curr['pt_2']))
+                $kt_2=intval($curr['real_2'])-intval($curr['pt_2']);
+            else
+                $kt_2=-1;
+
             $curr['kpia_1']=$this->getKPIProcessIndex($kt_1);
             $curr['kpia_2']=$this->getKPIProcessIndex($kt_2);
             $curr['bColor_kpia_1']=$this->getKPIProcessColor($kt_1);
@@ -284,6 +292,94 @@ class KPIHeader extends Model
         return $curr_date;
     }
 
+    public function getResultHeading(){
+        $headings=[];
+
+        for($i=0,$period=null,$c=0;$i<14;$i++){
+            $h='';
+
+            if($c>=4)
+                $c=0;
+
+            if($i>=2 && $i<=5){
+                if($i%2===0){
+                    $h.='Target ';
+                }
+                else{
+                    $h.='Kumulatif ';
+                }
+                $c++;
+                if($c<=2){
+                    $period=$this->cPeriod();
+                }
+                else if($c>2 && $c<=4){
+                    $period=$this->cNextPeriod();
+                }
+                $h.=$period->format('M');
+
+            }
+            else if($i>=6 && $i<=9){
+                if($i%2===0){
+                    $h.='Realisasi ';
+                }
+                else{
+                    $h.='Kumulatif ';
+                }
+                $c++;
+                if($c<=2){
+                    $period=$this->cPeriod();
+                }
+                else if($c>2 && $c<=4){
+                    $period=$this->cNextPeriod();
+                }
+
+                $h.=$period->format('M');
+            }
+            else{
+                if($i%2===0){
+                    $period=$this->cPeriod();
+                }
+                else
+                    $period=$this->cNextPeriod();
+                $h=$period->format('M');
+            }
+
+            $headings[]=$h;
+        }
+
+        return $headings;
+    }
+
+    public function getProcessHeading(){
+        $headings=[];
+
+        for($i=0,$period=null;$i<10;$i++){
+            $h='';
+            if($i%2===0){
+                $period=$this->cPeriod();
+            }
+            else
+                $period=$this->cNextPeriod();
+
+            switch($i){
+                case 2:
+                case 3:
+                    $h.='Target ';
+                break;
+                case 4:
+                case 5:
+                    $h.='Realisasi ';
+                break;
+            }
+
+            $h.=$period->format('M');
+            $headings[]=$h;
+
+        }
+
+        return $headings;
+    }
+
     public static function getCurrentDate(){
         $curr_date=self::getDate(Carbon::now()->month);
         return $curr_date;
@@ -311,6 +407,26 @@ class KPIHeader extends Model
             return $this->fetchAccumulatedKPIProcess();
         }
         return null;
+    }
+
+    public function cPeriod(){
+        $period=$this->period;
+        $date=Carbon::parse($period);
+        return $date;
+    }
+
+    public function cNextPeriod(){
+        $period=$this->period;
+        $date=Carbon::parse($period);
+        return $date->addMonth();
+    }
+
+    public function cCumStartPeriod(){
+        $period=$this->period;
+        $date=Carbon::parse($period);
+        $date->setMonth(12);
+        $date->setYear($date->year-1);
+        return $date;
     }
 
     public function employee(){

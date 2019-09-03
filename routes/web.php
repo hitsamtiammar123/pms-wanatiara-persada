@@ -1,22 +1,29 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Model\Employee;
+use App\Model\KPIHeader;
+
+Route::get('/test/{employeeID}',function($employeeID){
+        $employee=Employee::find($employeeID);
+        $kpiheader=$employee->getHeader(8,2019);
+        $kpiresults=$kpiheader->fetchAccumulatedData('kpiresult');
+        $kpiprocesses=$kpiheader->fetchAccumulatedData('kpiprocess');
+        $data=[
+            'kpiresult'=>$kpiresults,
+            'kpiprocess'=>$kpiprocesses,
+            'employee'=>$employee
+        ];
+
+        return $data;
+});
+
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');
 Route::get('/auth-user','Auth\\LoginController@auth_user')->name('authuser');
 Route::get('/app','PageController@app')->name('app')->middleware('auth');
 Route::get('/excl-hehe','KPICompanyController@exclHehe')->name('exclhehe');
 
 Route::get('/pdf-hehe','PDFController@bacoba')->name('pdf.hehe');
-Route::get('/pdf/pms/','PDFController@pms')->name('pdf.pms');
+Route::get('/pdf/pms/{employeeID}','PDFController@pms')->name('pdf.pms');
 
 
 Route::get('/javascript/app','JavascriptController@appJS')->name('js.app');

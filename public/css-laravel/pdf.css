@@ -4,6 +4,9 @@
 .pms-title{
     font-weight: bold !important;
 }
+.text-center{
+    text-align: center;
+}
 
 .head-title{
     font-family: 'Cambria';
@@ -31,8 +34,25 @@
 }
 
 .table-pdf thead tr th,
+.table-pdf tbody tr td{
+    padding:5px auto;
+}
+
+.table-pdf thead tr th,
 .table-pdf tbody tr td.num-content{
     text-align: center;
+    width:80px;
+}
+
+.table-pdf thead tr th,
+.table-pdf tbody tr td.index-content{
+    text-align: center;
+    width:10px;
+}
+
+.table-pdf tbody tr td.kpi-content{
+    width:150px;
+    padding:15px 10px;
 }
 
 .table-pdf thead tr th{
@@ -42,4 +62,23 @@
 /*Halaman Pengesahan*/
 .tanda-tangan{
     height: 50px;
+}
+
+/*Table color*/
+
+
+.red-column{
+    color: red;
+}
+
+.blue-column{
+    color: blue;
+}
+
+.green-column{
+    color: green;
+}
+
+.black-column{
+    color: black;
 }
