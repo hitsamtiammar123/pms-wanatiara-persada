@@ -55,9 +55,13 @@ if(!function_exists('kpi_company')){
         $file="kpicompany/kpicompany_{$_year}_{$_month}";
 
         $real_path=$disk->getAdapter()->getPathPrefix().'/'.$file;
-        $kpi_company=file_get_contents($real_path);
 
-        return json_decode($kpi_company,true);
+        if(file_exists($real_path)){
+            $kpi_company=file_get_contents($real_path);
+            return json_decode($kpi_company,true);
+        }
+        else
+            return [];
     }
 }
 

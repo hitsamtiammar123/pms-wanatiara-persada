@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Model\KPIHeader;
 use Illuminate\Console\Command;
 use App\Notifications\EndorsementNotification;
 use App\Model\User;
@@ -40,9 +41,7 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        $user=User::first();
-
-        echo $user['id'];
+        echo KPIHeader::getDate(15,2019);
 
     }
 }

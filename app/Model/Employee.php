@@ -57,7 +57,7 @@ class Employee extends Model
             $r['message']=$data['message'];
             $r['approved']=$data['approved'];
         }
-        
+
         $r['subject']=$data['subject'];
 
         if(array_key_exists('from',$data))
@@ -84,6 +84,17 @@ class Employee extends Model
         $curr_header=$headers->where('period',$currDate)->first();
 
         return $curr_header;
+    }
+
+    public function checkHeader($period){
+        $headers=$this->kpiheaders;
+
+        foreach($headers as $header){
+            if($header->period===$period)
+                return true;
+        }
+
+        return false;
     }
 
     public function getSendToUser(){
@@ -127,6 +138,39 @@ class Employee extends Model
         }
 
         return false;
+    }
+
+    public function createHeader($year,$month){
+        $period=KPIHeader::getDate($month,$year);
+
+        if($this->checkHeader($period))
+            return -1;
+
+        $curr_header=$this->getCurrentHeader();
+        $header_id=KPIHeader::generateID($this->id);
+        $header=KPIHeader::create([
+            'id'=>$header_id,
+            'employee_id'=>$this->id,
+            'period'=>$period,
+            'weight_result'=>$curr_header->weight_result,
+            'weight_process'=>$curr_header->weight_process
+        ]);
+
+        foreach($curr_header->kpiresultheaders as $resultheader){
+            KPIResultHeader::create([
+                'id'=>KPIResultHeader::generateID($this->id,$header_id),
+                'kpi_result_id'=>$resultheader->kpi_result_id,
+                'kpi_header_id'=>$header_id,
+                'pw'=>$resultheader->pw,
+                'pt_t'=>$resultheader->pt_t,
+                'pt_k'=>$resultheader->pt_k,
+                'real_t'=>$resultheader->real_t,
+                'real_k'=>$resultheader->real_k
+            ]);
+        }
+
+        return 1;
+
     }
 
 

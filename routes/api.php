@@ -44,7 +44,7 @@ Route::group(['prefix'=>'v1','middleware'=>['cors','web']
     Route::get('/kpicompany','KPICompanyController@getCurrentKPICompany')
     ->name('kpicompany.get');
 
-    Route::post('/kpicompany','KPICompanyController@postKPICompany')
+    Route::post('/kpicompany/upload','KPICompanyController@postKPICompany')
     ->name('kpicompany.post');
 
     Route::get('/notification/get/{employeeID}','NotificationController@getNotifications')

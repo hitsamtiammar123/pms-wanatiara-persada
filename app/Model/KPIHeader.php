@@ -15,7 +15,7 @@ class KPIHeader extends Model
     protected static $listID=[];
     protected $table='kpiheaders';
     protected $fillable=[
-        'period'
+        'id','period','employee_id','weight_result','weight_process'
     ];
 
     protected $casts=['id'=>'string'];
@@ -275,9 +275,9 @@ class KPIHeader extends Model
 
     }
 
-    public static function getDate($month){
+    public static function getDate($month,$year=null){
         $curr=Carbon::now();
-        $year=$curr->year;
+        $year=$year?$year:$curr->year;
         $month=$month;
         $date=16;
         $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
