@@ -28,12 +28,18 @@ class KPIProcess extends Model
         return $this->belongsToMany(KPIHeader::class,'kpiprocesses_kpiheaders','kpi_proccess_id','kpi_header_id');
     }
 
+
     public function getNext(){
         $kpiheader=KPIHeader::find($this->pivot->kpi_header_id);
         if($kpiheader){
             $kpiheadernext=$kpiheader->getNext();
-            $kpiprocessNext=$kpiheadernext->kpiprocesses->where('id',$this->id)->first();
-            return $kpiprocessNext;
+            if($kpiheadernext){
+                $kpiprocessNext=$kpiheadernext->kpiprocesses->where('id',$this->id)->first();
+                return $kpiprocessNext;
+            }
+            else {
+                return null;
+            }
         }
         return null;
     }

@@ -1,5 +1,12 @@
 @extends('layouts.print')
 @section('content')
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+            <div class="navbar-header">
+                    <a class="navbar-brand" href="#">Tekan Ctrl+P untuk mencetak halaman</a>
+                  </div>
+    </div>
+</nav>
 <div class="c-container">
         <div class="row">
                 <div class="col-sm-2">
