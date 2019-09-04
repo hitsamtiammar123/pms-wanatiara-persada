@@ -47,15 +47,6 @@
                           <h4 class="title2">PT Wanatiara Persada <span>{{ $tahunkiwari }}</span> </h4>
                       </div>
                   </div>
-                  <div class="col-sm-4 header-right">
-                      <div class="row">
-                          <div class="col-sm-4">
-                                  Pilih Bulan:
-                                 <select ng-change="changed()" ng-options="m.value for m in months" ng-model="currentMonth"></select>
-                          </div>
-
-                      </div>
-                  </div>
       </div>
       <div class="col-sm-9 navigation margin-top-20" style="margin-top: -20px;">
         <ul class="nav-bar">

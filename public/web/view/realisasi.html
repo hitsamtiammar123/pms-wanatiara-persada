@@ -1,6 +1,7 @@
 <div class="padding-elem"></div>
 <div id="realisasi">
-        <div class="table-100">
+
+        <div class="table-100" >
                 <div class="row">
                         <div class="col-sm-3">{{ employee.role.name}}</div>
                         <div class="col-sm-2">: {{employee.name}}</div>
@@ -16,6 +17,15 @@
 
 
         </div>
+        <div class="table-100" style="margin-top:30px;">
+                <div class="row">
+                        <div class="col-sm-4">
+                                Pilih Bulan: 
+                               <select ng-change="changeMonth()" ng-options="m.value for m in months" ng-model="currentMonth"></select> 
+                        </div>
+                </div>
+        
+            </div>
     <div class="table-100">
         <p class="bold table-title">
             <md-menu ng-hide="hasEndorse">
