@@ -205,6 +205,20 @@ class Employee extends Model
             ]);
         }
 
+        $kpiprocesses=$curr_header->kpiprocesses;
+
+        $header=KPIHeader::find($header_id);
+
+        foreach($kpiprocesses as $kpiprocess){
+            $header->kpiprocesses()->attach([
+                $kpiprocess->id=>[
+                    'pw'=>$kpiprocess->pivot->pw,
+                    'pt'=>$kpiprocess->pivot->pt,
+                    'real'=>$kpiprocess->pivot->real
+                ]
+            ]);
+        }
+
         return 1;
 
     }
