@@ -43,8 +43,10 @@ class TestCommand extends Command
     {
         //
         $e=Employee::find('1915284162');
+        $header=$e->getCurrentHeader()->getPrev();
 
-        print_r($e->getHirarcialEmployee());
+        dd($header);
+
 
     }
 }

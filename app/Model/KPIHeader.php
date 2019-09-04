@@ -23,10 +23,12 @@ class KPIHeader extends Model
 
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
+
+
     protected function fetchKPIResult(){
 
         $result=[];
-        $kpi_results_header_start=$this->kpiresultheaders->sortBy('kpiresult.name');
+        $kpi_results_header_start=$this->getPrev()->kpiresultheaders->sortBy('kpiresult.name');
 
         foreach($kpi_results_header_start as $kpiresultheader){
             $r=[];
@@ -61,7 +63,7 @@ class KPIHeader extends Model
 
     protected function fetchKPIProcess(){
         $result=[];
-        $kpi_proccess_start=$this->kpiprocesses;
+        $kpi_proccess_start=$this->getPrev()->kpiprocesses;
 
         foreach($kpi_proccess_start as $curr_s){
             $r=[];
@@ -481,13 +483,22 @@ class KPIHeader extends Model
         ->withTimestamps()->withPivot(['pw','pt','real']);
     }
 
+    public function getHeaderByDate($date){
+        return self::where('period',$date)->where('employee_id',$this->employee_id)->first();
+    }
+
     public function getNext(){
         $date=Carbon::parse($this->period);
         $next_date=$date->addMonth();
 
-        $r=self::where('period',$next_date)->where('employee_id',$this->employee_id)->first();
+        return $this->getHeaderByDate($next_date);
+    }
 
-        return $r;
+    public function getPrev(){
+        $date=Carbon::parse($this->period);
+        $prev_date=$date->addMonth(-1);
+
+        return $this->getHeaderByDate($prev_date);
     }
 
     public function getEndorse($employee){

@@ -36,7 +36,7 @@ class KPIHeaderController extends Controller
             $curr_date=KPIHeader::getCurrentDate();
         }
         $nc=new Carbon($curr_date);
-        $next_date=$nc->addMonth();
+        $prev_month=$nc->addMonth(-1);
 
         $kpiheaders=KPIHeader::where('employee_id',$id)->get();
         $kpiheader=$kpiheaders->where('period',$curr_date)->first();
@@ -64,8 +64,8 @@ class KPIHeaderController extends Controller
         $kpiheader_arr['kpiresults']=$kpiheader->fetchFrontEndData('kpiresult');
         $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements->keyBy('level');
         $kpiheader_arr['kpiprocesses']=$kpiheader->fetchFrontEndData('kpiprocess');
-        $kpiheader_arr['period_end']=$next_date->format('Y-m-d');
-        $kpiheader_arr['period_start']=$kpiheader_arr['period'];
+        $kpiheader_arr['period_end']=$kpiheader_arr['period'];
+        $kpiheader_arr['period_start']=$prev_month->format('Y-m-d') ;
 
 
         unset($kpiheader_arr['period']);
@@ -84,6 +84,7 @@ class KPIHeaderController extends Controller
         }
 
         $header_next=$header->getNext();
+        $header_prev=$header->getPrev();
         if(!$header_next){
             return send_404_error('Data pada bulan berikutnya Tidak ditemukan');
         }
@@ -113,24 +114,26 @@ class KPIHeaderController extends Controller
                 $curr_result=KPIResultHeader::find($kpiresult['id']);
 
                 $curr_result_next=$curr_result->getNext();
-                $curr_result->pw=$kpiresult['pw_1'];
-                $curr_result->pt_t=$kpiresult['pt_t1'];
-                $curr_result->pt_k=$kpiresult['pt_k1'];
-                $curr_result->real_t=$kpiresult['real_t1'];
-                $curr_result->real_k=$kpiresult['real_k1'];
+                $curr_result_prev=$curr_result->getPrev();
 
-                $curr_result_next->pw=$kpiresult['pw_2'];
-                $curr_result_next->pt_t=$kpiresult['pt_t2'];
-                $curr_result_next->pt_k=$kpiresult['pt_k2'];
-                $curr_result_next->real_t=$kpiresult['real_t2'];
-                $curr_result_next->real_k=$kpiresult['real_k2'];
+                $curr_result_prev->pw=$kpiresult['pw_1'];
+                $curr_result_prev->pt_t=$kpiresult['pt_t1'];
+                $curr_result_prev->pt_k=$kpiresult['pt_k1'];
+                $curr_result_prev->real_t=$kpiresult['real_t1'];
+                $curr_result_prev->real_k=$kpiresult['real_k1'];
+
+                $curr_result->pw=$kpiresult['pw_2'];
+                $curr_result->pt_t=$kpiresult['pt_t2'];
+                $curr_result->pt_k=$kpiresult['pt_k2'];
+                $curr_result->real_t=$kpiresult['real_t2'];
+                $curr_result->real_k=$kpiresult['real_k2'];
 
                 $curr_result->kpiresult->name=$kpiresult['name'];
                 $curr_result->kpiresult->unit=$kpiresult['unit'];
 
 
                     $curr_result->push();
-                    $curr_result_next->save();
+                    $curr_result_prev->save();
 
             }
             else{
@@ -201,8 +204,9 @@ class KPIHeaderController extends Controller
             }
         }
 
-            $header->kpiprocesses()->sync($kpiprocess_save);
-            $header_next->kpiprocesses()->sync($kpiprocess_save_n);
+            $header_prev->kpiprocesses()->sync($kpiprocess_save);
+            $header->kpiprocesses()->sync($kpiprocess_save_n);
+            //$header_next->kpiprocesses()->sync($kpiprocess_save_n);
 
         $employee=$header->employee;
         $this->broadcastChange($employee);
