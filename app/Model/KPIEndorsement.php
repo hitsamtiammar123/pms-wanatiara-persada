@@ -12,7 +12,7 @@ class KPIEndorsement extends Model
     use DynamicID;
     protected $table='kpiendorsements';
     protected $fillable=[
-        'kpi_header_id','employee_id','verified'
+        'id','kpi_header_id','employee_id','level'
     ];
     protected $casts=['id'=>'string'];
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];

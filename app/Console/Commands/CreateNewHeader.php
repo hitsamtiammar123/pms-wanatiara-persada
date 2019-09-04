@@ -47,10 +47,14 @@ class CreateNewHeader extends Command
         $m=$opt_month==='default'?intval($now->month)+1:$opt_month;
         $y=$opt_year==='default'?$now->year:$opt_year;
 
+        // $e=Employee::find('1915284162');
+        // $e->createHeader($y,$m);
+
         $employees=Employee::all();
+        $date=Carbon::create($y,$m,16);
 
         foreach($employees as $employee){
-            $date=Carbon::create($y,$m,16);
+
             $n=$employee->createHeader($y,$m);
             if($n===1)
                 printf("Header dari %s sudah berhasil dibuat\n",$employee->name);

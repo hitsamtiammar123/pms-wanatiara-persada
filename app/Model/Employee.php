@@ -148,6 +148,23 @@ class Employee extends Model
         return false;
     }
 
+    public function getHirarcialEmployee(){
+        $r=[];
+
+        $u1=$this;
+        $r[]=$u1;
+        if($this->atasan){
+            $u2=$this->atasan;
+
+            $r[]=$u2;
+            if($u2->atasan){
+                $r[]=$u2->atasan;
+            }
+        }
+
+        return $r;
+    }
+
     public function createHeader($year,$month){
         $period=KPIHeader::getDate($month,$year);
 
@@ -156,7 +173,7 @@ class Employee extends Model
 
         $curr_header=$this->getCurrentHeader();
         $header_id=KPIHeader::generateID($this->id);
-        $header=KPIHeader::create([
+        KPIHeader::create([
             'id'=>$header_id,
             'employee_id'=>$this->id,
             'period'=>$period,
@@ -174,6 +191,17 @@ class Employee extends Model
                 'pt_k'=>$resultheader->pt_k,
                 'real_t'=>$resultheader->real_t,
                 'real_k'=>$resultheader->real_k
+            ]);
+        }
+
+        $userAndAtasan=$this->getHirarcialEmployee();
+
+        for($i=1;$i<=count($userAndAtasan);$i++){
+            KPIEndorsement::create([
+                'id'=>KPIEndorsement::generateID($this->id),
+                'kpi_header_id'=>$header_id,
+                'employee_id'=>$this->id,
+                'level'=>$i
             ]);
         }
 

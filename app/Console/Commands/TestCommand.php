@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Model\Employee;
 use App\Model\KPIHeader;
 use Illuminate\Console\Command;
 use App\Notifications\EndorsementNotification;
@@ -41,7 +42,9 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        echo KPIHeader::getDate(15,2019);
+        $e=Employee::find('1915284162');
+
+        print_r($e->getHirarcialEmployee());
 
     }
 }
