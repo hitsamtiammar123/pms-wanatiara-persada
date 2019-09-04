@@ -26,7 +26,7 @@ class KPIHeader extends Model
     protected function fetchKPIResult(){
 
         $result=[];
-        $kpi_results_header_start=$this->kpiresultheaders->sortBy('kpiresult.name');
+        $kpi_results_header_start=$this->kpiresultheaders->sortBy('kpiresult.created_at');
 
         foreach($kpi_results_header_start as $kpiresultheader){
             $r=[];
