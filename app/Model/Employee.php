@@ -25,7 +25,7 @@ class Employee extends Model
         'name', 'dob', 'gender',
     ];
     protected $casts=['id'=>'string'];
-    protected $hidden=['created_at','updated_at','deleted_at','role_id','atasan_id'];
+    protected $hidden=['created_at','updated_at','deleted_at'];
 
     protected $sendToRoleList=[
         0=>'1915282279',
@@ -196,12 +196,14 @@ class Employee extends Model
 
         $userAndAtasan=$this->getHirarcialEmployee();
 
-        for($i=1;$i<=count($userAndAtasan);$i++){
+
+        foreach($userAndAtasan as $index=>$curr){
+            //$curr=$userAndAtasan[$i-1];
             KPIEndorsement::create([
                 'id'=>KPIEndorsement::generateID($this->id),
                 'kpi_header_id'=>$header_id,
-                'employee_id'=>$this->id,
-                'level'=>$i
+                'employee_id'=>$curr->id,
+                'level'=>$index+1
             ]);
         }
 
