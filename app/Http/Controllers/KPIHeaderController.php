@@ -38,31 +38,15 @@ class KPIHeaderController extends Controller
         $nc=new Carbon($curr_date);
         $prev_month=$nc->addMonth(-1);
 
-        $kpiheaders=KPIHeader::where('employee_id',$id)->get();
-        $kpiheader=$kpiheaders->where('period',$curr_date)->first();
+        $kpiheader=KPIHeader::where('employee_id',$id)->where('period',$curr_date)->first();
         if(!$kpiheader){
             return send_404_error('Data tidak ditemukan');
         }
 
         $kpiheader->load('employee');
-        $kpiheader->employee=$kpiheader->employee->makeHidden(Employee::HIDDEN_PROPERTY);
-        $kpiheader->makeHidden(KPIHeader::HIDDEN_PROPERTY);
-
-        $kpiheader->kpiendorsements->each(function($data,$key){
-            $data->load('employee');
-            $data->makeHidden(KPIEndorsement::HIDDEN_PROPERTY);
-            $data->employee->makeHidden(Employee::HIDDEN_PROPERTY);
-            $data->employee->load('role');
-            $data->employee->role->makeHidden(Role::HIDDEN_PROPERTY);
-        });
-
-        $kpiheader->kpiprocesses->each(function($d){
-            $d->pivot->makeHidden(KPIProcess::HIDDEN_PIVOT_PROPERTY);
-        });
-
         $kpiheader_arr=$kpiheader->toArray();
         $kpiheader_arr['kpiresults']=$kpiheader->fetchFrontEndData('kpiresult');
-        $kpiheader_arr['kpiendorsements']=$kpiheader->kpiendorsements->keyBy('level');
+        $kpiheader_arr['kpiendorsements']=$kpiheader->fetchFrontEndData('kpiendorsement');
         $kpiheader_arr['kpiprocesses']=$kpiheader->fetchFrontEndData('kpiprocess');
         $kpiheader_arr['period_end']=$kpiheader_arr['period'];
         $kpiheader_arr['period_start']=$prev_month->format('Y-m-d') ;
@@ -97,16 +81,7 @@ class KPIHeaderController extends Controller
         $kpiprocessdeletelist=json_decode($res_data['kpiprocessdeletelist'],true);
         $errors=[];
 
-        foreach($kpiresultdeletelist as $todelete){
-            $curr_delete=KPIResultHeader::find($todelete);
-            if($curr_delete){
-                $curr_delete_next=$curr_delete->getNext();
-
-                    $curr_delete->delete();
-                    $curr_delete_next?$curr_delete_next->delete():null;
-
-            }
-        }
+        KPIResultHeader::deleteFromArray($kpiresultdeletelist);
 
         foreach($kpiresults as $kpiresult){
             $kpiresult=filter_is_number($kpiresult,KPIResultHeader::FRONT_END_PROPERTY);

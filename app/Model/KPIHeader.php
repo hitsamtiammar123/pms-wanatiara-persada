@@ -17,6 +17,9 @@ class KPIHeader extends Model
     protected $fillable=[
         'id','period','employee_id','weight_result','weight_process'
     ];
+    protected $hidden=[
+        'created_at','updated_at','deleted_at'
+    ];
 
     protected $casts=['id'=>'string'];
     protected $kpiResultDKeys=['pt_t1','pt_k1','pt_t2','pt_k2','real_t1','real_k1','real_t2','real_k2'];
@@ -28,30 +31,31 @@ class KPIHeader extends Model
     protected function fetchKPIResult(){
 
         $result=[];
-        $kpi_results_header_start=$this->getPrev()->kpiresultheaders->sortBy('kpiresult.name');
+        $kpi_results_header_start=$this->kpiresultheaders->sortBy('kpiresult.name');
 
         foreach($kpi_results_header_start as $kpiresultheader){
             $r=[];
             $kpiresult=KPIResult::find($kpiresultheader->kpi_result_id);
             $kpiresultheaderend=$kpiresultheader->getNext();
+            $kpiresultheaderprev=$kpiresultheader->getPrev();
 
-            if($kpiresultheaderend){
+            if($kpiresultheaderprev){
                 $r['kpi_header_id']=$this->id;
                 $r['kpi_result_id']=$kpiresultheader->kpi_result_id;
                 $r['name']=$kpiresult->name;
                 $r['unit']=$kpiresult->unit;
 
                 $r['id']=$kpiresultheader->id;
-                $r['pw_1']=$kpiresultheader->pw;
-                $r['pw_2']=$kpiresultheaderend->pw;
-                $r['pt_t1']=$kpiresultheader->pt_t;
-                $r['pt_k1']=$kpiresultheader->pt_k;
-                $r['pt_t2']=$kpiresultheaderend->pt_t;
-                $r['pt_k2']=$kpiresultheaderend->pt_k;
-                $r['real_t1']=$kpiresultheader->real_t;
-                $r['real_k1']=$kpiresultheader->real_k;
-                $r['real_t2']=$kpiresultheaderend->real_t;
-                $r['real_k2']=$kpiresultheaderend->real_k;
+                $r['pw_1']=$kpiresultheaderprev->pw;
+                $r['pw_2']=$kpiresultheader->pw;
+                $r['pt_t1']=$kpiresultheaderprev->pt_t;
+                $r['pt_k1']=$kpiresultheaderprev->pt_k;
+                $r['pt_t2']=$kpiresultheader->pt_t;
+                $r['pt_k2']=$kpiresultheader->pt_k;
+                $r['real_t1']=$kpiresultheaderprev->real_t;
+                $r['real_k1']=$kpiresultheaderprev->real_k;
+                $r['real_t2']=$kpiresultheader->real_t;
+                $r['real_k2']=$kpiresultheader->real_k;
 
                 $result[]=$r;
             }
@@ -63,27 +67,41 @@ class KPIHeader extends Model
 
     protected function fetchKPIProcess(){
         $result=[];
-        $kpi_proccess_start=$this->getPrev()->kpiprocesses;
+        $kpi_proccess_start=$this->kpiprocesses;
 
         foreach($kpi_proccess_start as $curr_s){
             $r=[];
             $curr_e=$curr_s->getNext();
+            $curr_p=$curr_s->getPrev();
 
-            if($curr_e){
+            if($curr_p){
                 $r['id']=$curr_s->id;
                 $r['name']=$curr_s->name;
                 $r['unit']=$curr_s->unit;
-                $r['pw_1']=$curr_s->pivot->pw;
-                $r['pw_2']=$curr_e->pivot->pw;
-                $r['pt_1']=$curr_s->pivot->pt;
-                $r['pt_2']=$curr_e->pivot->pt;
-                $r['real_1']=$curr_s->pivot->real;
-                $r['real_2']=$curr_e->pivot->real;
+                $r['pw_1']=$curr_p->pivot->pw;
+                $r['pw_2']=$curr_s->pivot->pw;
+                $r['pt_1']=$curr_p->pivot->pt;
+                $r['pt_2']=$curr_s->pivot->pt;
+                $r['real_1']=$curr_p->pivot->real;
+                $r['real_2']=$curr_s->pivot->real;
                 $result[]=$r;
             }
 
         }
         return $result;
+    }
+
+    protected function fetchKPIEndorsement(){
+        $endorsements=$this->kpiendorsements;
+        $endorsements->each(function($data,$key){
+            $data->load('employee');
+            $data->makeHidden(KPIEndorsement::HIDDEN_PROPERTY);
+            $data->employee->makeHidden(Employee::HIDDEN_PROPERTY);
+            $data->employee->load('role');
+            $data->employee->role->makeHidden(Role::HIDDEN_PROPERTY);
+        });
+
+        return $endorsements->keyBy('level');
     }
 
     protected function sumTotalAchievement($data,$j){
@@ -431,6 +449,9 @@ class KPIHeader extends Model
         else if($type==='kpiprocess'){
             return $this->fetchKPIProcess();
         }
+        else if($type==='kpiendorsement'){
+            return $this->fetchKPIEndorsement();
+        }
         return null;
 
 
@@ -444,6 +465,32 @@ class KPIHeader extends Model
             return $this->fetchAccumulatedKPIProcess();
         }
         return null;
+    }
+
+    public function updateFromArray($kpiresult){
+        if(!is_null($kpiresult['id'])){
+            $curr_result=KPIResultHeader::find($kpiresult['id']);
+            $curr_result_prev=$curr_result->getPrev();
+            if($curr_result_prev){
+                $curr_result_prev->pw=$kpiresult['pw_1'];
+                $curr_result_prev->pt_t=$kpiresult['pt_t1'];
+                $curr_result_prev->pt_k=$kpiresult['pt_k1'];
+                $curr_result_prev->real_t=$kpiresult['real_t1'];
+                $curr_result_prev->real_k=$kpiresult['real_k1'];
+
+                $curr_result->pw=$kpiresult['pw_2'];
+                $curr_result->pt_t=$kpiresult['pt_t2'];
+                $curr_result->pt_k=$kpiresult['pt_k2'];
+                $curr_result->real_t=$kpiresult['real_t2'];
+                $curr_result->real_k=$kpiresult['real_k2'];
+
+                $curr_result->kpiresult->name=$kpiresult['name'];
+                $curr_result->kpiresult->unit=$kpiresult['unit'];
+
+                $curr_result->push();
+                $curr_result_prev->save();
+            }
+        }
     }
 
     public function cPeriod(){

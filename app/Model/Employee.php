@@ -25,7 +25,7 @@ class Employee extends Model
         'name', 'dob', 'gender',
     ];
     protected $casts=['id'=>'string'];
-    protected $hidden=['created_at','updated_at','deleted_at'];
+    protected $hidden=['created_at','updated_at','deleted_at','role_id','atasan_id'];
 
     protected $sendToRoleList=[
         0=>'1915282279',

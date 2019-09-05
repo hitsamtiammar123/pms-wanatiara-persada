@@ -40,12 +40,37 @@ class KPIResultHeader extends Model
         return self::_generateID($a,$code);
     }
 
+    public static function deleteFromArray($kpiresultdeletelist){
+        foreach($kpiresultdeletelist as $todelete){
+            $curr_delete=self::find($todelete);
+            if($curr_delete){
+                $curr_delete_prev=$curr_delete->getPrev();
+                    $curr_delete->delete();
+                    $curr_delete_prev?$curr_delete_prev->delete():null;
+
+            }
+        }
+    }
+
     public function kpiresult(){
         return $this->belongsTo(KPIResult::class,'kpi_result_id','id');
     }
 
     public function kpiheader(){
         return $this->belongsTo(KPIHeader::class,'kpi_header_id','id');
+    }
+
+    public function getFromCarbon($carbon){
+        $d=KPIHeader::select('id')->where('employee_id',$this->kpiheader->employee_id)
+        ->where('period',$carbon)->first();
+
+        if($d){
+            $d=self::where('kpi_header_id',$d->id)->where('kpi_result_id',$this->kpi_result_id)->first();
+            return $d;
+        }
+        else{
+            return null;
+        }
     }
 
     public function getPrev(){
@@ -55,16 +80,7 @@ class KPIResultHeader extends Model
         $carbon_p=Carbon::parse($period);
         $prev_p=$carbon_p->addMonth(-1);
 
-        $prev_kpiheader=KPIHeader::select('id')->where('employee_id',$kpiheader->employee_id)
-        ->where('period',$prev_p)->first();
-
-        if($prev_kpiheader){
-            $prev_kpiresultheader=self::where('kpi_header_id',$prev_kpiheader->id)->where('kpi_result_id',$this->kpi_result_id)->first();
-            return $prev_kpiresultheader;
-        }
-        else{
-            return null;
-        }
+        return $this->getFromCarbon($prev_p);
     }
 
     public function getNext(){
@@ -74,15 +90,6 @@ class KPIResultHeader extends Model
         $carbon_p=Carbon::parse($period);
         $next_p=$carbon_p->addMonth();
 
-        $next_kpiheader=KPIHeader::select('id')->where('employee_id',$kpiheader->employee_id)
-        ->where('period',$next_p)->first();
-
-        if($next_kpiheader){
-            $next_kpiresultheader=self::where('kpi_header_id',$next_kpiheader->id)->where('kpi_result_id',$this->kpi_result_id)->first();
-            return $next_kpiresultheader;
-        }
-        else{
-            return null;
-        }
+        return $this->getFromCarbon($next_p);
     }
 }
