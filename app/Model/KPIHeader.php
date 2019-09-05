@@ -22,7 +22,16 @@ class KPIHeader extends Model
     ];
 
     protected $casts=['id'=>'string'];
-    protected $kpiResultDKeys=['pt_t1','pt_k1','pt_t2','pt_k2','real_t1','real_k1','real_t2','real_k2'];
+    protected $kpiResultDKeys=[
+        'pt_t1' =>'pt_t',
+        'pt_k1' => 'pt_k',
+        'pt_t2' => 'pt_t',
+        'pt_k2' => 'pt_k',
+        'real_t1' => 'real_t',
+        'real_k1' => 'real_k',
+        'real_t2' => 'real_t',
+        'real_k2' => 'real_k'
+    ];
 
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
@@ -208,7 +217,7 @@ class KPIHeader extends Model
 
             if($type==='kpiresult'){
                 $unit=$curr['unit'];
-                foreach($this->kpiResultDKeys as $key){
+                foreach(array_keys($this->kpiResultDKeys) as $key){
                     switch($unit){
                         case '$':
                         case 'WMT':
@@ -319,6 +328,71 @@ class KPIHeader extends Model
             'totalAchievement'=>$accumulated['totalAchievement'],
             'indexAchievement'=>$accumulated['indexAchivement']
         ];
+    }
+
+    protected function applyUpdateKPIResultFromArray($kpiresult,$header_prev){
+
+        if(!is_null($kpiresult['id'])){
+            $curr_result=KPIResultHeader::find($kpiresult['id']);
+            $curr_result_prev=$curr_result->getPrev();
+            if($curr_result_prev){
+                $curr_result_prev->pw=$kpiresult['pw_1'];
+                $curr_result_prev->pt_t=$kpiresult['pt_t1'];
+                $curr_result_prev->pt_k=$kpiresult['pt_k1'];
+                $curr_result_prev->real_t=$kpiresult['real_t1'];
+                $curr_result_prev->real_k=$kpiresult['real_k1'];
+
+                $curr_result->pw=$kpiresult['pw_2'];
+                $curr_result->pt_t=$kpiresult['pt_t2'];
+                $curr_result->pt_k=$kpiresult['pt_k2'];
+                $curr_result->real_t=$kpiresult['real_t2'];
+                $curr_result->real_k=$kpiresult['real_k2'];
+
+                $curr_result->kpiresult->name=$kpiresult['name'];
+                $curr_result->kpiresult->unit=$kpiresult['unit'];
+
+                $curr_result->push();
+                $curr_result_prev->save();
+            }
+        }
+        else{
+            if(!$header_prev)
+                return;
+
+            $curr_result=new KPIResultHeader();
+            $curr_result->id=KPIResultHeader::generateID($this->employee->id,$this->id);
+            $curr_result->kpi_header_id=$this->id;
+
+            $curr_result_prev=new KPIResultHeader();
+            $curr_result_prev->id=KPIResultHeader::generateID($this->employee->id,$header_prev->id);
+            $curr_result_prev->kpi_header_id=$header_prev->id;
+
+            $new_result=new KPIResult();
+            $new_result_id=KPIResult::generateID($this->employee->id);
+            $new_result->id=$new_result_id;
+            $new_result->name=$kpiresult['name'];
+            $new_result->unit=$kpiresult['unit'];
+
+            $curr_result->kpi_result_id=$new_result_id;
+            $curr_result_prev->kpi_result_id=$new_result_id;
+
+            $curr_result_prev->pw=$kpiresult['pw_1'];
+            $curr_result_prev->pt_t=$kpiresult['pt_t1'];
+            $curr_result_prev->pt_k=$kpiresult['pt_k1'];
+            $curr_result_prev->real_t=$kpiresult['real_t1'];
+            $curr_result_prev->real_k=$kpiresult['real_k1'];
+
+            $curr_result->pw=$kpiresult['pw_2'];
+            $curr_result->pt_t=$kpiresult['pt_t2'];
+            $curr_result->pt_k=$kpiresult['pt_k2'];
+            $curr_result->real_t=$kpiresult['real_t2'];
+            $curr_result->real_k=$kpiresult['real_k2'];
+
+            $new_result->save();
+            $curr_result_prev->save();
+            $curr_result->save();
+
+        }
     }
 
     public static function generateID($employeeID){
@@ -467,30 +541,45 @@ class KPIHeader extends Model
         return null;
     }
 
-    public function updateFromArray($kpiresult){
-        if(!is_null($kpiresult['id'])){
-            $curr_result=KPIResultHeader::find($kpiresult['id']);
-            $curr_result_prev=$curr_result->getPrev();
-            if($curr_result_prev){
-                $curr_result_prev->pw=$kpiresult['pw_1'];
-                $curr_result_prev->pt_t=$kpiresult['pt_t1'];
-                $curr_result_prev->pt_k=$kpiresult['pt_k1'];
-                $curr_result_prev->real_t=$kpiresult['real_t1'];
-                $curr_result_prev->real_k=$kpiresult['real_k1'];
+    public function updateKPIResultFromArray($kpiresults){
+        $header_prev=$this->getPrev();
+        foreach($kpiresults as $kpiresult){
+            $kpiresult=filter_is_number($kpiresult,KPIResultHeader::FRONT_END_PROPERTY);
+            $this->applyUpdateKPIResultFromArray($kpiresult,$header_prev);
+        }
+    }
 
-                $curr_result->pw=$kpiresult['pw_2'];
-                $curr_result->pt_t=$kpiresult['pt_t2'];
-                $curr_result->pt_k=$kpiresult['pt_k2'];
-                $curr_result->real_t=$kpiresult['real_t2'];
-                $curr_result->real_k=$kpiresult['real_k2'];
+    public function updateKPIProcessFromArray($kpiprocesses,$kpiprocessdeletelist){
+        $kpiprocess_save=[];
+        $kpiprocess_save_n=[];
+        $header_prev=$this->getPrev();
 
-                $curr_result->kpiresult->name=$kpiresult['name'];
-                $curr_result->kpiresult->unit=$kpiresult['unit'];
+        foreach($kpiprocesses as $kpiprocess){
 
-                $curr_result->push();
-                $curr_result_prev->save();
+            $curr_process_id=$kpiprocess['id'];
+            $curr_process=KPIProcess::find($curr_process_id);
+            $curr_process->unit=$kpiprocess['unit'];
+            $kpiprocess=filter_is_number($kpiprocess,KPIProcess::FRONT_END_PROPERTY);
+
+            if(!in_array($curr_process_id,$kpiprocessdeletelist)){
+                $kpiprocess_save[$curr_process_id]=[
+                    'pw'=>$kpiprocess['pw_1'],
+                    'pt'=>$kpiprocess['pt_1'],
+                    'real'=>$kpiprocess['real_1']
+                ];
+                $kpiprocess_save_n[$curr_process_id]=[
+                    'pw'=>$kpiprocess['pw_2'],
+                    'pt'=>$kpiprocess['pt_2'],
+                    'real'=>$kpiprocess['real_2']
+                ];
+
+                $curr_process->save();
+
             }
         }
+
+        $header_prev->kpiprocesses()->sync($kpiprocess_save);
+        $this->kpiprocesses()->sync($kpiprocess_save_n);
     }
 
     public function cPeriod(){

@@ -67,125 +67,23 @@ class KPIHeaderController extends Controller
             return send_404_error('Data Tidak ditemukan');
         }
 
-        $header_next=$header->getNext();
         $header_prev=$header->getPrev();
-        if(!$header_next){
-            return send_404_error('Data pada bulan berikutnya Tidak ditemukan');
+        if(!$header_prev){
+            return send_404_error('Data pada bulan sebelumnya Tidak ditemukan');
         }
 
         $res_data=$request->all();
-
         $kpiresults=json_decode($res_data['kpiresult'],true);
         $kpiprocesses=json_decode($res_data['kpiprocesses'],true);
         $kpiresultdeletelist=json_decode($res_data['kpiresultdeletelist'],true);
         $kpiprocessdeletelist=json_decode($res_data['kpiprocessdeletelist'],true);
-        $errors=[];
 
         KPIResultHeader::deleteFromArray($kpiresultdeletelist);
 
-        foreach($kpiresults as $kpiresult){
-            $kpiresult=filter_is_number($kpiresult,KPIResultHeader::FRONT_END_PROPERTY);
-            if(!is_null($kpiresult['id'])){
-                $curr_result=KPIResultHeader::find($kpiresult['id']);
+        $header->updateKPIResultFromArray($kpiresults);
+        $header->updateKPIProcessFromArray($kpiprocesses,$kpiprocessdeletelist);
 
-                $curr_result_next=$curr_result->getNext();
-                $curr_result_prev=$curr_result->getPrev();
-
-                $curr_result_prev->pw=$kpiresult['pw_1'];
-                $curr_result_prev->pt_t=$kpiresult['pt_t1'];
-                $curr_result_prev->pt_k=$kpiresult['pt_k1'];
-                $curr_result_prev->real_t=$kpiresult['real_t1'];
-                $curr_result_prev->real_k=$kpiresult['real_k1'];
-
-                $curr_result->pw=$kpiresult['pw_2'];
-                $curr_result->pt_t=$kpiresult['pt_t2'];
-                $curr_result->pt_k=$kpiresult['pt_k2'];
-                $curr_result->real_t=$kpiresult['real_t2'];
-                $curr_result->real_k=$kpiresult['real_k2'];
-
-                $curr_result->kpiresult->name=$kpiresult['name'];
-                $curr_result->kpiresult->unit=$kpiresult['unit'];
-
-
-                    $curr_result->push();
-                    $curr_result_prev->save();
-
-            }
-            else{
-                $curr_result=new KPIResultHeader();
-                $curr_result->id=KPIResultHeader::generateID($header->employee->id,$header->id);
-                $curr_result->kpi_header_id=$header->id;
-
-                $curr_result_next=new KPIResultHeader();
-                $curr_result_next->id=KPIResultHeader::generateID($header_next->employee->id,$header_next->id);
-                $curr_result_next->kpi_header_id=$header_next->id;
-
-                $new_result=new KPIResult();
-                $new_result_id=KPIResult::generateID($header->employee->id);
-                $new_result->id=$new_result_id;
-                $new_result->name=$kpiresult['name'];
-                $new_result->unit=$kpiresult['unit'];
-
-                $curr_result->kpi_result_id=$new_result_id;
-                $curr_result_next->kpi_result_id=$new_result_id;
-
-
-                $curr_result->pw=$kpiresult['pw_1'];
-                $curr_result->pt_t=$kpiresult['pt_t1'];
-                $curr_result->pt_k=$kpiresult['pt_k1'];
-                $curr_result->real_t=$kpiresult['real_t1'];
-                $curr_result->real_k=$kpiresult['real_k1'];
-
-                $curr_result_next->pw=$kpiresult['pw_2'];
-                $curr_result_next->pt_t=$kpiresult['pt_t2'];
-                $curr_result_next->pt_k=$kpiresult['pt_k2'];
-                $curr_result_next->real_t=$kpiresult['real_t2'];
-                $curr_result_next->real_k=$kpiresult['real_k2'];
-
-                    $new_result->save();
-                    $curr_result->save();
-                    $curr_result_next->save();
-                    //$curr_result->kpiresult->save();
-
-
-            }
-
-        }
-
-        $kpiprocess_save=[];
-        $kpiprocess_save_n=[];
-
-        foreach($kpiprocesses as $kpiprocess){
-
-            $curr_process_id=$kpiprocess['id'];
-            $curr_process=KPIProcess::find($curr_process_id);
-            $curr_process->unit=$kpiprocess['unit'];
-            $kpiprocess=filter_is_number($kpiprocess,KPIProcess::FRONT_END_PROPERTY);
-
-            if(!in_array($curr_process_id,$kpiprocessdeletelist)){
-                $kpiprocess_save[$curr_process_id]=[
-                    'pw'=>$kpiprocess['pw_1'],
-                    'pt'=>$kpiprocess['pt_1'],
-                    'real'=>$kpiprocess['real_1']
-                ];
-                $kpiprocess_save_n[$curr_process_id]=[
-                    'pw'=>$kpiprocess['pw_2'],
-                    'pt'=>$kpiprocess['pt_2'],
-                    'real'=>$kpiprocess['real_2']
-                ];
-
-                    $curr_process->save();
-
-            }
-        }
-
-            $header_prev->kpiprocesses()->sync($kpiprocess_save);
-            $header->kpiprocesses()->sync($kpiprocess_save_n);
-            //$header_next->kpiprocesses()->sync($kpiprocess_save_n);
-
-        $employee=$header->employee;
-        $this->broadcastChange($employee);
-
+        $this->broadcastChange($header->employee);
 
         return [
             'message'=>'Berhasil'
