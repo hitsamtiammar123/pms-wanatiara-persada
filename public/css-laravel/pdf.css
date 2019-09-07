@@ -39,23 +39,32 @@
 
 .table-pdf thead tr th,
 .table-pdf tbody tr td{
+    border-color: #8d948b;
+}
+
+.table-pdf thead tr th{
+    background-color: #dee3df;
+}
+
+.table-pdf thead tr th,
+.table-pdf tbody tr td{
     padding:5px auto;
 }
 
 .table-pdf thead tr th,
 .table-pdf tbody tr td.num-content{
     text-align: center;
-    width:80px;
+    width:70px;
 }
 
 .table-pdf thead tr th,
 .table-pdf tbody tr td.index-content{
     text-align: center;
-    width:10px;
+    width:40px;
 }
 
 .table-pdf tbody tr td.kpi-content{
-    width:150px;
+    width:130px;
     padding:15px 10px;
 }
 
@@ -63,9 +72,17 @@
     font-weight: bold;
 }
 
+.table-pdf tbody tr td.footer-title-tbl{
+    padding-left: 5px;
+}
+
 /*Halaman Pengesahan*/
 .tanda-tangan{
     height: 50px;
+}
+
+.endorsement-title{
+    font-style: italic;
 }
 
 /*Table color*/

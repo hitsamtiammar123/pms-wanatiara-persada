@@ -69,7 +69,7 @@
                         <tr>
                                 <td class="index-content">{{$loop->index+1}}</td>
                                 <td class="kpi-content">{{$kpiresult['name']}}</td>
-                                <td class="text-center">{{$kpiresult['unit']}}</td>
+                                <td class="index-content">{{$kpiresult['unit']}}</td>
                                 <td class="num-content">{{$kpiresult['pw_1']}}</td>
                                 <td class="num-content">{{$kpiresult['pw_2']}}</td>
                                 <td class="num-content">{{$kpiresult['pt_t1']}}</td>
@@ -87,17 +87,17 @@
                             </tr>
                     @endforeach
                         <tr>
-                            <td colspan="3">Total Bobot: </td>
+                            <td colspan="3" class="footer-title-tbl">Total Bobot: </td>
                             <td class="num-content">{{array_reduce($kpiresults['data'],'get_totalW_pw1',0)}}%</td>
                             <td class="num-content">{{array_reduce($kpiresults['data'],'get_totalW_pw2',0)}}%</td>
                             <td colspan="8"></td>
-                            <td colspan="2">Total Achievement:</td>
+                            <td colspan="2" class="footer-title-tbl">Total Achievement:</td>
                             <td class="num-content">{{$kpiresults['totalAchievement']['t1']}}</td>
                             <td class="num-content">{{$kpiresults['totalAchievement']['t2']}}</td>
                         </tr>
                         <tr>
                             <td colspan="13"></td>
-                            <td colspan="2">Index Achievement:</td>
+                            <td colspan="2" class="footer-title-tbl">Index Achievement:</td>
                             <td class="num-content">{{$kpiresults['indexAchievement']['t1']}}</td>
                             <td class="num-content">{{$kpiresults['indexAchievement']['t2']}}</td>
                         </tr>
@@ -146,17 +146,17 @@
                                 </tr>
                         @endforeach
                         <tr>
-                                <td colspan="3">Total Bobot: </td>
+                                <td colspan="3" class="footer-title-tbl">Total Bobot: </td>
                                 <td class="num-content">{{array_reduce($kpiprocesses['data'],'get_totalW_pw1',0)}}%</td>
                                 <td class="num-content">{{array_reduce($kpiprocesses['data'],'get_totalW_pw2',0)}}%</td>
                                 <td colspan="4"></td>
-                                <td colspan="2">Total Achievement:</td>
+                                <td colspan="2" class="footer-title-tbl">Total Achievement:</td>
                                 <td class="num-content">{{$kpiprocesses['totalAchievement']['t1']}}</td>
                                 <td class="num-content">{{$kpiprocesses['totalAchievement']['t2']}}</td>
                             </tr>
                             <tr>
                                 <td colspan="9"></td>
-                                <td colspan="2">Index Achievement:</td>
+                                <td colspan="2" class="footer-title-tbl">Index Achievement:</td>
                                 <td class="num-content">{{$kpiprocesses['indexAchievement']['t1']}}</td>
                                 <td class="num-content">{{$kpiprocesses['indexAchievement']['t2']}}</td>
                             </tr>
@@ -164,7 +164,7 @@
                 </table>
         </div>
         <div class="row">
-            <p class="pms-title" style="font-weight: bold;">PMS ini sudah disahkan secara elektronik.</p>
+            <p class="pms-title endorsement-title" style="font-style:italic !important">PMS ini sudah disahkan secara elektronik.</p>
         </div>
     </div>
 @endsection
