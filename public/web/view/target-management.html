@@ -1,13 +1,13 @@
 <div id="target-manajemen">
     <div class="row">
-            <h6 class="bold title">Pengguna</h6>
+            <h6 class="bold title">Pengguna 用户</h6>
             <div class="bottom-border"></div>
         <table class="table table-beranda">
             <thead>
-                <th>Nama</th>
-                <th>Jabatan</th>
-                <th>Nama Atasan</th>
-                <th>Jabatan Atasan</th>
+                <th>Nama 名</th>
+                <th>Jabatan 办公室</th>
+                <th>Nama Atasan 老板的名字</th>
+                <th>Jabatan Atasan 办公室</th>
             </thead>
             <tbody>
                 <tr>
@@ -19,7 +19,7 @@
             </tbody>
         </table>
 
-        <h6 class="bold title margin-1">Staff/Bawahan</h6>
+        <h6 class="bold title margin-1">Staff/Bawahan 下属</h6>
         <div class="bottom-border"></div>
         <div class="user-list-box">   
             <span ng-repeat="employee in employeeList">{{ $index!==0?'&rarr;':'' }} <a ng-click="expandEmployee(employee)">{{ employee.name }}</a> </span>
@@ -28,9 +28,9 @@
 
         <table class="table table-borderless table-beranda">
             <thead>
-                <th>Nama</th>
-                <th>Jabatan</th>
-                <th>Aksi</th>
+                <th>Nama 名</th>
+                <th>Jabatan 办公室</th>
+                <th>Aksi 行动</th>
             </thead>
             <tbody>
                 <tr ng-repeat="bawahan in staffs">
