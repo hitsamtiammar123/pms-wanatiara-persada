@@ -19,18 +19,18 @@
       <div class="col-sm-12">
               <nav class="navbar navbar-default navbar-wanatiara">
                   <ul class="nav navbar-nav">
-                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Berkas<span class="caret"></span></a>
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Berkas 文件<span class="caret"></span></a>
                           <ul class="dropdown-menu">
-                            <li><a ng-click="downloadPDF()">Unduh</a></li>
-                            <li><a ng-click="toPrint()">Cetak</a></li>
-                            <li><a >Kirim Ke Surel</a></li>
-                            <li><a ng-click="logout()">Keluar</a></li>
+                            <li><a ng-click="downloadPDF()">Unduh 下载它</a></li>
+                            <li><a ng-click="toPrint()">Cetak 打印</a></li>
+                            <li><a >Kirim Ke Surel 发送电子邮件</a></li>
+                            <li><a ng-click="logout()">Keluar 登出</a></li>
                           </ul>
                         </li>
-                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Pengesahan <span class="notification-label"  ng-hide="unreadNotification===0">({{$unreadNotification}})</span> <span class="caret"></span></a>
+                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Pengesahan 批准 <span class="notification-label"  ng-hide="unreadNotification===0">({{$unreadNotification}})</span> <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="#!pengesahan/notifikasi">Notifikasi <span class="notification-label" ng-hide="unreadNotification===0">({{$unreadNotification}})</span> </a></li>
-                              <li><a href="#!pengesahan/baru">Perubahan Pengesahan</a></li>
+                                <li><a href="#!pengesahan/notifikasi">Notifikasi 通知 <span class="notification-label" ng-hide="unreadNotification===0">({{$unreadNotification}})</span> </a></li>
+                              <li><a href="#!pengesahan/baru">Perubahan Pengesahan 证明变更</a></li>
 
                             </ul>
                           </li>
@@ -49,12 +49,12 @@
                   </div>
       </div>
       <div class="col-sm-9 navigation margin-top-20" style="margin-top: -20px;">
-        <ul class="nav-bar">
-            <li><a href="#!target-manajemen" tab-target="#target-manajemen" >Beranda</a></li>
-            <li><a href="{!! $pmsIndex !!}"tab-target="#realisasi">PMS</a></li>
-            <li><a href="#!realisasi-perusahaan" tab-target="#realisasi-perusahaan">PMS Perusahaan</a></li>
-            <li><a href="#!ikhtisar" tab-target="#ikhtisar" >Ikhtisar</a></li>
-            <li><a href="#!pencarian" tab-target="#pencarian" >Pencarian</a></li>
+        <ul class="nav-bar nav-bar-pms">
+            <li><a href="#!target-manajemen" tab-target="#target-manajemen" >Beranda 主页</a></li>
+            <li><a href="{!! $pmsIndex !!}"tab-target="#realisasi">PMS 绩效考核管理体系</a></li>
+            <li><a href="#!realisasi-perusahaan" tab-target="#realisasi-perusahaan">PMS Perusahaan 绩效考核管理体系该公司</a></li>
+            <li><a href="#!ikhtisar" tab-target="#ikhtisar" >Ikhtisar 摘要</a></li>
+            <li><a href="#!pencarian" tab-target="#pencarian" >Pencarian 搜索</a></li>
         </ul>
       </div>
 
