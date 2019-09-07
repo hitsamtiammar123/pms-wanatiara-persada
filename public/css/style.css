@@ -49,7 +49,7 @@ table th{
 }
 
 .navigation{
-    margin-left: 90px
+    margin-left: 90px;
 }
 
 .nav-bar li{
@@ -59,6 +59,7 @@ table th{
 
 .nav-bar-pms{
     font-size: 15px;
+    width: 1000px;
 }
 
 .nav-bar li a{

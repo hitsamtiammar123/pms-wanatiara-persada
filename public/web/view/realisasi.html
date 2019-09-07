@@ -1,7 +1,7 @@
 <div class="padding-elem"></div>
 <div id="realisasi">
 
-        <div class="table-100" >
+        <div class="table-100 heading-content" >
                 <div class="row">
                         <div class="col-sm-3">{{ employee.role.name}}</div>
                         <div class="col-sm-2">: {{employee.name}}</div>
@@ -67,17 +67,17 @@
 
         1. Sasaran Hasil {{ header.weight_result?(header.weight_result*100)+'%':'' }}
         </p>
-        <table class="table realisasi-table">
+        <table class="table table-striped realisasi-table">
                 <thead>
                         <tr>
-                            <th class="f-column-num f-column" rowspan="2">序号 No.</th>
-                            <th class="kpi f-column" rowspan="2">绩效考核关键指标 Key Performance Indicator</th>
-                            <th class="f-column" rowspan="2">单位 Unit</th>
-                            <th colspan="2">2019年责任权重 Performance Wighing 2019</th>
-                            <th colspan="4" class="top-column">2019年绩效目标 Performance Target 2019</th>
-                            <th colspan="4" class="top-column">2019年实行情况 Realization 2019</th>
-                            <th colspan="2">2019年绩效考核指标完成率 KPI Achievement 2019</th>
-                            <th colspan="2">年绩效考核指标完成率 x 年责任权重 Achievement x Weighing</th>
+                            <th class="f-column-num f-column light-grey" rowspan="2">序号 No.</th>
+                            <th class="kpi f-column light-grey" rowspan="2">绩效考核关键指标 Key Performance Indicator</th>
+                            <th class="f-column light-grey" rowspan="2">单位 Unit</th>
+                            <th colspan="2" class="light-blue">2019年责任权重 Performance Weighing 2019</th>
+                            <th colspan="4" class="top-column light-grey">2019年绩效目标 Performance Target 2019</th>
+                            <th colspan="4" class="top-column light-blue">2019年实行情况 Realization 2019</th>
+                            <th colspan="2" class="light-grey">2019年绩效考核指标完成率 KPI Achievement 2019</th>
+                            <th colspan="2" class="light-blue">年绩效考核指标完成率 x 年责任权重 Achievement x Weighing</th>
                         </tr>
                         <tr>
                             <th ng-repeat="h in headerLabel track by $index" ng-class="getHeaderColor($index)">{{h}}</th>
@@ -130,14 +130,14 @@
                                 <td colspan="3" class="center-text bold">责任权重总数 TOTAL BOBOT :</td>
                                 <td ng-repeat="i in [] |range:2" notify-g-label="add-content">{{totalW[i]}}%</td>
                                 <td colspan="7"></td>
-                                <td colspan="2" class="right-text bold">Total Achievement: </td>
+                                <td colspan="2" class="right-text bold">Total Achievement 总成就: </td>
                                 <td class="center-text" notify-g-label="add-content" belong-to="totalAchieveMent.t1"></td>
                                 <td class="center-text" notify-g-label="add-content" belong-to="totalAchieveMent.t2"></td>
                             </tr>
                             <tr>
                                 <td class="num"></td>
                                 <td colspan="12"></td>
-                                <td colspan="2" class="right-text bold">Index:</td>
+                                <td colspan="2" class="right-text bold">Index 分数:</td>
                                 <td class="center-text" notify-g-label="add-content" belong-to="IndexAchieveMent.t1"></td>
                                 <td class="center-text" notify-g-label="add-content" belong-to="IndexAchieveMent.t2"></td>
                             </tr>
@@ -188,17 +188,17 @@
                     </md-menu>
             2. Sasaran Proses {{ header.weight_process?(header.weight_process*100)+'%':'' }}
         </p>
-        <table class="table realisasi-table">
+        <table class="table table-striped realisasi-table">
                 <thead>
                         <tr>
-                            <th class="f-column f-column-num" rowspan="2">序号 No.</th>
-                            <th class="kpi-process f-column" rowspan="2">核心竞争力 Kompetensi Inti</th>
-                            <th class="f-column" rowspan="2">单位 Unit</th>
-                            <th colspan="2">2019年责任权重 Performance Wighing 2019</th>
-                            <th colspan="2" class="top-column">2019年绩效目标 Performance Target 2019</th>
-                            <th colspan="2" class="top-column">2019年实行情况 Realization 2019</th>
-                            <th colspan="2">2019年绩效考核指标完成率 KPI Achievement 2019</th>
-                            <th colspan="2">年绩效考核指标完成率 x 年责任权重 Achievement x Weighing</th>
+                            <th class="f-column f-column-num light-grey" rowspan="2">序号 No.</th>
+                            <th class="kpi-process f-column light-grey" rowspan="2">核心竞争力 Kompetensi Inti</th>
+                            <th class="f-column light-grey" rowspan="2">单位 Unit</th>
+                            <th colspan="2" class="light-blue">2019年责任权重 Performance Weighing 2019</th>
+                            <th colspan="2" class="top-column light-grey">2019年绩效目标 Performance Target 2019</th>
+                            <th colspan="2" class="top-column light-grey">2019年实行情况 Realization 2019</th>
+                            <th colspan="2" class="light-blue">2019年绩效考核指标完成率 KPI Achievement 2019</th>
+                            <th colspan="2" class="light-blue">年绩效考核指标完成率 x 年责任权重 Achievement x Weighing</th>
                         </tr>
                         <tr>
                             <th ng-repeat="h in headerLabelProcess track by $index" ng-class="getHeaderColor($index)">{{h}}</th>
@@ -227,14 +227,14 @@
                                     <td></td>
                                     <td ng-repeat="i in [] |range:2">{{totalW_P[i]}}%</td>
                                     <td colspan="4"></td>
-                                    <td colspan="2" class="right-text bold">Total Achievement: </td>
+                                    <td colspan="2" class="right-text bold">Total Achievement 总成就: </td>
                                     <td notify-g-label="add-content" belong-to="totalAchieveMentP.t1"></td>
                                     <td notify-g-label="add-content" belong-to="totalAchieveMentP.t2" ></td>
                                 </tr>
                                 <tr>
                                     <td class="num"></td>
                                     <td colspan="9"></td>
-                                    <td colspan="2" class="right-text bold">Index:</td>
+                                    <td colspan="2" class="right-text bold">Index 分数 :</td>
                                     <td notify-g-label="add-content" belong-to="IndexAchieveMentP.t1"></td>
                                     <td notify-g-label="add-content" belong-to="IndexAchieveMentP.t2"></td>
                                 </tr>
@@ -245,13 +245,13 @@
         <div flex="30">
                 <button class="btn btn-danger" ng-hide="hasEndorse || !dlt_process.toogle_delete " ng-click="toogleDelete(dlt_process)" ng-disabled="hasChanged">{{dlt_process.dlt_message}}</button>
                 <br>
-                <button class="btn btn-success save-change-btn" ng-hide="hasEndorse" ng-click="saveChanged()" ng-disabled="hasChanged || toogle_delete">Simpan Perubahan</button>
+                <button class="btn btn-success save-change-btn" ng-hide="hasEndorse" ng-click="saveChanged()" ng-disabled="hasChanged || toogle_delete">Simpan Perubahan 保存更改</button>
         </div>
 
         <div class="col-sm-12 footer-pengesahan">
             <div class="row pengesahan-header">
                     <div class="col-sm-6">
-                            <p class="bold">Pengesahan</p>
+                            <p class="bold">Pengesahan 批准</p>
                         </div>
                     <div class="col-sm-6">
                             <p ng-bind-html="aggrementStr" class="blue-font bold right-text"></p>

@@ -10,6 +10,11 @@
 
 }
 
+.heading-content{
+    background-color: #f2f3f5;
+    width: 1700px;
+}
+
 /*Table*/
 
 .realisasi-table tbody {
@@ -17,6 +22,12 @@
     max-height:250px;
     overflow:auto;
 }
+
+.realisasi-table thead tr th{
+    border:1px solid #9599a1 !important;
+
+}
+
 .realisasi-table thead, .realisasi-table tbody tr {
     display:table;
     width:100%;
@@ -70,7 +81,7 @@
 
 
 .table-title{
-    margin-top:60px;
+    margin-top:20px;
 }
 
 /*Pengesahan*/
@@ -88,9 +99,10 @@
 } 
 
 .footer-pengesahan{
-    background-color: lightgreen;
+    background-color: #f2f3f5;
     margin-bottom:20px;
     margin-top:20px;
+    box-shadow: 5px 5px #dadfeb;
     /* width: 1700px; */
 }
 
