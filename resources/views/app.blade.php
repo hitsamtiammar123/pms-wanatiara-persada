@@ -5,7 +5,7 @@
 @include('include.head-app')
 
 <link rel="stylesheet" href="css/style.css">
-<script src="{{route('js.app')}}"></script>
+<script src="javascript/app"></script>
 </head>
 <body>
   <div id="app"></div>

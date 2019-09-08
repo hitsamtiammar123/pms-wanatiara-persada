@@ -1,5 +1,5 @@
 app.constant('route',{
-    url:'http://localhost/pms-wp/',
+    url:'',
     routelist:{
         'kpiheader':'api/v1/kpiheader/',
         'employee':'api/v1/employee/',

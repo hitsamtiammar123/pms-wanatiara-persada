@@ -28,9 +28,15 @@ class JavascriptController extends Controller
             'factory'=>[],
             'directive'=>[],
             'filter'=>[],
-            'values'=>[route('js.user'),route('js.token')],
-            'provider'=>['formModal.js'],
-            'boot'=>['resolve.js','routing.js',"providerConf.js",route('js.config'),"run.js"]
+            'values'=>['javascript/user','javascript/csrf-token'],
+            'provider'=>['web/provider/formModal.js'],
+            'boot'=>[
+                'web/boot/resolve.js',
+                'web/boot/routing.js',
+                "web/boot/providerConf.js",
+               'web/boot/config.js',
+                "web/boot/run.js"
+            ]
         ];
     }
 
@@ -94,8 +100,8 @@ class JavascriptController extends Controller
 
         $appJS=str_replace('{count}',$count,$appJS);
         $appJS=str_replace('{countDynamic}',$countDynamic,$appJS);
-        $appJS=str_replace('{frontview}', "'".route('app.frontview')."'",$appJS);
-        $appJS=str_replace('{pfile}',route('js.provider'),$appJS);
+        $appJS=str_replace('{frontview}', "'app/front-view'",$appJS);
+        $appJS=str_replace('{pfile}','javascript/provider',$appJS);
 
         return response($appJS,200,$this->header_arr);
 
@@ -161,8 +167,8 @@ class JavascriptController extends Controller
 
     public function provider(){
 
-        $provider=$this->getFileWithDirRes($this->list_files['provider'],'provider');
-        $bootlist=$this->getFileWithDirRes($this->list_files['boot'],'boot');
+        $provider=$this->list_files['provider'];
+        $bootlist=$this->list_files['boot'];
 
         $providers_list=array_merge($provider,$bootlist);
         $providerJS='';
