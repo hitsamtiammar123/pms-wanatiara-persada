@@ -1,5 +1,5 @@
 app.controller('TargetManajemenController',function(
-    $scope,$rootScope,loader,notifier,alertModal,user,dataService){
+    $scope,$rootScope,loader,notifier,alertModal,user,dataService,$location){
         $scope.user=user.employee;
         $scope.staffs;
         $scope.employeeList=$rootScope.employeeList?$rootScope.employeeList:[];
@@ -54,7 +54,7 @@ app.controller('TargetManajemenController',function(
 
         var loadEmployeeFail=function(employee){
             return function(){
-                debugger;
+                //debugger;
                 var index=$scope.employeeList.indexOf(employee);
                 $scope.employeeList=$scope.employeeList.slice(0,index);
                 alertModal.display('Peringatan','Terjadi kesalahan saat memuat data, mohon coba lagi');
@@ -90,6 +90,14 @@ app.controller('TargetManajemenController',function(
                 }
             }
             else{
+
+                if($scope.employeeList[$scope.employeeList.length-1]===employee){
+                    var id=employee.id;
+                    var url=loader.angular_route('realisasi',[id]);
+                    $location.path(url);
+                    return;
+                }
+
                 var index=sliceEmployeeList(employee);
                 $rootScope.employeeList=$scope.employeeList;
                 if(index!==0)
