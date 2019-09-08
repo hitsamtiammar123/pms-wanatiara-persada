@@ -1,6 +1,6 @@
 <div id="ikhtisar" >
     <div class="table-100">
-        <table class="table table-ikhtisar">
+        <table class="table table-striped table-ikhtisar">
             <thead>
                 <tr>
                     <th rowspan="2" class="f-column">No. 数</th>
@@ -19,7 +19,7 @@
                     <td>{{ $index+1 }}</td>
                     <td>{{ employee.name }}</td>
                     <td>{{ employee.role.name }}</td>
-                    <td ng-repeat="i in []|range:12" ng-class="employee.kpia[i]?employee.kpia[i].bColor:'' ">{{ employee.kpia[i]?employee.kpia[i].kpia:'' }}</td>
+                    <td ng-repeat="i in []|range:12" ng-class="employee.kpia[i]?employee.kpia[i].bColor:'' ">{{ employee.kpia[i]?employee.kpia[i].kpia+'%':'' }}</td>
                     <td ng-repeat="i in []|range:12">{{ employee.index[i]?employee.index[i]:'' }}</td>
                 </tr>
             </tbody>

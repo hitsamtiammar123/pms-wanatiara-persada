@@ -184,7 +184,7 @@
 }
 
 .realisasi-perusahaan-table thead tr th{
-    border:0 !important;
+    background-color: #FDE9D9;
 }
 
 .realisasi-perusahaan-table tbody tr td.kpi,

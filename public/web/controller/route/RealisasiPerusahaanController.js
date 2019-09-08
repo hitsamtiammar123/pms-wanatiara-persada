@@ -1,6 +1,7 @@
 app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader,alertModal){
-    $scope.headers=$rootScope.kpicompanyheader?$rootScope.kpicompanyheader:[];
+    $scope.headers=$rootScope.kpicompanyheaders?$rootScope.kpicompanyheaders:[];
     $scope.kpicompanydata=$rootScope.kpicompanydata?$rootScope.kpicompanydata:[];
+    $scope.keys=$rootScope.kpicompanykeys?$rootScope.kpicompanykeys:[];
     $scope.kpi_company_file;
 
     var ol_regex=/^\d+\.\s+.+/;
@@ -81,7 +82,7 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
 
     }
 
-    $scope.getClass=function(key,val){
+    $scope.getClass=function(key,val,type){
         var c='';
         switch(key){
             case 'deskripsi':
@@ -92,6 +93,17 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
             case '2019_target_2019':
             case 'realisasi_bulan_berjalan':
                 c+='kpi-num';
+            break;
+            case 'realisasi_rt':
+                if(type==='content'){
+                    var v=parseInt(val);
+                    if(v<100)
+                        c+='red-font';
+                    else if(v===100)
+                        c+='blue-font';
+                    else if(v>100)
+                        c+='gold-font';
+                }
             break;
         }
 
