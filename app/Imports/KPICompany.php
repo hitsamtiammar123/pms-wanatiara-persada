@@ -68,6 +68,7 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
             $data['result']=$result;
             $data['count']=count($result);
             $data['rowspans']=$rowspans;
+            $data['headers']=config('frontend.kpi_company_headers');
             $data['keys']=$keys;
             return $data;
         }

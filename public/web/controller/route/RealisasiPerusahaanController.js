@@ -8,12 +8,14 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
     var loadSuccess=function(result){
         if(result.data.hasOwnProperty('result')){
             $scope.kpicompanydata=$rootScope.kpicompanydata=result.data.result;
-            $scope.headers=$rootScope.kpicompanyheader=result.data.keys;
+            $scope.keys=$rootScope.kpicompanykeys=result.data.keys;
+            $scope.headers=$rootScope.kpicompanyheaders=result.data.headers;
             
         }
         else{
             $scope.kpicompanydata=[];
             $scope.headers=[];
+            $scope.keys=[];
         }
         setFilter();
         alertModal.hide();

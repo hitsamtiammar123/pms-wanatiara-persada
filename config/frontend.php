@@ -31,6 +31,39 @@ return [
         'values/user.js'
     ],
 
-    'dynamic'=>['controller','filter','service','factory','values','directive']
+    'dynamic'=>['controller','filter','service','factory','values','directive'],
+    'kpi_company_headers'=>[
+        '序号 No.',
+        '项目 Deskripsi',
+        '单位
+        Unit',
+        '当月 份目标 Realisasi Bulan Berjalan',
+        'Realisasi
+        (% R/T)',
+        '一月
+        Jan',
+        '二月
+        Feb',
+        '三月
+        Mar',
+        '四月
+        Apr',
+        '五月
+        May',
+        '六月
+        Jun',
+        '七月
+        Jul',
+        '八月
+        Aug',
+        '九月
+        Sep',
+        '十月
+        Oct',
+        '十一月
+        Nov',
+        '十二月
+        Dec'
+    ]
 
 ];
