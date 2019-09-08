@@ -44,10 +44,7 @@ class KPIResultHeader extends Model
         foreach($kpiresultdeletelist as $todelete){
             $curr_delete=self::find($todelete);
             if($curr_delete){
-                $curr_delete_prev=$curr_delete->getPrev();
-                    $curr_delete->delete();
-                    $curr_delete_prev?$curr_delete_prev->delete():null;
-
+                $curr_delete->delete();
             }
         }
     }
