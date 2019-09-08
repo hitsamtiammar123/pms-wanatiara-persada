@@ -8,7 +8,7 @@ return [
 	'keywords'              => '',
 	'creator'               => 'Laravel Pdf',
 	'display_mode'          => 'fullpage',
-    'tempDir'               => base_path('../temp/'),
+    'tempDir'               => storage_path('pdf'),
     'font_path'             => public_path('vendor/fonts/'),
     'font_data' => [
         'msyh' => [
