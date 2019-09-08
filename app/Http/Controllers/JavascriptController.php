@@ -35,7 +35,8 @@ class JavascriptController extends Controller
     }
 
     public function mapNameDFiles($data){
-        return env('APP_RES')."/web/$data";
+        //return env('APP_RES')."/web/$data";
+        return "web/$data";
     }
 
     protected function getFileWithDirRes($list,$dir){

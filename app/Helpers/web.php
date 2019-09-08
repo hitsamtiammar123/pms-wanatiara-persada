@@ -19,6 +19,7 @@ if(!function_exists('style')){
     }
 
     function res_url($d){
-       return env('APP_RES').'/'.$d;
+       //return env('APP_RES').'/'.$d;
+       return $d;
     }
 }

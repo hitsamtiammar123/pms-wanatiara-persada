@@ -1,0 +1,29 @@
+app.constant('kpiKeys',{
+    kpiresult:[
+        'name',
+        'unit',
+        'kpi_header_id',
+        'id',
+        'pw_1',
+        'pw_2',
+        "pt_t1",
+        "pt_k1",
+        "pt_t2",
+        "pt_k2",
+        "real_t1",
+        "real_k1",
+        "real_t2",
+        "real_k2"
+    ],
+    kpiprocess:[
+        "id",
+        "name",
+        "unit",
+        "pw_1",
+        "pw_2",
+        "pt_1",
+        "pt_2",
+        "real_1",
+        "real_2"
+    ]
+}); 

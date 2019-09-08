@@ -9,7 +9,7 @@ return [
 	'creator'               => 'Laravel Pdf',
 	'display_mode'          => 'fullpage',
     'tempDir'               => base_path('../temp/'),
-    'font_path'             => public_path('fonts/'),
+    'font_path'             => public_path('vendor/fonts/'),
     'font_data' => [
         'msyh' => [
 			'R'  => 'chinese.msyh.ttf',

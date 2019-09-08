@@ -1,0 +1,1 @@
+app.constant('DTIME',100); 

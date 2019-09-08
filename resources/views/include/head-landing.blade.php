@@ -1,6 +1,6 @@
 @php
-    $js_vendors=[res_url('/vendor/js/jquery.min.js'),res_url('/vendor/js/bootstrap.min.js')];
-    $css_vendors=[ res_url('/vendor/css/bootstrap.min.css'),res_url("/vendor/css/bootstrap-theme.min.css")];
+    $js_vendors=[res_url('vendor/js/jquery.min.js'),res_url('vendor/js/bootstrap.min.js')];
+    $css_vendors=[ res_url('vendor/css/bootstrap.min.css'),res_url("vendor/css/bootstrap-theme.min.css")];
 @endphp
 
 <meta charset="UTF-8">

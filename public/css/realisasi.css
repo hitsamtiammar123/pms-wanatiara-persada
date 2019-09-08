@@ -25,8 +25,9 @@
 
 .realisasi-table thead tr th{
     border:1px solid #9599a1 !important;
-
 }
+
+
 
 .realisasi-table thead, .realisasi-table tbody tr {
     display:table;
@@ -180,6 +181,10 @@
 
 .realisasi-perusahaan-table tbody {
     height:350px;
+}
+
+.realisasi-perusahaan-table thead tr th{
+    border:0 !important;
 }
 
 .realisasi-perusahaan-table tbody tr td.kpi,
