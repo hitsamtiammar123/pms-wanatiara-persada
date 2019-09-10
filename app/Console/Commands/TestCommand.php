@@ -2,11 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Model\Employee;
-use App\Model\KPIHeader;
 use Illuminate\Console\Command;
-use App\Notifications\EndorsementNotification;
-use App\Model\User;
+use Symfony\Component\Process\Process;
 
 class TestCommand extends Command
 {
@@ -42,11 +39,7 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        $e=Employee::find('1915284162');
-        $header=$e->getCurrentHeader()->getPrev();
-
-        dd($header);
-
+        $this->info(rand(0,100));
 
     }
 }
