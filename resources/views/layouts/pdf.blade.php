@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="{{res_url('vendor/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{public_path('css-laravel/pdf.css')}}">
-    <title>PDF PMS</title>
+    <title>{{isset($title)?$title:'PDF PMS'}}</title>
 </head>
 <body>
     @yield('content')

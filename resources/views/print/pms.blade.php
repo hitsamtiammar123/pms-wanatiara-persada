@@ -44,12 +44,13 @@
                 <div class="col-sm-4">当月考核期 Periode bulan berjalan:</div>
                 <div class="col-sm-3"> {{$cCumPeriod->format('d M Y')}} - {{$cPeriod->format('d M Y')}}</div>
         </div>
-        <div class="row title-row">
+
+            <div class="title-row">
                 <p class="pms-title">1. Sasaran Hasil: {{$header->weight_result*100}}%</p>
-        </div>
-                <div class="table-content">
-                    <div class="col-sm-12">
-                            <table class="table table-print">
+            </div>
+            <div class="table-content page-break">
+                    <div class="col-sm-12 ">
+                            <table class="table table-print ">
                                     <thead>
                                         <tr>
                                             <th rowspan="2">KPI</th>
@@ -106,69 +107,73 @@
                                     </tbody>
                             </table>
                     </div>
-
+            </div>
+            <div class="page-break">
+                <div class="title-row page-break">
+                    <p class="pms-title">2. Sasaran Proses: {{$header->weight_process*100}}%</p>
                 </div>
-
-                <div class="title-row">
-                        <p class="pms-title">2. Sasaran Proses: {{$header->weight_process*100}}%</p>
-                </div>
-                <div class="table-content">
-                        <div class="col-sm-12">
-                                <table class="table table-print">
-                                        <thead>
-                                            <tr>
-                                                <th rowspan="2">Kompetensi Inti</th>
-                                                <th rowspan="2">Unit</th>
-                                                <th colspan="2">Performance weighting {{$cPeriod->format('Y')}}</th>
-                                                <th colspan="2">Performance Target {{$cPeriod->format('Y')}}</th>
-                                                <th colspan="2">Realization {{$cPeriod->format('Y')}}</th>
-                                                <th colspan="2">KPI Achievement {{$cPeriod->format('Y')}}</th>
-                                                <th colspan="2">Achievement x Weighing</th>
-                                            </tr>
-                                            <tr>
-                                                @foreach ($header->getProcessHeading() as $h)
-                                                <th>{{$h}}</th>
-                                                @endforeach
-                                            </tr>
-
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($kpiprocesses['data'] as $kpiprocess)
-                                                <tr>
-                                                        <td>{{$kpiprocess['name']}}</td>
-                                                        <td>{{$kpiprocess['unit']}}</td>
-                                                        <td class="num-content">{{$kpiprocess['pw_1']}}</td>
-                                                        <td class="num-content">{{$kpiprocess['pw_1']}}</td>
-                                                         <td class="num-content">{{$kpiprocess['pt_1']}}</td>
-                                                         <td class="num-content">{{$kpiprocess['pt_2']}}</td>
-                                                         <td class="num-content">{{$kpiprocess['real_1']}}</td>
-                                                         <td class="num-content">{{$kpiprocess['real_2']}}</td>
-                                                         <td class="num-content {{$kpiresult['bColor_kpia_1']}}">{{$kpiprocess['kpia_1']}}</td>
-                                                         <td class="num-content {{$kpiresult['bColor_kpia_2']}}">{{$kpiprocess['kpia_2']}}</td>
-                                                         <td class="num-content">{{$kpiprocess['aw_1']}}</td>
-                                                         <td class="num-content">{{$kpiprocess['aw_2']}}</td>
+                <div class="table-content ">
+                                <div class="col-sm-12">
+                                        <table class="table table-print">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2">Kompetensi Inti</th>
+                                                        <th rowspan="2">Unit</th>
+                                                        <th colspan="2">Performance weighting {{$cPeriod->format('Y')}}</th>
+                                                        <th colspan="2">Performance Target {{$cPeriod->format('Y')}}</th>
+                                                        <th colspan="2">Realization {{$cPeriod->format('Y')}}</th>
+                                                        <th colspan="2">KPI Achievement {{$cPeriod->format('Y')}}</th>
+                                                        <th colspan="2">Achievement x Weighing</th>
                                                     </tr>
-                                            @endforeach
-                                                <tr>
-                                                    <td colspan="2" class="bold">Total Bobot: </td>
-                                                    <td class="num-content">{{array_reduce($kpiprocesses['data'],'get_totalW_pw1',0)}}%</td>
-                                                    <td class="num-content">{{array_reduce($kpiprocesses['data'],'get_totalW_pw2',0)}}%</td>
-                                                    <td colspan="4"></td>
-                                                    <td colspan="2" class="bold">Total Achievement:</td>
-                                                    <td class="num-content center-text">{{$kpiprocesses['totalAchievement']['t1']}}</td>
-                                                    <td class="num-content center-text">{{$kpiprocesses['totalAchievement']['t2']}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="8"></td>
-                                                    <td colspan="2" class="bold">Index Achievement:</td>
-                                                    <td class="num-content center-text">{{$kpiprocesses['indexAchievement']['t1']}}</td>
-                                                    <td class="num-content center-text">{{$kpiprocesses['indexAchievement']['t2']}}</td>
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                        </div>
+                                                    <tr>
+                                                        @foreach ($header->getProcessHeading() as $h)
+                                                        <th>{{$h}}</th>
+                                                        @endforeach
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($kpiprocesses['data'] as $kpiprocess)
+                                                        <tr>
+                                                                <td>{{$kpiprocess['name']}}</td>
+                                                                <td>{{$kpiprocess['unit']}}</td>
+                                                                <td class="num-content">{{$kpiprocess['pw_1']}}</td>
+                                                                <td class="num-content">{{$kpiprocess['pw_1']}}</td>
+                                                                <td class="num-content">{{$kpiprocess['pt_1']}}</td>
+                                                                <td class="num-content">{{$kpiprocess['pt_2']}}</td>
+                                                                <td class="num-content">{{$kpiprocess['real_1']}}</td>
+                                                                <td class="num-content">{{$kpiprocess['real_2']}}</td>
+                                                                <td class="num-content {{$kpiresult['bColor_kpia_1']}}">{{$kpiprocess['kpia_1']}}</td>
+                                                                <td class="num-content {{$kpiresult['bColor_kpia_2']}}">{{$kpiprocess['kpia_2']}}</td>
+                                                                <td class="num-content">{{$kpiprocess['aw_1']}}</td>
+                                                                <td class="num-content">{{$kpiprocess['aw_2']}}</td>
+                                                            </tr>
+                                                    @endforeach
+                                                        <tr>
+                                                            <td colspan="2" class="bold">Total Bobot: </td>
+                                                            <td class="num-content">{{array_reduce($kpiprocesses['data'],'get_totalW_pw1',0)}}%</td>
+                                                            <td class="num-content">{{array_reduce($kpiprocesses['data'],'get_totalW_pw2',0)}}%</td>
+                                                            <td colspan="4"></td>
+                                                            <td colspan="2" class="bold">Total Achievement:</td>
+                                                            <td class="num-content center-text">{{$kpiprocesses['totalAchievement']['t1']}}</td>
+                                                            <td class="num-content center-text">{{$kpiprocesses['totalAchievement']['t2']}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="8"></td>
+                                                            <td colspan="2" class="bold">Index Achievement:</td>
+                                                            <td class="num-content center-text">{{$kpiprocesses['indexAchievement']['t1']}}</td>
+                                                            <td class="num-content center-text">{{$kpiprocesses['indexAchievement']['t2']}}</td>
+                                                        </tr>
+                                                </tbody>
+                                            </table>
+                                </div>
 
                 </div>
+            </div>
+
+
+
+
 
     <footer>
         <p>PMS ini sudah disahkan secara elektronik</p>

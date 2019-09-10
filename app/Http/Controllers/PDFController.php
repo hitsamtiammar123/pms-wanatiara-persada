@@ -30,7 +30,8 @@ class PDFController extends Controller
             'kpiresults'=>$kpiresults,
             'kpiprocesses'=>$kpiprocesses,
             'employee'=>$employee,
-            'header'=>$kpiheader
+            'header'=>$kpiheader,
+            'title'=>"Performance Management System (PMS) - $employee->name - Periode: {$kpiheader->cPeriod()->format('F Y')}"
         ];
 
         $pdf=PDF::loadView('pdf.pdf-pms',$data);
