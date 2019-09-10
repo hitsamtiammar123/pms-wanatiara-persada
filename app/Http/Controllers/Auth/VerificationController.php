@@ -27,6 +27,11 @@ class VerificationController extends Controller
      */
     protected $redirectTo = '/home';
 
+    protected function redirectTo(){
+
+        return $this->redirectTo;
+    }
+
     /**
      * Create a new controller instance.
      *

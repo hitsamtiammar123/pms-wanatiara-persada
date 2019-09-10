@@ -238,6 +238,31 @@ class KPIHeader extends Model
         return $result;
     }
 
+    protected function getKPIA($d,$j){
+        $unit=$d['unit'];
+        $r=0;
+        $rC=0;
+        $tC=0;
+        $pt_key='pt_t'.($j+1);
+        $real_key='real_t'.($j+1);
+        $real_k_key='real_k'.($j+1);
+        $pt_k_key='pt_k'.($j+1);
+        switch($unit){
+            case '$':
+            if($j===1){
+                $rC=$d[$real_k_key];
+                $tC=$d[$pt_k_key];
+                break;
+            }
+            default:
+                $rC=$d[$real_key];
+                $tC=$d[$pt_key];
+            break;
+        }
+        $r=(floatval($rC)/floatval($tC))*100;
+        return $r;
+    }
+
     protected function fetchAccumulatedKPIResult(){
         $kpiresults=$this->fetchKPIResult();
         $result=[];
@@ -253,7 +278,7 @@ class KPIHeader extends Model
                 $pwq_key='pw_'.($i+1);
 
                 if($d[$pt_key]!=0){
-                    $rt=$d[$real_key]/$d[$pt_key]*100;
+                    $rt=$this->getKPIA($d,$i);
                 }
                 else
                     $rt=0;

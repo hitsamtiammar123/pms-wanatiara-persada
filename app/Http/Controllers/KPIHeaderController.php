@@ -4,11 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Model\KPIHeader;
-use App\Model\Employee;
-use App\Model\KPIResult;
-use App\Model\KPIEndorsement;
-use App\Model\Role;
-use App\Model\KPIProcess;
 use App\Model\KPIResultHeader;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Traits\BroadcastPMSChange;
