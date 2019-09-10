@@ -28,44 +28,35 @@
             </div>
     <div class="table-100">
         <p class="bold table-title">
-            <md-menu ng-hide="hasEndorse">
-                <span class="glyphicon glyphicon-option-vertical" ng-click="openMenu($mdMenu,$event)"></span>
-                <md-menu-content class="md-dense" width="3">
-                    <md-menu-item>
-                        <md-button ng-click="addRow()" ng-disabled="hasChanged || dlt_result.toogle_delete">
-                            <span class="glyphicon glyphicon-plus"></span>  Tambah Baris
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="toogleDelete(dlt_result)" ng-disabled="hasChanged">
-                            <span class="glyphicon glyphicon-minus"></span> {{dlt_result.dlt_message}}
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-divider></md-menu-divider>
-                    <md-menu-item>
-                        <md-button ng-click="copyData()">
-                            <span class="glyphicon glyphicon-copy"></span>    Salin
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="pasteData()">
-                            <span class="glyphicon glyphicon-paste"></span>    Tempel
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="undoData()">
-                            <span class="glyphicon glyphicon-chevron-left"></span>    Batal
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="redoData()">
-                            <span class="glyphicon glyphicon-chevron-right"></span>    Balik
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
+            <div class="dropright" > 
+                <a class="dropdown-toggle" ng-hide="hasEndorse" data-toggle="dropdown" aria-hidden="true"> <span class="glyphicon glyphicon-option-vertical black-font"></span></a>
+                1. Sasaran Hasil {{ header.weight_result?(header.weight_result*100)+'%':'' }}
+                 <ul class="dropdown-menu">
+                        <li>
+                            <a ng-click="addRow()" ng-hide="dlt_result.toogle_delete" ng-disabled="hasChanged">
+                                <span class="glyphicon glyphicon-plus"></span>    Tambah Baris
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click="toogleDelete(dlt_result)" ng-disabled="hasChanged">
+                                <span class="glyphicon glyphicon-minus"></span>{{dlt_result.dlt_message}}
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a ng-click="undoData()">
+                                <span class="glyphicon glyphicon-chevron-left"></span>     Batal
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click="redoData()">
+                                <span class="glyphicon glyphicon-chevron-right"></span>     Balik
+                            </a>
+                        </li>
+            </div>
+        </div>  
 
-        1. Sasaran Hasil {{ header.weight_result?(header.weight_result*100)+'%':'' }}
+       
         </p>
         <table class="table table-striped realisasi-table">
                 <thead>
@@ -150,43 +141,33 @@
         <div>{{changedMessage}}</div>
 
         <p class="bold table-title">
-                <md-menu ng-hide="hasEndorse">
-                        <span class="glyphicon glyphicon-option-vertical" ng-click="openMenu($mdMenu,$event)"></span>
-                        <md-menu-content class="md-dense" width="3">
-                            <md-menu-item>
-                                <md-button ng-click="addPRow()" ng-disabled="hasChanged || dlt_process.toogle_delete">
-                                    <span class="glyphicon glyphicon-plus"></span>  Tambah Baris
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="toogleDelete(dlt_process)" ng-disabled="hasChanged">
-                                    <span class="glyphicon glyphicon-minus"></span> {{dlt_process.dlt_message}}
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-divider></md-menu-divider>
-                            <md-menu-item>
-                                <md-button ng-click="copyDataP()">
-                                    <span class="glyphicon glyphicon-copy"></span>    Salin
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="pasteDataP()">
-                                    <span class="glyphicon glyphicon-paste"></span>    Tempel
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="undoDataP()">
-                                    <span class="glyphicon glyphicon-chevron-left"></span>    Batal
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="redoDataP()">
-                                    <span class="glyphicon glyphicon-chevron-right"></span>    {{dlt_process.dlt_message}}
-                                </md-button>
-                            </md-menu-item>
-                        </md-menu-content>
-                    </md-menu>
-            2. Sasaran Proses {{ header.weight_process?(header.weight_process*100)+'%':'' }}
+                    <div class="dropright"> 
+                            <a class="dropdown-toggle" ng-hide="hasEndorse" data-toggle="dropdown" aria-hidden="true"> <span class="glyphicon glyphicon-option-vertical black-font"></span></a>
+                            2. Sasaran Proses {{ header.weight_process?(header.weight_process*100)+'%':'' }}
+                             <ul class="dropdown-menu">
+                                    <li>
+                                        <a ng-click="addPRow()" ng-hide="dlt_process.toogle_delete" ng-disabled="hasChanged">
+                                            <span class="glyphicon glyphicon-plus"></span>    Tambah Baris
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="toogleDelete(dlt_process)" ng-disabled="hasChanged">
+                                            <span class="glyphicon glyphicon-minus"></span>{{dlt_process.dlt_message}}
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a ng-click="undoDataP()">
+                                            <span class="glyphicon glyphicon-chevron-left"></span>     Batal
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a ng-click="redoDataP()">
+                                            <span class="glyphicon glyphicon-chevron-right"></span>     Balik
+                                        </a>
+                                    </li>
+                        </div>
+           
         </p>
         <table class="table table-striped realisasi-table">
                 <thead>
