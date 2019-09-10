@@ -17,8 +17,8 @@ class EndorsementNotification extends Notification
     protected $employee;
 
     protected function getRedirectLink(){
-        $header_id=$this->header->employee->id;
-        $link="realisasi/$header_id";
+        $employee_id=$this->header->employee->id;
+        $link="realisasi/$employee_id/".($this->header->cPeriod()->month-1);
 
         return $link;
     }
