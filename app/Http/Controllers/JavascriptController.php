@@ -23,7 +23,6 @@ class JavascriptController extends Controller
         $this->angular=Storage::disk('angular');
         $this->except_files=config('frontend.except');
         $this->list_files=[
-            'controller'=>[],
             'service'=>[],
             'factory'=>[],
             'directive'=>[],
@@ -32,10 +31,10 @@ class JavascriptController extends Controller
             'provider'=>['web/provider/formModal.js'],
             'boot'=>[
                 'web/boot/resolve.js',
-                'web/boot/routing.js',
+                '{routing}',
                 "web/boot/providerConf.js",
-               'web/boot/config.js',
-                "web/boot/run.js"
+                "web/boot/config.js",
+                "web/boot/run.js",
             ]
         ];
     }
@@ -60,9 +59,6 @@ class JavascriptController extends Controller
 
 
     protected function loadDynamically($dir){
-        if($dir==='values'){
-            $j=0;
-        }
         $disk=$this->web;
         $except_files=$this->except_files;
         $collection_files=collect($disk->allfiles($dir));
@@ -73,6 +69,35 @@ class JavascriptController extends Controller
 
         return $collection_files->toArray();
 
+    }
+
+    protected function loadControllers(){
+        $user=auth_user();
+        $tier=$user->employee->role->tier;
+        $controllers=[];
+        $defaults=config('frontend.controllers.default');
+        $tier_controllers=[];
+        switch($tier){
+            case 0:
+            $tier_controllers=config('frontend.controllers.t0');
+            break;
+            case 1:
+            $tier_controllers=config('frontend.controllers.t1');
+            break;
+            case 2:
+            $tier_controllers=config('frontend.controllers.t2');
+            break;
+            case 3:
+            $tier_controllers=config('frontend.controllers.t3');
+            break;
+        }
+
+        $controllers=collect(array_merge($controllers,$defaults,$tier_controllers))
+        ->map(function($d){
+            return "controller/$d";
+        });
+
+        return $controllers->map([$this,'mapNameDFiles']);
     }
 
 
@@ -90,14 +115,18 @@ class JavascriptController extends Controller
             if(in_array($key,$dynamic_list)){
                 $d=array_merge($listfiles[$key],$this->loadDynamically($key));
                 $countDynamic+=count($d);
-            }
-            $key_a='{'.$key.'_key}';
-            $appJS=str_replace($key_a,json_encode($d,JSON_UNESCAPED_SLASHES),$appJS);
+                $key_a='{'.$key.'_key}';
+                $appJS=str_replace($key_a,json_encode($d,JSON_UNESCAPED_SLASHES),$appJS);
 
-            if($key!=='boot')
-                $count+=count($d);
+                if($key!=='boot')
+                    $count+=count($d);
+            }
+
         }
 
+        $controllers=json_encode($this->loadControllers(),JSON_UNESCAPED_SLASHES);
+
+        $appJS=str_replace('{controller_key}',$controllers,$appJS);
         $appJS=str_replace('{count}',$count,$appJS);
         $appJS=str_replace('{countDynamic}',$countDynamic,$appJS);
         $appJS=str_replace('{frontview}', "'app/front-view'",$appJS);
@@ -127,9 +156,16 @@ class JavascriptController extends Controller
         $routelist=$this->angular->get('route.js');
         $routingJS=$this->angular->get('routing.js');
 
-        $routingJS=str_replace('{routelist}',$routelist,$routingJS);
+        $user=auth_user();
+        if($user){
+            $routingJS=str_replace('{routelist}',$routelist,$routingJS);
 
-        return response($routingJS,200,$this->header_arr);
+            return response($routingJS,200,$this->header_arr);
+        }
+
+        return response('');
+
+
     }
 
 
@@ -170,19 +206,35 @@ class JavascriptController extends Controller
         $provider=$this->list_files['provider'];
         $bootlist=$this->list_files['boot'];
 
-        $providers_list=array_merge($provider,$bootlist);
-        $providerJS='';
+        $user=auth_user();
 
-        $minifier=new Minify\JS;
+        if($user){
+            $tier=$user->employee->role->tier;
 
-        foreach($providers_list as $js){
-            $providerJS.=file_get_contents($js);
+            switch($tier){
+                case 0:
+                  $bootlist[1]=str_replace('{routing}','web/boot/routing_t0.js',$bootlist[1]);
+                break;
+                default:
+                $bootlist[1]=str_replace('{routing}','web/boot/routing.js',$bootlist[1]);
+                break;
+            }
+
+            $providers_list=array_merge($provider,$bootlist);
+            $providerJS='';
+
+            $minifier=new Minify\JS;
+
+            foreach($providers_list as $js){
+                $providerJS.=file_get_contents($js);
+            }
+
+            $minifier->add($providerJS);
+            $mJS=$minifier->minify();
+
+            return response($providerJS,200,$this->header_arr);
         }
-
-        $minifier->add($providerJS);
-        $mJS=$minifier->minify();
-
-        return response($providerJS,200,$this->header_arr);
+        return send_401_error();
 
     }
 }

@@ -30,8 +30,37 @@ return [
     'except'=>[
         'values/user.js'
     ],
+    'controllers'=>[
+        'default'=>[
+            'misc/AlertModalController.js',
+            'misc/ConfirmModalController.js',
+            'misc/PromptModalController.js',
+            'route/DummyController.js',
+            'route/FrontController.js',
+            'route/IkhtisarController.js',
+            'route/NotifikasiPengesahan.js',
+            'route/PencarianController.js',
+            'route/PengesahanBaru.js',
+            'route/PengesahanDetail.js',
+            'route/RealisasiController.js',
+            'route/RealisasiPerusahaanController.js',
 
-    'dynamic'=>['controller','filter','service','factory','values','directive'],
+        ],
+        't0'=>[
+            't0/TargetManajemenController.js'
+        ],
+        't1'=>[
+            'route/TargetManajemenController.js',
+        ],
+        't2'=>[
+            'route/TargetManajemenController.js',
+        ],
+        't3'=>[
+            'route/TargetManajemenController.js',
+        ],
+    ],
+
+    'dynamic'=>['filter','service','factory','values','directive'],
     'kpi_company_headers'=>[
         '序号 No.',
         '项目 Deskripsi',

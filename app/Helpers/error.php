@@ -14,5 +14,9 @@ if(!function_exists('send_406')){
         return response()->json(["error"=>403,"message"=>$message],403);
     }
 
+    function send_401_error($message="Anda belum melakukan autentikasi"){
+        return response()->json(["error"=>401,"message"=>$message],401);
+    }
+
 
 };
