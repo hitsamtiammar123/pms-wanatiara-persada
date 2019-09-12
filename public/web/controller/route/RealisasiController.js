@@ -539,12 +539,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
     var setDataFilter=function(d){
         var unit=d.unit.trim();
-        d.pw_filter='addPercent';
+        d.pw_filter='integer|addPercent';
         d.pt_filter='';
         d.real_filter='';
         d.kpia_filter='addPercent';
         d.aw_filter='addPercent';
-        d.pw_sanitize=d.pt_sanitize=d.real_sanitize=d.kpia_sanitize=d.aw_sanitize='sNumber';
+        d.pt_sanitize=d.real_sanitize=d.kpia_sanitize=d.aw_sanitize='sNumber';
+        d.pw_sanitize='sNumber'
         switch(unit){
             case '%':
             case 'MV':

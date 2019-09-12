@@ -55,8 +55,8 @@ class KPIHeader extends Model
                 $r['unit']=$kpiresult->unit;
 
                 $r['id']=$kpiresultheader->id;
-                $r['pw_1']=$kpiresultheaderprev->pw;
-                $r['pw_2']=$kpiresultheader->pw;
+                $r['pw_1']=intval($kpiresultheaderprev->pw).'';
+                $r['pw_2']=intval($kpiresultheader->pw).'';
                 $r['pt_t1']=$kpiresultheaderprev->pt_t;
                 $r['pt_k1']=$kpiresultheaderprev->pt_k;
                 $r['pt_t2']=$kpiresultheader->pt_t;
@@ -87,8 +87,8 @@ class KPIHeader extends Model
                 $r['id']=$curr_s->id;
                 $r['name']=$curr_s->name;
                 $r['unit']=$curr_s->unit;
-                $r['pw_1']=$curr_p->pivot->pw;
-                $r['pw_2']=$curr_s->pivot->pw;
+                $r['pw_1']=intval($curr_p->pivot->pw).'';
+                $r['pw_2']=intval($curr_s->pivot->pw).'';
                 $r['pt_1']=$curr_p->pivot->pt;
                 $r['pt_2']=$curr_s->pivot->pt;
                 $r['real_1']=$curr_p->pivot->real;
