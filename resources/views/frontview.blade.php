@@ -7,7 +7,7 @@
 
     $tahunkiwari='{{tahunkiwari}}';
     $unreadNotification='{{unreadNotification}}';
-    $curr_date='{{greting_message}}, {{user_name}}: {{date.day}}, {{date.date}} {{date.month}} {{date.year}}, {{date.hour}}:{{date.minute}}:{{date.second}}';
+    $curr_date='<strong>{{greting_message}}, {{user_name}}</strong>: {{date.day}}, {{date.date}} {{date.month}} {{date.year}}, {{date.hour}}:{{date.minute}}:{{date.second}}';
 @endphp
 
 <link rel="stylesheet" href="css/target-manajemen.css">
@@ -38,7 +38,7 @@
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     <li class="greetings-nav">
-                        <div class="col-sm-12">{{$curr_date}}</div>
+                        <div class="col-sm-12">{!! $curr_date !!}</div>
                     </li>
                   </ul>
               </nav>

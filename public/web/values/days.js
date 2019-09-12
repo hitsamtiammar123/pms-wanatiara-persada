@@ -8,4 +8,4 @@ app.constant('days',
         'Jumat',
         'Sabtu',
     ]
-) 
+); 

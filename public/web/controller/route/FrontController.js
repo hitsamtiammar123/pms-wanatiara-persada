@@ -7,7 +7,7 @@ app.controller('FrontController',function($scope,$rootScope,dataService,months,
     $scope.currentMonth=months[$rootScope.month];
     $scope.unreadNotification=0;
     $scope.date={};
-    $scope.user_name=user.employee.name;
+    $scope.user_name=(user.employee.gender==='male'?'Pak ':'Bu ')+user.employee.name;
 
     var isDownloading=false;
 
