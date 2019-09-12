@@ -5,6 +5,7 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
     $scope.kpi_company_file;
 
     var ol_regex=/^\d+\.\s+.+/;
+    var curr_date=new Date();
 
     var loadSuccess=function(result){
         if(result.data.hasOwnProperty('result')){
@@ -84,13 +85,15 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
 
     $scope.getClass=function(key,val,type){
         var c='';
+        var target_column=curr_date.getFullYear()+'_target_'+curr_date.getFullYear();
+       
         switch(key){
             case 'deskripsi':
                 c+='kpi';
                 if(ol_regex.test(val))
                     c+=' ol-color';
             break;
-            case '2019_target_2019':
+            case target_column:
             case 'realisasi_bulan_berjalan':
                 c+='kpi-num';
             break;
