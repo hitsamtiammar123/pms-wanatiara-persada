@@ -122,8 +122,8 @@
                                 <td ng-repeat="i in [] |range:2" notify-g-label="add-content">{{totalW[i]}}%</td>
                                 <td colspan="7"></td>
                                 <td colspan="2" class="right-text bold">Total Achievement 总成就: </td>
-                                <td class="center-text" notify-g-label="add-content" belong-to="totalAchieveMent.t1"></td>
-                                <td class="center-text" notify-g-label="add-content" belong-to="totalAchieveMent.t2"></td>
+                                <td class="center-text" notify-g-label="add-content" belong-to="totalAchieveMent.t1" format="addPercent"></td>
+                                <td class="center-text" notify-g-label="add-content" belong-to="totalAchieveMent.t2" format="addPercent"></td>
                             </tr>
                             <tr>
                                 <td class="num"></td>
@@ -209,8 +209,8 @@
                                     <td ng-repeat="i in [] |range:2">{{totalW_P[i]}}%</td>
                                     <td colspan="4"></td>
                                     <td colspan="2" class="right-text bold">Total Achievement 总成就: </td>
-                                    <td notify-g-label="add-content" belong-to="totalAchieveMentP.t1"></td>
-                                    <td notify-g-label="add-content" belong-to="totalAchieveMentP.t2" ></td>
+                                    <td notify-g-label="add-content" format="addPercent" belong-to="totalAchieveMentP.t1"></td>
+                                    <td notify-g-label="add-content" format="addPercent" belong-to="totalAchieveMentP.t2" ></td>
                                 </tr>
                                 <tr>
                                     <td class="num"></td>
@@ -222,6 +222,29 @@
 
                     </tbody>
         </table>
+
+        <div class="col-sm-4">
+                <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="light-grey f-column" rowspan="2">价值总额 TOTAL NILAI</th>
+                                <th class="light-grey" notify-g-label="add-content" belong-to="finalAchievement.t1_n" format="addPercent"></th>
+                                <th class="light-grey" notify-g-label="add-content" belong-to="finalAchievement.t2_n" format="addPercent"></th>
+                            </tr>
+                            <tr>
+                                <th class="light-grey" notify-g-label="add-content" belong-to="finalAchievement.t1_i"></th>
+                                <th class="light-grey" notify-g-label="add-content" belong-to="finalAchievement.t2_i"></th>
+                            </tr>
+                            <tr>
+                                <th class="light-grey">指数 Indeks</th>
+                                <th class="light-grey" notify-g-label="add-content" belong-to="finalAchievement.t1_f" format="addPercent"></th>
+                                <th class="light-grey" notify-g-label="add-content" belong-to="finalAchievement.t2_f" format="addPercent"></th>
+                            </tr>
+            
+                        </thead>
+                    </table>
+        </div>
+
 
         <div flex="30">
                 <button class="btn btn-danger" ng-hide="hasEndorse || !dlt_process.toogle_delete " ng-click="toogleDelete(dlt_process)" ng-disabled="hasChanged">{{dlt_process.dlt_message}}</button>

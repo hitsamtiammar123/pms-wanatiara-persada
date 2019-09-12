@@ -7,6 +7,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.IndexAchieveMent={}; 
     $scope.IndexAchieveMentP={};
     $scope.totalAchieveMentP={};
+    $scope.finalAchievement={};
     $scope.aggrements={};
     $scope.hasChanged=false;
     $scope.headerLabel=$scope.headerLabel?$scope.headerLabel:[];
@@ -282,7 +283,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var q='t'+(i+1);
             if(isNaN(s))
                 continue;
-            totalAchieveMent[q]=s.toFixed(1)+'%';
+            totalAchieveMent[q]=s.toFixed(1);
             var index=getAchievementIndex(s);
             IndexAchieveMent[q]=index;
 
@@ -326,6 +327,39 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
     }
 
+    var setFinalAchivement=function(){
+        const FUNCTION_NAME='add-content';
+        var t1_fr=parseFloat($scope.totalAchieveMent.t1);
+        var t1_fp=parseFloat($scope.totalAchieveMentP.t1);
+        var t2_fr=parseFloat($scope.totalAchieveMent.t2);
+        var t2_fp=parseFloat($scope.totalAchieveMentP.t2);
+
+        $scope.finalAchievement.t1_n=(t1_fr*$scope.header.weight_result+
+                                    t1_fp*$scope.header.weight_process).toFixed(1);
+        $scope.finalAchievement.t2_n=(t2_fr*$scope.header.weight_result+
+                                    t2_fp*$scope.header.weight_process).toFixed(1);
+        
+        $scope.finalAchievement.t1_i=getAchievementIndex($scope.finalAchievement.t1_n);
+        $scope.finalAchievement.t2_i=getAchievementIndex($scope.finalAchievement.t2_n);
+
+        $scope.finalAchievement.t1_f=($scope.finalAchievement.t1_n-100).toFixed(1);
+        $scope.finalAchievement.t2_f=($scope.finalAchievement.t2_n-100).toFixed(1);
+
+        notifier.notifyGroup('add-content');
+    }
+
+    var formatContent=function(format,setter,elem,scope){
+        var v=setter(scope);
+        var f;
+        var sp_f=format.split('|');
+        for(var i=0;i<sp_f.length;i++){
+            var csp=sp_f[i];
+            var nvalue=$filter(csp)(v);
+            f=nvalue?nvalue:v;
+            elem.text(f)
+            v=f;
+        }
+    }
 
 
     var setCurrentMonth=function(month){
@@ -612,6 +646,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                     setTotalW($scope.kpiprocesses,$scope.totalW_P);
                     console.log($scope.kpiprocesses);
                 }
+                setFinalAchivement();
                 $scope.$digest();
             },50)
         }
@@ -843,6 +878,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 kpiprocessdeletestream.pushData(deleteListProcess,deleteListProcess);
                 //pushDataIntoDeleteList($scope.kpiprocesses,deleteListProcess,kpiprocessdeletestream);
             }
+            setFinalAchivement();
 
             dataService.digest($scope);
             notifier.notifyGroup('realisasi-content');
@@ -932,6 +968,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setAggrements();
         setContentEditable($scope.data,KPI_RESULT);
         setContentEditable($scope.kpiprocesses,KPI_PROCESS);
+
+        setFinalAchivement();
         notifier.notifyGroup('realisasi-content');
         //console.log($scope.data);
     }
@@ -1077,11 +1115,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setBColor(data);
         setTotalAchievement(data,totalAchieveMent,IndexAchieveMent);
         setFilter(data);  
+        setFinalAchivement();
     }
 
     var setKPIProcessDetail=function(data,totalAchieveMent,IndexAchieveMent){
         setBColorP(data);
         setTotalAchievement(data,totalAchieveMent,IndexAchieveMent);
+        setFinalAchivement();
     }
 
     var onAfterEdit=function(data,totalAchieveMent,IndexAchieveMent){
@@ -1256,7 +1296,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         var value=setter(scope);
         
         if(!isUndf(value)){
-            elem.text(value);
+            var format=context.attrs.format;
+            if(format){
+                formatContent(format,setter,elem,scope);
+            }
+            else{
+                elem.text(value);
+            }
         }
         else{
             elem.text('');
@@ -1288,16 +1334,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setter.assign(scope,getter);
 
         if(format){
-            var v=setter(scope);
-            var f;
-            var sp_f=format.split('|');
-            for(var i=0;i<sp_f.length;i++){
-                var csp=sp_f[i];
-                var nvalue=$filter(csp)(v);
-                f=nvalue?nvalue:v;
-                elem.text(f)
-                v=f;
-            }
+            formatContent(format,setter,elem,scope);
         }
         else{
             elem.text(getter);
