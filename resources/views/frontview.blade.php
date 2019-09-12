@@ -22,9 +22,11 @@
                   <ul class="nav navbar-nav">
                         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Berkas 文件<span class="caret"></span></a>
                           <ul class="dropdown-menu">
+                            @can('tier-except-0', Auth::user())
                             <li><a ng-click="downloadPDF()">Unduh 下载它</a></li>
                             <li><a ng-click="toPrint()">Cetak 打印</a></li>
                             <li><a >Kirim Ke Surel 发送电子邮件</a></li>
+                            @endcan
                             <li><a ng-click="logout()">Keluar 登出</a></li>
                           </ul>
                         </li>

@@ -171,6 +171,9 @@ class Employee extends Model
         if($this->checkHeader($period))
             return -1;
 
+        if($this->role->tier===0)
+            return 0;
+
         $curr_header=$this->getCurrentHeader();
         $header_id=KPIHeader::generateID($this->id);
         KPIHeader::create([
