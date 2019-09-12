@@ -51,7 +51,9 @@
       <div class="col-sm-9 navigation margin-top-20" style="margin-top: -20px;">
         <ul class="nav-bar nav-bar-pms">
             <li><a href="#!target-manajemen" tab-target="#target-manajemen" >Beranda 主页</a></li>
+            @can('tier-except-0', Auth::user())
             <li><a href="{!! $pmsIndex !!}"tab-target="#realisasi">PMS 绩效考核管理体系</a></li>
+            @endcan
             <li><a href="#!realisasi-perusahaan" tab-target="#realisasi-perusahaan">PMS Perusahaan 绩效考核管理体系该公司</a></li>
             <li><a href="#!ikhtisar" tab-target="#ikhtisar" >Ikhtisar 摘要</a></li>
             <li><a href="#!pencarian" tab-target="#pencarian" >Pencarian 搜索</a></li>

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Model\User;
+use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -13,7 +15,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        // User::class =>UserPolicy::class
     ];
 
     /**
@@ -24,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+        Gate::define('tier-except-0','App\Policies\UserPolicy@tier_except_0');
 
         //
     }
