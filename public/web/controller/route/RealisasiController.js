@@ -88,6 +88,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         $scope.atasan=curr_employee.atasan;
     }
 
+    var vanishDisturbingColumn=function(){
+        setTimeout(function(){
+            E('#disturbing').remove();
+        },10)
+        E('#unit-bug').next().attr('id','disturbing');
+    }
+
     var setHeaderResultLabel=function(){
         $scope.headerLabel=[];
         $scope.fp=[];
@@ -1588,14 +1595,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     notifier.setNotifier('changeMonth',setCurrentMonth);
-
     checkEmployee();
     loadHeader(currMonth);
     pusher.on('pms-has-changed-'+employeeIndex,PMSHasChanged);
+    vanishDisturbingColumn();
 
-
-    setTimeout(function(){
-        E('#disturbing').remove();
-    },10)
-    E('#unit-bug').next().attr('id','disturbing');
-}) 
+}); 
