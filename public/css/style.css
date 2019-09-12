@@ -283,6 +283,13 @@ td{
     font-weight: bold;
 }
 
+.greetings-nav{
+    margin-top:10px;
+    font-size:10px;
+    margin-right: 100px;
+    margin-left: 20px;
+}
+
 /*Padding Elemen*/
 
 .padding-elem{

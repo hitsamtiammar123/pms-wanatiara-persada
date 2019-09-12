@@ -1,0 +1,11 @@
+app.constant('days',
+    [
+        'Minggu',
+        'Senin',
+        'Selasa',
+        'Rabu',
+        'Kamis',
+        'Jumat',
+        'Sabtu',
+    ]
+) 
