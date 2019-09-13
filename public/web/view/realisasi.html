@@ -20,15 +20,15 @@
         <div class="table-100" style="margin-top:30px;">
                 <div class="row">
                         <div class="col-sm-4">
-                                Pilih Bulan: 
-                               <select ng-change="changeMonth()" ng-options="m.value for m in months" ng-model="currentMonth"></select> 
+                                Pilih Bulan:
+                               <select ng-change="changeMonth()" ng-options="m.value for m in months" ng-model="currentMonth"></select>
                         </div>
                 </div>
-        
+
             </div>
     <div class="table-100">
         <p class="bold table-title">
-            <div class="dropright" > 
+            <div class="dropright" >
                 <a class="dropdown-toggle" ng-hide="hasEndorse" data-toggle="dropdown" aria-hidden="true"> <span class="glyphicon glyphicon-option-vertical black-font"></span></a>
                 1. Sasaran Hasil {{ header.weight_result?(header.weight_result*100)+'%':'' }}
                  <ul class="dropdown-menu">
@@ -54,9 +54,9 @@
                             </a>
                         </li>
             </div>
-        </div>  
+        </div>
 
-       
+
         </p>
         <table class="table table-striped realisasi-table">
                 <thead>
@@ -141,7 +141,7 @@
         <div>{{changedMessage}}</div>
 
         <p class="bold table-title">
-                    <div class="dropright"> 
+                    <div class="dropright">
                             <a class="dropdown-toggle" ng-hide="hasEndorse" data-toggle="dropdown" aria-hidden="true"> <span class="glyphicon glyphicon-option-vertical black-font"></span></a>
                             2. Sasaran Proses {{ header.weight_process?(header.weight_process*100)+'%':'' }}
                              <ul class="dropdown-menu">
@@ -167,7 +167,7 @@
                                         </a>
                                     </li>
                         </div>
-           
+
         </p>
         <table class="table table-striped realisasi-table">
                 <thead>
@@ -240,7 +240,7 @@
                                 <th class="light-grey" notify-g-label="add-content" belong-to="finalAchievement.t1_f" format="addPercent"></th>
                                 <th class="light-grey" notify-g-label="add-content" belong-to="finalAchievement.t2_f" format="addPercent"></th>
                             </tr>
-            
+
                         </thead>
                     </table>
         </div>

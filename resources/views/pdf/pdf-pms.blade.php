@@ -12,6 +12,7 @@
     $cPeriod=$header->cPeriod();
     $cNextPeriod=$header->cNextPeriod();
     $cCumPeriod=$header->cCumStartPeriod();
+    $finalAcievement=$header->getFinalAchivement($kpiresults,$kpiprocesses);
 @endphp
     <style>
         body{
@@ -163,8 +164,31 @@
                     </tbody>
                 </table>
         </div>
+        <div class="row table-content">
+            <div class="col-xs-4">
+                    <table class="table table-bordered table-pdf">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">价值总额 TOTAL NILAI</th>
+                                    <th>{{$finalAcievement['t1_n']}}%</th>
+                                    <th>{{$finalAcievement['t2_n']}}%</th>
+                                </tr>
+                                <tr>
+                                    <th>{{$finalAcievement['t1_i']}}</th>
+                                    <th>{{$finalAcievement['t2_i']}}</th>
+                                </tr>
+                                <tr>
+                                    <th>指数 Indeks</th>
+                                    <th>{{$finalAcievement['t1_f']}}%</th>
+                                    <th>{{$finalAcievement['t2_f']}}%</th>
+                                </tr>
+                            </thead>
+                        </table>
+            </div>
+
+        </div>
         <div class="row">
-            <p class="pms-title endorsement-title" style="font-style:italic !important">PMS ini sudah disahkan secara elektronik.</p>
+            <p class="pms-title endorsement-title" style="font-style:italic !important">PMS ini sudah disahkan secara elektronik 该绩效考核管理体系已经过电子批准.</p>
         </div>
     </div>
 @endsection

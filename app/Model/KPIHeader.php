@@ -437,6 +437,7 @@ class KPIHeader extends Model
 
     }
 
+
     public static function getDate($month,$year=null){
         $curr=Carbon::now();
         $year=$year?$year:$curr->year;
@@ -444,6 +445,27 @@ class KPIHeader extends Model
         $date=16;
         $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
         return $curr_date;
+    }
+
+    public function getFinalAchivement(array $kpiresults,array $kpiproceses){
+
+        $t1_fr=floatval($kpiresults['totalAchievement']['t1']);
+        $t1_fp=floatval($kpiproceses['totalAchievement']['t1']);
+        $t2_fr=floatval($kpiresults['totalAchievement']['t2']);
+        $t2_fp=floatval($kpiproceses['totalAchievement']['t2']);
+
+        $final_achievements=[];
+
+        $final_achievements['t1_n']=round($t1_fr * $this->weight_result + $t1_fp * $this->weight_process,1);
+        $final_achievements['t2_n']=round($t2_fr * $this->weight_result + $t2_fp * $this->weight_process,1);
+
+        $final_achievements['t1_i']=$this->getIndexAchievement($final_achievements['t1_n']);
+        $final_achievements['t2_i']=$this->getIndexAchievement($final_achievements['t2_n']);
+
+        $final_achievements['t1_f']=round($final_achievements['t1_n']-100,1);
+        $final_achievements['t2_f']=round($final_achievements['t2_n']-100,1);
+
+        return $final_achievements;
     }
 
     public function getResultHeading(){

@@ -22,8 +22,13 @@ class PDFController extends Controller
 
     public function pms(Request $request,$employeeID){
         $employee=Employee::find($employeeID);
+        if(!$employee)
+            return send_404_error('Data Karyawan Tidak ditemukan');
 
         $kpiheader=$this->fetchInputHeader($request,$employee);
+        if(!$kpiheader){
+            return send_404_error('PMS tidak ditemukan');
+        }
         $kpiresults=$kpiheader->fetchAccumulatedData('kpiresult');
         $kpiprocesses=$kpiheader->fetchAccumulatedData('kpiprocess');
         $data=[
@@ -35,7 +40,6 @@ class PDFController extends Controller
         ];
 
         $pdf=PDF::loadView('pdf.pdf-pms',$data);
-        //return $pdf->setPaper('a4','landscape')->stream('test.pdf');
         return $pdf->stream('test.pdf');
 
     }

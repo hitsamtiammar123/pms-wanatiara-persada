@@ -12,6 +12,7 @@
     $cPeriod=$header->cPeriod();
     $cNextPeriod=$header->cNextPeriod();
     $cCumPeriod=$header->cCumStartPeriod();
+    $finalAcievement=$header->getFinalAchivement($kpiresults,$kpiprocesses);
 @endphp
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -109,7 +110,7 @@
                     </div>
             </div>
             <div class="page-break">
-                <div class="title-row page-break">
+                <div class="title-row">
                     <p class="pms-title">2. Sasaran Proses: {{$header->weight_process*100}}%</p>
                 </div>
                 <div class="table-content ">
@@ -170,14 +171,35 @@
 
                 </div>
             </div>
+            <div class="table-content">
+                    <div class="col-sm-4">
+                        <table class="table table-print">
+                                <thead>
+                                        <tr>
+                                            <th rowspan="2">价值总额 TOTAL NILAI</th>
+                                            <th>{{$finalAcievement['t1_n']}}%</th>
+                                            <th>{{$finalAcievement['t2_n']}}%</th>
+                                        </tr>
+                                        <tr>
+                                            <th>{{$finalAcievement['t1_i']}}</th>
+                                            <th>{{$finalAcievement['t2_i']}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>指数 Indeks</th>
+                                            <th>{{$finalAcievement['t1_f']}}%</th>
+                                            <th>{{$finalAcievement['t2_f']}}%</th>
+                                        </tr>
+                                    </thead>
+                        </table>
+                    </div>
+                    <div class="col-sm-8"></div>
+            </div>
 
 
 
-
-
-    <footer>
-        <p>PMS ini sudah disahkan secara elektronik</p>
-    </footer>
+    <div class="col-sm-12">
+        <p>PMS ini sudah disahkan secara elektronik 该绩效考核管理体系已经过电子批准.</p>
+    </div>
 
 </div>
 @endsection

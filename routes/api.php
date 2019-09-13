@@ -17,19 +17,19 @@ use Illuminate\Http\Request;
 Route::group(['prefix'=>'v1','middleware'=>['cors','web']
 ],function(){
 
-    Route::resource('kpiheader','KPIHeaderController',[
+    Route::apiResource('kpiheader','KPIHeaderController',[
         'only'=>['index','show','update']
     ]);
 
-    Route::resource('employee', 'EmployeeController',[
+    Route::apiResource('employee', 'EmployeeController',[
         'only'=>['show']
     ]);
 
-    Route::resource('kpiprocess', 'KPIProcessController',[
+    Route::apiResource('kpiprocess', 'KPIProcessController',[
         'only'=>['index']
     ]);
 
-    Route::resource('kpiendorsement', 'KPIEndorsementController',[
+    Route::apiResource('kpiendorsement', 'KPIEndorsementController',[
         'only'=>['update']
     ]);
 
