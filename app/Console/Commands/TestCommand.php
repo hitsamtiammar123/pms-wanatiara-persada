@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Model\KPIHeader;
 use App\Model\KPIResult;
 use App\Model\KPIResultHeader;
 use Illuminate\Console\Command;
@@ -33,29 +34,33 @@ class TestCommand extends Command
     }
 
     public function calculateCum(){
-        $kpiresultheaders=KPIResultHeader::get();
-        $kpiresultheaders=$kpiresultheaders->filter(function($d){
-            return $d->kpiresult->unit==='$';
-        });
+        $headers=KPIHeader::orderBy('period')->where('period','!=','2019-06-16')->get();
 
-        foreach($kpiresultheaders as $resultheader){
-            $prev=$resultheader->getPrev();
-            if($prev){
-                $pt_k1=$prev->pt_k;
-                $pt_t2=$resultheader->pt_t;
-                $real_k1=$prev->real_k;
-                $real_t2=$resultheader->real_k;
+        foreach($headers as $header){
+            $resultheaders=$header->kpiresultheaders;
+            $resultheaders=$resultheaders->filter(function($d){
+                return $d->kpiresult->unit==='$';
+            });
+            $employee=$header->employee;
+            foreach($resultheaders as $resultheader){
+                $prev=$resultheader->getPrev();
+                if($prev){
+                    $pt_k1=$prev->pt_k;
+                    $pt_t2=$resultheader->pt_t;
+                    $real_k1=$prev->real_k;
+                    $real_t2=$resultheader->real_t;
 
-                $resultheader->pt_k=intval($pt_k1+$pt_t2).'';
-                $resultheader->real_k=intval($real_k1+$real_t2).'';
-
-                $header=$resultheader->kpiheader;
-                $this->info("Untuk Sasaran Proses dengan nama \"{$resultheader->kpiresult->name}\" milik {$header->employee->name} untuk periode {$header->period}");
-                $resultheader->save();
-                sleep(1);
+                    $resultheader->pt_k=intval($pt_k1+$pt_t2).'';
+                    $resultheader->real_k=intval($real_k1+$real_t2).'';
+                    $this->info("Untuk kpi {$resultheader->kpiresult->name} milik {$employee->name} period {$header->period}");
+                    $resultheader->save();
+                    sleep(1);
+                }
 
             }
+
         }
+
     }
 
     /**
@@ -67,6 +72,6 @@ class TestCommand extends Command
     {
         //
 
-
+        $this->calculateCum();
     }
 }

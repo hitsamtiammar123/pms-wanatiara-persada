@@ -5,15 +5,8 @@ use App\Model\KPIHeader;
 USE App\Model\KPIResultHeader;
 
 Route::get('/test',function(){
-    $kpiresultheaders=KPIResultHeader::get();
-    // $kpiresultheaders->each(function($d){
-    //     $d->kpiresult;
-    // });
-
-    $kpiresultheaders=$kpiresultheaders->filter(function($d){
-        return $d->kpiresult->unit==='$';
-    });
-    return $kpiresultheaders;
+    $headers=KPIHeader::orderBy('period')->where('period','!=','2019-06-16')->get();
+    return $headers;
 });
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');
