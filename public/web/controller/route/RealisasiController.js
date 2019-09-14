@@ -393,6 +393,35 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
     }
 
+    var setPWContentEditable=function(curr,j,hasEndorse){
+        if(hasEndorse && j<2){
+            curr.pw_contentEditable[j]=false;
+        }
+        else{
+            if(j===0)
+                curr.pw_contentEditable[j]=false;
+            else if(j===1)
+                curr.pw_contentEditable[j]=true;
+        }
+    }
+
+    var setPTAndRealContentEditable=function(curr,j,hasEndorse){
+        if(hasEndorse){
+            curr.pt_contentEditable[j]=false;
+            curr.real_contentEditable[j]=false;
+        }
+        else{
+            if(j<2){
+                curr.pt_contentEditable[j]=false;
+                curr.real_contentEditable[j]=false;
+            }
+            else if(j>=2){
+                curr.pt_contentEditable[j]=true;
+                curr.real_contentEditable[j]=true;
+            }
+        }
+    }
+
     var setContentEditable=function(data,type){
         if(type===KPI_RESULT){
 
@@ -400,19 +429,21 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 var curr=data[i];
                 curr.kpia_contentEditable=false;
                 curr.aw_contentEditable=false;
+                curr.pw_contentEditable=[];
+                curr.pt_contentEditable=[];
+                curr.real_contentEditable=[];
                 if($scope.hasEndorse){
-                    curr.pw_contentEditable=false;
-                    curr.pt_contentEditable=false;
-                    curr.real_contentEditable=false;
                     curr.name_contentEditable=false;
                     curr.unit_contentEditable=false;
                 }
                 else{
-                    curr.pw_contentEditable=true;
-                    curr.pt_contentEditable=true;
-                    curr.real_contentEditable=true;
                     curr.name_contentEditable=true;
                     curr.unit_contentEditable=true;
+                }
+
+                for(var j=0;j<4;j++){
+                    setPWContentEditable(curr,j,$scope.hasEndorse);
+                    setPTAndRealContentEditable(curr,j,$scope.hasEndorse);
                 }
             }
 
@@ -437,11 +468,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 }
                 else{
                     curr.contentEditable.unit=true;
-                    curr.contentEditable.pw_1=true;
+                    curr.contentEditable.pw_1=false;
                     curr.contentEditable.pw_2=true;
-                    curr.contentEditable.pt_1=true;
+                    curr.contentEditable.pt_1=false;
                     curr.contentEditable.pt_2=true;
-                    curr.contentEditable.real_1=true;
+                    curr.contentEditable.real_1=false;
                     curr.contentEditable.real_2=true;
                 }
 
@@ -476,6 +507,61 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         return rt;
     }
 
+    var setBColorKPIAandPW=function(curr){
+        for(var j=0;j<2;j++){
+            var kpia_key='kpia_'+(j+1);
+            var aw_key='aw_'+(j+1);
+            var pw_key=$scope.pw_indices[j];
+            var rt;
+
+            rt=getKPIA(curr,j);
+
+            if(isNaN(rt)||!isFinite(rt)){
+                rt=0;
+                curr.kpia_contentEditable='true';
+            }
+            else
+                rt=rt.toFixed(1);
+
+
+            curr[kpia_key]=rt+'%';
+            var bColor='bColor_kpia_'+(j+1);
+
+
+            if(rt>=120){
+                curr[bColor]='gold-column'
+            }
+            else if(rt>=105 && rt<120){
+                curr[bColor]='blue-column'
+            }
+            else if(rt>=95 && rt<105){
+                curr[bColor]='green-column'
+            }
+            else if(rt<95){
+                curr[bColor]='red-column'
+            }
+            var pwqIndex='pw_'+(j+1);
+            var pwq=curr[pwqIndex];
+            var calculate=rt*parseFloat(pwq)/100;
+            curr[aw_key]=(calculate.toFixed(1));
+
+            if(j===1)
+                curr['bColor_'+pw_key]='can-edit-content';
+        }
+    }
+
+    var setBColorPTandReal=function(curr){
+        for(var i=0;i<4;i++){
+            var real_key=$scope.real_indices[i];
+            var pt_key=$scope.pt_indices[i];
+
+            if(i>=2){
+                curr['bColor_'+real_key]='can-edit-content';
+                curr['bColor_'+pt_key]='can-edit-content';
+            }
+        }
+    }
+
     var setBColor=function(data){
         //debugger;
         for(var i=0;i<data.length;i++){
@@ -483,49 +569,15 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var counter=1;
             curr.kpiColor='';
             curr.unitColor='';
-            for(var j=0;j<2;j++){
-                var kpia_key='kpia_'+(j+1);
-                var aw_key='aw_'+(j+1);
-                var rt;
-
-                rt=getKPIA(curr,j);
-
-                if(isNaN(rt)||!isFinite(rt)){
-                    rt=0;
-                    curr.kpia_contentEditable='true';
-                }
-                else
-                    rt=rt.toFixed(1);
-
-
-                curr[kpia_key]=rt+'%';
-                var bColor='bColor_kpia_'+(j+1);
-
-
-                if(rt>=120){
-                    curr[bColor]='gold-column'
-                }
-                else if(rt>=105 && rt<120){
-                    curr[bColor]='blue-column'
-                }
-                else if(rt>=95 && rt<105){
-                    curr[bColor]='green-column'
-                }
-                else if(rt<95){
-                    curr[bColor]='red-column'
-                }
-                var pwqIndex='pw_'+(j+1);
-                var pwq=curr[pwqIndex];
-                var calculate=rt*parseFloat(pwq)/100;
-                curr[aw_key]=(calculate.toFixed(1));
-
-            }
+            setBColorKPIAandPW(curr);
+            setBColorPTandReal(curr);
+            
         }
 
     }
 
     var setBColorP=function(data){
-        var getColor=function(r){
+        var getKPIAColor=function(r){
             if(r<0)
                 return 'black-column';
             else if(r===0)
@@ -551,6 +603,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 return 0;
         }
 
+        var getEditableColor=function(hasEndorse){
+            if(hasEndorse)
+                return 'can-edit-content';
+            else
+                return '';
+        }
+
         for(var i=0;i<data.length;i++){
             var curr=data[i];
             curr.contentEditable={};
@@ -562,8 +621,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var kt_2=parseInt(curr.real_2)-parseInt(curr.pt_2);
             curr.kpia_1=getIndex(kt_1);
             curr.kpia_2=getIndex(kt_2);
-            curr.bColor_kpia_1=getColor(kt_1);
-            curr.bColor_kpia_2=getColor(kt_2);
+            curr.bColor_kpia_1=getKPIAColor(kt_1);
+            curr.bColor_kpia_2=getKPIAColor(kt_2);
+            curr.bColor_real=getEditableColor($scope.hasEndorse);
+            curr.bColor_pt=getEditableColor($scope.hasEndorse);
+            curr.bColor_pw=getEditableColor($scope.hasEndorse);
 
             curr.aw_1=((curr.kpia_1/100)*parseInt(curr.pw_1)).toFixed(1);
             curr.aw_2=((curr.kpia_2/100)*parseInt(curr.pw_2)).toFixed(1);
@@ -619,7 +681,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 case 'WMT':
                 case 'MT':
                     var keys=$scope.pt_indices.concat($scope.real_indices);
-                    parseDataToInt(d,keys);
+                    //parseDataToInt(d,keys);
                     d.pt_k2=(parseInt(d.pt_k1)+parseInt(d.pt_t2))+'';
                     d.real_k2=(parseInt(d.real_k1)+parseInt(d.real_t2))+'';
                 break;
@@ -980,7 +1042,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
         setFinalAchivement();
         notifier.notifyGroup('realisasi-content');
-        //console.log($scope.data);
+        console.log($scope.data);
     }
 
     var loadKPIProcessDone=function(){
@@ -1559,9 +1621,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         const FUNCTION_NAME='realisasi-content';
         var data=scope.d;
         data.unit=value;
-        setDataFilter(data);
+        setFilter($scope.data);
         dataService.digest($scope);
         notifier.notifyGroup('realisasi-content');
+        console.log($scope.data);
     }
 
     $scope.dataSelected=function(context,data,toogle){

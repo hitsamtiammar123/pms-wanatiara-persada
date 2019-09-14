@@ -87,19 +87,19 @@
 
                                 <td ng-repeat="i in pw_indices" belong-to="d[i]" data-flag="pw"
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
-                                contenteditable="{{d.pw_contentEditable}}" c-index="{{c_index+2+$index}}" i-index="{{i}}"
-                                auto-fill="true" sanitize="{{d.pw_sanitize}}" format="{{d.pw_filter}}" ng-class="d.pw['bColor'+(i+1)]"
+                                contenteditable="{{d.pw_contentEditable[$index]}}" c-index="{{c_index+2+$index}}" i-index="{{i}}"
+                                auto-fill="true" sanitize="{{d.pw_sanitize}}" format="{{d.pw_filter}}" ng-class="d['bColor_'+i]"
                                  after-edit="setBColor|setTotalW" notify-g-label="realisasi-content:pw-{{outerIndex}}-{{i}}" d-index="{{$parent.$index}}"></td>
 
                                 <td ng-repeat="i in pt_indices" belong-to="d[i]" data-flag="pt" on-data-paste="dataPaste" on-data-copy="dataCopy"
-                                on-data-escaped="dataEscaped" on-data-selected="dataSelected" ng-class="d.pt['bColor'+(i+1)]"
-                                contenteditable="{{d.pt_contentEditable}}" auto-fill="true" sanitize="{{d.pt_sanitize}}" i-index="{{i}}"
+                                on-data-escaped="dataEscaped" on-data-selected="dataSelected" ng-class="d['bColor_'+i]"
+                                contenteditable="{{d.pt_contentEditable[$index]}}" auto-fill="true" sanitize="{{d.pt_sanitize}}" i-index="{{i}}"
                                 format="{{d.pt_filter}}" after-edit="setBColor" notify-g-label="realisasi-content:pt-{{outerIndex}}-{{i}}"
                                 d-index="{{$parent.$index}}" c-index="{{c_index+4+$index}}" ></td>
 
                                 <td ng-repeat="i in real_indices" belong-to="d[i]" data-flag="real" on-data-paste="dataPaste" on-data-copy="dataCopy"
-                                on-data-escaped="dataEscaped" on-data-selected="dataSelected" ng-class="d.real['bColor'+(i+1)]"
-                                contenteditable="{{d.real_contentEditable}}" auto-fill="true" sanitize="{{d.real_sanitize}}" i-index="{{i}}"
+                                on-data-escaped="dataEscaped" on-data-selected="dataSelected" ng-class="d['bColor_'+i]"
+                                contenteditable="{{d.real_contentEditable[$index]}}" auto-fill="true" sanitize="{{d.real_sanitize}}" i-index="{{i}}"
                                 format="{{d.real_filter}}" c-index="{{c_index+8+$index}}" after-edit="setBColor" notify-g-label="realisasi-content:real-{{outerIndex}}-{{i}}"
                                 d-index="{{$parent.$index}}"></td>
 
@@ -191,11 +191,11 @@
                                  <td class="kpi-process" d-index="{{$index}}"  belong-to="p.name" auto-fill="true" contenteditable="false"></td>
                                  <td belong-to="p.unit" d-index="{{$index}}" on-data-paste="dataPasteP" on-data-escaped="dataEscapedP" on-data-copy="dataCopyP" notify-g-label="realisasi-content" on-data-selected="dataSelectedP" c-index="0" auto-fill="true" contenteditable="{{p.contentEditable.unit}}"></td>
                                  <td belong-to="p.pw_1" after-edit="setBColorP|setTotalW_P" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP"  c-index="1" data-flag="pw" format="{{p.pw_filter}}" auto-fill="true" contenteditable="{{p.contentEditable.pw_1}}"></td>
-                                 <td belong-to="p.pw_2" after-edit="setBColorP|setTotalW_P" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="2" data-flag="pw" format="{{p.pw_filter}}" auto-fill="true" contenteditable="{{p.contentEditable.pw_2}}"></td>
+                                 <td belong-to="p.pw_2" ng-class="p.bColor_pw" after-edit="setBColorP|setTotalW_P" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="2" data-flag="pw" format="{{p.pw_filter}}" auto-fill="true" contenteditable="{{p.contentEditable.pw_2}}"></td>
                                  <td belong-to="p.pt_1" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="3" auto-fill="true" data-flag="pt" contenteditable="{{p.contentEditable.pt_1}}"></td>
-                                 <td belong-to="p.pt_2" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="4" auto-fill="true" data-flag="pt" contenteditable="{{p.contentEditable.pt_2}}"></td>
+                                 <td belong-to="p.pt_2" ng-class="p.bColor_pt" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="4" auto-fill="true" data-flag="pt" contenteditable="{{p.contentEditable.pt_2}}"></td>
                                  <td belong-to="p.real_1" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP" c-index="5" auto-fill="true" data-flag="real" contenteditable="{{p.contentEditable.real_1}}"></td>
-                                 <td belong-to="p.real_2" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP"  c-index="6" auto-fill="true" data-flag="real" contenteditable="{{p.contentEditable.real_2}}"></td>
+                                 <td belong-to="p.real_2" ng-class="p.bColor_real" after-edit="setBColorP" on-data-paste="dataPasteP" d-index="{{$index}}" on-data-escaped="dataEscapedP" notify-g-label="realisasi-content" on-data-copy="dataCopyP" on-data-selected="dataSelectedP"  c-index="6" auto-fill="true" data-flag="real" contenteditable="{{p.contentEditable.real_2}}"></td>
                                  <td belong-to="p.kpia_1" ng-class="p.bColor_kpia_1" on-data-paste="dataPasteP" auto-fill="true" data-flag="kpia" notify-g-label="realisasi-content" format="{{p.kpia_filter}}" contenteditable="{{p.contentEditable.kpia_1}}"></td>
                                  <td belong-to="p.kpia_2" ng-class="p.bColor_kpia_2" on-data-paste="dataPasteP" auto-fill="true" data-flag="kpia" notify-g-label="realisasi-content" format="{{p.kpia_filter}}" contenteditable="{{p.contentEditable.kpia_2}}"></td>
                                  <td belong-to="p.aw_1" auto-fill="true" data-flag="aw" on-data-paste="dataPasteP" notify-g-label="realisasi-content" contenteditable="{{p.contentEditable.aw_1}}" format="{{p.aw_filter}}"></td>

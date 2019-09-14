@@ -109,7 +109,11 @@
 
 .blue-check{
     color:blue;    
-} 
+}
+
+.can-edit-content{
+    color:#443ad3da;
+}
 
 .jabatan-btn{
     margin-left:5px;
