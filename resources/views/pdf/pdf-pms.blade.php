@@ -11,6 +11,7 @@
 
     $cPeriod=$header->cPeriod();
     $cNextPeriod=$header->cNextPeriod();
+    $cPrevPeriod=$header->cPrevPeriod();
     $cCumPeriod=$header->cCumStartPeriod();
     $finalAcievement=$header->getFinalAchivement($kpiresults,$kpiprocesses);
 @endphp
@@ -34,7 +35,7 @@
                 <div class="col-xs-2">{{$employee->role->name}}</div>
                 <div class="col-xs-2">: {{$employee->name}}</div>
                 <div class="col-xs-3">年责任权重 Periode bulan berjalan</div>
-                <div class="col-xs-3">: {{$cPeriod->format('d M Y')}} - {{$cNextPeriod->format('d M Y')}}</div>
+                <div class="col-xs-3">: {{$cPrevPeriod->format('d M Y')}} - {{$cPeriod->format('d M Y')}}</div>
         </div>
         <div class="row" style="margin-top:10px;">
                 <div class="col-xs-2">{{$employee->atasan->role->name}}</div>
@@ -168,6 +169,11 @@
             <div class="col-xs-4">
                     <table class="table table-bordered table-pdf">
                             <thead>
+                                <tr>
+                                    <th class="light-grey"></th>
+                                    <th class="light-grey">{{$cPrevPeriod->format('M')}}</th>
+                                    <th class="light-grey">{{$cPeriod->format('M')}}</th>
+                                </tr>
                                 <tr>
                                     <th rowspan="2">价值总额 TOTAL NILAI</th>
                                     <th>{{$finalAcievement['t1_n']}}%</th>

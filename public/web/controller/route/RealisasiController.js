@@ -69,6 +69,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var deleteListProcess=[];
 
     $scope.currentMonth=$scope.months[currMonth];
+    $scope.currendDate=new Date();
+    
 
     var onFail=function(a,b,c){
         console.log(a,b,c)

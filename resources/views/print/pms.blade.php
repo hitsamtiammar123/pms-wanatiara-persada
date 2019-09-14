@@ -10,6 +10,7 @@
     }
 
     $cPeriod=$header->cPeriod();
+    $cPrevPeriod=$header->cPrevPeriod();
     $cNextPeriod=$header->cNextPeriod();
     $cCumPeriod=$header->cCumStartPeriod();
     $finalAcievement=$header->getFinalAchivement($kpiresults,$kpiprocesses);
@@ -29,7 +30,7 @@
                     <div class="col-sm-7">
                         <div class="row">
                             <h3 class="title1">Sistem Manajemen Kinerja (PMS) 绩效考核管理体系 </h3>
-                            <h4 class="title2">PT Wanatiara Persada 2019 </h4>
+                            <h4 class="title2">PT Wanatiara Persada {{$cPeriod->format('Y')}} </h4>
                         </div>
                     </div>
         </div>
@@ -37,7 +38,7 @@
                 <div class="col-sm-3">{{$employee->role->name}}: </div>
                 <div class="col-sm-2"> {{$employee->name}}</div>
                 <div class="col-sm-4">当月考核期 Periode bulan berjalan:</div>
-                <div class="col-sm-3"> {{$cPeriod->format('d M Y')}} - {{$cNextPeriod->format('d M Y')}}</div>
+                <div class="col-sm-3"> {{$cPrevPeriod->format('d M Y')}} - {{$cPeriod->format('d M Y')}}</div>
         </div>
         <div class="row" style="margin-top:10px;">
                 <div class="col-sm-3">{{$employee->atasan->role->name}}:</div>

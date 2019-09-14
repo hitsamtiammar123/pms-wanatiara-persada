@@ -64,10 +64,10 @@
                             <th class="f-column-num f-column light-grey" rowspan="2">序号 No.</th>
                             <th class="kpi f-column light-grey" rowspan="2">绩效考核关键指标 Key Performance Indicator</th>
                             <th class="f-column light-grey" rowspan="2">单位 Unit</th>
-                            <th colspan="2" class="light-blue">2019年责任权重 Performance Weighing 2019</th>
-                            <th colspan="4" class="top-column light-grey">2019年绩效目标 Performance Target 2019</th>
-                            <th colspan="4" class="top-column light-blue">2019年实行情况 Realization 2019</th>
-                            <th colspan="2" class="light-grey">2019年绩效考核指标完成率 KPI Achievement 2019</th>
+                            <th colspan="2" class="light-blue">{{currendDate.getFullYear()}}年责任权重 Performance Weighing {{currendDate.getFullYear()}}</th>
+                            <th colspan="4" class="top-column light-grey">{{currendDate.getFullYear()}}年绩效目标 Performance Target {{currendDate.getFullYear()}}</th>
+                            <th colspan="4" class="top-column light-blue">{{currendDate.getFullYear()}}年实行情况 Realization {{currendDate.getFullYear()}}</th>
+                            <th colspan="2" class="light-grey">{{currendDate.getFullYear()}}年绩效考核指标完成率 KPI Achievement {{currendDate.getFullYear()}}</th>
                             <th colspan="2" class="light-blue">年绩效考核指标完成率 x 年责任权重 Achievement x Weighing</th>
                         </tr>
                         <tr>
@@ -175,10 +175,10 @@
                             <th class="f-column f-column-num light-grey" rowspan="2">序号 No.</th>
                             <th class="kpi-process f-column light-grey" rowspan="2">核心竞争力 Kompetensi Inti</th>
                             <th class="f-column light-grey" rowspan="2">单位 Unit</th>
-                            <th colspan="2" class="light-blue">2019年责任权重 Performance Weighing 2019</th>
-                            <th colspan="2" class="top-column light-grey">2019年绩效目标 Performance Target 2019</th>
-                            <th colspan="2" class="top-column light-grey">2019年实行情况 Realization 2019</th>
-                            <th colspan="2" class="light-blue">2019年绩效考核指标完成率 KPI Achievement 2019</th>
+                            <th colspan="2" class="light-blue">{{currendDate.getFullYear()}}年责任权重 Performance Weighing {{currendDate.getFullYear()}}</th>
+                            <th colspan="2" class="top-column light-grey">{{currendDate.getFullYear()}}年绩效目标 Performance Target {{currendDate.getFullYear()}}</th>
+                            <th colspan="2" class="top-column light-grey">{{currendDate.getFullYear()}}年实行情况 Realization {{currendDate.getFullYear()}}</th>
+                            <th colspan="2" class="light-blue">{{currendDate.getFullYear()}}年绩效考核指标完成率 KPI Achievement {{currendDate.getFullYear()}}</th>
                             <th colspan="2" class="light-blue">年绩效考核指标完成率 x 年责任权重 Achievement x Weighing</th>
                         </tr>
                         <tr>
@@ -226,6 +226,11 @@
         <div class="col-sm-4">
                 <table class="table table-bordered">
                         <thead>
+                            <tr>
+                                <th class="light-grey"></th>
+                                <th class="light-grey">{{index!==0?f[currentMonth.index-1]:f[11]}}</th>
+                                <th class="light-grey">{{f[currentMonth.index]}}</th>
+                            </tr>
                             <tr>
                                 <th class="light-grey f-column" rowspan="2">价值总额 TOTAL NILAI</th>
                                 <th class="light-grey" notify-g-label="add-content" belong-to="finalAchievement.t1_n" format="addPercent"></th>

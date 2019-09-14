@@ -39,7 +39,7 @@ class TestCommand extends Command
     public function handle()
     {
         //
-        $this->info(rand(0,100));
+         $this->info(rand(0,100));
 
     }
 }

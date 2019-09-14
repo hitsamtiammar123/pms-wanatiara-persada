@@ -486,10 +486,10 @@ class KPIHeader extends Model
                 }
                 $c++;
                 if($c<=2){
-                    $period=$this->cPeriod();
+                    $period=$this->cPrevPeriod();
                 }
                 else if($c>2 && $c<=4){
-                    $period=$this->cNextPeriod();
+                    $period=$this->cPeriod();
                 }
                 $h.=$period->format('M');
 
@@ -503,20 +503,20 @@ class KPIHeader extends Model
                 }
                 $c++;
                 if($c<=2){
-                    $period=$this->cPeriod();
+                    $period=$this->cPrevPeriod();
                 }
                 else if($c>2 && $c<=4){
-                    $period=$this->cNextPeriod();
+                    $period=$this->cPeriod();
                 }
 
                 $h.=$period->format('M');
             }
             else{
                 if($i%2===0){
-                    $period=$this->cPeriod();
+                    $period=$this->cPrevPeriod();
                 }
                 else
-                    $period=$this->cNextPeriod();
+                    $period=$this->cPeriod();
                 $h=$period->format('M');
             }
 
@@ -532,10 +532,10 @@ class KPIHeader extends Model
         for($i=0,$period=null;$i<10;$i++){
             $h='';
             if($i%2===0){
-                $period=$this->cPeriod();
+                $period=$this->cPrevPeriod();
             }
             else
-                $period=$this->cNextPeriod();
+                $period=$this->cPeriod();
 
             switch($i){
                 case 2:
@@ -627,6 +627,12 @@ class KPIHeader extends Model
 
         $header_prev->kpiprocesses()->sync($kpiprocess_save);
         $this->kpiprocesses()->sync($kpiprocess_save_n);
+    }
+
+    public function cPrevPeriod(){
+        $period=$this->period;
+        $date=Carbon::parse($period);
+        return $date->subMonth();
     }
 
     public function cPeriod(){
