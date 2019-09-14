@@ -367,17 +367,17 @@ class KPIHeader extends Model
                 $curr_result_prev->real_t=$kpiresult['real_t1'];
                 $curr_result_prev->real_k=$kpiresult['real_k1'];
 
-                $curr_result->pw=$kpiresult['pw_2'];
-                $curr_result->pt_t=$kpiresult['pt_t2'];
-                $curr_result->pt_k=$kpiresult['pt_k2'];
-                $curr_result->real_t=$kpiresult['real_t2'];
-                $curr_result->real_k=$kpiresult['real_k2'];
+                // $curr_result->pw=$kpiresult['pw_2'];
+                // $curr_result->pt_t=$kpiresult['pt_t2'];
+                // $curr_result->pt_k=$kpiresult['pt_k2'];
+                // $curr_result->real_t=$kpiresult['real_t2'];
+                // $curr_result->real_k=$kpiresult['real_k2'];
 
                 $curr_result->kpiresult->name=$kpiresult['name'];
                 $curr_result->kpiresult->unit=$kpiresult['unit'];
 
                 $curr_result->push();
-                $curr_result_prev->save();
+                //$curr_result_prev->save();
             }
         }
         else{
@@ -401,11 +401,11 @@ class KPIHeader extends Model
             $curr_result->kpi_result_id=$new_result_id;
             $curr_result_prev->kpi_result_id=$new_result_id;
 
-            $curr_result_prev->pw=$kpiresult['pw_1'];
-            $curr_result_prev->pt_t=$kpiresult['pt_t1'];
-            $curr_result_prev->pt_k=$kpiresult['pt_k1'];
-            $curr_result_prev->real_t=$kpiresult['real_t1'];
-            $curr_result_prev->real_k=$kpiresult['real_k1'];
+            // $curr_result_prev->pw=$kpiresult['pw_1'];
+            // $curr_result_prev->pt_t=$kpiresult['pt_t1'];
+            // $curr_result_prev->pt_k=$kpiresult['pt_k1'];
+            // $curr_result_prev->real_t=$kpiresult['real_t1'];
+            // $curr_result_prev->real_k=$kpiresult['real_k1'];
 
             $curr_result->pw=$kpiresult['pw_2'];
             $curr_result->pt_t=$kpiresult['pt_t2'];
@@ -609,11 +609,11 @@ class KPIHeader extends Model
             $kpiprocess=filter_is_number($kpiprocess,KPIProcess::FRONT_END_PROPERTY);
 
             if(!in_array($curr_process_id,$kpiprocessdeletelist)){
-                $kpiprocess_save[$curr_process_id]=[
-                    'pw'=>$kpiprocess['pw_1'],
-                    'pt'=>$kpiprocess['pt_1'],
-                    'real'=>$kpiprocess['real_1']
-                ];
+                // $kpiprocess_save[$curr_process_id]=[
+                //     'pw'=>$kpiprocess['pw_1'],
+                //     'pt'=>$kpiprocess['pt_1'],
+                //     'real'=>$kpiprocess['real_1']
+                // ];
                 $kpiprocess_save_n[$curr_process_id]=[
                     'pw'=>$kpiprocess['pw_2'],
                     'pt'=>$kpiprocess['pt_2'],
