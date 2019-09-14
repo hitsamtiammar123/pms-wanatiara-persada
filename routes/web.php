@@ -2,19 +2,18 @@
 
 use App\Model\Employee;
 use App\Model\KPIHeader;
+USE App\Model\KPIResultHeader;
 
-Route::get('/test/{employeeID}',function($employeeID){
-        $employee=Employee::find($employeeID);
-        $kpiheader=$employee->getHeader(8,2019);
-        $kpiresults=$kpiheader->fetchAccumulatedData('kpiresult');
-        $kpiprocesses=$kpiheader->fetchAccumulatedData('kpiprocess');
-        $data=[
-            'kpiresult'=>$kpiresults,
-            'kpiprocess'=>$kpiprocesses,
-            'employee'=>$employee
-        ];
+Route::get('/test',function(){
+    $kpiresultheaders=KPIResultHeader::get();
+    // $kpiresultheaders->each(function($d){
+    //     $d->kpiresult;
+    // });
 
-        return $data;
+    $kpiresultheaders=$kpiresultheaders->filter(function($d){
+        return $d->kpiresult->unit==='$';
+    });
+    return $kpiresultheaders;
 });
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');

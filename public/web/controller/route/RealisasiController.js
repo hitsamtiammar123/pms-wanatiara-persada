@@ -416,8 +416,26 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 curr.real_contentEditable[j]=false;
             }
             else if(j>=2){
-                curr.pt_contentEditable[j]=true;
-                curr.real_contentEditable[j]=true;
+                if(j===3){
+                    switch(curr.unit){
+                        case '$':
+                        case '#':
+                        case 'WMT':
+                        case 'MT':
+                            curr.pt_contentEditable[j]=false;
+                            curr.real_contentEditable[j]=false;
+                        break;
+                        default:
+                                curr.pt_contentEditable[j]=true;
+                                curr.real_contentEditable[j]=true;
+                        break;  
+                    }
+                }
+                else{
+                    curr.pt_contentEditable[j]=true;
+                    curr.real_contentEditable[j]=true;
+                }
+
             }
         }
     }
@@ -1042,7 +1060,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
         setFinalAchivement();
         notifier.notifyGroup('realisasi-content');
-        console.log($scope.data);
+        //console.log($scope.data);
     }
 
     var loadKPIProcessDone=function(){
@@ -1624,7 +1642,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setFilter($scope.data);
         dataService.digest($scope);
         notifier.notifyGroup('realisasi-content');
-        console.log($scope.data);
+        //console.log($scope.data);
     }
 
     $scope.dataSelected=function(context,data,toogle){
