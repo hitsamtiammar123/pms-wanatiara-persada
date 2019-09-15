@@ -13,7 +13,7 @@ class CreateNewHeader extends Command
      *
      * @var string
      */
-    protected $signature = 'hitsam:endmonth:create-header {--month=default} {--year=default}';
+    protected $signature = 'hitsam:endmonth:create-header {--month=default} {--year=default} {--employee=default}';
 
     /**
      * The console command description.
@@ -27,6 +27,15 @@ class CreateNewHeader extends Command
      *
      * @return void
      */
+
+    protected function makeHeader($employee,$y,$m,$date){
+        $n=$employee->createHeader($y,$m);
+        if($n===1)
+            printf("Header dari %s sudah berhasil dibuat\n",$employee->name);
+        else if($n===-1)
+            printf("Header dari %s pada periode %s sudah ada\n",$employee->name,$date->format('Y-m-d'));
+        sleep(1);
+    }
     public function __construct()
     {
         parent::__construct();
@@ -43,24 +52,29 @@ class CreateNewHeader extends Command
 
         $opt_month=$this->option('month');
         $opt_year=$this->option('year');
+        $opt_employee=$this->option('employee');
 
         $m=$opt_month==='default'?intval($now->month)+1:$opt_month;
         $y=$opt_year==='default'?$now->year:$opt_year;
+        $e=$opt_employee==='default'?null:$opt_employee;
 
         // $e=Employee::find('1915284162');
         // $e->createHeader($y,$m);
 
-        $employees=Employee::all();
-        $date=Carbon::create($y,$m,16);
+        if(!$e){
+            $employees=Employee::all();
+            $date=Carbon::create($y,$m,16);
 
-        foreach($employees as $employee){
-
-            $n=$employee->createHeader($y,$m);
-            if($n===1)
-                printf("Header dari %s sudah berhasil dibuat\n",$employee->name);
-            else if($n===-1)
-                printf("Header dari %s pada periode %s sudah ada\n",$employee->name,$date->format('Y-m-d'));
-            sleep(1);
+            foreach($employees as $employee){
+                $this->makeHeader($employee,$y,$m,$date);
+            }
+        }
+        else{
+            $employee=Employee::find($e);
+            $date=Carbon::create($y,$m,16);
+            if($employee){
+                $this->makeHeader($employee,$y,$m,$date);
+            }
         }
     }
 }

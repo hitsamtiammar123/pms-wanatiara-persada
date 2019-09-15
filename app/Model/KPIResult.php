@@ -19,6 +19,8 @@ class KPIResult extends Model
     protected $hidden=['created_at','updated_at'];
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
+
+
     public static function generateID($employeeID){
         $employee=Employee::find($employeeID);
 

@@ -175,6 +175,10 @@ class Employee extends Model
             return 0;
 
         $curr_header=$this->getCurrentHeader();
+
+        if(!$curr_header)
+            return -2;
+
         $header_id=KPIHeader::generateID($this->id);
         KPIHeader::create([
             'id'=>$header_id,
