@@ -1,25 +1,25 @@
 app.controller('RealisasiController',function($scope,$rootScope,validator,loader,$route,
     $filter,notifier,copier,alertModal,dataService,user,$routeParams,formModal,confirmModal
     ,$sce,pusher,months,$location){
-       
+
 
     $scope.totalAchieveMent={};
-    $scope.IndexAchieveMent={}; 
+    $scope.IndexAchieveMent={};
     $scope.IndexAchieveMentP={};
     $scope.totalAchieveMentP={};
     $scope.finalAchievement={};
     $scope.aggrements={};
     $scope.hasChanged=false;
     $scope.headerLabel=$scope.headerLabel?$scope.headerLabel:[];
-    $scope.currentData=[];  
-    $scope.atasan={}; 
+    $scope.currentData=[];
+    $scope.atasan={};
     $scope.dlt_result={dspl_dlt:false,toogle_delete:false,dlt_message:'Hapus Baris'};
     $scope.dlt_process={dspl_dlt:false,toogle_delete:false,dlt_message:'Hapus Baris'}
-    $scope.fp=[]; 
-    $scope.totalW=[]; 
+    $scope.fp=[];
+    $scope.totalW=[];
     $scope.totalW_P=[];
     $scope.rContent=[];
-    $scope.displayData=[]; 
+    $scope.displayData=[];
     $scope.pb={};
     $scope.f=[
         'Jan 一月',
@@ -46,10 +46,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.user=user;
     $scope.hasEndorse=true;
     $scope.months=months;
-    
+
 
     var currMonth=$routeParams.month?parseInt($routeParams.month):$rootScope.month;
-    var dataSelected={}; 
+    var dataSelected={};
     var dataSelectedP={};
     const indexData=['name','unit'].concat($scope.pw_indices,$scope.pt_indices,$scope.real_indices);
     const indexDataP=['unit','pw_1','pw_2','pt_1','pt_2','real_1','real_2'];
@@ -61,31 +61,40 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var kpiresultdeletestream=copier.stream(employeeIndex+'_kpiresult_delete_list');
     var kpiprocessdeletestream=copier.stream(employeeIndex+'_kpiprocess_delete_list');
     const KPI_RESULT='kpiresult';
-    const KPI_PROCESS='kpiprocess';  
-    var kpiresult_elem=E('.realisasi-table tbody').eq(0); 
-    var kpiprocess_elem=E('.realisasi-table tbody').eq(1); 
+    const KPI_PROCESS='kpiprocess';
+    var kpiresult_elem=E('.realisasi-table tbody').eq(0);
+    var kpiprocess_elem=E('.realisasi-table tbody').eq(1);
     var currentEmployee=user.employee;
     var deleteListResult=[];
     var deleteListProcess=[];
 
     $scope.currentMonth=$scope.months[currMonth];
+    $scope.currendDate=new Date();
+    
 
     var onFail=function(a,b,c){
         console.log(a,b,c)
     }
-    
+
     var PMSHasChanged=function(){
         var curr=$route.current.$$route.controller;
         flushStreamAndHeader();
         if(curr==='RealisasiController'){
             alertModal.display('Peringatan','Terjadi Perubahan Data',false,true);
             setTimeout($route.reload,1500);
-        }        
+        }
     }
 
     var setUsers=function(){
         $scope.employee=curr_employee;
         $scope.atasan=curr_employee.atasan;
+    }
+
+    var vanishDisturbingColumn=function(){
+        setTimeout(function(){
+            E('#disturbing').remove();
+        },10)
+        E('#unit-bug').next().attr('id','disturbing');
     }
 
     var setHeaderResultLabel=function(){
@@ -132,7 +141,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                         input+='份累计';
 
                     p++;
-                    if(p===2) 
+                    if(p===2)
                         t++;
                     else if(p===4){
                         t--;
@@ -141,7 +150,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 break;
                 case 6:
                 case 7:
-                case 8: 
+                case 8:
                 case 9:
                     if(j%2===0){
                         input+='Realisasi ';
@@ -160,7 +169,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                     else if(p===4){
                         t--;
                         p=0;
-                    }                
+                    }
                 break;
             }
             $scope.headerLabel.push(input);
@@ -209,20 +218,20 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
         var pbSb=new Date(kpiheaders.period_start);
         var pbEb=new Date(kpiheaders.period_end);
-        
+
         $scope.pb.start=pbSb.getDate()+' '+$scope.f[pbSb.getMonth()]+' '+pbSb.getFullYear();
         $scope.pb.end=pbEb.getDate()+' '+$scope.f[pbEb.getMonth()]+' '+pbEb.getFullYear();
-        
+
         $scope.pb.startB=pbS.getDate()+' '+$scope.f[pbS.getMonth()]+' '+pbS.getFullYear();
         $scope.pb.endB=pbEb.getDate()+' '+$scope.f[pbEb.getMonth()]+' '+pbEb.getFullYear();
     }
- 
+
     var setHeader=function(){
         setHeaderResultLabel();
         setHeaderProcessLabel();
         setUserHeading();
     }
-    
+
     var getAchievementIndex=function(s){
         var index='';
         if(s<80){
@@ -239,7 +248,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
         else if(s>=90 && s<95){
             index="B"
-        } 
+        }
         else if(s>=95 && s<100){
             index="B+"
         }
@@ -268,13 +277,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
         return s;
     }
- 
- 
+
+
     var setTotalAchievement=function(data,totalAchieveMent,IndexAchieveMent){
         const FUNCTION_NAME='add-content';
       	if(!data)
           	return;
-        
+
         var salaryIndex={};
 
         //debugger;
@@ -338,7 +347,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                                     t1_fp*$scope.header.weight_process).toFixed(1);
         $scope.finalAchievement.t2_n=(t2_fr*$scope.header.weight_result+
                                     t2_fp*$scope.header.weight_process).toFixed(1);
-        
+
         $scope.finalAchievement.t1_i=getAchievementIndex($scope.finalAchievement.t1_n);
         $scope.finalAchievement.t2_i=getAchievementIndex($scope.finalAchievement.t2_n);
 
@@ -384,6 +393,53 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
     }
 
+    var setPWContentEditable=function(curr,j,hasEndorse){
+        if(hasEndorse && j<2){
+            curr.pw_contentEditable[j]=false;
+        }
+        else{
+            if(j===0)
+                curr.pw_contentEditable[j]=false;
+            else if(j===1)
+                curr.pw_contentEditable[j]=true;
+        }
+    }
+
+    var setPTAndRealContentEditable=function(curr,j,hasEndorse){
+        if(hasEndorse){
+            curr.pt_contentEditable[j]=false;
+            curr.real_contentEditable[j]=false;
+        }
+        else{
+            if(j<2){
+                curr.pt_contentEditable[j]=false;
+                curr.real_contentEditable[j]=false;
+            }
+            else if(j>=2){
+                if(j===3){
+                    switch(curr.unit){
+                        case '$':
+                        case '#':
+                        case 'WMT':
+                        case 'MT':
+                            curr.pt_contentEditable[j]=false;
+                            curr.real_contentEditable[j]=false;
+                        break;
+                        default:
+                                curr.pt_contentEditable[j]=true;
+                                curr.real_contentEditable[j]=true;
+                        break;  
+                    }
+                }
+                else{
+                    curr.pt_contentEditable[j]=true;
+                    curr.real_contentEditable[j]=true;
+                }
+
+            }
+        }
+    }
+
     var setContentEditable=function(data,type){
         if(type===KPI_RESULT){
 
@@ -391,19 +447,21 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 var curr=data[i];
                 curr.kpia_contentEditable=false;
                 curr.aw_contentEditable=false;
+                curr.pw_contentEditable=[];
+                curr.pt_contentEditable=[];
+                curr.real_contentEditable=[];
                 if($scope.hasEndorse){
-                    curr.pw_contentEditable=false;
-                    curr.pt_contentEditable=false;
-                    curr.real_contentEditable=false;
                     curr.name_contentEditable=false;
                     curr.unit_contentEditable=false;
                 }
                 else{
-                    curr.pw_contentEditable=true;
-                    curr.pt_contentEditable=true;
-                    curr.real_contentEditable=true;
                     curr.name_contentEditable=true;
                     curr.unit_contentEditable=true;
+                }
+
+                for(var j=0;j<4;j++){
+                    setPWContentEditable(curr,j,$scope.hasEndorse);
+                    setPTAndRealContentEditable(curr,j,$scope.hasEndorse);
                 }
             }
 
@@ -428,11 +486,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 }
                 else{
                     curr.contentEditable.unit=true;
-                    curr.contentEditable.pw_1=true;
+                    curr.contentEditable.pw_1=false;
                     curr.contentEditable.pw_2=true;
-                    curr.contentEditable.pt_1=true;
+                    curr.contentEditable.pt_1=false;
                     curr.contentEditable.pt_2=true;
-                    curr.contentEditable.real_1=true;
+                    curr.contentEditable.real_1=false;
                     curr.contentEditable.real_2=true;
                 }
 
@@ -467,6 +525,61 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         return rt;
     }
 
+    var setBColorKPIAandPW=function(curr){
+        for(var j=0;j<2;j++){
+            var kpia_key='kpia_'+(j+1);
+            var aw_key='aw_'+(j+1);
+            var pw_key=$scope.pw_indices[j];
+            var rt;
+
+            rt=getKPIA(curr,j);
+
+            if(isNaN(rt)||!isFinite(rt)){
+                rt=0;
+                curr.kpia_contentEditable='true';
+            }
+            else
+                rt=rt.toFixed(1);
+
+
+            curr[kpia_key]=rt+'%';
+            var bColor='bColor_kpia_'+(j+1);
+
+
+            if(rt>=120){
+                curr[bColor]='gold-column'
+            }
+            else if(rt>=105 && rt<120){
+                curr[bColor]='blue-column'
+            }
+            else if(rt>=95 && rt<105){
+                curr[bColor]='green-column'
+            }
+            else if(rt<95){
+                curr[bColor]='red-column'
+            }
+            var pwqIndex='pw_'+(j+1);
+            var pwq=curr[pwqIndex];
+            var calculate=rt*parseFloat(pwq)/100;
+            curr[aw_key]=(calculate.toFixed(1));
+
+            if(j===1)
+                curr['bColor_'+pw_key]='can-edit-content';
+        }
+    }
+
+    var setBColorPTandReal=function(curr){
+        for(var i=0;i<4;i++){
+            var real_key=$scope.real_indices[i];
+            var pt_key=$scope.pt_indices[i];
+
+            if(i>=2){
+                curr['bColor_'+real_key]='can-edit-content';
+                curr['bColor_'+pt_key]='can-edit-content';
+            }
+        }
+    }
+
     var setBColor=function(data){
         //debugger;
         for(var i=0;i<data.length;i++){
@@ -474,49 +587,15 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var counter=1;
             curr.kpiColor='';
             curr.unitColor='';
-            for(var j=0;j<2;j++){
-                var kpia_key='kpia_'+(j+1);
-                var aw_key='aw_'+(j+1);
-                var rt;
+            setBColorKPIAandPW(curr);
+            setBColorPTandReal(curr);
             
-                rt=getKPIA(curr,j);
-
-                if(isNaN(rt)||!isFinite(rt)){
-                    rt=0;
-                    curr.kpia_contentEditable='true';
-                }
-                else
-                    rt=rt.toFixed(1);
-
-                
-                curr[kpia_key]=rt+'%'; 
-                var bColor='bColor_kpia_'+(j+1);
-               
-
-                if(rt>=120){
-                    curr[bColor]='gold-column'
-                }
-                else if(rt>=105 && rt<120){
-                    curr[bColor]='blue-column'
-                }
-                else if(rt>=95 && rt<105){
-                    curr[bColor]='green-column'
-                }
-                else if(rt<95){
-                    curr[bColor]='red-column'
-                }
-                var pwqIndex='pw_'+(j+1);
-                var pwq=curr[pwqIndex];
-                var calculate=rt*parseFloat(pwq)/100;
-                curr[aw_key]=(calculate.toFixed(1));
-            
-            }
         }
 
     }
-    
+
     var setBColorP=function(data){
-        var getColor=function(r){
+        var getKPIAColor=function(r){
             if(r<0)
                 return 'black-column';
             else if(r===0)
@@ -542,6 +621,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 return 0;
         }
 
+        var getEditableColor=function(hasEndorse){
+            if(hasEndorse)
+                return 'can-edit-content';
+            else
+                return '';
+        }
+
         for(var i=0;i<data.length;i++){
             var curr=data[i];
             curr.contentEditable={};
@@ -553,14 +639,17 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var kt_2=parseInt(curr.real_2)-parseInt(curr.pt_2);
             curr.kpia_1=getIndex(kt_1);
             curr.kpia_2=getIndex(kt_2);
-            curr.bColor_kpia_1=getColor(kt_1);
-            curr.bColor_kpia_2=getColor(kt_2);
+            curr.bColor_kpia_1=getKPIAColor(kt_1);
+            curr.bColor_kpia_2=getKPIAColor(kt_2);
+            curr.bColor_real=getEditableColor($scope.hasEndorse);
+            curr.bColor_pt=getEditableColor($scope.hasEndorse);
+            curr.bColor_pw=getEditableColor($scope.hasEndorse);
 
             curr.aw_1=((curr.kpia_1/100)*parseInt(curr.pw_1)).toFixed(1);
             curr.aw_2=((curr.kpia_2/100)*parseInt(curr.pw_2)).toFixed(1);
         }
     }
-    
+
     var loadData=function(){
         if(!$scope.data||$scope.data.length===0){
             //loader.loadDData(null,rI);
@@ -610,15 +699,15 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 case 'WMT':
                 case 'MT':
                     var keys=$scope.pt_indices.concat($scope.real_indices);
-                    parseDataToInt(d,keys);
+                    //parseDataToInt(d,keys);
                     d.pt_k2=(parseInt(d.pt_k1)+parseInt(d.pt_t2))+'';
                     d.real_k2=(parseInt(d.real_k1)+parseInt(d.real_t2))+'';
-                break;  
+                break;
             }
         }
 
     }
-  
+
     var applyCopiedTable=function(copyData,flag){
         if(copyData){
             if(flag===KPI_RESULT){
@@ -631,7 +720,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             }
             var copy_data=angular.copy(copyData);
             setTimeout(function(){
-                
+
                 if(flag===KPI_RESULT){
                     $scope.data=copy_data;
                     kpiheaders.kpiresults=$scope.data;
@@ -666,7 +755,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var copyData=function(i,data){
         copier.setCopyData(i,data);
     }
- 
+
     var pasteData=function(i,flag){
         //debugger;
         var copyData=copier.getCopyData(i);
@@ -687,10 +776,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 stream=kpiprocessdeletestream;
                 data=$scope.kpiprocesses;
             }
-           
+
             pushDataIntoDeleteList(data,deleteList,stream);
             applyCopiedTable(copyData,flag);
-           
+
 
         }
     }
@@ -708,9 +797,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             console.log({deleteListProcess});
         }
         applyCopiedTable(_undoDt,flag);
-       
+
     }
- 
+
     var redoData=function(flag){
         var _redoDt;
         if(flag===KPI_RESULT){
@@ -745,7 +834,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var cdata=d[i];
             if(isUndf($scope.data[p_index]))
                 $scope.addNewData();
-            
+
             for(var j=0;j<cdata.length;j++){
                 var ccdata=cdata[j];
                 if(
@@ -764,7 +853,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                         f_index=indexData.indexOf(first_flag);
                         j_index=table_indices.indexOf(first_index);
                     }
-                    else{ 
+                    else{
                         j_index++;
                         f_index++;
                     }
@@ -772,11 +861,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                     d_flag=indexData[f_index];
                     changeFlag=false;
 
-                
+
             }
-            p_index++; 
+            p_index++;
             d_flag=first_flag;
-            
+
             f_index=indexData.indexOf(d_flag);
             i_index=first_index;
             j_index=table_indices.indexOf(i_index);
@@ -800,7 +889,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 var ccdata=cdata[j];
                 if(!$scope.kpiprocesses.hasOwnProperty(p_index))
                     break;
-                
+
                 if(fFlag!=='unit'){
                     var sanitize='sNumber';
                     ccdata=$filter(sanitize)(ccdata);
@@ -817,13 +906,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                     f_index++;
                     fFlag=indexDataP[f_index];
                 }
-                
+
             }
 
             p_index++;
             fFlag=first_flag;
             f_index=first_index;
-            
+
         }
     }
 
@@ -838,7 +927,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             break;
             default:
                 if(!isUndf(s.i))
-                    s.d[flag]['bColor'+(s.i+1)]='';   
+                    s.d[flag]['bColor'+(s.i+1)]='';
             break;
         }
     }
@@ -854,7 +943,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             alertModal.display('Peringatan','Data yang dicopy tidak valid',true,false);
         }
         else{
-            
+
             if(flag===KPI_RESULT){
                 var copy_data=angular.copy($scope.data);
                 applyPastedData(context,r);
@@ -886,7 +975,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     var clearSelectedData=function(){
-        
+
     }
 
     var checkSelectedData=function(dataSelected){
@@ -938,7 +1027,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             }
 
             if(endorse.verified===0&& endorse.employee.id===user.employee.id){
-                if($scope.employee.id===user.employee.id || 
+                if($scope.employee.id===user.employee.id ||
                     $scope.atasan.id===user.employee.id){
                         $scope.hasEndorse=false;
                     }
@@ -949,7 +1038,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         $scope.aggrementStr='HRD <span class="glyphicon glyphicon-ok"></span>';
         $scope.aggrementStr=$sce.trustAsHtml($scope.aggrementStr);
 
-        
+
     }
 
     var initData=function(){
@@ -989,7 +1078,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         curr_employee=employee;
         loadKPIProcess();
     }
-    
+
     var loadSuccessHeader=function(result){
         //debugger;
         var header=result.data;
@@ -1040,7 +1129,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         kpiprocessstream.flush();
         kpiresultstream.flush();
     }
-    
+
 
     var saveSuccess=function(result){
         alertModal.hide();
@@ -1110,11 +1199,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         $scope.kpiprocesses.push(data);
         dataService.digest($scope);
     }
-    
+
     var setKPIResultDetail=function(data,totalAchieveMent,IndexAchieveMent){
         setBColor(data);
         setTotalAchievement(data,totalAchieveMent,IndexAchieveMent);
-        setFilter(data);  
+        setFilter(data);
         setFinalAchivement();
     }
 
@@ -1126,7 +1215,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
     var onAfterEdit=function(data,totalAchieveMent,IndexAchieveMent){
         const FUNCTION_NAME='realisasi-content';
-        
+
         if(data===$scope.data)
             setKPIResultDetail(data,totalAchieveMent,IndexAchieveMent);
         else if(data===$scope.kpiprocesses)
@@ -1146,13 +1235,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         //debugger;
         if(toogle){
             elem.addClass('dSelected');
-            
+
             if(!dataSelected[index]){
                 dataSelected[index]={};
             }
             context.data=data;
             dataSelected[index][cindex]=context;
-            
+
         }
         else{
             elem.removeClass('dSelected');
@@ -1173,7 +1262,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 curr2.elem.removeClass('dSelected');
             }
         }
-        
+
         if(flag==='kpiresult')
             dataSelected={};
         else if(flag==='kpiprocess')
@@ -1234,10 +1323,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setTimeout(function(){
             $route.reload();
         },1000)
-        
+
     }
 
-    
+
 
     var appendDeleteListIntoStream=function(data,list,stream){
         var copy_list=angular.copy(list);
@@ -1294,7 +1383,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         var scope=context.scope;
 
         var value=setter(scope);
-        
+
         if(!isUndf(value)){
             var format=context.attrs.format;
             if(format){
@@ -1311,7 +1400,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     $scope.realisasiContent=function(context,setter){
-        
+
         var elem=context.elem;
         var scope=context.scope;
         var attrs=context.attrs;
@@ -1339,7 +1428,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         else{
             elem.text(getter);
         }
-        
+
     }
 
     $scope.addNewData=function(){
@@ -1376,12 +1465,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         $scope.data.push(data);
         hasNew=true;
     }
- 
+
     $scope.validateNum=validator.validateNum;
- 
+
     $scope.removeData=function(index){
-        $scope.data.splice(index,1); 
-    } 
+        $scope.data.splice(index,1);
+    }
 
     $scope.saveChanged=function(){
 
@@ -1391,12 +1480,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             kpiresultdeletelist:deleteListResult?deleteListResult:[],
             kpiprocessdeletelist:deleteListProcess?deleteListProcess:[]
         }
-       
+
         loader.savePMS($scope.header.id,body).then(saveSuccess,loadFail).finally(saveDone);
         $scope.hasChanged=true;
         $rootScope.loading=true;
         alertModal.display('Peringatan','Menyimpan data, mohon tunggu',false,true);
-    } 
+    }
 
     $scope.getHeaderColor=function(index){
         if((index>=0&&index<=1)||(index>=6&&index<=9)||(index>=12))
@@ -1413,16 +1502,16 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.setTotalW_P=function(){
         setTotalW($scope.kpiprocesses,$scope.totalW_P);
     }
-  
+
     $scope.setBColor=function(elem,value,scope,attrs){
         onAfterEdit($scope.data,$scope.totalAchieveMent,$scope.IndexAchieveMent);
         //console.log({elem,value,scope,attrs});
-    } 
+    }
 
     $scope.setBColorP=function(elem,value,scope,attrs){
         onAfterEdit($scope.kpiprocesses,$scope.totalAchieveMentP,$scope.IndexAchieveMentP);
     }
-    
+
     $scope.setEndorse=function(endorse){
         var message=!endorse.verified?'Apa anda yakin ini mengesahkan PMS ini':'Apa anda yakin ingin membalikan keadaan pada PMS ini?';
         confirmModal('Peringatan',message).then(function(){
@@ -1498,7 +1587,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     $scope.deleteRowP=function(index){
-       
+
         var copy_data=angular.copy($scope.kpiprocesses);
         var copy_data_2=angular.copy(copy_data);
 
@@ -1515,7 +1604,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.deleteRow=function(index){
         var copy_data=angular.copy($scope.data);
         var copy_data_2=angular.copy(copy_data);
-        
+
         copy_data[index]['id']?appendDeleteListIntoStream(copy_data[index]['id'],deleteListResult,kpiresultdeletestream):'';
         copy_data.splice(index,1);
         $scope.data=[];
@@ -1541,7 +1630,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             break;
         }
 
-        
+
         return r;
 
     }
@@ -1550,11 +1639,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         const FUNCTION_NAME='realisasi-content';
         var data=scope.d;
         data.unit=value;
-        setDataFilter(data);
+        setFilter($scope.data);
         dataService.digest($scope);
         notifier.notifyGroup('realisasi-content');
+        //console.log($scope.data);
     }
-     
+
     $scope.dataSelected=function(context,data,toogle){
         onDataSelected(context,data,toogle,dataSelected);
     }
@@ -1565,16 +1655,16 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
     $scope.dataEscaped=function(context,data){
         onDataEscaped(context,data,dataSelected,'kpiresult');
-    } 
+    }
 
     $scope.dataEscapedP=function(context,data){
         onDataEscaped(context,data,dataSelectedP,'kpiprocess');
     }
- 
+
     $scope.dataPaste=function(context,e){
         pasteCopiedData(context,e,KPI_RESULT);
     }
-    
+
     $scope.dataPasteP=function(context,e){
         pasteCopiedData(context,e,KPI_PROCESS);
     }
@@ -1588,14 +1678,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     notifier.setNotifier('changeMonth',setCurrentMonth);
-
     checkEmployee();
     loadHeader(currMonth);
     pusher.on('pms-has-changed-'+employeeIndex,PMSHasChanged);
+    vanishDisturbingColumn();
 
-
-    setTimeout(function(){
-        E('#disturbing').remove();
-    },10)
-    E('#unit-bug').next().attr('id','disturbing');
-}) 
+});

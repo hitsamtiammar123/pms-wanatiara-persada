@@ -38,7 +38,7 @@ app.service('validator',function(alertModal,unitFilter){
     }
 
     this.isUnitFilter=function(t){
-        t=t.trim().toLowerCase();
+        t=t.trim();
         return unitFilter.indexOf(t)!==-1||unitFilter.toString().indexOf(t)!==-1
     }
 }) 
