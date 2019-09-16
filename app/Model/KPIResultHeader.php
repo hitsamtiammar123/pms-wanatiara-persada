@@ -88,7 +88,7 @@ class KPIResultHeader extends Model
         return $this->belongsTo(KPIHeader::class,'kpi_header_id','id');
     }
 
-    public function getFromCarbon($carbon){
+    public function getFromCarbon(Carbon $carbon){
         $d=KPIHeader::select('id')->where('employee_id',$this->kpiheader->employee_id)
         ->where('period',$carbon)->first();
 

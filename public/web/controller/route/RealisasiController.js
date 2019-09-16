@@ -76,6 +76,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         console.log(a,b,c)
     }
 
+    /**
+     * 
+     * @description 
+     * Fungsi ini dipanggil sebagai callback jika atasan atau bawahan yang dinilai melakukan
+     * perubahan data
+     * @returns void
+     */
     var PMSHasChanged=function(){
         var curr=$route.current.$$route.controller;
         flushStreamAndHeader();
@@ -359,9 +366,17 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
     /**
      *
-     * @param {Object} curr
-     * @param {number} j
-     * @param {boolean} hasEndorse
+     * @author Hitsam Tiammar <hitsamtiammar@gmail.com>
+     * @module RealisasiContent
+     * 
+     * 
+     * @description
+     * berfungsi untuk men-set ContentEditable pada data KPIResult untuk attribute performance weighting
+     * @param {Object} curr merupakan data KPIResult yang bersangkutan. Harus berupa objek
+     * @param {number} j index ke berapa data tersebut ada pada array KPIResult
+     * @param {boolean} hasEndorse Menentukan apakah PMS sudah di-endorse
+     * 
+     * @returns void 
      */
     var setPWContentEditable=function(curr,j,hasEndorse){
         if(hasEndorse && j<2){
