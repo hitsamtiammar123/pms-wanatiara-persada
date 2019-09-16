@@ -606,10 +606,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
 
         var getEditableColor=function(hasEndorse){
-            if(hasEndorse)
+           // if(hasEndorse)
                 return 'can-edit-content';
-            else
-                return '';
+            // else
+            //     return '';
         }
 
         for(var i=0;i<data.length;i++){
@@ -1170,12 +1170,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         data.id=kpiprocess.id;
         data.name=kpiprocess.name;
         data.unit=kpiprocess.unit;
-        data.pw_1='';
-        data.pw_2='';
-        data.pt_1='';
-        data.pt_2='';
-        data.real_1='';
-        data.real_2='';
+        data.pw_1=0;
+        data.pw_2=0;
+        data.pt_1=0;
+        data.pt_2=0;
+        data.real_1=0;
+        data.real_2=0;
 
         $scope.kpiprocesses.push(data);
         dataService.digest($scope);
