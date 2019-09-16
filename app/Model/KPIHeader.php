@@ -371,7 +371,7 @@ class KPIHeader extends Model
                 $real_k1=$kpiresult['real_k1'];
                 $real_t2=$kpiresult['real_t2'];
 
-                $kpiresult['pt_k1']=intval($pt_k1+$pt_t2).'';
+                $kpiresult['pt_k2']=intval($pt_k1+$pt_t2).'';
                 $kpiresult['real_k2']=intval($real_k1+$real_t2).'';
             break;
         }
