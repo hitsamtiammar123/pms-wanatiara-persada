@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Model\Employee;
 use App\Model\KPIHeader;
 use App\Model\KPIResult;
 use App\Model\KPIResultHeader;
@@ -72,6 +73,6 @@ class TestCommand extends Command
     {
         //
 
-        $this->calculateCum();
+        //this->calculateCum();
     }
 }

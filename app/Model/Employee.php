@@ -9,6 +9,7 @@ use App\Model\Traits\DynamicID;
 use App\Model\User;
 use Carbon\Carbon;
 use App\Notifications\RequestChange;
+use Illuminate\Support\Collection;
 
 class Employee extends Model
 {
@@ -35,6 +36,12 @@ class Employee extends Model
     ];
 
 
+    /**
+     *
+     * Membuat ID Employee barus secara dinamis
+     *
+     * @return string
+     */
     public static function generateID(){
         $a=1;
         return self::_generateID($a);
@@ -68,6 +75,12 @@ class Employee extends Model
         return $r;
     }
 
+    /**
+     *
+     * mengambil array dari notifikasi untuk dikonsumsi oleh front end
+     * @param Collection $notifications
+     * @return array
+     */
     public static function frontEndNotifications($notifications){
         $result=[];
 

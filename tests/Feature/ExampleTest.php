@@ -16,6 +16,16 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertStatus(200);
+        $response->assertSeeInOrder(['PT','Wanatiara Hehe']);
+    }
+
+    public function testAuthUser(){
+        $user=\Auth::user();
+
+        if($user)
+            $this->assertTrue(true);
+        else
+            $this->assertTrue(false);
+
     }
 }

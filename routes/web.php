@@ -1,12 +1,8 @@
 <?php
 
-use App\Model\Employee;
-use App\Model\KPIHeader;
-USE App\Model\KPIResultHeader;
 
 Route::get('/test',function(){
-    $headers=KPIHeader::orderBy('period')->where('period','!=','2019-06-16')->get();
-    return $headers;
+    return 'Test 123';
 });
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');
