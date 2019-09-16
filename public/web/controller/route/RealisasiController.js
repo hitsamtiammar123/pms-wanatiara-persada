@@ -341,6 +341,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     var setTotalW=function(data,totalW){
+
         if(data){
             for(var i=0;i<2;i++){
                 totalW[i]=0;
@@ -356,6 +357,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
     }
 
+    /**
+     *
+     * @param {Object} curr
+     * @param {number} j
+     * @param {boolean} hasEndorse
+     */
     var setPWContentEditable=function(curr,j,hasEndorse){
         if(hasEndorse && j<2){
             curr.pw_contentEditable[j]=false;

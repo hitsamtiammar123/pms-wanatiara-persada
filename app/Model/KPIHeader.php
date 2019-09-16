@@ -7,6 +7,11 @@ use App\Model\Traits\DynamicID;
 use Illuminate\Support\Carbon;
 use App\Model\Traits\Indexable;
 
+/**
+ *
+ * @author Hitsam Tiammar <hitsamtiammmar@gmail.com>
+ */
+
 class KPIHeader extends Model
 {
     //

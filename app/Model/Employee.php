@@ -78,12 +78,11 @@ class Employee extends Model
     /**
      *
      * mengambil array dari notifikasi untuk dikonsumsi oleh front end
-     * @param Collection $notifications
+     * @param Illuminate\Support\Collection $notifications data ini berisi array dari notifikasi
      * @return array
      */
     public static function frontEndNotifications($notifications){
         $result=[];
-
         foreach($notifications as $notification){
             $r=self::frontEndNotification($notification);
             $result[]=$r;

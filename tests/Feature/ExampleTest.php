@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Model\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -20,8 +21,9 @@ class ExampleTest extends TestCase
     }
 
     public function testAuthUser(){
+        $user_1=User::first();
+        $this->actingAs($user_1);
         $user=\Auth::user();
-
         if($user)
             $this->assertTrue(true);
         else
