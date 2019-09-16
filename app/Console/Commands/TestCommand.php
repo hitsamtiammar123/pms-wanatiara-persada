@@ -72,7 +72,8 @@ class TestCommand extends Command
     public function handle()
     {
         //
-
         //this->calculateCum();
+        $str='健康、安全与环保和环境维护 HSE123 dan pemeliharaan lingkungan hidup ';
+        $r=str_name_compare($str,'健康、安全与环保和环境维护       HSE dan pemeliharaan lingkungan hidup ');
     }
 }

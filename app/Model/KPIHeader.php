@@ -637,11 +637,13 @@ class KPIHeader extends Model
     }
 
     public function findByName($name){
-        $kpiheaderresult=$this->kpiresultheaders;
-        $r=$kpiheaderresult->search(function($item)use($name){
-            return $item->kpiresult->name===$name;
-        });
-        return $r?$kpiheaderresult[$r]:null;
+        $kpiheaderresults=$this->kpiresultheaders->sortBy('created_at');
+
+        foreach($kpiheaderresults as $headerresult){
+            if(str_name_compare($headerresult->kpiresult->name,$name))
+                return $headerresult;
+        }
+        return null;
 
     }
 

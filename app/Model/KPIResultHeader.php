@@ -49,6 +49,37 @@ class KPIResultHeader extends Model
         }
     }
 
+    /**
+     *
+     * Method ini berfungsi untuk melakukan kalkulasi Data Kumulatif pada tanggal yang bersangkutan
+     * @return void
+     */
+    public static function calculateCum(){
+        $headers=KPIHeader::orderBy('period')->get();
+
+        foreach($headers as $header){
+            $resultheaders=$header->kpiresultheaders;
+            $resultheaders=$resultheaders->filter(function($d){
+                return $d->kpiresult->unit==='$';
+            });
+            foreach($resultheaders as $resultheader){
+                $prev=$resultheader->getPrev();
+                if($prev){
+                    $pt_k1=$prev->pt_k;
+                    $pt_t2=$resultheader->pt_t;
+                    $real_k1=$prev->real_k;
+                    $real_t2=$resultheader->real_t;
+
+                    $resultheader->pt_k=intval($pt_k1+$pt_t2).'';
+                    $resultheader->real_k=intval($real_k1+$real_t2).'';
+                    $resultheader->save();
+                }
+
+            }
+
+        }
+    }
+
     public function kpiresult(){
         return $this->belongsTo(KPIResult::class,'kpi_result_id','id');
     }

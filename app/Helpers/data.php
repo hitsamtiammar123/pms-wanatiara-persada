@@ -91,4 +91,33 @@ if(!function_exists('filter_is_number')){
 
 }
 
+if(!function_exists('str_name_compare')){
+
+    /**
+     *
+     * Fungsi ini digunakan untuk membandingkan satu string dgn yang lainnya per karakter
+     * @param string $str String yang ingin di-compare
+     * @param string $compareTo String pembanding
+     * @return boolean
+     */
+    function str_name_compare($str,$compareTo){
+        $delimiter='/\s+/';
+        $str_split=preg_split($delimiter,$str);
+        $str_compare_to=preg_split($delimiter,$compareTo);
+
+        if(count($str_split)!==count($str_compare_to))
+            return false;
+
+        for($i=0;$i<count($str_split);$i++){
+            $c1=$str_split[$i];
+            $c2=$str_compare_to[$i];
+            if($c1!==$c2)
+                return false;
+        }
+        return true;
+
+    }
+
+}
+
 
