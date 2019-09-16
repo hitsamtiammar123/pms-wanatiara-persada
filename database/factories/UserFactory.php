@@ -1,6 +1,8 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\Model\Employee;
 use App\Model\User;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
@@ -15,13 +17,14 @@ use Faker\Generator as Faker;
 | model instances for testing / seeding your application's database.
 |
 */
- 
+
 $factory->define(User::class, function (Faker $faker) {
+    $employee=factory(Employee::class)->create();
     return [
         'id'=>User::generateID(),
         'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => md5('password'), // password
+        'password' => bcrypt('password'), // password
         'remember_token' => Str::random(10),
+        'employee_id'=>$employee->id
     ];
 });

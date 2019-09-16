@@ -3,11 +3,14 @@
 namespace Tests\Feature;
 
 use App\Model\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ExampleTest extends TestCase
+class UserTest extends TestCase
 {
+
+    use DatabaseTransactions;
     /**
      * A basic test example.
      *
@@ -17,13 +20,14 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertSeeInOrder(['PT','Wanatiara Hehe']);
+        $response->assertSeeInOrder(['PT','Wanatiara']);
     }
 
     public function testAuthUser(){
-        $user_1=User::first();
+        $user_1=factory(User::class)->make();
         $this->actingAs($user_1);
         $user=\Auth::user();
+
         if($user)
             $this->assertTrue(true);
         else

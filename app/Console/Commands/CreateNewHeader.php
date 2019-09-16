@@ -36,6 +36,7 @@ class CreateNewHeader extends Command
             printf("Header dari %s pada periode %s sudah ada\n",$employee->name,$date->format('Y-m-d'));
         sleep(1);
     }
+
     public function __construct()
     {
         parent::__construct();
