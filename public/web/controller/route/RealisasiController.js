@@ -1535,6 +1535,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         kpiresultstream.pushData(copy_data_2,copy_data);
         var scrollHeight=kpiresult_elem.prop('scrollHeight');
         kpiresult_elem.scrollTop(scrollHeight);
+        setBColor($scope.data);
+        setContentEditable($scope.data,KPI_RESULT);
     }
 
     $scope.addPRow=function(){
@@ -1544,13 +1546,16 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var copy_data=angular.copy($scope.kpiprocesses);
             if(!checked)
                 appendKPIProcess(data.kpiprocess.selected);
-            else
+            else{
                 alertModal.display('Peringatan','Data Sasaran Proses sudah dimasukan sebelumnya',true,false);
+                return;
+            }
             var copy_data_2=angular.copy($scope.kpiprocesses);
             kpiprocessstream.pushData(copy_data_2,copy_data);
 
             var scrollHeight=kpiprocess_elem.prop('scrollHeight');
             kpiprocess_elem.scrollTop(scrollHeight);
+            setBColorP($scope.kpiprocesses);
             setContentEditable($scope.kpiprocesses,KPI_PROCESS);
         });
     }
