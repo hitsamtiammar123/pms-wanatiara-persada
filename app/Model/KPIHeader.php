@@ -399,7 +399,7 @@ class KPIHeader extends Model
                 $curr_result->kpiresult->unit=$kpiresult['unit'];
 
                 $curr_result->push();
-                //$curr_result_prev->save();
+                $curr_result_prev->save();
             }
         }
         else{
