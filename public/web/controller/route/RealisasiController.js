@@ -1182,9 +1182,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     var setKPIResultDetail=function(data,totalAchieveMent,IndexAchieveMent){
+        setFilter(data);
         setBColor(data);
         setTotalAchievement(data,totalAchieveMent,IndexAchieveMent);
-        setFilter(data);
         setFinalAchivement();
     }
 
@@ -1610,6 +1610,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         var data=scope.d;
         data.unit=value;
         setFilter($scope.data);
+        setTotalAchievement($scope.data,$scope.totalAchieveMent,$scope.IndexAchieveMent);
+        setContentEditable($scope.data,KPI_RESULT);
+        setFinalAchivement();
         dataService.digest($scope);
         notifier.notifyGroup('realisasi-content');
         //console.log($scope.data);
