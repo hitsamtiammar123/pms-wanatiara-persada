@@ -34,36 +34,6 @@ class TestCommand extends Command
         parent::__construct();
     }
 
-    public function calculateCum(){
-        $headers=KPIHeader::orderBy('period')->where('period','!=','2019-06-16')->get();
-
-        foreach($headers as $header){
-            $resultheaders=$header->kpiresultheaders;
-            $resultheaders=$resultheaders->filter(function($d){
-                return $d->kpiresult->unit==='$';
-            });
-            $employee=$header->employee;
-            foreach($resultheaders as $resultheader){
-                $prev=$resultheader->getPrev();
-                if($prev){
-                    $pt_k1=$prev->pt_k;
-                    $pt_t2=$resultheader->pt_t;
-                    $real_k1=$prev->real_k;
-                    $real_t2=$resultheader->real_t;
-
-                    $resultheader->pt_k=intval($pt_k1+$pt_t2).'';
-                    $resultheader->real_k=intval($real_k1+$real_t2).'';
-                    $this->info("Untuk kpi {$resultheader->kpiresult->name} milik {$employee->name} period {$header->period}");
-                    $resultheader->save();
-                    sleep(1);
-                }
-
-            }
-
-        }
-
-    }
-
     /**
      * Execute the console command.
      *
@@ -71,9 +41,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        //
-        //this->calculateCum();
-        $str='健康、安全与环保和环境维护 HSE123 dan pemeliharaan lingkungan hidup ';
-        $r=str_name_compare($str,'健康、安全与环保和环境维护       HSE dan pemeliharaan lingkungan hidup ');
+
     }
 }
