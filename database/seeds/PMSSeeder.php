@@ -37,7 +37,8 @@ class PMSSeeder extends Seeder
         'kpiresults',
         'kpiprocesses',
         'notifications',
-        'password_resets'
+        'password_resets',
+        'priviledgekpiresults'
     ];
 
     /**
@@ -59,7 +60,8 @@ class PMSSeeder extends Seeder
     protected $d3tables=[
         'kpiresultsheader',
         'kpiprocesses_kpiheaders',
-        'kpiendorsements'
+        'kpiendorsements',
+        'priviledgedetail'
     ];
 
     /**
