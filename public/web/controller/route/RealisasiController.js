@@ -742,18 +742,20 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         d.real_filter='';
         d.kpia_filter='addPercent';
         d.aw_filter='addPercent';
-        d.pt_sanitize=d.real_sanitize=d.kpia_sanitize=d.aw_sanitize='sNumber';
+        d.kpia_sanitize=d.aw_sanitize='sNumber';
         d.pw_sanitize='sNumber'
         switch(unit){
             case '%':
             case 'MV':
                 d.pt_filter='addPercent';
                 d.real_filter='addPercent';
+                d.pt_sanitize=d.real_sanitize='sNumber';
             break;
             case '$':
             case 'WMT':
                 d.pt_filter='number';
                 d.real_filter='number';
+                d.pt_sanitize=d.real_sanitize='sNumber';
             break;
         }
 
