@@ -41,6 +41,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-
+        $d=\Storage::disk('local');
     }
 }
