@@ -67,6 +67,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var currentEmployee=user.employee;
     var deleteListResult=[];
     var deleteListProcess=[];
+    var priviledgesKPIResults=[{
+        by:"name",
+        value:"企业法律保护 Corporate Legal Protectiveness",
+        priviledge:1
+    }];
 
     $scope.currentMonth=$scope.months[currMonth];
     $scope.currendDate=new Date();
@@ -77,8 +82,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     /**
-     * 
-     * @description 
+     *
+     * @description
      * Fungsi ini dipanggil sebagai callback jika atasan atau bawahan yang dinilai melakukan
      * perubahan data
      * @returns void
@@ -368,15 +373,15 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
      *
      * @author Hitsam Tiammar <hitsamtiammar@gmail.com>
      * @module RealisasiContent
-     * 
-     * 
+     *
+     *
      * @description
      * berfungsi untuk men-set ContentEditable pada data KPIResult untuk attribute performance weighting
      * @param {Object} curr merupakan data KPIResult yang bersangkutan. Harus berupa objek
      * @param {number} j index ke berapa data tersebut ada pada array KPIResult
      * @param {boolean} hasEndorse Menentukan apakah PMS sudah di-endorse
-     * 
-     * @returns void 
+     *
+     * @returns void
      */
     var setPWContentEditable=function(curr,j,hasEndorse){
         if(hasEndorse && j<2){
@@ -424,16 +429,32 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
     }
 
+    var setKPIAContentEditable=function(curr,hasEndorse){
+        for(var i=0;i<2;i++){
+            if(hasEndorse){
+                curr.kpia_contentEditable[i]=false;
+            }
+            else{
+                var rt=getKPIA(curr,i);
+                if(isPriviledgesKPIResult(curr)){
+                    curr.kpia_contentEditable[i]=true;
+                }
+                else
+                    curr.kpia_contentEditable[i]=false;
+            }
+        }
+    }
+
     var setContentEditable=function(data,type){
         if(type===KPI_RESULT){
 
             for(var i=0;i<data.length;i++){
                 var curr=data[i];
-                curr.kpia_contentEditable=false;
                 curr.aw_contentEditable=false;
                 curr.pw_contentEditable=[];
                 curr.pt_contentEditable=[];
                 curr.real_contentEditable=[];
+                curr.kpia_contentEditable=[];
                 if($scope.hasEndorse){
                     curr.name_contentEditable=false;
                     curr.unit_contentEditable=false;
@@ -447,6 +468,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                     setPWContentEditable(curr,j,$scope.hasEndorse);
                     setPTAndRealContentEditable(curr,j,$scope.hasEndorse);
                 }
+                setKPIAContentEditable(curr,$scope.hasEndorse);
             }
 
         }
@@ -482,6 +504,14 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
     }
 
+    /**
+     * berfungsi untuk mendapatkan nilai KPIAchievement pada suatu KPIResult
+     *
+     * @param {Object} d
+     * @param {number} j
+     *
+     * @return number
+     */
     var getKPIA=function(d,j){
         var unit=d.unit;
 
@@ -509,26 +539,77 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         return rt;
     }
 
+    /**
+     * Berfungsi untuk menentukan apakah KPIResult adalah KPIResult dengan priviledge tertentu
+     *
+     * @param {JSON} curr Data KPIResult yang bersangkutan
+     * @param {Object} obj Object berupa parameter keluaran yang akan menerima flag dari suatu priviledge
+     * @return bool
+     */
+    var isPriviledgesKPIResult=function(curr,obj){
+        for(var i=0;i<priviledgesKPIResults.length;i++){
+            var p=priviledgesKPIResults[i];
+            switch(p.by){
+                case 'name':
+                    if(curr.name.trim()===p.value){
+                        obj?obj.priviledge=p.priviledge:null;
+                        return true;
+                    }
+                break;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @param {JSON} curr Data KPIResult yang bersangkutan
+     * @param {string} kpia_key property dari curr
+     * @param {Object} obj_priviledge object berisi property priviledge yang menetukan tipe priviledge dari suatu KPIResult
+     *
+     * @returns number
+     */
+    var getKPIAByPriviledge=function(curr,kpia_key,obj_priviledge){
+        var p=obj_priviledge.priviledge;
+        var rt=0;
+
+        switch(p){
+            case 1:
+                if(curr.hasOwnProperty(kpia_key)){
+                    rt=parseInt(curr[kpia_key]);
+                }
+                else
+                    rt=100;
+            break;
+        }
+
+        return rt;
+    }
+
     var setBColorKPIAandPW=function(curr){
         for(var j=0;j<2;j++){
             var kpia_key='kpia_'+(j+1);
             var aw_key='aw_'+(j+1);
             var pw_key=$scope.pw_indices[j];
             var rt;
+            var obj_priviledge={};
 
-            rt=getKPIA(curr,j);
+            if(!isPriviledgesKPIResult(curr,obj_priviledge)){
+                rt=getKPIA(curr,j);
 
-            if(isNaN(rt)||!isFinite(rt)){
-                rt=0;
-                curr.kpia_contentEditable='true';
+                if(isNaN(rt)||!isFinite(rt)){
+                    rt=0;
+                }
+                else
+                    rt=rt.toFixed(1);
+
             }
-            else
-                rt=rt.toFixed(1);
-
+            else{
+                rt=getKPIAByPriviledge(curr,kpia_key,obj_priviledge);
+            }
 
             curr[kpia_key]=rt+'%';
             var bColor='bColor_kpia_'+(j+1);
-
 
             if(rt>=120){
                 curr[bColor]='gold-column'
@@ -1186,6 +1267,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setBColor(data);
         setTotalAchievement(data,totalAchieveMent,IndexAchieveMent);
         setFinalAchivement();
+        setContentEditable(data,KPI_RESULT);
     }
 
     var setKPIProcessDetail=function(data,totalAchieveMent,IndexAchieveMent){
@@ -1485,12 +1567,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setTotalW($scope.kpiprocesses,$scope.totalW_P);
     }
 
-    $scope.setBColor=function(elem,value,scope,attrs){
+    $scope.setBColor=function(){
         onAfterEdit($scope.data,$scope.totalAchieveMent,$scope.IndexAchieveMent);
         //console.log({elem,value,scope,attrs});
     }
 
-    $scope.setBColorP=function(elem,value,scope,attrs){
+    $scope.setBColorP=function(){
         onAfterEdit($scope.kpiprocesses,$scope.totalAchieveMentP,$scope.IndexAchieveMentP);
     }
 

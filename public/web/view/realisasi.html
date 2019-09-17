@@ -77,7 +77,7 @@
                     <tbody>
                             <tr ng-repeat="d in data track by $index" ng-init="c_index=0;outerIndex=$index">
                                 <td class="num"><span ng-if="!dlt_result.toogle_delete">{{$index+1}}</span><button class="btn btn-danger" ng-if="dlt_result.toogle_delete" ng-click="deleteRow($index)">X</button></td>
-                                <td class="kpi" belong-to="d.name" after-edit="setKPI" contenteditable="{{d.name_contentEditable}}" data-flag="name"
+                                <td class="kpi" belong-to="d.name" after-edit="setBColor" contenteditable="{{d.name_contentEditable}}" data-flag="name"
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 notify-g-label="realisasi-content:kpi-{{outerIndex}}" ng-class="d.kpiColor" i-index="name" c-index="{{c_index}}" d-index="{{$index}}"></td>
 
@@ -106,7 +106,7 @@
 
                                 <td ng-repeat="i in kpia_indices" belong-to="d[i]" data-flag="kpia" on-data-paste="dataPaste"
                                 on-data-escaped="dataEscaped" on-data-selected="dataSelected" ng-class="d['bColor_'+i]"
-                                contenteditable="{{d.kpia_contentEditable}}" auto-fill="true" sanitize="{{d.kpia_sanitize}}"
+                                contenteditable="{{d.kpia_contentEditable[$index]}}" auto-fill="true" sanitize="{{d.kpia_sanitize}}"
                                 format="{{d.kpia_filter}}" after-edit="setBColor" notify-g-label="realisasi-content:kpia-{{outerIndex}}-{{i}}"
                                 d-index="{{$parent.$index}}"></td>
 

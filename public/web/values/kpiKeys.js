@@ -13,7 +13,9 @@ app.constant('kpiKeys',{
         "real_t1",
         "real_k1",
         "real_t2",
-        "real_k2"
+        "real_k2",
+        "kpia_1",
+        "kpia_2"
     ],
     kpiprocess:[
         "id",
@@ -26,4 +28,4 @@ app.constant('kpiKeys',{
         "real_1",
         "real_2"
     ]
-}); 
+});

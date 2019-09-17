@@ -36,7 +36,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         if(param){
             p=param.join('/');
         }
-        
+
         if(param_url){
             p_u+='?'+E.param(param_url)
         }
@@ -47,13 +47,13 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
     this.requestChange=function(employeID,data){
         var url=this.route('request-change',[employeID]);
         var fd=new FormData();
-        
+
         for(var i in data){
             fd.append(i,data[i]);
         }
-        return $http.post(url,fd,ajaxConfig);        
+        return $http.post(url,fd,ajaxConfig);
     }
-    
+
     this.getRequestableUsers=function(employeeID){
         var url=this.route('requestable-users',[employeeID]);
         return $http.get(url);
@@ -76,7 +76,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
         return $http.get(url);
     }
-    
+
 
     this.getKPICompany=function(){
         var url=this.route('kpicompany');
@@ -103,7 +103,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         var url=this.route('ikhtisar',null,{page:page});
         return $http.get(url);
     }
-    
+
     this.getHeaders=function(id,month){
 
         var url=this.route('kpiheader',[id],{month:month});
@@ -155,15 +155,15 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
     this.resetEndorsement=function(id,data){
         var url=this.route('kpiendorsement',[id,'reset']);
-        
-       return $http.put(url,E.param(data),ajaxConfig2); 
+
+       return $http.put(url,E.param(data),ajaxConfig2);
     }
 
     this.setEndorsement=function(data){
         var url=this.route('kpiendorsement',[data.id]);
         return $http.put(url,data);
     }
-    
+
     this.route=function(name,param,param_url){
         return route.url+route.routelist[name]+getRouteParam(param,param_url);
     }
@@ -186,4 +186,4 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
 
 
-}); 
+});
