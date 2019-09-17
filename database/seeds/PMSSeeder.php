@@ -84,6 +84,8 @@ class PMSSeeder extends Seeder
     /**
      * Melakukan filter untuk tabel tertentu
      *
+     * @param array $data Data yang mau di-filter
+     * @param string $type tipe/nama tabel dari data yang ingin di-filter
      * @return array
      */
 
@@ -106,7 +108,6 @@ class PMSSeeder extends Seeder
      * @return void
      */
     protected function migrateTable(){
-
         for($i=1;$i<=3;$i++){
             $dcurr="d{$i}tables";
             $darr=$this->{$dcurr};
