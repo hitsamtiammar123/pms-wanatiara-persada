@@ -620,6 +620,14 @@ class KPIHeader extends Model
 
     }
 
+    /**
+     *  Berfungsi untuk mengambil data KPIHeader yang akan dipakai oleh frontEnd
+     *
+     * @uses self::fetchKPIProcess() bacoba
+     * @param string $type
+     * Tipe data yang mau diambil bisa berupa kpiresult,kpiprocess,atau kpiendorsement
+     * @return array
+     */
     public function fetchFrontEndData($type){
 
         if($type==='kpiresult'){
@@ -637,6 +645,7 @@ class KPIHeader extends Model
     }
 
     public function findByName($name){
+
         $kpiheaderresults=$this->kpiresultheaders->sortBy('created_at');
 
         foreach($kpiheaderresults as $headerresult){
