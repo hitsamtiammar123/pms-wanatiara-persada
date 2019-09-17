@@ -67,11 +67,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var currentEmployee=user.employee;
     var deleteListResult=[];
     var deleteListProcess=[];
-    var priviledgesKPIResults=[{
-        by:"name",
-        value:"企业法律保护 Corporate Legal Protectiveness",
-        priviledge:1
-    }];
 
     $scope.currentMonth=$scope.months[currMonth];
     $scope.currendDate=new Date();
@@ -436,7 +431,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             }
             else{
                 var rt=getKPIA(curr,i);
-                if(isPriviledgesKPIResult(curr)){
+                if(isPriviledgesKPIResult(curr) && i===1){
                     curr.kpia_contentEditable[i]=true;
                 }
                 else
@@ -547,15 +542,18 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
      * @return bool
      */
     var isPriviledgesKPIResult=function(curr,obj){
-        for(var i=0;i<priviledgesKPIResults.length;i++){
-            var p=priviledgesKPIResults[i];
-            switch(p.by){
-                case 'name':
-                    if(curr.name.trim()===p.value){
-                        obj?obj.priviledge=p.priviledge:null;
-                        return true;
-                    }
-                break;
+        if(kpiheaders && kpiheaders.hasOwnProperty('priviledgekpiresults')){
+            var priviledgesKPIResults=kpiheaders.priviledgekpiresults;
+            for(var i=0;i<priviledgesKPIResults.length;i++){
+                var p=priviledgesKPIResults[i];
+                switch(p.by){
+                    case 'name':
+                        if(curr.name.trim()===p.value){
+                            obj?obj.priviledge=p.priviledge:null;
+                            return true;
+                        }
+                    break;
+                }
             }
         }
         return false;

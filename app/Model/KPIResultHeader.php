@@ -50,6 +50,15 @@ class KPIResultHeader extends Model
     }
 
     /**
+     * Method static ini mengembalikan semua daftar KPIResult dengan priviledge tertentu
+     *
+     * @return Illuminate\Database\Eloquent\Collection;
+     */
+    public static function priviledgeKPIResultList(){
+        return PriviledgeKPIResult::all();
+    }
+
+    /**
      *
      * Method ini berfungsi untuk melakukan kalkulasi Data Kumulatif pada tanggal yang bersangkutan
      * @return void
@@ -86,6 +95,11 @@ class KPIResultHeader extends Model
 
     public function kpiheader(){
         return $this->belongsTo(KPIHeader::class,'kpi_header_id','id');
+    }
+
+    public function priviledgekpiresults(){
+        return $this->belongsToMany(KPIResultHeader::class,'priviledgedetail','p_id','h_id')
+        ->withPivot(['value','key']);
     }
 
     public function getFromCarbon(Carbon $carbon){

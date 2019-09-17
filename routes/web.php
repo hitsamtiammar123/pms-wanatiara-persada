@@ -1,8 +1,9 @@
 <?php
 
+use App\Model\KPIResultHeader;
 
 Route::get('/test',function(){
-    return 'Test 123';
+    return KPIResultHeader::priviledgeKPIResultList();
 });
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');

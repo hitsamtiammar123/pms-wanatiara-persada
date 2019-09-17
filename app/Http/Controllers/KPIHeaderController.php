@@ -45,7 +45,7 @@ class KPIHeaderController extends Controller
         $kpiheader_arr['kpiprocesses']=$kpiheader->fetchFrontEndData('kpiprocess');
         $kpiheader_arr['period_end']=$kpiheader_arr['period'];
         $kpiheader_arr['period_start']=$prev_month->format('Y-m-d') ;
-
+        $kpiheader_arr['priviledgekpiresults']=KPIResultHeader::priviledgeKPIResultList();
 
         unset($kpiheader_arr['period']);
 
