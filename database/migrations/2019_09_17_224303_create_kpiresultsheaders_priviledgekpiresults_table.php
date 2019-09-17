@@ -16,7 +16,7 @@ class CreateKpiresultsheadersPriviledgekpiresultsTable extends Migration
         Schema::create('priviledgedetail', function (Blueprint $table) {
             $table->bigInteger('p_id')->unsigned();
             $table->string('h_id',18);
-            $table->string('value');
+            $table->string('value')->nullable();
             $table->string('key',20);
             $table->primary(['p_id','h_id']);
             $table->timestamps();
