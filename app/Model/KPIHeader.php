@@ -71,7 +71,7 @@ class KPIHeader extends Model
                 $r['real_t2']=$kpiresultheader->real_t;
                 $r['real_k2']=$kpiresultheader->real_k;
 
-                //$r=$kpiresultheader->fetchFrontEndPriviledge($r,$kpiresultheaderprev);
+                $r=$kpiresultheader->fetchFrontEndPriviledge($r,$kpiresultheaderprev);
 
                 $result[]=$r;
             }
@@ -405,6 +405,9 @@ class KPIHeader extends Model
                 $curr_result->push();
                 $curr_result_prev->save();
 
+                $curr_result_prev->mapPriviledge($kpiresult['kpia_1']);
+                $curr_result->mapPriviledge($kpiresult['kpia_2']);
+
             }
         }
         else{
@@ -456,6 +459,9 @@ class KPIHeader extends Model
             // $new_result->save();
             $curr_result_prev->save();
             $curr_result->push();
+
+            $curr_result_prev->mapPriviledge($kpiresult['kpia_1']);
+            $curr_result->mapPriviledge($kpiresult['kpia_2']);
 
         }
     }

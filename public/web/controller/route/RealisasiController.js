@@ -431,7 +431,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             }
             else{
                 var rt=getKPIA(curr,i);
-                if(isPriviledgesKPIResult(curr,i) && i===1){
+                if(isPriviledgesKPIResult(curr,i)){
                     curr.kpia_contentEditable[i]=true;
                 }
                 else

@@ -144,13 +144,9 @@ class KPIResultHeader extends Model
      */
     public function fetchFrontEndPriviledge(array $kpiresult,KPIResultHeader $prev){
         if($this->isPriviledge()){
-            $priviledge=$this->priviledgekpiresults[0];
-            $key_1=$priviledge->pivot->key.'2';
-            $kpiresult[$key_1]=$priviledge->pivot->value;
-            if($prev->isPriviledge()){
-                $priviledge=$prev->priviledgekpiresults[0];
-                $key_2=$priviledge->pivot->key.'1';
-                $kpiresult[$key_2]=$priviledge->pivot->value;
+            if(!is_null($this->priviledge) && !is_null($prev->priviledge)){
+                $kpiresult['kpia_1']=$prev->priviledge->value;
+                $kpiresult['kpia_2']=$this->priviledge->value;
             }
         }
         return $kpiresult;
