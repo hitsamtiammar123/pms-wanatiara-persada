@@ -37,8 +37,7 @@ class PMSSeeder extends Seeder
         'kpiresults',
         'kpiprocesses',
         'notifications',
-        'password_resets',
-        'priviledgekpiresults'
+        'password_resets'
     ];
 
     /**
@@ -53,7 +52,7 @@ class PMSSeeder extends Seeder
     ];
 
     /**
-     * Daftar dari tabel yang mempunyai 2 relasi
+     * Daftar dari tabel yang mempunyai 2 relasi atau tabel yang berelasi dengan tabel dgn 2 relasi
      *
      * @var array
      */
@@ -61,7 +60,7 @@ class PMSSeeder extends Seeder
         'kpiresultsheader',
         'kpiprocesses_kpiheaders',
         'kpiendorsements',
-        'priviledgedetail'
+        'priviledgeresultskpia'
     ];
 
     /**
