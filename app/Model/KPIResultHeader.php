@@ -104,7 +104,7 @@ class KPIResultHeader extends Model
     public function isPriviledge(){
         $unit=$this->kpiresult->unit;
         $pt_t=$this->pt_t;
-        if($unit==='#' && $pt_t==0)
+        if(($unit==='#' || $unit === 'kwh') && $pt_t==0)
             return true;
         else
             return false;
@@ -119,14 +119,15 @@ class KPIResultHeader extends Model
      */
     public function mapPriviledge($value=null){
         if($this->isPriviledge()){
+            $nvalue=intval($value);
             if(is_null($this->priviledge)){
                 $this->priviledge()->create([
-                    'value'=>$value
+                    'value'=>$nvalue
                 ]);
             }
             else{
                 $p=$this->priviledge;
-                $p->value=$value;
+                $p->value=$nvalue;
                 $p->save();
             }
         }

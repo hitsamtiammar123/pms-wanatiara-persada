@@ -407,6 +407,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                         case '$':
                         case 'WMT':
                         case 'MT':
+                        case 'kwh':
                             curr.pt_contentEditable[j]=false;
                             curr.real_contentEditable[j]=false;
                         break;
@@ -417,7 +418,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                     }
                 }
                 else{
-                    curr.pt_contentEditable[j]=true;
+                    if(curr.unit ==='kwh')
+                        curr.pt_contentEditable[j]=false;
+                    else
+                        curr.pt_contentEditable[j]=true;
                     curr.real_contentEditable[j]=true;
                 }
 
@@ -543,7 +547,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
      * @return bool
      */
     var isPriviledgesKPIResult=function(curr,i){
-        if(kpiheaders && curr.unit === '#'){
+        if(kpiheaders && (
+            curr.unit === '#' ||
+            curr.unit ==='kwh'
+            )
+        ){
             var t_key ='pt_t'+(i+1);
             var t=parseInt(curr[t_key]);
             if(t===0)
@@ -717,9 +725,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             case '$':
             case 'WMT':
             case 'MT':
-                var keys=$scope.pt_indices.concat($scope.real_indices);
+            case 'kwh':
                 d.pt_k2=(parseInt(d.pt_k1)+parseInt(d.pt_t2))+'';
                 d.real_k2=(parseInt(d.real_k1)+parseInt(d.real_t2))+'';
+            if(d.unit!=='kwh')
+                break;
+            case 'kwh':
+                d.pt_t1=d.pt_k1=d.pt_t2=d.pt_k2=0;
             break;
         }
     }
@@ -746,6 +758,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 d.real_filter='number';
                 d.pt_sanitize=d.real_sanitize='sNumber';
             break;
+            case 'kwh':
+                d.pt_filter='kwh';
+                d.real_filter='number';
+                d.pt_sanitize=d.real_sanitize='sNumber';
+            break;
         }
 
         applyUnitFilter(d);
@@ -756,7 +773,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var d=data[i];
             setDataFilter(d);
         }
-
+        console.log(data);
     }
 
     var applyCopiedTable=function(copyData,flag){
@@ -1499,7 +1516,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             calculateWeight(flag);
         }
         setFinalAchivement();
-        console.log({flag,elem,value,$scope});
     }
 
     $scope.realisasiContent=function(context,setter){
