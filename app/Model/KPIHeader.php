@@ -71,6 +71,8 @@ class KPIHeader extends Model
                 $r['real_t2']=$kpiresultheader->real_t;
                 $r['real_k2']=$kpiresultheader->real_k;
 
+                $r=$kpiresultheader->fetchFrontEndPriviledge($r,$kpiresultheaderprev);
+
                 $result[]=$r;
             }
 
@@ -264,7 +266,10 @@ class KPIHeader extends Model
                 $tC=$d[$pt_key];
             break;
         }
-        $r=(floatval($rC)/floatval($tC))*100;
+        if($tC!=0)
+            $r=(floatval($rC)/floatval($tC))*100;
+        else
+            $r=0;
         return $r;
     }
 
@@ -282,11 +287,10 @@ class KPIHeader extends Model
                 $real_key='real_t'.($i+1);
                 $pwq_key='pw_'.($i+1);
 
-                if($d[$pt_key]!=0){
+                if(!array_key_exists($kpia_key,$d))
                     $rt=$this->getKPIA($d,$i);
-                }
                 else
-                    $rt=0;
+                    $rt=$d[$kpia_key];
 
                 $rt=round($rt,1);
                 $bColor='bColor_kpia_'.($i+1);
@@ -400,6 +404,13 @@ class KPIHeader extends Model
 
                 $curr_result->push();
                 $curr_result_prev->save();
+
+                $curr_result_prev->isPriviledge()?$curr_result_prev->mapPriviledge(
+                    array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null
+                ):null;
+                $curr_result->isPriviledge()?$curr_result->mapPriviledge(
+                    array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null
+                ):null;
             }
         }
         else{
@@ -450,8 +461,13 @@ class KPIHeader extends Model
 
             // $new_result->save();
             $curr_result_prev->save();
-            $curr_result->save();
-
+            $curr_result->push();
+            $curr_result_prev->isPriviledge()?$curr_result_prev->mapPriviledge(
+                array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null
+            ):null;
+            $curr_result->isPriviledge()?$curr_result->mapPriviledge(
+                array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null
+            ):null;
         }
     }
 

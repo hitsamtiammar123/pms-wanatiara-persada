@@ -39,6 +39,35 @@ class KPIResultHeader extends Model
         }
     }
 
+        /**
+     * Melakukan fetching Priviledge KPIResult dengan menyamakan nama
+     *
+     * @param array &$plist daftar dari priviledge kpiresult. variabel ini bersifat output parameter
+     * @return void
+     */
+    protected function fetchPriviledgeByUnit(array &$plist){
+        $priviledges=static::priviledgeKPIResultListByUnit();
+        $unit=$this->kpiresult->unit;
+        foreach($priviledges as $p){
+            if(str_name_compare($p->value,$unit)){
+                $plist[]=$p;
+            }
+        }
+    }
+
+    /**
+     * berfungsi untuk mendapatkan daftar priviledges berdasarkan nama atau unit
+     *
+     * @return array
+     */
+    protected function fetchPriviledges(){
+        $plist=[];
+        $this->fetchPriviledgeByName($plist);
+        $this->fetchPriviledgeByUnit($plist);
+
+        return $plist;
+    }
+
     public static function generateID($employeeID,$headerID){
         $employee=Employee::find($employeeID);
         $header=KPIHeader::find($headerID);
@@ -83,7 +112,7 @@ class KPIResultHeader extends Model
         return PriviledgeKPIResult::where('by','name')->get();
     }
 
-        /**
+    /**
      *
      * mengembalikan semua daftar KPIResult denga priviledge tertentu berdasarkan unit
      * @return Illuminate\Database\Eloquent\Collection;
@@ -138,14 +167,28 @@ class KPIResultHeader extends Model
     }
 
     /**
+     * Menentukan apakah kpiresult ini bersifat priviledge
+     *
+     * @return bool
+     */
+    public function isPriviledge(){
+        $plist=$this->fetchPriviledges();
+
+        if(count($plist)===0)
+            return false;
+        else
+            return true;
+
+    }
+
+    /**
      * Melakukan mapping jika data ini memiliki priviledge
      *
      * @param string|null $value
      * @return void
      */
     public function mapPriviledge($value=null){
-        $plist=[];
-        $this->fetchPriviledgeByName($plist);
+        $plist=$this->fetchPriviledges();
 
         if(count($plist)!==0){
             $attachments=[];
@@ -160,6 +203,26 @@ class KPIResultHeader extends Model
             $this->priviledgekpiresults()->sync($attachments);
         }
 
+    }
+
+    /**
+     *
+     * @param array $kpiresult data dari kpiresult yang bersangkutan
+     * @param App\Model\KPIResultHeader $prev data dari kpiresult yang sebelumnya
+     * @return array
+     */
+    public function fetchFrontEndPriviledge(array $kpiresult,KPIResultHeader $prev){
+        if($this->isPriviledge()){
+            $priviledge=$this->priviledgekpiresults[0];
+            $key_1=$priviledge->pivot->key.'2';
+            $kpiresult[$key_1]=$priviledge->pivot->value;
+            if($prev->isPriviledge()){
+                $priviledge=$prev->priviledgekpiresults[0];
+                $key_2=$priviledge->pivot->key.'1';
+                $kpiresult[$key_2]=$priviledge->pivot->value;
+            }
+        }
+        return $kpiresult;
     }
 
     public function getFromCarbon(Carbon $carbon){
