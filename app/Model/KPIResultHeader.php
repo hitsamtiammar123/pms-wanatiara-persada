@@ -19,7 +19,7 @@ class KPIResultHeader extends Model
         'kpi_header_id'=>'string'
     ];
     protected $hidden=['created_at','updated_at'];
-    protected $fillable=['id','pw','pt_t','pt_k','real_t','real_k','kpi_header_id','kpi_result_header','id','kpi_result_id'];
+    protected $fillable=['id','pw','pt_t','pt_k','real_t','real_k','kpi_header_id','kpi_result_header','kpi_result_id'];
 
     const FRONT_END_PROPERTY=['pw_1','pw_2','pt_t1','pt_k1','pt_t2','pt_k2','real_t1','real_k1','real_t2','real_k2'];
 
