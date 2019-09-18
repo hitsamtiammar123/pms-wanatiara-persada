@@ -1,6 +1,6 @@
 app.controller('RealisasiController',function($scope,$rootScope,validator,loader,$route,
     $filter,notifier,copier,alertModal,dataService,user,$routeParams,formModal,confirmModal
-    ,$sce,pusher,months,$location){
+    ,$sce,pusher,months,$location,$parse){
 
 
     $scope.totalAchieveMent={};
@@ -46,6 +46,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.user=user;
     $scope.hasEndorse=true;
     $scope.months=months;
+    $scope.display_weights={};
 
 
     var currMonth=$routeParams.month?parseInt($routeParams.month):$rootScope.month;
@@ -1139,6 +1140,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         $scope.data=header.kpiresults;
         $scope.kpiprocesses=header.kpiprocesses;
         $scope.kpiendorsements=header.kpiendorsements;
+        $scope.display_weights={
+            weight_result:header.weight_result*100,
+            weight_process:header.weight_process*100
+        };
         // $scope.kpiendorsements=$scope.kpiendorsements.sort(function(d1,d2){
         //     return parseInt(d1.level)-parseInt(d2.level);
         // });
@@ -1224,12 +1229,17 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
        }
        else{
            var header=headers[month];
+
            kpiheaders=header;
            $scope.header=kpiheaders;
            $scope.data=header.kpiresults;
            $scope.kpiprocesses=header.kpiprocesses;
            $scope.kpiendorsements=header.kpiendorsements;
            $scope.kpiendorsementIndex=Object.keys($scope.kpiendorsements).reverse();
+           $scope.display_weights={
+                weight_result:header.weight_result*100,
+                weight_process:header.weight_process*100
+            };
            loadEmployee();
        }
     }
@@ -1386,6 +1396,29 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         stream.pushData(list,copy_list);
     }
 
+    /**
+     * berfungsi untuk melakukan kalkulasi ulang setelah bobot diubah
+     *
+     * @param {string} flag variabel yang menentukan akan melakukan kalkulasi terhadap kpiresult atau kpiprocess
+     */
+    var calculateWeight=function(flag){
+        var w_r=$scope.display_weights.weight_result?parseInt($scope.display_weights.weight_result):0;
+        var w_p=$scope.display_weights.weight_process?parseInt($scope.display_weights.weight_process):0;
+
+        if(flag===KPI_RESULT){
+            w_p=100-w_r;
+        }
+        else if(flag===KPI_PROCESS)
+            w_r=100-w_p;
+        $scope.header.weight_result=w_r/100;
+        $scope.header.weight_process=w_p/100;
+        $scope.display_weights={
+            weight_process:w_p,
+            weight_result:w_r
+        };
+
+    }
+
     $scope.openMenu=function($mdMenu,ev){
         $mdMenu.open(ev);
     }
@@ -1449,6 +1482,24 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             elem.text('');
         }
         //console.log({attrs,value,scope})
+    }
+
+    $scope.setWeight=function(elem,value,scope,attrs){
+
+        var flag=attrs.flag;
+        var val_int=value?parseInt(value):0;
+        var setter=$parse(attrs.belongTo);
+        if(val_int<0 || val_int>100){
+
+            var default_val=(flag===KPI_RESULT)?($scope.header.weight_result*100):($scope.header.weight_process*100);
+            setter.assign(scope,default_val);
+            alertModal.display('Peringatan','Bobot harus diantara 0 dan 100');
+        }
+        else{
+            calculateWeight(flag);
+        }
+        setFinalAchivement();
+        console.log({flag,elem,value,$scope});
     }
 
     $scope.realisasiContent=function(context,setter){
@@ -1530,7 +1581,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             kpiresult:$scope.data,
             kpiprocesses:$scope.kpiprocesses,
             kpiresultdeletelist:deleteListResult?deleteListResult:[],
-            kpiprocessdeletelist:deleteListProcess?deleteListProcess:[]
+            kpiprocessdeletelist:deleteListProcess?deleteListProcess:[],
+            weighting:{
+                weight_result:$scope.header.weight_result,
+                weight_process:$scope.header.weight_process,
+            }
         }
 
         loader.savePMS($scope.header.id,body).then(saveSuccess,loadFail).finally(saveDone);

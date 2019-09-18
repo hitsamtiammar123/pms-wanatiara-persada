@@ -30,7 +30,7 @@
         <p class="bold table-title">
             <div class="dropright" >
                 <a class="dropdown-toggle" ng-hide="hasEndorse" data-toggle="dropdown" aria-hidden="true"> <span class="glyphicon glyphicon-option-vertical black-font"></span></a>
-                1. Sasaran Hasil {{ header.weight_result?(header.weight_result*100)+'%':'' }}
+                1. Sasaran Hasil <span contenteditable="true" after-edit="setWeight" flag="kpiresult" notify-g-label="add-content" belong-to="display_weights.weight_result" format="addPercent"></span>
                  <ul class="dropdown-menu">
                         <li>
                             <a ng-click="addRow()" ng-hide="dlt_result.toogle_delete" ng-disabled="hasChanged">
@@ -143,7 +143,7 @@
         <p class="bold table-title">
                     <div class="dropright">
                             <a class="dropdown-toggle" ng-hide="hasEndorse" data-toggle="dropdown" aria-hidden="true"> <span class="glyphicon glyphicon-option-vertical black-font"></span></a>
-                            2. Sasaran Proses {{ header.weight_process?(header.weight_process*100)+'%':'' }}
+                            2. Sasaran Proses <span notify-g-label="add-content" contenteditable="true" after-edit="setWeight" flag="kpiprocess"  belong-to="display_weights.weight_process" format="addPercent"></span>
                              <ul class="dropdown-menu">
                                     <li>
                                         <a ng-click="addPRow()" ng-hide="dlt_process.toogle_delete" ng-disabled="hasChanged">

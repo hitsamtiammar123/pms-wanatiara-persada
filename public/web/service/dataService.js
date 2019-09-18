@@ -7,7 +7,7 @@ app.service('dataService',function(DTIME){
 
     this.set=function(key,value){
         listData[key]=value;
-    } 
+    }
 
     this.has=function(key){
         return listData.hasOwnProperty(key);
@@ -21,7 +21,7 @@ app.service('dataService',function(DTIME){
         pre?pre(scope):'';
     }
 
-    
+
 
     this.only=function(list,keys){
         var result=[];

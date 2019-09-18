@@ -730,6 +730,21 @@ class KPIHeader extends Model
         return $date;
     }
 
+    public function updateWeighting(array $weighting){
+        $this->weight_result=$weighting['weight_result'];
+        $this->weight_process=$weighting['weight_process'];
+
+        $this->save();
+    }
+
+    public function hasFullEndorse(){
+        foreach($this->kpiendorsements as $endorse){
+            if(!$endorse->verified)
+                return false;
+        }
+        return true;
+    }
+
     public function employee(){
         return $this->belongsTo(Employee::class,'employee_id','id');
     }

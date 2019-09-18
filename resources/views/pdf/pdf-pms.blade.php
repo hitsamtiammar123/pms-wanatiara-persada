@@ -194,7 +194,12 @@
 
         </div>
         <div class="row">
-            <p class="pms-title endorsement-title" style="font-style:italic !important">PMS ini sudah disahkan secara elektronik 该绩效考核管理体系已经过电子批准.</p>
+            @if ($header->hasFullEndorse())
+            <p class="pms-title endorsement-title green-column" style="font-style:italic !important">PMS ini sudah disahkan secara elektronik 该绩效考核管理体系已经过电子批准.</p>
+            @else
+            <p class="pms-title endorsement-title red-column" style="font-style:italic !important">PMS ini belum keseluruhan disahkan 该绩效考核管理体系尚未完全获得批准.</p>
+            @endif
+
         </div>
     </div>
 @endsection

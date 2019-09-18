@@ -11,7 +11,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
         // notifier.flushNotifier('realisasi-content');
         // notifier.flushNotifier('add-content');
     }
- 
+
     function checkText(elem){
         var val=elem.text();
         if(val===''){
@@ -27,9 +27,9 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
         return nvalue?nvalue:value;
 
     }
-    
 
-  
+
+
     function linkFunction(scope,elem,attrs){
         var setter=$parse(attrs.belongTo);
         var validateFunc;
@@ -42,10 +42,10 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
         var list_f_f=[];
         var notifyLabel;
         var sanitize;
-        var editable="false"; 
+        var editable="false";
         var onDataSelected;
         var onDataEscape;
-        var onDataPaste; 
+        var onDataPaste;
         var onDataCopy;
         var context={
             elem:elem,
@@ -62,7 +62,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
 
         var getId=function(){
             return new Date().getTime().toString().substr(6);
-        } 
+        }
 
         var setAfterEdit=function(){
             var sp_ed=attrs.afterEdit.split('|');
@@ -86,10 +86,10 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
             for(var i=0;i<list_f_f.length;i++){
                 f=addFormat($filter,value,list_f_f[i]);
                 elem.text(f);
-                value=f;   
+                value=f;
             }
         }
-        
+
         var onFocusOut=function(){
             var value=elem.text().trim();
             setter=$parse(attrs.belongTo);
@@ -98,7 +98,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
                 elem.text(getter);
                 return;
             }
-            
+
             getter=setter(scope);
             if(attrs.sanitize){
                 value=$filter(attrs.sanitize)(value);
@@ -106,16 +106,17 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
 
             setter.assign(scope,value);
             oldValue=value;
- 
+
             if(afterEdit &&edited){
                 for(var i=0;i<list_f_af.length;i++){
                     list_f_af[i]?list_f_af[i](elem,value,scope,attrs):'';
                 }
                 edited=false;
             }
-            
+
             if(attrs.format){
                 var f;
+                value=setter(scope);
                 setFormat();
                 applyFormat(value);
                 //addFormat($filter,elem,value,format);
@@ -145,14 +146,14 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
         }
 
         //console.log('belong-to '+getter,scope,attrs);
-        
+
         if(attrs.validation){
             validateFunc=$parse(attrs.validation)(scope);
         }
         if(attrs.editable){
             editable=attrs.editable;
         }
- 
+
         if(attrs.afterEdit){
             setAfterEdit();
         }
@@ -164,7 +165,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
         if(attrs.format){
             setFormat();
         }
-        
+
         if(!autoFill || autoFill!=='false' ){
             elem.text(getter);
         }
@@ -183,12 +184,12 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
 
         if(attrs.onDataPaste){
             onDataPaste=$parse(attrs.onDataPaste)(scope);
-        } 
+        }
 
         if(attrs.onDataCopy){
             onDataCopy=$parse(attrs.onDataCopy)(scope);
-        } 
-  
+        }
+
         if(attrs.notifyLabel||attrs.notifyGLabel){
             notifyLabel=attrs.notifyLabel||attrs.notifyGLabel;
             var sanitizeS;
@@ -210,7 +211,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
             }
         }
 
-        
+
 
         elem.bind('keydown',function(e){
             // if(!contenteditable || contenteditable==='false')
@@ -219,7 +220,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
             var data=setter(scope);
             if(e.key==='Escape'){
                 onDataEscape&&angular.isFunction(onDataEscape)?onDataEscape(context,data):'';
-                dataSelected={}; 
+                dataSelected={};
             }
             else if(e.key==='Control'){
                 ctrlPressed=true;
@@ -245,7 +246,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
         elem.bind('focusout',function(){
             onFocusOut();
         });
- 
+
         elem.on('paste',function(e){
             onDataPaste&&angular.isFunction(onDataPaste)?onDataPaste(context,e):'';
             ctrlPressed=false;
@@ -260,12 +261,12 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
             console.log('',e);
 
         });
-        
+
         elem.on('click',function(e){
             if(ctrlPressed){
                 dataSelect();
             }
-        }) 
+        })
 
         if(highlight && highlight==='true'){
             elem.bind('keyup',function(e){
@@ -280,7 +281,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
         }
 
 
-        
+
     }
 
     return {

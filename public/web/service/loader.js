@@ -136,6 +136,9 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         sentData.kpiprocessdeletelist=JSON.stringify(
             body.kpiprocessdeletelist
         );
+        sentData.weighting=JSON.stringify(
+            body.weighting
+        );
 
         return $http.put(url,E.param(sentData),ajaxConfig2);
     }
