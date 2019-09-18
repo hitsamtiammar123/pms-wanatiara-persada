@@ -14,6 +14,6 @@ class PriviledgeKPIResult extends Model
     ];
 
     public function kpiresultheaders(){
-        return $this->belongsToMany(KPIResultHeader::class,'priviledgedetail','h_id','p_id');
+        return $this->belongsToMany(KPIResultHeader::class,'priviledgedetail','p_id','h_id');
     }
 }

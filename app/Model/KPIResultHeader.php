@@ -23,6 +23,22 @@ class KPIResultHeader extends Model
 
     const FRONT_END_PROPERTY=['pw_1','pw_2','pt_t1','pt_k1','pt_t2','pt_k2','real_t1','real_k1','real_t2','real_k2'];
 
+    /**
+     * Melakukan fetching Priviledge KPIResult dengan menyamakan nama
+     *
+     * @param array &$plist daftar dari priviledge kpiresult. variabel ini bersifat output parameter
+     * @return void
+     */
+    protected function fetchPriviledgeByName(array &$plist){
+        $priviledges=static::priviledgeKPIResultListByName();
+        $name=$this->kpiresult->name;
+        foreach($priviledges as $p){
+            if(str_name_compare($p->value,$name)){
+                $plist[]=$p;
+            }
+        }
+    }
+
     public static function generateID($employeeID,$headerID){
         $employee=Employee::find($employeeID);
         $header=KPIHeader::find($headerID);
@@ -60,6 +76,24 @@ class KPIResultHeader extends Model
 
     /**
      *
+     * mengembalikan semua daftar KPIResult denga priviledge tertentu berdasarkan nama
+     * @return Illuminate\Database\Eloquent\Collection;
+     */
+    public static function priviledgeKPIResultListByName(){
+        return PriviledgeKPIResult::where('by','name')->get();
+    }
+
+        /**
+     *
+     * mengembalikan semua daftar KPIResult denga priviledge tertentu berdasarkan unit
+     * @return Illuminate\Database\Eloquent\Collection;
+     */
+    public static function priviledgeKPIResultListByUnit(){
+        return PriviledgeKPIResult::where('by','unit')->get();
+    }
+
+    /**
+     *
      * Method ini berfungsi untuk melakukan kalkulasi Data Kumulatif pada tanggal yang bersangkutan
      * @return void
      */
@@ -89,6 +123,7 @@ class KPIResultHeader extends Model
         }
     }
 
+
     public function kpiresult(){
         return $this->belongsTo(KPIResult::class,'kpi_result_id','id');
     }
@@ -98,8 +133,33 @@ class KPIResultHeader extends Model
     }
 
     public function priviledgekpiresults(){
-        return $this->belongsToMany(KPIResultHeader::class,'priviledgedetail','p_id','h_id')
-        ->withPivot(['value','key']);
+        return $this->belongsToMany(PriviledgeKPIResult::class,'priviledgedetail','h_id','p_id')
+        ->withTimestamps()->withPivot(['value','key']);
+    }
+
+    /**
+     * Melakukan mapping jika data ini memiliki priviledge
+     *
+     * @param string|null $value
+     * @return void
+     */
+    public function mapPriviledge($value=null){
+        $plist=[];
+        $this->fetchPriviledgeByName($plist);
+
+        if(count($plist)!==0){
+            $attachments=[];
+            foreach($plist as $index => $p){
+                if($p->priviledge===1){
+                    $attachments[$p->id]=[
+                        'value'=>$value,
+                        'key' => 'kpia_'
+                    ];
+                }
+            }
+            $this->priviledgekpiresults()->sync($attachments);
+        }
+
     }
 
     public function getFromCarbon(Carbon $carbon){

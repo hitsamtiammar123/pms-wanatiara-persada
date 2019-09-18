@@ -41,6 +41,14 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $d=\Storage::disk('local');
+        // foreach(KPIResultHeader::all() as $r){
+        //     $r->mapPriviledge(100);
+        // }
+       $r1=KPIResultHeader::find('19363056155899');
+       dd($r1->priviledgekpiresults);
+    //    $r2=KPIResultHeader::find('1926054615349');
+
+    //    $r1->mapPriviledge([100]);
+    //    $r2->mapPriviledge([100]);
     }
 }
