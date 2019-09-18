@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Model\Employee;
 use App\Model\KPIHeader;
-use App\Model\KPIResult;
 use App\Model\KPIResultHeader;
 use Illuminate\Console\Command;
 
@@ -41,10 +39,10 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        foreach(KPIResultHeader::all() as $r){
-            $r->mapPriviledge(100);
-        }
-    //    $r1=KPIResultHeader::find('19365656155758');
-    //    printf($r1->isPriviledge());
+       $results=KPIResultHeader::all();
+       foreach($results as $result){
+            $result->mapPriviledge(100);
+       }
+
     }
 }

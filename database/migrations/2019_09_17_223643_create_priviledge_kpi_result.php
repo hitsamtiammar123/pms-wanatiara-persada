@@ -13,12 +13,11 @@ class CreatePriviledgeKpiResult extends Migration
      */
     public function up()
     {
-        Schema::create('priviledgekpiresults', function (Blueprint $table) {
+        Schema::create('priviledgeresultskpia', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('kpi_header_result_id',18);
             $table->string('value');
-            $table->string('by',50)->default('name');
-            $table->integer('priviledge')->default(1);
-            $table->timestamp('created_at')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -29,6 +28,6 @@ class CreatePriviledgeKpiResult extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('priviledgekpiresults');
+        Schema::dropIfExists('priviledgeresultskpia');
     }
 }

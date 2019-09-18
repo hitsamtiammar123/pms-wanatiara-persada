@@ -405,12 +405,6 @@ class KPIHeader extends Model
                 $curr_result->push();
                 $curr_result_prev->save();
 
-                // $curr_result_prev->isPriviledge()?$curr_result_prev->mapPriviledge(
-                //     array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null
-                // ):null;
-                // $curr_result->isPriviledge()?$curr_result->mapPriviledge(
-                //     array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null
-                // ):null;
             }
         }
         else{
@@ -462,12 +456,7 @@ class KPIHeader extends Model
             // $new_result->save();
             $curr_result_prev->save();
             $curr_result->push();
-            // $curr_result_prev->isPriviledge()?$curr_result_prev->mapPriviledge(
-            //     array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null
-            // ):null;
-            // $curr_result->isPriviledge()?$curr_result->mapPriviledge(
-            //     array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null
-            // ):null;
+
         }
     }
 

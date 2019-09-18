@@ -23,50 +23,6 @@ class KPIResultHeader extends Model
 
     const FRONT_END_PROPERTY=['pw_1','pw_2','pt_t1','pt_k1','pt_t2','pt_k2','real_t1','real_k1','real_t2','real_k2'];
 
-    /**
-     * Melakukan fetching Priviledge KPIResult dengan menyamakan nama
-     *
-     * @param array &$plist daftar dari priviledge kpiresult. variabel ini bersifat output parameter
-     * @return void
-     */
-    protected function fetchPriviledgeByName(array &$plist){
-        $priviledges=static::priviledgeKPIResultListByName();
-        $name=$this->kpiresult->name;
-        foreach($priviledges as $p){
-            if(str_name_compare($p->value,$name)){
-                $plist[]=$p;
-            }
-        }
-    }
-
-        /**
-     * Melakukan fetching Priviledge KPIResult dengan menyamakan nama
-     *
-     * @param array &$plist daftar dari priviledge kpiresult. variabel ini bersifat output parameter
-     * @return void
-     */
-    protected function fetchPriviledgeByUnit(array &$plist){
-        $priviledges=static::priviledgeKPIResultListByUnit();
-        $unit=$this->kpiresult->unit;
-        foreach($priviledges as $p){
-            if(str_name_compare($p->value,$unit)){
-                $plist[]=$p;
-            }
-        }
-    }
-
-    /**
-     * berfungsi untuk mendapatkan daftar priviledges berdasarkan nama atau unit
-     *
-     * @return array
-     */
-    protected function fetchPriviledges(){
-        $plist=[];
-        $this->fetchPriviledgeByName($plist);
-        $this->fetchPriviledgeByUnit($plist);
-
-        return $plist;
-    }
 
     public static function generateID($employeeID,$headerID){
         $employee=Employee::find($employeeID);
@@ -94,32 +50,7 @@ class KPIResultHeader extends Model
         }
     }
 
-    /**
-     * Method static ini mengembalikan semua daftar KPIResult dengan priviledge tertentu
-     *
-     * @return Illuminate\Database\Eloquent\Collection;
-     */
-    public static function priviledgeKPIResultList(){
-        return PriviledgeKPIResult::all();
-    }
 
-    /**
-     *
-     * mengembalikan semua daftar KPIResult denga priviledge tertentu berdasarkan nama
-     * @return Illuminate\Database\Eloquent\Collection;
-     */
-    public static function priviledgeKPIResultListByName(){
-        return PriviledgeKPIResult::where('by','name')->get();
-    }
-
-    /**
-     *
-     * mengembalikan semua daftar KPIResult denga priviledge tertentu berdasarkan unit
-     * @return Illuminate\Database\Eloquent\Collection;
-     */
-    public static function priviledgeKPIResultListByUnit(){
-        return PriviledgeKPIResult::where('by','unit')->get();
-    }
 
     /**
      *
@@ -161,9 +92,8 @@ class KPIResultHeader extends Model
         return $this->belongsTo(KPIHeader::class,'kpi_header_id','id');
     }
 
-    public function priviledgekpiresults(){
-        return $this->belongsToMany(PriviledgeKPIResult::class,'priviledgedetail','h_id','p_id')
-        ->withTimestamps()->withPivot(['value','key']);
+    public function priviledge(){
+        return $this->hasOne(PriviledgeKPIResult::class,'kpi_header_result_id','id');
     }
 
     /**
@@ -172,12 +102,12 @@ class KPIResultHeader extends Model
      * @return bool
      */
     public function isPriviledge(){
-        $plist=$this->fetchPriviledges();
-
-        if(count($plist)===0)
-            return false;
-        else
+        $unit=$this->kpiresult->unit;
+        $pt_t=$this->pt_t;
+        if($unit==='#' && $pt_t==0)
             return true;
+        else
+            return false;
 
     }
 
@@ -188,21 +118,22 @@ class KPIResultHeader extends Model
      * @return void
      */
     public function mapPriviledge($value=null){
-        $plist=$this->fetchPriviledges();
-
-        if(count($plist)!==0){
-            $attachments=[];
-            foreach($plist as $index => $p){
-                if($p->priviledge===1){
-                    $attachments[$p->id]=[
-                        'value'=>$value,
-                        'key' => 'kpia_'
-                    ];
-                }
+        if($this->isPriviledge()){
+            if(is_null($this->priviledge)){
+                $this->priviledge()->create([
+                    'value'=>$value
+                ]);
             }
-            $this->priviledgekpiresults()->sync($attachments);
+            else{
+                $p=$this->priviledge;
+                $p->value=$value;
+                $p->save();
+            }
         }
-
+        else{
+            if(!is_null($this->priviledge))
+                $this->priviledge->delete();
+        }
     }
 
     /**

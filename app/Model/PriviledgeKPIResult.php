@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class PriviledgeKPIResult extends Model
 {
-    protected $table='priviledgekpiresults';
+    protected $table='priviledgeresultskpia';
     protected $hidden=['created_at','id'];
 
     protected $fillable=[
-        'value','by','priviledge'
+        'value'
     ];
 
     public function kpiresultheaders(){
-        return $this->belongsToMany(KPIResultHeader::class,'priviledgedetail','p_id','h_id');
+        return $this->belongsTo(KPIResultHeader::class,'kpi_header_result_id','id');
     }
+
 }
