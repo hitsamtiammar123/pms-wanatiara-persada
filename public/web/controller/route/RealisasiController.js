@@ -431,7 +431,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             }
             else{
                 var rt=getKPIA(curr,i);
-                if(isPriviledgesKPIResult(curr) && i===1){
+                if(isPriviledgesKPIResult(curr,i) && i===1){
                     curr.kpia_contentEditable[i]=true;
                 }
                 else
@@ -541,20 +541,14 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
      * @param {Object} obj Object berupa parameter keluaran yang akan menerima flag dari suatu priviledge
      * @return bool
      */
-    var isPriviledgesKPIResult=function(curr,obj){
-        if(kpiheaders && kpiheaders.hasOwnProperty('priviledgekpiresults')){
-            var priviledgesKPIResults=kpiheaders.priviledgekpiresults;
-            for(var i=0;i<priviledgesKPIResults.length;i++){
-                var p=priviledgesKPIResults[i];
-                switch(p.by){
-                    case 'name':
-                        if(curr.name.trim()===p.value){
-                            obj?obj.priviledge=p.priviledge:null;
-                            return true;
-                        }
-                    break;
-                }
-            }
+    var isPriviledgesKPIResult=function(curr,i){
+        if(kpiheaders && curr.unit === '#'){
+            var t_key ='pt_t'+(i+1);
+            var t=parseInt(curr[t_key]);
+            if(t===0)
+                return true;
+            else
+                return false;
         }
         return false;
     }
@@ -567,19 +561,14 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
      *
      * @returns number
      */
-    var getKPIAByPriviledge=function(curr,kpia_key,obj_priviledge){
-        var p=obj_priviledge.priviledge;
+    var getKPIAByPriviledge=function(curr,kpia_key){
         var rt=0;
-
-        switch(p){
-            case 1:
-                if(curr.hasOwnProperty(kpia_key)){
-                    rt=parseInt(curr[kpia_key]);
-                }
-                else
-                    rt=100;
-            break;
+        if(curr.hasOwnProperty(kpia_key)){
+            rt=parseInt(curr[kpia_key]);
         }
+        else
+            rt=100;
+
 
         return rt;
     }
@@ -590,9 +579,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var aw_key='aw_'+(j+1);
             var pw_key=$scope.pw_indices[j];
             var rt;
-            var obj_priviledge={};
 
-            if(!isPriviledgesKPIResult(curr,obj_priviledge)){
+            if(!isPriviledgesKPIResult(curr,j)){
                 rt=getKPIA(curr,j);
 
                 if(isNaN(rt)||!isFinite(rt)){
@@ -603,7 +591,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
             }
             else{
-                rt=getKPIAByPriviledge(curr,kpia_key,obj_priviledge);
+                rt=getKPIAByPriviledge(curr,kpia_key);
             }
 
             curr[kpia_key]=rt+'%';
