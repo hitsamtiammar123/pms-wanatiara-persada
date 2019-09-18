@@ -33,7 +33,7 @@ class KPIHeaderController extends Controller
         $nc=new Carbon($curr_date);
         $prev_month=$nc->addMonth(-1);
 
-        $kpiheader=KPIHeader::where('employee_id',$id)->where('period',$curr_date)->first();
+        $kpiheader=KPIHeader::findForFrontEnd($id,$curr_date);
         if(!$kpiheader){
             return send_404_error('Data tidak ditemukan');
         }

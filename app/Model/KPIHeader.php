@@ -516,6 +516,17 @@ class KPIHeader extends Model
         return $curr_date;
     }
 
+    /**
+     * berfungsi untuk mengambil data kpiheader untuk dikonsumsi oleh front end
+     *
+     * @param string $id ID dari karyawam
+     * @param string|Carbon\Carbon tanggal dari suatu header
+     * @return App\Model\KPIHeader
+     */
+    public static function findForFrontEnd($id,$curr_date){
+        return KPIHeader::where('employee_id',$id)->where('period',$curr_date)->first();
+    }
+
     public function getFinalAchivement(array $kpiresults,array $kpiproceses){
 
         $t1_fr=floatval($kpiresults['totalAchievement']['t1']);
