@@ -41,7 +41,10 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $id=KPIEndorsement::generateID('1915284117');
-        printf($id);
+        $employee=Employee::find('1915284117');
+        foreach($employee->kpiheaders as $header){
+            $header->makeEndorsement();
+        }
+
     }
 }

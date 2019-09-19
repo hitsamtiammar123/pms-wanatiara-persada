@@ -741,6 +741,48 @@ class KPIHeader extends Model
         }
     }
 
+    /**
+     * Membuat KPIEndorsement Baru
+     *
+     * @return int
+     */
+    public function makeEndorsement($_id=null){
+        $employeeList=$this->employee->getHirarcialEmployee();
+        $count=0;
+
+        foreach($employeeList as $index => $employee){
+            $p=$this->kpiendorsements->where('employee_id',$employee->id)->first();
+            if(is_null($p)){
+                $id=$this->id;
+                $endorsementID=KPIEndorsement::generateID($this->employee->id);
+                if(!$id){
+                    if(!is_null($_id)){
+                        KPIEndorsement::create([
+                            'id'=>$endorsementID,
+                            'kpi_header_id' =>$_id,
+                            'level' =>($index+1),
+                            'verified' => false,
+                            'employee_id' => $employee->id
+                        ]);
+                        $count++;
+                    }
+
+                }
+                else{
+                    $this->kpiendorsements()->create([
+                        'id'=>$endorsementID,
+                        'level' =>($index+1),
+                        'verified' => false,
+                        'employee_id' => $employee->id
+                    ]);
+                    $count++;
+                }
+            }
+        }
+        return $count;
+
+    }
+
     public function cPrevPeriod(){
         $period=$this->period;
         $date=Carbon::parse($period);
