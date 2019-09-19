@@ -1,9 +1,9 @@
 <?php
 
-use App\Model\KPIResultHeader;
+use App\Model\KPIResult;
 
 Route::get('/test',function(){
-    return KPIResultHeader::priviledgeKPIResultList();
+    return KPIResult::deleteUnrelatesData();
 });
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');

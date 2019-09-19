@@ -37,6 +37,25 @@ class KPIResult extends Model
         return self::_generateID($a,$code);
     }
 
+    /**
+     * Berfungsi untuk menghapus data yang tidak mempunya relasi
+     *
+     * @return int jumlah data yang dihapus
+     */
+    public static function deleteUnrelatesData(){
+        $results=self::all();
+        $count=0;
+        foreach($results as $r){
+            if($r->kpiresultheaders->count()===0){
+                $r->delete();
+                $count++;
+            }
+
+        }
+        return $count;
+
+    }
+
     public function kpiresultheaders(){
         return $this->hasMany(KPIResultHeader::class,'kpi_result_id','id');
     }

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Model\Employee;
+use App\Model\KPIEndorsement;
 use App\Model\KPIHeader;
 use App\Model\KPIResultHeader;
 use Illuminate\Console\Command;
@@ -40,7 +41,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $employee=Employee::find('1915284136');
-        $employee->deleteKPIResultsOfHeader();
+        $id=KPIEndorsement::generateID('1915284117');
+        printf($id);
     }
 }
