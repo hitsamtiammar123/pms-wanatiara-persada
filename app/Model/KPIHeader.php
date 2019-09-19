@@ -224,7 +224,7 @@ class KPIHeader extends Model
 
             if($type==='kpiresult'){
                 $unit=$curr['unit'];
-                foreach(array_keys($this->kpiResultDKeys) as $key){
+                foreach($this->kpiResultDKeys as $key => $index){
                     switch($unit){
                         case '$':
                         case 'WMT':
@@ -233,6 +233,17 @@ class KPIHeader extends Model
                         case '%':
                         case 'MV':
                             $curr[$key]=$curr[$key].'%';
+                        break;
+                        case 'kwh':
+                            switch($index){
+                                case 'pt_t':
+                                case 'pt_k':
+                                    $curr[$key]='根据需要 Sesuai kebutuhan';
+                                break;
+                                default:
+                                    $curr[$key]=number_format($curr[$key]);
+                                break;
+                            }
                         break;
                     }
                 }
@@ -419,7 +430,8 @@ class KPIHeader extends Model
             $unit=$kpiresult['unit'];
 
             $curr_result_prev=$header_prev->findByName($name);
-
+            $curr_result_id='';
+            $curr_result_prev_id='';
             if(!$curr_result_prev){
                 $new_result=new KPIResult();
                 $new_result_id=KPIResult::generateID($this->employee->id);
@@ -429,17 +441,20 @@ class KPIHeader extends Model
                 $new_result->save();
 
                 $curr_result_prev=new KPIResultHeader();
-                $curr_result_prev->id=KPIResultHeader::generateID($this->employee->id,$header_prev->id);
+                $curr_result_prev_id=KPIResultHeader::generateID($this->employee->id,$header_prev->id);
+                $curr_result_prev->id=$curr_result_prev_id;
                 $curr_result_prev->kpi_header_id=$header_prev->id;
                 $curr_result_prev->kpi_result_id=$new_result_id;
 
             }
             else{
                 $new_result_id=$curr_result_prev->kpi_result_id;
+                $curr_result_prev_id=$curr_result_prev->id;
             }
 
             $curr_result=new KPIResultHeader();
-            $curr_result->id=KPIResultHeader::generateID($this->employee->id,$this->id);
+            $curr_result_id=KPIResultHeader::generateID($this->employee->id,$this->id);
+            $curr_result->id=$curr_result_id;
             $curr_result->kpi_header_id=$this->id;
             $curr_result->kpi_result_id=$new_result_id;
 
@@ -460,8 +475,8 @@ class KPIHeader extends Model
             $curr_result_prev->save();
             $curr_result->push();
 
-            $curr_result_prev->mapPriviledge($kpiresult['kpia_1']);
-            $curr_result->mapPriviledge($kpiresult['kpia_2']);
+            $curr_result_prev->mapPriviledge($kpiresult['kpia_1'],$curr_result_prev_id);
+            $curr_result->mapPriviledge($kpiresult['kpia_2'],$curr_result_id);
 
         }
     }
@@ -520,7 +535,7 @@ class KPIHeader extends Model
      * berfungsi untuk mengambil data kpiheader untuk dikonsumsi oleh front end
      *
      * @param string $id ID dari karyawam
-     * @param string|Carbon\Carbon tanggal dari suatu header
+     * @param string|Carbon\Carbon $curr_date tanggal dari suatu header
      * @return App\Model\KPIHeader
      */
     public static function findForFrontEnd($id,$curr_date){
@@ -671,7 +686,7 @@ class KPIHeader extends Model
         $kpiheaderresults=$this->kpiresultheaders->sortBy('created_at');
 
         foreach($kpiheaderresults as $headerresult){
-            if(str_name_compare($headerresult->kpiresult->name,$name))
+            if(str_name_compare(trim($headerresult->kpiresult->name),trim($name)))
                 return $headerresult;
         }
         return null;
@@ -713,6 +728,17 @@ class KPIHeader extends Model
 
         $header_prev->kpiprocesses()->sync($kpiprocess_save);
         $this->kpiprocesses()->sync($kpiprocess_save_n);
+    }
+
+    /**
+     * Menghapus semua KPIResultHeader
+     *
+     * @return void
+     */
+    public function deleteKPIResulHeader(){
+        foreach($this->kpiresultheaders as $resultheader){
+            $resultheader->delete();
+        }
     }
 
     public function cPrevPeriod(){

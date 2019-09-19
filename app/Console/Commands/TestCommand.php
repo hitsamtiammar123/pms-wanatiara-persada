@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Model\Employee;
 use App\Model\KPIHeader;
 use App\Model\KPIResultHeader;
 use Illuminate\Console\Command;
@@ -39,10 +40,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
-       $results=KPIResultHeader::all();
-       foreach($results as $result){
-            $result->mapPriviledge(100);
-       }
-
+        $employee=Employee::find('1915284136');
+        $employee->deleteKPIResultsOfHeader();
     }
 }

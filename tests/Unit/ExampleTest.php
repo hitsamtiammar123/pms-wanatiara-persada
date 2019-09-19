@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ExampleTest extends TestCase
 {
 
-    use DatabaseMigrations;
+    //use DatabaseMigrations;
 
     /**
      * A basic test example.
@@ -20,5 +20,13 @@ class ExampleTest extends TestCase
     {
 
         $this->assertTrue(false);
+    }
+
+    public function testComparingStrName(){
+        $str='冶炼厂产量、品位Volume Produksi dan Kadar Smelter plant ';
+        $r=str_name_compare($str,'冶炼厂产量、品位Volume Produksi dan Kadar Smelter plant ');
+
+        $this->assertTrue($r);
+
     }
 }

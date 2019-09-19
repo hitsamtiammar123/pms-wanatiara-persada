@@ -10,7 +10,7 @@ class PriviledgeKPIResult extends Model
     protected $hidden=['created_at','id'];
 
     protected $fillable=[
-        'value'
+        'value','kpi_header_result_id'
     ];
 
     public function kpiresultheaders(){

@@ -244,6 +244,25 @@ class Employee extends Model
 
     }
 
+    /**
+     * Menghapus semua detail KPIResultHeader dari suatu header
+     *
+     * @param string $period
+     * @return void
+     */
+    public function deleteKPIResultsOfHeader($period=null){
+        if(is_null($period)){
+            foreach($this->kpiheaders as $header){
+                $header->deleteKPIResulHeader();
+            }
+
+        }
+        else{
+            $header=KPIHeader::findForFrontEnd($this->id,$period);
+            $header->deleteKPIResultsOfHeader();
+        }
+    }
+
 
     public function isUser(){
         return !is_null($this->user);

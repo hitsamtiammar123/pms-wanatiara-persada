@@ -114,16 +114,25 @@ class KPIResultHeader extends Model
     /**
      * Melakukan mapping jika data ini memiliki priviledge
      *
-     * @param string|null $value
+     * @param string|null $value Nilai yang mau dimasukan
+     * @param string|null $id ID dari KPIResult yang bersangkutan
      * @return void
      */
-    public function mapPriviledge($value=null){
+    public function mapPriviledge($value=null,$id=null){
         if($this->isPriviledge()){
             $nvalue=intval($value);
             if(is_null($this->priviledge)){
-                $this->priviledge()->create([
-                    'value'=>$nvalue
-                ]);
+                if(is_null($id)){
+                    $this->priviledge()->create([
+                        'value'=>$nvalue
+                    ]);
+                }
+                else{
+                    PriviledgeKPIResult::create([
+                        'kpi_header_result_id' =>$id,
+                        'value'=>$nvalue
+                    ]);
+                }
             }
             else{
                 $p=$this->priviledge;
