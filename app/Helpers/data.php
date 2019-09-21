@@ -98,8 +98,10 @@ if(!function_exists('sanitize_to_number')){
     function sanitize_to_number(array &$data,$keys,$precision=2){
 
         foreach($keys as $key){
-            $value=$data[$key];
-            $data[$key]=round(floatval($value),$precision);
+            if(array_key_exists($key,$data)){
+                $value=$data[$key];
+                $data[$key]=round(floatval($value),$precision);
+            }
         }
     }
 

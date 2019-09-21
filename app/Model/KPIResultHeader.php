@@ -293,10 +293,10 @@ class KPIResultHeader extends Model
             ){
                 $arr=[];
                 $map=$keys[$key];
-                $arr['oldval']=$this->{$map};
+                $arr['oldval']=in_array($key,$char_set)?$this->kpiresult->{$map}:$this->{$map};
                 $arr['newval']=$value;
                 if(in_array($key,$char_set)){
-                    if($arr['oldval']!==$arr['newval'])
+                    if(trim($arr['oldval'])!==trim($arr['newval']))
                         $total[$map]=$arr;
                 }
                 else{
