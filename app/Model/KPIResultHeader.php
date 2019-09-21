@@ -265,15 +265,14 @@ class KPIResultHeader extends Model
         $this->push();
         $result_prev->save();
 
-        if(array_key_exists('kpia_1',$kpiresult)){
             $id=array_key_exists(0,$ids)?$ids[0]:null;
-            $result_prev->mapPriviledge($kpiresult['kpia_1'],$id);
-        }
+            $kpia_1=array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null;
+            $result_prev->mapPriviledge($kpia_1,$id);
 
-        if(array_key_exists('kpia_2',$kpiresult)){
-            $id=array_key_exists(0,$ids)?$ids[0]:null;
-            $this->mapPriviledge($kpiresult['kpia_2'],$id);
-        }
+            $id=array_key_exists(1,$ids)?$ids[1]:null;
+            $kpia_2=array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null;
+            $this->mapPriviledge($kpia_2,$id);
+
     }
 
     /**
@@ -287,6 +286,7 @@ class KPIResultHeader extends Model
     public function setUpdatedList($kpiresult, array &$updatedlist){
         $keys=array_merge(static::KPIRESULTDKEY,static::KPIRESULTFRONTKEY);
         $total=[];
+        $char_set=['name','unit'];
         foreach($kpiresult as $key =>$value){
             if(
                 in_array($key,array_keys($keys))
@@ -295,7 +295,15 @@ class KPIResultHeader extends Model
                 $map=$keys[$key];
                 $arr['oldval']=$this->{$map};
                 $arr['newval']=$value;
-                $total[$map]=$arr;
+                if(in_array($key,$char_set)){
+                    if($arr['oldval']!==$arr['newval'])
+                        $total[$map]=$arr;
+                }
+                else{
+                    if(round(floatval($arr['oldval']),2)!==round(floatval($arr['newval']),2))
+                        $total[$map]=$arr;
+                }
+
             }
         }
         $updatedlist[$kpiresult['id']]=$total;
@@ -324,11 +332,13 @@ class KPIResultHeader extends Model
             if(!array_key_exists($this->id,$updatedlist)){
                 $updatedlist[$this->id]=[];
             }
+
             $arr=[
                 'oldvalue' => $oldvalue,
                 'newvalue' =>$value
             ];
-            $updatedlist[$this->id][$key]=$arr;
+            if(intval($oldvalue)!==intval($value))
+                $updatedlist[$this->id][$key]=$arr;
         }
     }
 

@@ -396,7 +396,10 @@ class KPIHeader extends Model
 
                     $kpiresult['real_k2']=intval($real_k1+$real_t2).'';
                 }
-
+            break;
+            case '%':
+            case 'MV':
+                sanitize_to_number($kpiresult,array_keys(KPIResultHeader::KPIRESULTDKEY));
             break;
         }
     }

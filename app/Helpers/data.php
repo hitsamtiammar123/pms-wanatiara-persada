@@ -93,6 +93,18 @@ if(!function_exists('filter_is_number')){
 
 }
 
+if(!function_exists('sanitize_to_number')){
+
+    function sanitize_to_number(array &$data,$keys,$precision=2){
+
+        foreach($keys as $key){
+            $value=$data[$key];
+            $data[$key]=round(floatval($value),$precision);
+        }
+    }
+
+}
+
 if(!function_exists('str_name_compare')){
 
     /**
