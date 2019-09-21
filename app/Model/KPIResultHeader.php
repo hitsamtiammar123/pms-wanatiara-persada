@@ -22,7 +22,16 @@ class KPIResultHeader extends Model
     protected $fillable=['id','pw','pt_t','pt_k','real_t','real_k','kpi_header_id','kpi_result_header','kpi_result_id'];
 
     const FRONT_END_PROPERTY=['pw_1','pw_2','pt_t1','pt_k1','pt_t2','pt_k2','real_t1','real_k1','real_t2','real_k2'];
-
+    const KPIRESULTDKEY=[
+        'pt_t1' =>'pt_t',
+        'pt_k1' => 'pt_k',
+        'pt_t2' => 'pt_t',
+        'pt_k2' => 'pt_k',
+        'real_t1' => 'real_t',
+        'real_k1' => 'real_k',
+        'real_t2' => 'real_t',
+        'real_k2' => 'real_k'
+    ];
 
     public static function generateID($employeeID,$headerID){
         $employee=Employee::find($employeeID);
@@ -173,6 +182,36 @@ class KPIResultHeader extends Model
         else{
             return null;
         }
+    }
+
+    /**
+     *
+     * @param array $kpiresult Data Array dari kpiresult yang mau di-simpan
+     * @param App\Model\KPIResultHeader $_prev Data KPIResultHeader pada periode sebelumnya
+     * @return void
+     */
+    public function saveFromArray(array $kpiresult, KPIResultHeader $_prev=null){
+        $result_prev=!is_null($_prev)?$_prev:$this->getPrev();
+        $result_prev->pw=$kpiresult['pw_1'];
+        $result_prev->pt_t=$kpiresult['pt_t1'];
+        $result_prev->pt_k=$kpiresult['pt_k1'];
+        $result_prev->real_t=$kpiresult['real_t1'];
+        $result_prev->real_k=$kpiresult['real_k1'];
+
+        $this->pw=$kpiresult['pw_2'];
+        $this->pt_t=$kpiresult['pt_t2'];
+        $this->pt_k=$kpiresult['pt_k2'];
+        $this->real_t=$kpiresult['real_t2'];
+        $this->real_k=$kpiresult['real_k2'];
+
+        $this->kpiresult->name=$kpiresult['name'];
+        $this->kpiresult->unit=$kpiresult['unit'];
+
+        $this->push();
+        $result_prev->save();
+
+        $result_prev->mapPriviledge($kpiresult['kpia_1']);
+        $this->mapPriviledge($kpiresult['kpia_2']);
     }
 
     public function getPrev(){

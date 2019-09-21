@@ -224,7 +224,7 @@ class KPIHeader extends Model
 
             if($type==='kpiresult'){
                 $unit=$curr['unit'];
-                foreach($this->kpiResultDKeys as $key => $index){
+                foreach(KPIResultHeader::KPIRESULTDKEY as $key => $index){
                     switch($unit){
                         case '$':
                         case 'WMT':
@@ -397,28 +397,8 @@ class KPIHeader extends Model
         if(!is_null($kpiresult['id'])){
             $curr_result=KPIResultHeader::find($kpiresult['id']);
             $curr_result_prev=$curr_result->getPrev();
-            if($curr_result_prev){
-                $curr_result_prev->pw=$kpiresult['pw_1'];
-                $curr_result_prev->pt_t=$kpiresult['pt_t1'];
-                $curr_result_prev->pt_k=$kpiresult['pt_k1'];
-                $curr_result_prev->real_t=$kpiresult['real_t1'];
-                $curr_result_prev->real_k=$kpiresult['real_k1'];
-
-                $curr_result->pw=$kpiresult['pw_2'];
-                $curr_result->pt_t=$kpiresult['pt_t2'];
-                $curr_result->pt_k=$kpiresult['pt_k2'];
-                $curr_result->real_t=$kpiresult['real_t2'];
-                $curr_result->real_k=$kpiresult['real_k2'];
-
-                $curr_result->kpiresult->name=$kpiresult['name'];
-                $curr_result->kpiresult->unit=$kpiresult['unit'];
-
-                $curr_result->push();
-                $curr_result_prev->save();
-
-                $curr_result_prev->mapPriviledge($kpiresult['kpia_1']);
-                $curr_result->mapPriviledge($kpiresult['kpia_2']);
-
+            if(!is_null($curr_result) && !is_null($curr_result_prev)){
+                $curr_result->saveFromArray($kpiresult,$curr_result_prev);
             }
         }
         else{
@@ -457,26 +437,7 @@ class KPIHeader extends Model
             $curr_result->id=$curr_result_id;
             $curr_result->kpi_header_id=$this->id;
             $curr_result->kpi_result_id=$new_result_id;
-
-
-            $curr_result_prev->pw=$kpiresult['pw_1'];
-            $curr_result_prev->pt_t=$kpiresult['pt_t1'];
-            $curr_result_prev->pt_k=$kpiresult['pt_k1'];
-            $curr_result_prev->real_t=$kpiresult['real_t1'];
-            $curr_result_prev->real_k=$kpiresult['real_k1'];
-
-            $curr_result->pw=$kpiresult['pw_2'];
-            $curr_result->pt_t=$kpiresult['pt_t2'];
-            $curr_result->pt_k=$kpiresult['pt_k2'];
-            $curr_result->real_t=$kpiresult['real_t2'];
-            $curr_result->real_k=$kpiresult['real_k2'];
-
-            // $new_result->save();
-            $curr_result_prev->save();
-            $curr_result->push();
-
-            $curr_result_prev->mapPriviledge($kpiresult['kpia_1'],$curr_result_prev_id);
-            $curr_result->mapPriviledge($kpiresult['kpia_2'],$curr_result_id);
+            $curr_result->saveFromArray($kpiresult,$curr_result_prev);
 
         }
     }

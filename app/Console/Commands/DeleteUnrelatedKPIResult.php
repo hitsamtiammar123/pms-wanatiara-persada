@@ -2,27 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\Model\Employee;
-use App\Model\KPIEndorsement;
-use App\Model\KPIHeader;
-use App\Model\KPIResultHeader;
+use App\Model\KPIResult;
 use Illuminate\Console\Command;
 
-class TestCommand extends Command
+class DeleteUnrelatedKPIResult extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'hehe';
+    protected $signature = 'hitsam:kpiresult:delete-unrelated';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'ini command Heheeheeheh';
+    protected $description = 'Perintah ini berfungsi untuk menghapus data KPIResult yang tidak memiliki relasi';
 
     /**
      * Create a new command instance.
@@ -41,7 +38,8 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        put_log('Test Log');
-
+        //
+        $count=KPIResult::deleteUnrelatesData();
+        $this->info("Jumlah data yang dihapus: $count");
     }
 }
