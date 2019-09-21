@@ -32,6 +32,49 @@ class KPIResultHeader extends Model
         'real_t2' => 'real_t',
         'real_k2' => 'real_k'
     ];
+    const KPIRESULTPWKEY=[
+        'pw_1'=>'pw',
+        'pw_2'=>'pw'
+    ];
+
+    const KPIRESULTPREVKEY=[
+        'pw_1',
+        'pt_t1',
+        'pt_k1',
+        'real_t1',
+        'real_k1'
+    ];
+
+    const KPIRESULTCURRENTKEY=[
+        'pw_2',
+        'pt_t2',
+        'pt_k2',
+        'real_t2',
+        'real_k2'
+    ];
+
+    /**
+     * Mapping data KPIResultHeader dari array
+     *
+     * @param array $mapping
+     * data mapping. menerima mapping dari KPIResulHeader::KPIRESULTCURRENTKEY atau KPIResultHeader::KPIRESULTPREVKEY
+     * @param array|Illuminate\Support\Collection $kpiresult
+     * Data KPIresultHeader yang mau dimasukan
+     * @return void
+     */
+    protected function mapFromArr(array $mapping,$kpiresult){
+        $mapping=array_merge(
+            $mapping,
+            array_keys(self::KPIRESULTPWKEY)
+        );
+        $kpiresultdkey=array_merge(KPIResultHeader::KPIRESULTPWKEY,KPIResultHeader::KPIRESULTDKEY);
+        foreach($kpiresult as $key => $value){
+            if(in_array($key,$mapping)){
+                $map=$kpiresultdkey[$key];
+                $this->{$map}=$value;
+            }
+        }
+    }
 
     public static function generateID($employeeID,$headerID){
         $employee=Employee::find($employeeID);
@@ -192,17 +235,10 @@ class KPIResultHeader extends Model
      */
     public function saveFromArray(array $kpiresult, KPIResultHeader $_prev=null){
         $result_prev=!is_null($_prev)?$_prev:$this->getPrev();
-        $result_prev->pw=$kpiresult['pw_1'];
-        $result_prev->pt_t=$kpiresult['pt_t1'];
-        $result_prev->pt_k=$kpiresult['pt_k1'];
-        $result_prev->real_t=$kpiresult['real_t1'];
-        $result_prev->real_k=$kpiresult['real_k1'];
 
-        $this->pw=$kpiresult['pw_2'];
-        $this->pt_t=$kpiresult['pt_t2'];
-        $this->pt_k=$kpiresult['pt_k2'];
-        $this->real_t=$kpiresult['real_t2'];
-        $this->real_k=$kpiresult['real_k2'];
+
+        $result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
+        $this->mapFromArr(KPIResultHeader::KPIRESULTCURRENTKEY,$kpiresult);
 
         $this->kpiresult->name=$kpiresult['name'];
         $this->kpiresult->unit=$kpiresult['unit'];
