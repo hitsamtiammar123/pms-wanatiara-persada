@@ -77,11 +77,11 @@
                     <tbody>
                             <tr ng-repeat="d in data track by $index" ng-init="c_index=0;outerIndex=$index">
                                 <td class="num"><span ng-if="!dlt_result.toogle_delete">{{$index+1}}</span><button class="btn btn-danger" ng-if="dlt_result.toogle_delete" ng-click="deleteRow($index)">X</button></td>
-                                <td class="kpi" belong-to="d.name" after-edit="setBColor" contenteditable="{{d.name_contentEditable}}" data-flag="name"
+                                <td class="kpi" belong-to="d.name" after-edit="setBColor|mapChange" contenteditable="{{d.name_contentEditable}}" data-flag="name"
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 notify-g-label="realisasi-content:kpi-{{outerIndex}}" ng-class="d.kpiColor" i-index="name" c-index="{{c_index}}" d-index="{{$index}}"></td>
 
-                                <td class="center-text" belong-to="d.unit" after-edit="setDataFilter" contenteditable="{{d.unit_contentEditable}}" data-flag="unit"
+                                <td class="center-text" belong-to="d.unit" after-edit="setDataFilter|mapChange" contenteditable="{{d.unit_contentEditable}}" data-flag="unit"
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 notify-g-label="realisasi-content:unit-{{outerIndex}}" ng-class="d.unitColor" i-index="unit" c-index="{{c_index+1}}" d-index="{{$index}}"></td>
 
@@ -89,31 +89,31 @@
                                 on-data-paste="dataPaste" on-data-copy="dataCopy" on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 contenteditable="{{d.pw_contentEditable[$index]}}" c-index="{{c_index+2+$index}}" i-index="{{i}}"
                                 auto-fill="true" sanitize="{{d.pw_sanitize}}" format="{{d.pw_filter}}" ng-class="d['bColor_'+i]"
-                                 after-edit="setBColor|setTotalW" notify-g-label="realisasi-content:pw-{{outerIndex}}-{{i}}" d-index="{{$parent.$index}}"></td>
+                                 after-edit="setBColor|setTotalW|mapChange" notify-g-label="realisasi-content:pw-{{outerIndex}}-{{i}}" d-index="{{$parent.$index}}"></td>
 
                                 <td ng-repeat="i in pt_indices" belong-to="d[i]" data-flag="pt" on-data-paste="dataPaste" on-data-copy="dataCopy"
                                 on-data-escaped="dataEscaped" on-data-selected="dataSelected" ng-class="d['bColor_'+i]"
                                 contenteditable="{{d.pt_contentEditable[$index]}}" auto-fill="true" sanitize="{{d.pt_sanitize}}" i-index="{{i}}"
-                                format="{{d.pt_filter}}" after-edit="setBColor" notify-g-label="realisasi-content:pt-{{outerIndex}}-{{i}}"
+                                format="{{d.pt_filter}}" after-edit="setBColor|mapChange" notify-g-label="realisasi-content:pt-{{outerIndex}}-{{i}}"
                                 d-index="{{$parent.$index}}" c-index="{{c_index+4+$index}}" ></td>
 
                                 <td ng-repeat="i in real_indices" belong-to="d[i]" data-flag="real" on-data-paste="dataPaste" on-data-copy="dataCopy"
                                 on-data-escaped="dataEscaped" on-data-selected="dataSelected" ng-class="d['bColor_'+i]"
                                 contenteditable="{{d.real_contentEditable[$index]}}" auto-fill="true" sanitize="{{d.real_sanitize}}" i-index="{{i}}"
-                                format="{{d.real_filter}}" c-index="{{c_index+8+$index}}" after-edit="setBColor" notify-g-label="realisasi-content:real-{{outerIndex}}-{{i}}"
+                                format="{{d.real_filter}}" c-index="{{c_index+8+$index}}" after-edit="setBColor|mapChange" notify-g-label="realisasi-content:real-{{outerIndex}}-{{i}}"
                                 d-index="{{$parent.$index}}"></td>
 
 
                                 <td ng-repeat="i in kpia_indices" belong-to="d[i]" data-flag="kpia" on-data-paste="dataPaste"
                                 on-data-escaped="dataEscaped" on-data-selected="dataSelected" ng-class="d['bColor_'+i]"
                                 contenteditable="{{d.kpia_contentEditable[$index]}}" auto-fill="true" sanitize="{{d.kpia_sanitize}}"
-                                format="{{d.kpia_filter}}" after-edit="setBColor" notify-g-label="realisasi-content:kpia-{{outerIndex}}-{{i}}"
+                                format="{{d.kpia_filter}}" after-edit="setBColor|mapChange" notify-g-label="realisasi-content:kpia-{{outerIndex}}-{{i}}"
                                 d-index="{{$parent.$index}}"></td>
 
                                 <td ng-repeat="i in aw_indices" belong-to="d[i]" data-flag="aw" on-data-paste="dataPaste"
                                 on-data-escaped="dataEscaped" on-data-selected="dataSelected"
                                 contenteditable="{{d.aw_contentEditable}}" auto-fill="true" sanitize="{{d.aw_sanitize}}"
-                                format="{{d.aw_filter}}" after-edit="setBColor" notify-g-label="realisasi-content:aw-{{outerIndex}}-{{i}}"
+                                format="{{d.aw_filter}}" after-edit="setBColor|mapChange" notify-g-label="realisasi-content:aw-{{outerIndex}}-{{i}}"
                                 d-index="{{$parent.$index}}"></td>
                             </tr>
                             <tr>

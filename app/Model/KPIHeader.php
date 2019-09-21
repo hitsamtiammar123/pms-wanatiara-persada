@@ -267,11 +267,10 @@ class KPIHeader extends Model
         $pt_k_key='pt_k'.($j+1);
         switch($unit){
             case '$':
-            if($j===1){
+
                 $rC=$d[$real_k_key];
                 $tC=$d[$pt_k_key];
                 break;
-            }
             default:
                 $rC=$d[$real_key];
                 $tC=$d[$pt_key];
@@ -376,18 +375,28 @@ class KPIHeader extends Model
     }
 
     protected function filterKPIResultByUnit(&$kpiresult){
+        if(!array_key_exists('unit',$kpiresult))
+            return;
         $unit=$kpiresult['unit'];
+        $keys=array_keys($kpiresult);
         switch($unit){
             case '$':
             case 'WMT':
             case 'MT':
-                $pt_k1=$kpiresult['pt_k1'];
-                $pt_t2=$kpiresult['pt_t2'];
-                $real_k1=$kpiresult['real_k1'];
-                $real_t2=$kpiresult['real_t2'];
+                if(in_array(['pt_k1','pt_t2','pt_k2'],$keys)){
+                    $pt_k1=$kpiresult['pt_k1'];
+                    $pt_t2=$kpiresult['pt_t2'];
 
-                $kpiresult['pt_k2']=intval($pt_k1+$pt_t2).'';
-                $kpiresult['real_k2']=intval($real_k1+$real_t2).'';
+                    $kpiresult['pt_k2']=intval($pt_k1+$pt_t2).'';
+                }
+
+                if(in_array(['real_k1','real_t2','real_k2'],$keys)){
+                    $real_k1=$kpiresult['real_k1'];
+                    $real_t2=$kpiresult['real_t2'];
+
+                    $kpiresult['real_k2']=intval($real_k1+$real_t2).'';
+                }
+
             break;
         }
     }
@@ -666,8 +675,10 @@ class KPIHeader extends Model
 
     public function updateKPIResultFromArray($kpiresults){
         $header_prev=$this->getPrev();
+        $keys=KPIResultHeader::numberKeys();
+        //$kpiresults_collection=collect($kpiresults)->unique('name');
         foreach($kpiresults as $kpiresult){
-            $kpiresult=filter_is_number($kpiresult,KPIResultHeader::FRONT_END_PROPERTY);
+            $kpiresult=filter_is_number($kpiresult,$keys);
             $this->filterKPIResultByUnit($kpiresult);
             $this->applyUpdateKPIResultFromArray($kpiresult,$header_prev);
         }

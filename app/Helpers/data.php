@@ -81,6 +81,8 @@ if(!function_exists('filter_is_number')){
     function filter_is_number($data,$keys,$default=null){
 
         foreach($keys as $key){
+            if(!array_key_exists($key,$data))
+                continue;
             $d=$data[$key];
             if(!is_numeric($d))
                 $d=$default;
@@ -119,5 +121,6 @@ if(!function_exists('str_name_compare')){
     }
 
 }
+
 
 

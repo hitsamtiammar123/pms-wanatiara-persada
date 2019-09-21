@@ -125,7 +125,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         var sentData={};
 
         sentData.kpiresult=JSON.stringify(
-            dataService.only(body.kpiresult,kpiKeys.kpiresult)
+            body.kpiresult
             );
         sentData.kpiprocesses=JSON.stringify(
             dataService.only(body.kpiprocesses,kpiKeys.kpiprocess)

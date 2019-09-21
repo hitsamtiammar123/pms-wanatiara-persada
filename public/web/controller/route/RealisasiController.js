@@ -68,6 +68,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var currentEmployee=user.employee;
     var deleteListResult=[];
     var deleteListProcess=[];
+    var updateMap={};
 
     $scope.currentMonth=$scope.months[currMonth];
     $scope.currendDate=new Date();
@@ -524,11 +525,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         var rt;
         switch(unit){
             case '$':
-                if(j===1){
-                    rC=d[real_k_key];
-                    tC=d[pt_k_key];
-                    break;
-                }
+                rC=d[real_k_key];
+                tC=d[pt_k_key];
+                break;
             default:
                 rC=d[real_key];
                 tC=d[pt_key];
@@ -580,6 +579,25 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
 
         return rt;
+    }
+
+    /**
+     * untuk melakukan mapping pada data yang mau diubah
+     *
+     * @param {number} d index dari data KPIResult
+     * @param {string} i index dari data yang mau diubah
+     * @param {*} value nilai baru
+     */
+    var mapChange=function(d,i,value){
+        var data=$scope.data[d];
+        if(!updateMap.hasOwnProperty(data.id)){
+            updateMap[data.id]={
+                id:data.id,
+                kpi_header_id:data.kpi_header_id
+            };
+        }
+        var mapping=updateMap[data.id];
+        mapping[i]=value;
     }
 
     var setBColorKPIAandPW=function(curr){
@@ -913,8 +931,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                     var sanitize='sNumber';
                     ccdata=$filter(sanitize)(ccdata+'');
                 }
-                if(ccdata!=='')
+                if(ccdata!==''){
                     $scope.data[p_index][i_index]=ccdata;
+                    mapChange(p_index,i_index,ccdata);
+                }
 
                     c_index=0;
                     if(i_index==='real_k2'){
@@ -1594,7 +1614,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.saveChanged=function(){
 
         var body={
-            kpiresult:$scope.data,
+            kpiresult:updateMap,
             kpiprocesses:$scope.kpiprocesses,
             kpiresultdeletelist:deleteListResult?deleteListResult:[],
             kpiprocessdeletelist:deleteListProcess?deleteListProcess:[],
@@ -1633,6 +1653,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
     $scope.setBColorP=function(){
         onAfterEdit($scope.kpiprocesses,$scope.totalAchieveMentP,$scope.IndexAchieveMentP);
+    }
+
+    $scope.mapChange=function(elem,value,scope,attrs){
+        var i=attrs.iIndex;
+        var d=parseInt(attrs.dIndex);
+        mapChange(d,i,value);
+        console.log(updateMap);
     }
 
     $scope.setEndorse=function(endorse){

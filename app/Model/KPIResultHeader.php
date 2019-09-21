@@ -53,6 +53,11 @@ class KPIResultHeader extends Model
         'real_k2'
     ];
 
+    const KPIRESULTKPIAKEY=[
+        'kpia_1',
+        'kpia_2'
+    ];
+
     /**
      * Mapping data KPIResultHeader dari array
      *
@@ -102,8 +107,6 @@ class KPIResultHeader extends Model
         }
     }
 
-
-
     /**
      *
      * Method ini berfungsi untuk melakukan kalkulasi Data Kumulatif pada tanggal yang bersangkutan
@@ -133,6 +136,15 @@ class KPIResultHeader extends Model
             }
 
         }
+    }
+
+    public static function numberKeys(){
+        return array_merge(
+            static::KPIRESULTCURRENTKEY,
+            static::KPIRESULTPREVKEY,
+            static::KPIRESULTKPIAKEY,
+            array_values(static::KPIRESULTKPIAKEY)
+        );
     }
 
 
@@ -214,6 +226,7 @@ class KPIResultHeader extends Model
         return $kpiresult;
     }
 
+
     public function getFromCarbon(Carbon $carbon){
         $d=KPIHeader::select('id')->where('employee_id',$this->kpiheader->employee_id)
         ->where('period',$carbon)->first();
@@ -229,25 +242,27 @@ class KPIResultHeader extends Model
 
     /**
      *
-     * @param array $kpiresult Data Array dari kpiresult yang mau di-simpan
+     * @param array|Illuminate\Support\Collection $kpiresult Data Array dari kpiresult yang mau di-simpan
      * @param App\Model\KPIResultHeader $_prev Data KPIResultHeader pada periode sebelumnya
      * @return void
      */
-    public function saveFromArray(array $kpiresult, KPIResultHeader $_prev=null){
+    public function saveFromArray($kpiresult, KPIResultHeader $_prev=null){
         $result_prev=!is_null($_prev)?$_prev:$this->getPrev();
 
+        array_key_exists('name',$kpiresult)?$this->kpiresult->name=$kpiresult['name']:null;
+        array_key_exists('unit',$kpiresult)?$this->kpiresult->unit=$kpiresult['unit']:null;
 
         $result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
         $this->mapFromArr(KPIResultHeader::KPIRESULTCURRENTKEY,$kpiresult);
 
-        $this->kpiresult->name=$kpiresult['name'];
-        $this->kpiresult->unit=$kpiresult['unit'];
-
         $this->push();
         $result_prev->save();
 
-        $result_prev->mapPriviledge($kpiresult['kpia_1']);
-        $this->mapPriviledge($kpiresult['kpia_2']);
+        array_key_exists('kpia_1',$kpiresult)?
+        $result_prev->mapPriviledge($kpiresult['kpia_1']):null;
+
+        array_key_exists('kpia_2',$kpiresult)?
+        $this->mapPriviledge($kpiresult['kpia_2']):null;
     }
 
     public function getPrev(){
