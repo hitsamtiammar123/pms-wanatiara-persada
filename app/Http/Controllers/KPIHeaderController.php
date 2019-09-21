@@ -72,13 +72,17 @@ class KPIHeaderController extends Controller
         $kpiresultdeletelist=json_decode($res_data['kpiresultdeletelist'],true);
         $kpiprocessdeletelist=json_decode($res_data['kpiprocessdeletelist'],true);
         $weighting=json_decode($res_data['weighting'],true);
+        $updatedlists=[];$createdlists=[];
 
         KPIResultHeader::deleteFromArray($kpiresultdeletelist);
-        $header->updateKPIResultFromArray($kpiresults);
+        $header->updateKPIResultFromArray($kpiresults,$updatedlists,$createdlists);
         $header->updateKPIProcessFromArray($kpiprocesses,$kpiprocessdeletelist);
         $header->updateWeighting($weighting);
 
         $this->broadcastChange($header->employee);
+        put_log(
+            'updated =>'.json_encode($updatedlists).'created =>'.json_encode($createdlists)
+        );
 
         return [
             'message'=>'Berhasil'

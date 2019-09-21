@@ -108,7 +108,7 @@
                                 on-data-escaped="dataEscaped" on-data-selected="dataSelected" ng-class="d['bColor_'+i]"
                                 contenteditable="{{d.kpia_contentEditable[$index]}}" auto-fill="true" sanitize="{{d.kpia_sanitize}}"
                                 format="{{d.kpia_filter}}" after-edit="setBColor|mapChange" notify-g-label="realisasi-content:kpia-{{outerIndex}}-{{i}}"
-                                d-index="{{$parent.$index}}"></td>
+                                d-index="{{$parent.$index}}" i-index="{{i}}"></td>
 
                                 <td ng-repeat="i in aw_indices" belong-to="d[i]" data-flag="aw" on-data-paste="dataPaste"
                                 on-data-escaped="dataEscaped" on-data-selected="dataSelected"

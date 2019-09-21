@@ -58,6 +58,11 @@ class KPIResultHeader extends Model
         'kpia_2'
     ];
 
+    const KPIRESULTFRONTKEY=[
+        'name' => 'name',
+        'unit' =>'unit'
+    ];
+
     /**
      * Mapping data KPIResultHeader dari array
      *
@@ -101,8 +106,10 @@ class KPIResultHeader extends Model
     public static function deleteFromArray($kpiresultdeletelist){
         foreach($kpiresultdeletelist as $todelete){
             $curr_delete=self::find($todelete);
+            $curr_delete_prev=$curr_delete->getPrev();
             if($curr_delete){
                 $curr_delete->delete();
+                is_null($curr_delete_prev)?:$curr_delete_prev->delete();
             }
         }
     }
@@ -246,7 +253,7 @@ class KPIResultHeader extends Model
      * @param App\Model\KPIResultHeader $_prev Data KPIResultHeader pada periode sebelumnya
      * @return void
      */
-    public function saveFromArray($kpiresult, KPIResultHeader $_prev=null){
+    public function saveFromArray($kpiresult, KPIResultHeader $_prev=null,$ids=[]){
         $result_prev=!is_null($_prev)?$_prev:$this->getPrev();
 
         array_key_exists('name',$kpiresult)?$this->kpiresult->name=$kpiresult['name']:null;
@@ -258,11 +265,71 @@ class KPIResultHeader extends Model
         $this->push();
         $result_prev->save();
 
-        array_key_exists('kpia_1',$kpiresult)?
-        $result_prev->mapPriviledge($kpiresult['kpia_1']):null;
+        if(array_key_exists('kpia_1',$kpiresult)){
+            $id=array_key_exists(0,$ids)?$ids[0]:null;
+            $result_prev->mapPriviledge($kpiresult['kpia_1'],$id);
+        }
 
-        array_key_exists('kpia_2',$kpiresult)?
-        $this->mapPriviledge($kpiresult['kpia_2']):null;
+        if(array_key_exists('kpia_2',$kpiresult)){
+            $id=array_key_exists(0,$ids)?$ids[0]:null;
+            $this->mapPriviledge($kpiresult['kpia_2'],$id);
+        }
+    }
+
+    /**
+     * Melakukan mapping untuk data-data yang diubah
+     *
+     * @param mixed $kpiresult
+     * @param array &$updatedlist
+     * @return void
+     */
+
+    public function setUpdatedList($kpiresult, array &$updatedlist){
+        $keys=array_merge(static::KPIRESULTDKEY,static::KPIRESULTFRONTKEY);
+        $total=[];
+        foreach($kpiresult as $key =>$value){
+            if(
+                in_array($key,array_keys($keys))
+            ){
+                $arr=[];
+                $map=$keys[$key];
+                $arr['oldval']=$this->{$map};
+                $arr['newval']=$value;
+                $total[$map]=$arr;
+            }
+        }
+        $updatedlist[$kpiresult['id']]=$total;
+
+        $result_prev=$this->getPrev();
+        if(array_key_exists('kpia_1',$kpiresult) && !is_null($result_prev)){
+            $result_prev->setUpdatedPriviledgeList($updatedlist,$kpiresult['kpia_1'],'kpia_1');
+        }
+
+        if(array_key_exists('kpia_2',$kpiresult)){
+            $this->setUpdatedPriviledgeList($updatedlist,$kpiresult['kpia_2'],'kpia_2');
+        }
+    }
+
+        /**
+     * Melakukan mapping untuk data KPIResult Priviledge
+     *
+     * @param array &$updatedlist
+     * @param mixed $value
+     * @param string $key
+     * @return void
+     */
+    public function setUpdatedPriviledgeList(array &$updatedlist,$value=null,$key='kpia_1'){
+        if($this->isPriviledge()){
+            $oldvalue=$this->priviledge->value;
+            if(!array_key_exists($this->id,$updatedlist)){
+                $updatedlist[$this->id]=[];
+            }
+            $arr=[
+                'oldvalue' => $oldvalue,
+                'newvalue' =>$value
+            ];
+            $updatedlist[$this->id][$key]=$arr;
+        }
     }
 
     public function getPrev(){

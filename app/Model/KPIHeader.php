@@ -401,22 +401,13 @@ class KPIHeader extends Model
         }
     }
 
-    protected function applyUpdateKPIResultFromArray($kpiresult,$header_prev){
-
-        if(!is_null($kpiresult['id'])){
-            $curr_result=KPIResultHeader::find($kpiresult['id']);
-            $curr_result_prev=$curr_result->getPrev();
-            if(!is_null($curr_result) && !is_null($curr_result_prev)){
-                $curr_result->saveFromArray($kpiresult,$curr_result_prev);
-            }
-        }
-        else{
+    protected function applyCreatedKPIResultFromArray($kpiresults,KPIHeader $header_prev,array &$createdlist){
+        foreach($kpiresults as $k){
             if(!$header_prev)
                 return;
-
             $new_result_id=null;
-            $name=$kpiresult['name'];
-            $unit=$kpiresult['unit'];
+            $name=$k['name'];
+            $unit=$k['unit'];
 
             $curr_result_prev=$header_prev->findByName($name);
             $curr_result_id='';
@@ -446,9 +437,22 @@ class KPIHeader extends Model
             $curr_result->id=$curr_result_id;
             $curr_result->kpi_header_id=$this->id;
             $curr_result->kpi_result_id=$new_result_id;
-            $curr_result->saveFromArray($kpiresult,$curr_result_prev);
-
+            $createdlist[$curr_result_id]=$k;
+            $curr_result->saveFromArray($k,$curr_result_prev,[$curr_result_prev_id,$curr_result_id]);
         }
+    }
+
+    protected function applyUpdateKPIResultFromArray($kpiresult,$header_prev,array &$updatedlist){
+
+        if(!is_null($kpiresult['id'])){
+            $curr_result=KPIResultHeader::find($kpiresult['id']);
+            $curr_result_prev=$curr_result->getPrev();
+            if(!is_null($curr_result) && !is_null($curr_result_prev)){
+                $curr_result->setUpdatedList($kpiresult, $updatedlist);
+                $curr_result->saveFromArray($kpiresult,$curr_result_prev);
+            }
+        }
+
     }
 
     protected function applyUpdateKPIProcessFromArray($kpiprocess,$kpiprocessdeletelist,&$kpiprocess_save,&$kpiprocess_save_n){
@@ -673,15 +677,20 @@ class KPIHeader extends Model
         return null;
     }
 
-    public function updateKPIResultFromArray($kpiresults){
+    public function updateKPIResultFromArray($kpiresults,array &$updatedlists=[],array &$createdlists=[]){
         $header_prev=$this->getPrev();
         $keys=KPIResultHeader::numberKeys();
         //$kpiresults_collection=collect($kpiresults)->unique('name');
-        foreach($kpiresults as $kpiresult){
-            $kpiresult=filter_is_number($kpiresult,$keys);
-            $this->filterKPIResultByUnit($kpiresult);
-            $this->applyUpdateKPIResultFromArray($kpiresult,$header_prev);
+        if(array_key_exists('updated',$kpiresults)){
+            foreach($kpiresults['updated'] as $kpiresult){
+
+                $kpiresult=filter_is_number($kpiresult,$keys);
+                $this->filterKPIResultByUnit($kpiresult);
+                $this->applyUpdateKPIResultFromArray($kpiresult,$header_prev,$updatedlists,$createdlists);
+            }
         }
+        !array_key_exists('created',$kpiresults)?:
+        $this->applyCreatedKPIResultFromArray($kpiresults['created'],$header_prev,$createdlists);
     }
 
     public function updateKPIProcessFromArray($kpiprocesses,$kpiprocessdeletelist){

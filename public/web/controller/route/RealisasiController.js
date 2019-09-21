@@ -1,6 +1,6 @@
 app.controller('RealisasiController',function($scope,$rootScope,validator,loader,$route,
     $filter,notifier,copier,alertModal,dataService,user,$routeParams,formModal,confirmModal
-    ,$sce,pusher,months,$location,$parse){
+    ,$sce,pusher,months,$location,$parse,kpiKeys){
 
 
     $scope.totalAchieveMent={};
@@ -590,13 +590,19 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
      */
     var mapChange=function(d,i,value){
         var data=$scope.data[d];
-        if(!updateMap.hasOwnProperty(data.id)){
-            updateMap[data.id]={
+        if(!updateMap.hasOwnProperty('updated'))
+            updateMap.updated={};
+
+        if(!data.id)
+            return;
+
+        if(!updateMap.updated.hasOwnProperty(data.id)){
+            updateMap.updated[data.id]={
                 id:data.id,
                 kpi_header_id:data.kpi_header_id
             };
         }
-        var mapping=updateMap[data.id];
+        var mapping=updateMap.updated[data.id];
         mapping[i]=value;
     }
 
@@ -1603,6 +1609,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         data.real_contentEditable=[];
         $scope.data.push(data);
         hasNew=true;
+        return data
     }
 
     $scope.validateNum=validator.validateNum;
@@ -1612,6 +1619,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     $scope.saveChanged=function(){
+
+        updateMap.created=dataService.only(updateMap.created,kpiKeys.kpiresult);
 
         var body={
             kpiresult:updateMap,
@@ -1698,13 +1707,19 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.addRow=function(){
 
         var copy_data=angular.copy($scope.data);
-        $scope.addNewData();
+        var newdata=$scope.addNewData();
         var copy_data_2=angular.copy($scope.data)
         kpiresultstream.pushData(copy_data_2,copy_data);
         var scrollHeight=kpiresult_elem.prop('scrollHeight');
         kpiresult_elem.scrollTop(scrollHeight);
         setBColor($scope.data);
         setContentEditable($scope.data,KPI_RESULT);
+        if(!updateMap.hasOwnProperty('created'))
+            updateMap.created=[];
+        updateMap.created.push(
+           newdata
+        );
+        console.log(updateMap);
     }
 
     $scope.addPRow=function(){
