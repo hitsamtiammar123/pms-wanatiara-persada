@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="css/ikhtisar.css">
 <link rel="stylesheet" href="css/pencarian.css">
 <link rel="stylesheet" href="css/pengesahan.css">
+<link rel="stylesheet" href="css/realisasi-group.css">
 <div ng-controller="FrontController">
   <div class="row web-header index-bar nav-bar-fixed" >
       <div class="col-sm-12">

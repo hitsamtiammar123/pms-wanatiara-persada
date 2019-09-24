@@ -8,9 +8,19 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
                 controller:'TargetManajemenController',
                 controllerAs:'targetManajemen',
                 resolve:{
-                   
+
                 }
-            }  
+            }
+        },
+        {
+            url:'/realisasi-group',
+            config:{
+                templateUrl:'web/view/realisasi-group.html',
+                controller:'RealisasiGroup',
+                resolve:{
+
+                }
+            }
         },
         {
             url:'/realisasi/:index/:month?',
@@ -18,18 +28,18 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
                 templateUrl:'web/view/realisasi.html',
                 controller:'RealisasiController',
                 resolve:{
-                    
+
                 }
             }
         },
-        { 
+        {
             url:'/ikhtisar/:id?',
             config:{
                 templateUrl:'web/view/ikhtisar.html',
                 controller:'IkhtisarController',
                 controllerAs:'ikhsCtrl',
                 resolve:{
-                 
+
                 }
             }
 
@@ -40,10 +50,10 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
                 templateUrl:'web/view/pencarian.html',
                 controller:'PencarianController',
                 resolve:{
-                  
+
                 }
-               
-            } 
+
+            }
         },
         {
             url:'/dummy',
@@ -51,7 +61,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
                 templateUrl:'web/view/dummy.html',
                 controller:'DummyController',
                 resolve:{
-                   
+
                 }
             }
         },
@@ -61,7 +71,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
                 templateUrl:'web/view/realisasi-perusahaan.html',
                 controller:'RealisasiPerusahaanController',
                 resolve:{
-                    
+
                 }
             }
         },
@@ -94,9 +104,39 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
 
                 }
             }
+        },
+        {
+            url:'/pengesahan/detail/:id/message',
+            config:{
+                templateUrl:'web/view/notification/message.html',
+                controller:'NotificationMessage',
+                resolve:{
+
+                }
+            }
+        },
+        {
+            url:'/pengesahan/detail/:id/redirect',
+            config:{
+                templateUrl:'web/view/notification/redirect.html',
+                controller:'NotificationRedirect',
+                resolve:{
+
+                }
+            }
+        },
+        {
+            url:'/pengesahan/detail/:id/request-change',
+            config:{
+                templateUrl:'web/view/notification/request-change.html',
+                controller:'NotificationRequestChange',
+                resolve:{
+
+                }
+            }
         }
     ]
-    
+
 
     this.$get=function(){
         return {}

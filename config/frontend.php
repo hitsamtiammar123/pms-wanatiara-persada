@@ -43,6 +43,7 @@ return [
             'route/PengesahanBaru.js',
             'route/PengesahanDetail.js',
             'route/RealisasiController.js',
+            'route/RealisasiGroup.js',
             'route/RealisasiPerusahaanController.js',
             'notification/notificationMessage.js',
             'notification/notificationRedirect.js',

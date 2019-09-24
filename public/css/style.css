@@ -240,6 +240,9 @@ td{
     background-color: rgb(183, 222, 232);
 }
 
+.overflow-content{
+    overflow: auto;
+}
 
 
 /* Cari User */

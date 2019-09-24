@@ -13,6 +13,16 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
+            url:'/realisasi-group',
+            config:{
+                templateUrl:'web/view/realisasi-group.html',
+                controller:'RealisasiGroup',
+                resolve:{
+
+                }
+            }
+        },
+        {
             url:'/realisasi/:index/:month?',
             config:{
                 templateUrl:'web/view/realisasi.html',

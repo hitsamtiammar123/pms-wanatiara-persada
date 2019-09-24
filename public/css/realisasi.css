@@ -34,6 +34,7 @@
     width:100%;
     table-layout:fixed;
 }
+
 .realisasi-table thead ,.realisasi-table body {
     width: calc( 100% - 1em )
 }
@@ -42,7 +43,6 @@
     text-align: left;
 }
 
-
 .realisasi-table tbody tr td.num,.f-column-num{
     width: 40px;
 }
@@ -50,7 +50,7 @@
 
 .realisasi-table thead tr th.kpi{
     width:200px !important;
-} 
+}
 
 .realisasi-table tbody tr td.kpi{
     width: 210px;
@@ -58,7 +58,7 @@
 
 .realisasi-table thead tr th.kpi-process{
     width: 200px !important;
-} 
+}
 
 .realisasi-table tbody tr td.kpi-process{
     width: 236px;
@@ -97,7 +97,7 @@
 
 .tanda-tangan{
     height:50px;
-} 
+}
 
 .footer-pengesahan{
     background-color: #f2f3f5;
@@ -108,7 +108,7 @@
 }
 
 .blue-check{
-    color:blue;    
+    color:blue;
 }
 
 .can-edit-content{
