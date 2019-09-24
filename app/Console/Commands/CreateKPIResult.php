@@ -47,7 +47,7 @@ class CreateKPIResult extends Command
                 'name'=>$name,
                 'unit'=>$unit
             ]);
-            $this->info('Data KPI Result dengan nama"'.$name.'" sudah berhasil dibuat');
+            $this->info('Data KPI Result dengan nama "'.$name.'" sudah berhasil dibuat');
         }catch(Exception $err){
             $this->error('Terdapat kesalahan saat membuat data KPIResult yang baru');
             $this->error('pesan error: '.$err->getMessage());
