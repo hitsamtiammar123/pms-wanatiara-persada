@@ -13,6 +13,7 @@ function($rootScope,loader,alertModal,user){
 
     var onFail=function(){
         console.log('Fail to load notification');
+        alertModal.display('Peringatan','Terjadi Kesalahan saat memuat data',false,true);
     }
 
     var fetchNotification=function(){
