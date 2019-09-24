@@ -1,6 +1,6 @@
-app.controller('NotificationRedirect',['$scope','$routeParams','$rootScope','notifier',
-'$location','alertModal','loader','user',
-function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,user){
+app.controller('NotificationRedirect',['$scope','$routeParams','notifier',
+'$location','notificationService',
+function($scope,$routeParams,notifier,$location,notificationService){
     var id=$routeParams.id;
 
     $scope.currNotification;
@@ -22,40 +22,6 @@ function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,use
         setMessage();
     }
 
-    var onLoadSuccess=function(result){
-        alertModal.hide();
-        $scope.currNotification=result.data;
-        setNotification();
-    }
-
-    var onFail=function(){
-        console.log('Fail to load notification');
-    }
-
-    var fetchNotification=function(){
-        loader.getNotification(user.employee.id,id).then(onLoadSuccess,onFail);
-        alertModal.upstream('loading');
-    }
-
-    var initNotification=function(){
-        if($rootScope.notification_list){
-            $scope.currNotification=$rootScope.notification_list.find(function(d){
-                return d.id===id;
-            });
-
-            if($scope.currNotification){
-                setNotification();
-            }
-            else{
-                fetchNotification();
-            }
-
-        }
-        else{
-            fetchNotification();
-        }
-    }
-
 
     $scope.toPMS=function(){
         if($scope.currNotification.type==='redirect'){
@@ -65,7 +31,7 @@ function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,use
     }
 
 
-    initNotification();
+    notificationService.initNotification(id,$scope,setNotification);
     //notifier.setNotifier('notificationsHasLoad',initNotification);
 
 
