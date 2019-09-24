@@ -13,7 +13,7 @@ class KPIResult extends Model
 
     protected $table='kpiresults';
     protected $fillable=[
-        'name','kpi_header_id','unit'
+        'name','unit','id'
     ];
     protected $casts=['id'=>'string'];
     protected $hidden=['created_at','updated_at'];

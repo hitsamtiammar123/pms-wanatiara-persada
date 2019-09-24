@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Model\KPIResult;
 use Illuminate\Console\Command;
 
 class CreateKPIResult extends Command
@@ -11,14 +12,14 @@ class CreateKPIResult extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'hitsam:kpiresult:create {name} {employeeID} {unit="%"}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Perintah ini dibuat untuk membuat KPIResult yang baru';
 
     /**
      * Create a new command instance.
@@ -37,6 +38,19 @@ class CreateKPIResult extends Command
      */
     public function handle()
     {
-        //
+        $name=$this->argument('name');
+        $employeeID=$this->argument('employeeID');
+        $unit=$this->argument('unit');
+        try{
+            KPIResult::create([
+                'id'=>KPIResult::generateID($employeeID),
+                'name'=>$name,
+                'unit'=>$unit
+            ]);
+            $this->info('Data KPI Result dengan nama"'.$name.'" sudah berhasil dibuat');
+        }catch(Exception $err){
+            $this->error('Terdapat kesalahan saat membuat data KPIResult yang baru');
+            $this->error('pesan error: '.$err->getMessage());
+        }
     }
 }
