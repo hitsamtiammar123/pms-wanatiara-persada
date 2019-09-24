@@ -16,7 +16,7 @@ function($scope,$rootScope,loader,notifier,user,dataService,$location){
     }
 
     var paginate=function(page){
-       
+
         var start=(page-1)*5;
         var end=page*5;
         $scope.notifications=$rootScope.notification_list.slice(start,end);
@@ -29,7 +29,7 @@ function($scope,$rootScope,loader,notifier,user,dataService,$location){
     }
 
     var setFrontEnd=function(){
-       
+
         $scope.totalPage=Math.ceil(notification_data.total/5);
         $scope.page=$rootScope.page?$rootScope.page:notification_data.page;
         dataService.digest($scope);
@@ -53,7 +53,8 @@ function($scope,$rootScope,loader,notifier,user,dataService,$location){
 
     $scope.toNotification=function(notification){
         var id=notification.id;
-        var url=loader.angular_route('notification-detail',[id]);
+        var type=notification.type;
+        var url=loader.angular_route('notification-detail',[id,type]);
         $location.path(url);
     }
 
@@ -68,7 +69,7 @@ function($scope,$rootScope,loader,notifier,user,dataService,$location){
             else{
                 paginate($scope.page);
             }
-           
+
         }
     }
 
@@ -82,4 +83,4 @@ function($scope,$rootScope,loader,notifier,user,dataService,$location){
     initNotification();
     notifier.setNotifier('notificationsHasLoad',initNotification);
 
-}]); 
+}]);

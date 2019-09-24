@@ -1,16 +1,14 @@
-app.controller('PengesahanDetail',['$scope','$routeParams','$rootScope','notifier',
-'$location','alertModal','loader','user','confirmModal',
-function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,user,confirmModal){
+app.controller('NotificationMessage',['$scope','$routeParams','$rootScope','notifier'
+,'alertModal','loader','user',
+function($scope,$routeParams,$rootScope,notifier,alertModal,loader,user){
     var id=$routeParams.id;
 
     $scope.currNotification;
     $scope.message='';
 
-    var toNotification=function(){
-        var type=$scope.currNotification.type;
-        var id=$scope.currNotification.id;
-        var url=loader.angular_route('notification-detail',[id,type]);
-        $location.path(url);
+    var setMessage=function(){
+            $scope.titleMessage='Notifikasi';
+            $scope.message=$scope.currNotification.subject;
     }
 
     var setNotification=function(){
@@ -18,13 +16,9 @@ function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,use
             notifier.notify('decrementUnreadNotification',[$scope.currNotification]);
         }
 
-        toNotification();
+        setMessage();
     }
 
-    var hasApproved=function(){
-        alertModal.hide();
-        $location.path('/target-manajemen');
-    }
 
     var onLoadSuccess=function(result){
         alertModal.hide();
@@ -59,7 +53,6 @@ function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,use
             fetchNotification();
         }
     }
-
 
     initNotification();
     //notifier.setNotifier('notificationsHasLoad',initNotification);

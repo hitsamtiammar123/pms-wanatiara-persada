@@ -44,6 +44,9 @@ return [
             'route/PengesahanDetail.js',
             'route/RealisasiController.js',
             'route/RealisasiPerusahaanController.js',
+            'notification/notificationMessage.js',
+            'notification/notificationRedirect.js',
+            'notification/NotificationRequestChange.js'
 
         ],
         't0'=>[

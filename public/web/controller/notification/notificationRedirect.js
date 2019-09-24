@@ -1,16 +1,17 @@
-app.controller('PengesahanDetail',['$scope','$routeParams','$rootScope','notifier',
-'$location','alertModal','loader','user','confirmModal',
-function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,user,confirmModal){
+app.controller('NotificationRedirect',['$scope','$routeParams','$rootScope','notifier',
+'$location','alertModal','loader','user',
+function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,user){
     var id=$routeParams.id;
 
     $scope.currNotification;
     $scope.message='';
 
-    var toNotification=function(){
+    var setMessage=function(){
         var type=$scope.currNotification.type;
-        var id=$scope.currNotification.id;
-        var url=loader.angular_route('notification-detail',[id,type]);
-        $location.path(url);
+        if(type==='redirect'){
+            $scope.titleMessage='Notifikasi Pemberitahuan Pengesahan';
+            $scope.message=$scope.currNotification.subject;
+        }
     }
 
     var setNotification=function(){
@@ -18,12 +19,7 @@ function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,use
             notifier.notify('decrementUnreadNotification',[$scope.currNotification]);
         }
 
-        toNotification();
-    }
-
-    var hasApproved=function(){
-        alertModal.hide();
-        $location.path('/target-manajemen');
+        setMessage();
     }
 
     var onLoadSuccess=function(result){
@@ -57,6 +53,14 @@ function($scope,$routeParams,$rootScope,notifier,$location,alertModal,loader,use
         }
         else{
             fetchNotification();
+        }
+    }
+
+
+    $scope.toPMS=function(){
+        if($scope.currNotification.type==='redirect'){
+            var url=$scope.currNotification.redirectTo;
+            $location.path(url);
         }
     }
 

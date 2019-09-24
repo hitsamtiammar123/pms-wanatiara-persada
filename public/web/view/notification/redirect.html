@@ -1,0 +1,30 @@
+<div id="pengesahan-detail" ng-if="currNotification">
+    <div class="row">
+            <div class="col-sm-6">
+                <h6 class="bold title">{{titleMessage}}</h6>
+                <div class="bottom-border"></div>
+            </div>
+    </div>
+        <div class="row pengesahan-form">
+            <div class="col-sm-12 bold">Dari: </div>
+            <p class="col-sm-12">
+                {{currNotification.from}}
+            </p>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 bold">Tanggal: </div>
+            <p class="col-sm-12">{{currNotification.date}}</p>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 bold">Pesan: </div>
+            <p class="col-sm-12">
+                {{message}}
+            </p>
+        </div>
+        <div class="row" ng-if="currNotification.type==='redirect'">
+            <div class="col-sm-12">
+                   <button class="btn btn-success" ng-click="currNotification.type==='redirect'?toPMS():null">Mengalihkan</button>
+            </div>
+        </div>
+
+</div>
