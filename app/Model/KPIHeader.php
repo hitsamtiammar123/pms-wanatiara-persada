@@ -735,6 +735,8 @@ class KPIHeader extends Model
         $count=0;
 
         foreach($employeeList as $index => $employee){
+            if(!$employee->isUser())
+                continue;
             $p=$this->kpiendorsements->where('employee_id',$employee->id)->first();
             if(is_null($p)){
                 $id=$this->id;
@@ -764,6 +766,69 @@ class KPIHeader extends Model
             }
         }
         return $count;
+
+    }
+
+    /**
+     *
+     *
+     * @return int Nilai balik 1 jika berhasil, 0 jika gagal
+     */
+    public function makeKPIResult(KPIHeader $curr_header=null,$header_id=null){
+
+        $header_id=is_null($header_id)?$this->id:$header_id;
+
+        try{
+
+            if(!is_null($curr_header)){
+                foreach($curr_header->kpiresultheaders as $resultheader){
+                    KPIResultHeader::create([
+                        'id'=>KPIResultHeader::generateID($this->employee->id,$header_id),
+                        'kpi_result_id'=>$resultheader->kpi_result_id,
+                        'kpi_header_id'=>$header_id,
+                        'pw'=>$resultheader->pw,
+                        'pt_t'=>$resultheader->pt_t,
+                        'pt_k'=>$resultheader->pt_k,
+                        'real_t'=>$resultheader->real_t,
+                        'real_k'=>$resultheader->real_k
+                    ]);
+                }
+            }
+        }catch(\Exception $err){
+            put_error_log($err);
+            return 0;
+        }
+        return 1;
+    }
+
+    /**
+     * Membuat KPIProcess bagi header yang baru
+     *
+     * @param App\Model\KPIHeader $curr_header Header yang mau di-mapping
+     * @param string|null $header_id ID Dari header yang ingin dibuat
+     *
+     * @return int 1 jika berhasil, 0 jika ada error
+     */
+    public function makeKPIProcess(KPIHeader $curr_header=null,$header_id=null){
+
+        if(!is_null($curr_header)){
+            $h=$header_id?$this:KPIHeader::find($header_id);
+            try{
+                foreach($curr_header->kpiprocesses as $kpiprocess){
+                    $h->kpiprocesses()->attach([
+                        $kpiprocess->id=>[
+                            'pw'=>$kpiprocess->pivot->pw,
+                            'pt'=>$kpiprocess->pivot->pt,
+                            'real'=>$kpiprocess->pivot->real
+                        ]
+                    ]);
+                }
+            }catch(\Exception $err){
+                put_error_log($err);
+                return 0;
+            }
+        }
+        return 1;
 
     }
 

@@ -23,7 +23,7 @@ class Employee extends Model
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at','role_id','atasan_id'];
 
     protected $fillable = [
-        'name', 'dob', 'gender',
+        'id','name', 'dob', 'gender',
     ];
     protected $casts=['id'=>'string'];
     protected $hidden=['created_at','updated_at','deleted_at'];
@@ -187,58 +187,20 @@ class Employee extends Model
             return 0;
 
         $curr_header=$this->getCurrentHeader();
+        $id=$this->id?$this->id:$this->getIDForTheFirstTime();
 
-        if(!$curr_header)
-            return -2;
-
-        $header_id=KPIHeader::generateID($this->id);
-        KPIHeader::create([
+        $header_id=KPIHeader::generateID($id);
+        $header=KPIHeader::create([
             'id'=>$header_id,
-            'employee_id'=>$this->id,
+            'employee_id'=>$id,
             'period'=>$period,
-            'weight_result'=>$curr_header->weight_result,
-            'weight_process'=>$curr_header->weight_process
+            'weight_result'=>!is_null($curr_header)?$curr_header->weight_result:0.6,
+            'weight_process'=>!is_null($curr_header)?$curr_header->weight_process:0.4
         ]);
 
-        foreach($curr_header->kpiresultheaders as $resultheader){
-            KPIResultHeader::create([
-                'id'=>KPIResultHeader::generateID($this->id,$header_id),
-                'kpi_result_id'=>$resultheader->kpi_result_id,
-                'kpi_header_id'=>$header_id,
-                'pw'=>$resultheader->pw,
-                'pt_t'=>$resultheader->pt_t,
-                'pt_k'=>$resultheader->pt_k,
-                'real_t'=>$resultheader->real_t,
-                'real_k'=>$resultheader->real_k
-            ]);
-        }
-
-        $userAndAtasan=$this->getHirarcialEmployee();
-
-
-        foreach($userAndAtasan as $index=>$curr){
-            //$curr=$userAndAtasan[$i-1];
-            KPIEndorsement::create([
-                'id'=>KPIEndorsement::generateID($this->id),
-                'kpi_header_id'=>$header_id,
-                'employee_id'=>$curr->id,
-                'level'=>$index+1
-            ]);
-        }
-
-        $kpiprocesses=$curr_header->kpiprocesses;
-
-        $header=KPIHeader::find($header_id);
-
-        foreach($kpiprocesses as $kpiprocess){
-            $header->kpiprocesses()->attach([
-                $kpiprocess->id=>[
-                    'pw'=>$kpiprocess->pivot->pw,
-                    'pt'=>$kpiprocess->pivot->pt,
-                    'real'=>$kpiprocess->pivot->real
-                ]
-            ]);
-        }
+        $header->makeKPIResult($curr_header,$header_id);
+        $header->makeEndorsement($header_id);
+        $header->makeKPIProcess($curr_header,$header_id);
 
         return 1;
 

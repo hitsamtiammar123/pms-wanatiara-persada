@@ -10,8 +10,19 @@ trait DynamicID{
         $id=generate_id($a,$code);
         while(in_array($id,self::$listID))
             $id=generate_id(++$a,$code);
-        
+
         self::$listID[]=$id;
         return $id;
     }
+
+    public static function getRandomID(){
+        return self::select(['id'])->first()->id;
+    }
+
+    public function getIDForTheFirstTime(){
+        if($this->wasRecentlyCreated)
+            return self::select('id')->orderBy('created_at','desc')->first()->id;
+        return null;
+    }
+
 }

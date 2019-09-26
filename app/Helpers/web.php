@@ -43,3 +43,15 @@ if(!function_exists('put_log')){
         fclose($file);
     }
 }
+
+if(!function_exists('put_error_log')){
+
+    function put_error_log(\ Exception $err){
+        $c=get_class($err);
+        $m=$err->getMessage();
+        put_log(
+            "Error => {$c} message=>{$m}"
+        );
+    }
+}
+
