@@ -9,6 +9,7 @@ use App\Notifications\EndorsementNotification;
 use App\Http\Controllers\Traits\ErrorMessages;
 use App\Notifications\SendMessage;
 use App\Http\Controllers\Traits\BroadcastPMSChange;
+use App\Model\KPIHeader;
 
 class KPIEndorsementController extends Controller
 {
@@ -73,8 +74,7 @@ class KPIEndorsementController extends Controller
 
             $kpiendorsements=$header->kpiendorsements;
             foreach($kpiendorsements as $endorse){
-                $endorse->verified=false;
-                $endorse->save();
+                $endorse->delete();
             }
 
             $this->approvedEndorseChange($notificationID);
@@ -93,19 +93,40 @@ class KPIEndorsementController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
-        $endorse=KPIEndorsement::find($id);
-        if($endorse){
-            $endorse->verified=$request->verified;
-            $endorse->save();
-            $this->fireEndorsementEvent($endorse);
+
+        $header=KPIHeader::find($id);
+        if($header){
+            $auth_user=auth_user();
+            $employee=$auth_user->employee;
+            $employee_id=$employee->id;
+
+            KPIEndorsement::create([
+                'id' =>KPIEndorsement::generateID($employee_id),
+                'kpi_header_id' =>$id,
+                'employee_id'=>$employee_id,
+                'level'=>$employee->getEndorsementLevel($header->employee)
+            ]);
 
             return [
                 'status'=>1,
                 'message'=>'Sudah disahkan',
-                'user'=>$endorse->kpiheader->employee
+                'user'=>$header->employee
             ];
+
         }
+
+        // $endorse=KPIEndorsement::find($id);
+        // if($endorse){
+        //     $endorse->verified=$request->verified;
+        //     $endorse->save();
+        //     $this->fireEndorsementEvent($endorse);
+
+        //     return [
+        //         'status'=>1,
+        //         'message'=>'Sudah disahkan',
+        //         'user'=>$endorse->kpiheader->employee
+        //     ];
+        // }
         return send_404_error('Data tidak ditemukan');
     }
 

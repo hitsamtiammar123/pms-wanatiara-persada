@@ -160,6 +160,11 @@ class Employee extends Model
         return false;
     }
 
+    /**
+     * Untuk mendapatkan daftar karyawan beserta atasannya sampai 2 level
+     *
+     * @return App\Model\Employee[]
+     */
     public function getHirarcialEmployee(){
         $r=[];
 
@@ -223,6 +228,24 @@ class Employee extends Model
             $header=KPIHeader::findForFrontEnd($this->id,$period);
             $header->deleteKPIResultsOfHeader();
         }
+    }
+
+    /**
+     * Menentukan level suatu Karyawan pada suatu KPIEndorsement
+     *
+     * @param App\Model\Employee $employee
+     * @return int
+     */
+    public function getEndorsementLevel(Employee $employee){
+        $list=$employee->getHirarcialEmployee();
+
+        for($i=0;$i<count($list);$i++){
+            $curr_employee=$list[$i];
+            if($this->id===$curr_employee->id)
+                return ($i+1);
+        }
+        return -1;
+
     }
 
 

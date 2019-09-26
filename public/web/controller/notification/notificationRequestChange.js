@@ -27,6 +27,10 @@ function($scope,$routeParams,notifier,$location,alertModal,loader,confirmModal,n
         $location.path('/target-manajemen');
     }
 
+    var onFail=function(){
+        alertModal.display('Peringatan','Terjadi kesalahan saat mengubah data');
+    }
+
 
     $scope.toPMS=function(){
         if($scope.currNotification.type==='redirect'){

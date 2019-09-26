@@ -108,16 +108,28 @@ class KPIHeader extends Model
     }
 
     protected function fetchKPIEndorsement(){
-        $endorsements=$this->kpiendorsements;
-        $endorsements->each(function($data,$key){
-            $data->load('employee');
-            $data->makeHidden(KPIEndorsement::HIDDEN_PROPERTY);
-            $data->employee->makeHidden(Employee::HIDDEN_PROPERTY);
-            $data->employee->load('role');
-            $data->employee->role->makeHidden(Role::HIDDEN_PROPERTY);
-        });
+        $hirarcial_employees=$this->employee->getHirarcialEmployee();
+        $r=[];
 
-        return $endorsements->keyBy('level');
+        foreach($hirarcial_employees as $index => $employee){
+            $employee->level=$index+1;
+            $employee->role;
+            $employee->verified=$this->hasEndorse($employee);
+            unset($employee->atasan);
+            $r[$index+1]=$employee;
+        }
+
+        return $r;
+        // $endorsements=$this->kpiendorsements;
+        // $endorsements->each(function($data,$key){
+        //     $data->load('employee');
+        //     $data->makeHidden(KPIEndorsement::HIDDEN_PROPERTY);
+        //     $data->employee->makeHidden(Employee::HIDDEN_PROPERTY);
+        //     $data->employee->load('role');
+        //     $data->employee->role->makeHidden(Role::HIDDEN_PROPERTY);
+        // });
+
+        //return $endorsements->keyBy('level');
     }
 
     protected function sumTotalAchievement($data,$j){
@@ -920,5 +932,16 @@ class KPIHeader extends Model
 
     public function getSelfEndorse(){
         return $this->getEndorse($this->employee);
+    }
+
+    /**
+     * Menentukan apakah seorang karyawan sudah melakukan pengesahan pada PMS
+     *
+     * @param App\Model\Employee $employee Karyawan yang dituju
+     * @return boolean
+     */
+    public function hasEndorse(Employee $employee){
+        $r=$this->kpiendorsements()->where('employee_id',$employee->id)->first();
+        return !is_null($r);
     }
 }

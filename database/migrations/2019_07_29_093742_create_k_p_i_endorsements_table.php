@@ -17,7 +17,6 @@ class CreateKPIEndorsementsTable extends Migration
             $table->string('id',18);
             $table->string('kpi_header_id',18);
             $table->string('employee_id',15);
-            $table->boolean('verified')->default(false);
             $table->primary('id');
             $table->enum('level',[1,2,3])->default(1);
             $table->softDeletes();

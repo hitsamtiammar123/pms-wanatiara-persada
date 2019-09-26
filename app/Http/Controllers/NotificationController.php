@@ -106,9 +106,9 @@ class NotificationController extends Controller
 
             foreach($bawahan as $curr){
                 $header=$curr->getCurrentHeader();
-                $self_endorse=$header->getSelfEndorse();
+                $hasEndorse=$header->hasEndorse($curr);
 
-                if($self_endorse->verified===1 && !$curr->hasRequestChange()){
+                if($hasEndorse && !$curr->hasRequestChange()){
                     $r=[];
                     $r['id']=$curr->id;
                     $r['name']=$curr->name;

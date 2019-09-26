@@ -4,12 +4,13 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Traits\DynamicID;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class KPIEndorsement extends Model
 {
     //
 
-    use DynamicID;
+    use DynamicID,SoftDeletes;
     protected $table='kpiendorsements';
     protected $fillable=[
         'id','kpi_header_id','employee_id','level'

@@ -1114,13 +1114,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         $scope.aggrementCount=0;
         for(var i in $scope.kpiendorsements){
             var endorse=$scope.kpiendorsements[i];
-            $scope.aggrements[endorse.id]=endorse.verified==1?true:false;
+            $scope.aggrements[endorse.id]=(endorse.verified==true)?true:false;
 
-            if(endorse.verified==1){
+            if(endorse.verified==true){
                 $scope.aggrementCount++;
             }
 
-            if(endorse.verified===0&& endorse.employee.id===user.employee.id){
+            if(endorse.verified==false&& endorse.id===user.employee.id){
                 if($scope.employee.id===user.employee.id ||
                     $scope.atasan.id===user.employee.id){
                         $scope.hasEndorse=false;
@@ -1676,8 +1676,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         confirmModal('Peringatan',message).then(function(){
             endorse.verified=!endorse.verified;
             loader.setEndorsement({
-                id:endorse.id,
-                verified:endorse.verified
+                id:kpiheaders.id
             }).then(onEndorseUpdated);
             alertModal.display('Peringatan','Mengirim data, mohon tunggu',false,true);
         },function(){
@@ -1686,7 +1685,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     $scope.isEndorseDisable=function(endorse){
-        if(endorse.employee.id===user.employee.id){
+        if(endorse.id===user.employee.id){
             if(endorse.verified)
                 return true;
             else{
