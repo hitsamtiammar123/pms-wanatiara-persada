@@ -21,7 +21,7 @@
       <div class="col-sm-12">
               <nav class="navbar navbar-default navbar-wanatiara">
                   <ul class="nav navbar-nav">
-                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Berkas 文件<span class="caret"></span></a>
+                        <li class=""><a class="dropdown-toggle" data-toggle="dropdown" >Berkas 文件<span class="caret"></span></a>
                           <ul class="dropdown-menu">
                             @can('tier-except-0', Auth::user())
                             <li><a ng-click="downloadPDF()">Unduh 下载它</a></li>
@@ -31,13 +31,55 @@
                             <li><a ng-click="logout()">Keluar 登出</a></li>
                           </ul>
                         </li>
-                        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" >Pengesahan 批准 <span class="notification-label"  ng-hide="unreadNotification===0">({{$unreadNotification}})</span> <span class="caret"></span></a>
+                        <li class=""><a class="dropdown-toggle" data-toggle="dropdown" >Pengesahan 批准 <span class="notification-label"  ng-hide="unreadNotification===0">({{$unreadNotification}})</span> <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#!pengesahan/notifikasi">Notifikasi 通知 <span class="notification-label" ng-hide="unreadNotification===0">({{$unreadNotification}})</span> </a></li>
-                              <li><a href="#!pengesahan/baru">Perubahan Pengesahan 证明变更</a></li>
+                                <li><a href="#!pengesahan/baru">Perubahan Pengesahan 证明变更</a></li>
 
                             </ul>
-                          </li>
+                        </li>
+                        <li class=""><a class="dropdown-toggle" data-toggle="dropdown" > PMS Group <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu"><a class="toogle">Divisi Smelter</a>
+                                    <ul class="dropdown-menu dropdown-menu-right" m-top="-3px" m-right="-14vw">
+                                        <li class="dropdown-submenu"><a class="toogle">Area RD & CMP</a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" m-right="-14vw" m-top="0vw">
+                                                <li><a>Ketua Grup RD & CMP</a></li>
+                                                <li><a>Operator Rotary Drier</a></li>
+                                                <li><a>Operator CMP</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu"><a class="toogle">Area MP & RK</a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" m-right="-14vw" m-top="2vw">
+                                                <li><a>Ketua Grup MP & RK</a></li>
+                                                <li><a>Operator Mixing Plant</a></li>
+                                                <li><a>Operator Rotary Kiln</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu"><a class="toogle">Area Electric Furnace</a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" m-right="-14vw" m-top="4vw">
+                                                <li><a>Ketua Grup Electric Furnace</a></li>
+                                                <li><a>Operator Electric Furnace</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu"><a class="toogle">Area OP, WTP & ACP</a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" m-right="-14vw" m-top="6vw">
+                                                <li><a>Ketua Grup Oxygen Plant</a></li>
+                                                <li><a>Ketua Grup Treatment Plant</a></li>
+                                                <li><a>Ketua Grup Air Compressor Plant</a></li>
+                                                <li><a>Operator Oxygen Plant</a></li>
+                                                <li><a>Operator Treatment Plant</a></li>
+                                                <li><a>Operator Air Compressor Plant</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+
+                                </li>
+                                <li><a>Divisi PowerPlant</a></li>
+                                <li><a>Divisi Production Support</a></li>
+                                <li><a>Divisi Mining</a></li>
+                            </ul>
+                        </li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     <li class="greetings-nav">
@@ -78,3 +120,26 @@
     @csrf
     </form>
 </div>
+<script>
+    (function(){
+        var curr_ul;
+        $('.dropdown-submenu a.toogle').on("click", function(e){
+            var next_ul=$(this).next('ul');
+            next_ul.toggle();
+            var right=next_ul.attr('m-right');
+            var left=(-parseFloat(right))+'vw';
+            var top=next_ul.attr('m-top');
+            next_ul.css({
+                right:right,
+                top:top,
+                left:left
+            });
+            e.stopPropagation();
+            e.preventDefault();
+
+            curr_ul=next_ul;
+        });
+    })();
+
+
+</script>

@@ -12,7 +12,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
             'Access-Control-Allow-Origin':'*'
         }
-    }
+    };
 
     const ajaxConfig2={
         headers:{
@@ -21,7 +21,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
             'Access-Control-Allow-Origin':'*'
         }
-    }
+    };
 
 
 
