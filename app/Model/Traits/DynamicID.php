@@ -16,7 +16,11 @@ trait DynamicID{
     }
 
     public static function getRandomID(){
-        return self::select(['id'])->first()->id;
+        $ids=self::select('id')->get()->toArray();
+        $ids_map=array_map(function($d){return $d['id'].'';},$ids);
+
+
+        return $ids_map[rand(0,count($ids_map)-1)];
     }
 
     public function getIDForTheFirstTime(){
