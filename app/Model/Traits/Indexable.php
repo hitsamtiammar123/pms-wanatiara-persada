@@ -12,5 +12,6 @@ trait Indexable{
 
         return $index;
     }
+
 }
 

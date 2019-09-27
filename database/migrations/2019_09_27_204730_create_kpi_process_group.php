@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateKpiResultGrouping extends Migration
+class CreateKpiProcessGroup extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateKpiResultGrouping extends Migration
      */
     public function up()
     {
-        Schema::create('groupkpiresult', function (Blueprint $table) {
-            $table->string('kpi_result_id',18);
-            $table->string('role_id',15);
-            $table->primary(['kpi_result_id','role_id']);
+        Schema::create('kpiprocessgroup', function (Blueprint $table) {
+            $table->string('kpi_process_id',18);
+            $table->string('tag_id',18);
+            $table->primary(['kpi_process_id','tag_id']);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateKpiResultGrouping extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groupkpiresult');
+        Schema::dropIfExists('kpiprocessgroup');
     }
 }

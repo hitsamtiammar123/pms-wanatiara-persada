@@ -40,36 +40,54 @@
                         </li>
                         <li class=""><a class="dropdown-toggle" data-toggle="dropdown" > PMS Group <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li class="dropdown-submenu"><a class="toogle">Divisi Smelter</a>
-                                    <ul class="dropdown-menu dropdown-menu-right" m-top="-3px" m-right="-14vw">
-                                        <li class="dropdown-submenu"><a class="toogle">Area RD & CMP</a>
-                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" m-right="-14vw" m-top="0vw">
+                                <li class="dropdown-submenu"><a class="toogle">Divisi Smelter <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+                                    <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" m-top="-3px" m-right="-14vw">
+                                        <li class="dropdown-submenu"><a class="toogle">Area RD & CMP <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" tag="smelter" m-right="-14vw" m-top="0vw">
                                                 <li><a>Ketua Grup RD & CMP</a></li>
                                                 <li><a>Operator Rotary Drier</a></li>
                                                 <li><a>Operator CMP</a></li>
                                             </ul>
                                         </li>
-                                        <li class="dropdown-submenu"><a class="toogle">Area MP & RK</a>
-                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" m-right="-14vw" m-top="2vw">
+                                        <li class="dropdown-submenu"><a class="toogle">Area MP & RK <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" tag="smelter" m-right="-14vw" m-top="2vw">
                                                 <li><a>Ketua Grup MP & RK</a></li>
                                                 <li><a>Operator Mixing Plant</a></li>
                                                 <li><a>Operator Rotary Kiln</a></li>
                                             </ul>
                                         </li>
-                                        <li class="dropdown-submenu"><a class="toogle">Area Electric Furnace</a>
-                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" m-right="-14vw" m-top="4vw">
+                                        <li class="dropdown-submenu"><a class="toogle">Area Electric Furnace <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" tag="smelter" m-right="-14vw" m-top="4vw">
                                                 <li><a>Ketua Grup Electric Furnace</a></li>
                                                 <li><a>Operator Electric Furnace</a></li>
                                             </ul>
                                         </li>
-                                        <li class="dropdown-submenu"><a class="toogle">Area OP, WTP & ACP</a>
-                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" m-right="-14vw" m-top="6vw">
+                                        <li class="dropdown-submenu"><a class="toogle">Area OP, WTP & ACP <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" tag="smelter" m-right="-14vw" m-top="6vw">
                                                 <li><a>Ketua Grup Oxygen Plant</a></li>
                                                 <li><a>Ketua Grup Treatment Plant</a></li>
                                                 <li><a>Ketua Grup Air Compressor Plant</a></li>
                                                 <li><a>Operator Oxygen Plant</a></li>
                                                 <li><a>Operator Treatment Plant</a></li>
                                                 <li><a>Operator Air Compressor Plant</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu"><a class="toogle">Area Pemeliharaan Smelter <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" tag="smelter" m-right="-14vw" m-top="8vw">
+                                                <li><a>Ketua Grup Pemeliharaan Mekanik</a></li>
+                                                <li><a>Ketua Grup Pemeliharaan Elektrik</a></li>
+                                                <li><a>Ketua Grup Pemeliharaan Instrument</a></li>
+                                                <li><a>Personil Mekanik Shift & Jaga</a></li>
+                                                <li><a>Personil Elektrik Shift & Jaga</a></li>
+                                                <li><a>Personil Instrument Shift & Jaga</a></li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu"><a class="toogle">Area Refraktori & Elektroda <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
+                                            <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" tag="smelter" m-right="-14vw" m-top="10vw">
+                                                <li><a>Ketua Grup Refr. & Bengkel Elektroda</a></li>
+                                                <li><a>Ketua Grup Elektroda Case</a></li>
+                                                <li><a>Personil Refraktori & Bengkel Elektroda</a></li>
+                                                <li><a>Personil Elektroda Case</a></li>
                                             </ul>
                                         </li>
                                     </ul>
@@ -122,9 +140,24 @@
 </div>
 <script>
     (function(){
-        var curr_ul;
+        var elems={};
+
+        function setTag(elem){
+            var tag=elem.attr('tag');
+            if(tag)
+                elems[tag]=elem;
+        }
+
+        function toogleTag(elem){
+            var tag=elem.attr('tag');
+            if(tag && elems.hasOwnProperty(tag)){
+                elems[tag].toggle();
+            }
+        }
+
         $('.dropdown-submenu a.toogle').on("click", function(e){
             var next_ul=$(this).next('ul');
+            toogleTag(next_ul);
             next_ul.toggle();
             var right=next_ul.attr('m-right');
             var left=(-parseFloat(right))+'vw';
@@ -136,8 +169,7 @@
             });
             e.stopPropagation();
             e.preventDefault();
-
-            curr_ul=next_ul;
+            setTag(next_ul);
         });
     })();
 
