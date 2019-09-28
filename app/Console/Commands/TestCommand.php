@@ -41,7 +41,8 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        put_log('Test Log');
+        $r=KPIHeader::class;
+        $p=$r::getRandomID();
 
     }
 }

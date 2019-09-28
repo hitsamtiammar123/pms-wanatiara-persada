@@ -120,16 +120,6 @@ class KPIHeader extends Model
         }
 
         return $r;
-        // $endorsements=$this->kpiendorsements;
-        // $endorsements->each(function($data,$key){
-        //     $data->load('employee');
-        //     $data->makeHidden(KPIEndorsement::HIDDEN_PROPERTY);
-        //     $data->employee->makeHidden(Employee::HIDDEN_PROPERTY);
-        //     $data->employee->load('role');
-        //     $data->employee->role->makeHidden(Role::HIDDEN_PROPERTY);
-        // });
-
-        //return $endorsements->keyBy('level');
     }
 
     protected function sumTotalAchievement($data,$j){
@@ -878,8 +868,8 @@ class KPIHeader extends Model
     }
 
     public function hasFullEndorse(){
-        foreach($this->kpiendorsements as $endorse){
-            if(!$endorse->verified)
+        foreach($this->employee->getHirarcialEmployee() as $employee){
+            if(!$this->hasEndorse($employee))
                 return false;
         }
         return true;

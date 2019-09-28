@@ -168,10 +168,11 @@ class Employee extends Model
     public function getHirarcialEmployee(){
         $r=[];
 
-        $u1=$this;
-        $r[]=$u1;
-        if($this->atasan){
-            $u2=$this->atasan;
+        $u1=$this->isUser()?$this:$this->atasan;
+
+        if(!is_null($u1) && $u1->atasan){
+            $r[]=$u1;
+            $u2=$u1->atasan;
 
             $r[]=$u2;
             if($u2->atasan){
