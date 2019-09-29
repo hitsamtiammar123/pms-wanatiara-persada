@@ -44,6 +44,12 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return p+p_u;
     }
 
+    this.getByGroupTag=function(tagID){
+        var url=this.route('kpitag',[tagID]);
+
+        return $http.get(url);
+    }
+
     this.requestChange=function(employeID,data){
         var url=this.route('request-change',[employeID]);
         var fd=new FormData();

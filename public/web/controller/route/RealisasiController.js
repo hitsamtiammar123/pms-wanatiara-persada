@@ -1,6 +1,6 @@
 app.controller('RealisasiController',function($scope,$rootScope,validator,loader,$route,
     $filter,notifier,copier,alertModal,dataService,user,$routeParams,formModal,confirmModal
-    ,$sce,pusher,months,$location,$parse,kpiKeys){
+    ,$sce,pusher,months,$location,$parse,kpiKeys,kpiService){
 
 
     $scope.totalAchieveMent={};
@@ -1505,27 +1505,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         $location.path(url);
     }
 
-    $scope.addContent=function(context,setter){
-        //debugger;
-        var elem=context.elem;
-        var scope=context.scope;
-
-        var value=setter(scope);
-
-        if(!isUndf(value)){
-            var format=context.attrs.format;
-            if(format){
-                formatContent(format,setter,elem,scope);
-            }
-            else{
-                elem.text(value);
-            }
-        }
-        else{
-            elem.text('');
-        }
-        //console.log({attrs,value,scope})
-    }
+    $scope.addContent=kpiService.addContent;
 
     $scope.setWeight=function(elem,value,scope,attrs){
 

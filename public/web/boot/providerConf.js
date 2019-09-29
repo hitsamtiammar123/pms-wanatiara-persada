@@ -33,7 +33,11 @@ app.provider('cP',['routingProvider',function(routingProvider){
                 RealisasiController:function(event,next,current){
                     notifier.flushNotifier('realisasi-content');
                     notifier.flushNotifier('add-content');
-                } 
+                },
+                RealisasiGroup:function(event,next,current){
+                    notifier.flushNotifier('realisasi-content');
+                    notifier.flushNotifier('add-content');
+                }  
             },
             onlocationChangeStart:{
                 changeNavBar:function(event,next,current){

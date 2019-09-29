@@ -50,6 +50,7 @@ class Handler extends ExceptionHandler
         if($exception instanceof \Illuminate\Foundation\Http\Exceptions\MaintenanceModeException){
             return response('Lagi Maintenance Hehe',503);
         }
+        put_error_log($exception);
 
         return parent::render($request, $exception);
     }
