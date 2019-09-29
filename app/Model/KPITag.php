@@ -31,11 +31,11 @@ class KPITag extends Model
     }
 
     public function groupkpiresult(){
-        return $this->belongsToMany(KPIResult::class,'kpiresultgroup','tag_id','kpi_result_id')->withTimestamps();
+        return $this->belongsToMany(KPIResult::class,'kpiresultgroup','tag_id','kpi_result_id');
     }
 
     public function groupkpiprocess(){
-        return $this->belongsToMany(KPIProcess::class,'kpiprocessgroup','tag_id','kpi_process_id')->withTimestamps();
+        return $this->belongsToMany(KPIProcess::class,'kpiprocessgroup','tag_id','kpi_process_id');
     }
 
     public function grouprole(){

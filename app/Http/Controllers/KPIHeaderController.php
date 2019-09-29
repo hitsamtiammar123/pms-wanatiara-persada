@@ -7,6 +7,7 @@ use App\Model\KPIHeader;
 use App\Model\KPIResultHeader;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Traits\BroadcastPMSChange;
+use App\Model\KPITag;
 
 class KPIHeaderController extends Controller
 {
@@ -16,6 +17,42 @@ class KPIHeaderController extends Controller
     public function index()
     {
         //
+    }
+
+    public function showGroup(Request $request,$id){
+        $kpitag=KPITag::find($id);
+        if(!$kpitag){
+            return send_404_error('Data tidak ditemukan');
+        }
+
+        $kpitag->representative;
+        $kpitag->groupkpiresult;
+        $kpitag->groupkpiprocess;
+
+        $employees=[];
+        $_month=$request->input('month');
+        $_year=$request->input('year');
+
+        $month=is_null($_month)?Carbon::now()->month:$_month;
+        $year=is_null($_year)?Carbon::now()->year:$_year;
+        foreach($kpitag->grouprole as $role){
+            foreach($role->employee as $e){
+                $header=$e->getHeader($month,$year);
+                $e_arr=[];
+                $e_arr['id']=$e->id;
+                $e_arr['name']=$e->name;
+                $e_arr['role']=$e->role;
+                $e_arr['kpiresult']=$header->kpiresultheaders->sortBy('created_at')->keyBy('id');
+                $e_arr['kpiprocess']=$header->kpiprocesses->sortBy('created_at')->keyBy('id');
+              
+                $e->role;
+                $employees[]=$e_arr;
+            }
+        }
+        $kpitag->employees=$employees;
+        unset($kpitag->grouprole);
+
+        return $kpitag;
     }
 
 

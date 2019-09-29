@@ -67,6 +67,8 @@ Route::group(['prefix'=>'v1','middleware'=>['cors','web']
     Route::put('/kpiendorsement/{employeeID}/reset','KPIEndorsementController@reset')
     ->name('kpiendorsement.reset');
 
+    Route::get('/kpitag/{tagID}','KPIHeaderController@showGroup')->name('kpitag.show');
+
 });
 
 
