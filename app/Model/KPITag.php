@@ -3,8 +3,8 @@
 namespace App\Model;
 
 use App\Model\Traits\DynamicID;
+use App\Model\Traits\Indexable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class KPITag extends Model
 {
@@ -31,15 +31,15 @@ class KPITag extends Model
     }
 
     public function groupkpiresult(){
-        return $this->belongsToMany(KPIResult::class,'kpiresultgroup','tag_id','kpi_result_id');
+        return $this->belongsToMany(KPIResult::class,'kpiresultgroup','tag_id','kpi_result_id')->withTimestamps();
     }
 
     public function groupkpiprocess(){
-        return $this->belongsToMany(KPIProcess::class,'kpiprocessgroup','tag_id','kpi_process_id');
+        return $this->belongsToMany(KPIProcess::class,'kpiprocessgroup','tag_id','kpi_process_id')->withTimestamps();
     }
 
     public function grouprole(){
-        return $this->belongsToMany(Role::class,'groupingkpi','tag_id','role_id');
+        return $this->belongsToMany(Role::class,'groupingkpi','tag_id','role_id')->withTimestamps();
     }
 
 }
