@@ -51,6 +51,7 @@
                         <td class="kpi-content" ng-repeat="mapping in rg.contentMapping"
                         belong-to="employee[mapping.type][mapping.id].{{mapping.key}}"
                         format="{{employee[mapping.type][mapping.id][mapping.filter]}}"
+                        format="{{employee[mapping.type][mapping.id][mapping.sanitize]}}"
                         auto-fill="true"></td>
 
                         <td class="kpi-content">100%</td>

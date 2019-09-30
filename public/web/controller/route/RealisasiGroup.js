@@ -27,7 +27,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         },
         {
             key:'kpia',
-            keyP:'pivot.kpia',
+            keyP:'kpia',
             keyfilter:'kpia_filter',
             keySanitize:'kpia_sanitize'
         }
@@ -77,7 +77,25 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         rt=(parseFloat(rC)/parseFloat(tC))*100;
 
         return rt;
+    }
 
+    var getKPIAProcess=function(kpiprocess,e_process){
+        var i;
+        var rt;
+
+        i=e_process.pivot.real;
+        if(i<=0)
+            rt=70;
+        else if(i===1)
+            rt=80;
+        else if(i===2)
+            rt=90;
+        else if(i===3)
+            rt=100;
+        else if(i>=4)
+            rt=120;
+
+        return rt;
     }
 
     var setUnitFilter=function(d,type){
@@ -120,12 +138,16 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
     var setKPIA=function(type){
         var data=(type==='kpiresult')?vw.kpiresultgroup:vw.kpiprocessgroup;
         for(var i=0;i<data.length;i++){
-            var kpiresult=data[i];
+            var d=data[i];
             for(var j=0;j<vw.employees.length;j++){
                 var employee=vw.employees[j];
                 if(type==='kpiresult'){
-                    var e_result=employee.kpiresult[kpiresult.id];
-                    e_result.kpia=getKPIAResult(kpiresult,e_result);
+                    var e_result=employee.kpiresult[d.id];
+                    e_result.kpia=getKPIAResult(d,e_result);
+                }
+                else if(type==='kpiprocess'){
+                    var e_process=employee.kpiprocess[d.id];
+                    e_process.kpia=getKPIAProcess(d,e_process);
                 }
             }
         }
@@ -169,6 +191,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         setContentMapping();
         setEmployeeData();
         setKPIA('kpiresult');
+        setKPIA('kpiprocess');
 
         dataService.digest($scope);
         notifier.notifyGroup('add-content');
