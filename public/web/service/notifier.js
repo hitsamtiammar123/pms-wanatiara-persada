@@ -7,7 +7,7 @@ app.service('notifier',function($route){
     var setRestriction=function(value,restrict){
         if(isUndf(restriction[value])){
             restriction[value]=[];
-            
+
         }
         if(isArr(restrict)){
             restriction[value]=restriction[value].concat(restrict);
@@ -31,17 +31,17 @@ app.service('notifier',function($route){
         funcArgs[value]=args;
         setRestriction(value,restrict);
 
-    } 
+    }
 
     this.notify=function(value,args){
         var arg=args?args:funcArgs[value];
         var func=funcToCall[value];
-        checkAuthority(value,arguments.callee.caller);
+        //checkAuthority(value,arguments.callee.caller);
 
-        if(func) 
+        if(func)
             func.apply(this,arg);
         //console.log('Route in notifier',$route);
-    }  
+    }
 
     this.setNotifierGroup=function(value,func,args,restrict,index){
 
@@ -49,7 +49,7 @@ app.service('notifier',function($route){
             funcToCall[value]=[];
             funcArgs[value]=[];
             setRestriction(value,restrict);
-        } 
+        }
             if(isUndf(index)){
                 funcToCall[value].push(func);
                 funcArgs[value].push(args);
@@ -58,14 +58,14 @@ app.service('notifier',function($route){
                 funcToCall[value][index]=func;
                 funcArgs[value][index]=args;
             }
-         
+
     }
 
     this.notifyGroup=function(value,args,index){
         //console.log(funcToCall[value])
         if(!funcToCall[value])
-            return; 
-        checkAuthority(value,arguments.callee.caller);
+            return;
+        //checkAuthority(value,arguments.callee.caller);
         var listFunc=funcToCall[value];
         var listArgs=funcArgs[value];
         if(!isUndf(index)){
@@ -90,4 +90,4 @@ app.service('notifier',function($route){
         delete restriction[value];
     }
 
-}); 
+});

@@ -5,13 +5,15 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
     var heading_table_2=E('#heading-table-2');
     var heading_table_3=E('#heading-table-3');
     var template_kpiresult=`<th colspan="2" class="heading-color-green" notify-g-label="add-content" belong-to="{belongTo}">{kpiresult}</th>
-    <th rowspan="2" class="heading-color-green kpi-content">KPI Achievement</th>`;
+    <th rowspan="2" class="heading-color-green kpi-content">R/T (%)</th>`;
     var template_kpiprocess=`<th colspan="2" class="heading-color-yellow" notify-g-label="add-content"  belong-to="{belongTo}">{kpiprocess}</th>
-    <th rowspan="2" class="heading-color-yellow kpi-content">KPI Achievement</th>`;
+    <th rowspan="2" class="heading-color-yellow kpi-content">R/T (%)</th>`;
     var template_final=`<th rowspan="2" class="heading-color-grey kpi-content">Nilai</th>
     <th rowspan="2" class="heading-color-grey kpi-content">Index</th>`;
     var template_heading_3=`<th class="{heading_color} kpi-content">Target</th><th class="{heading_color} kpi-content">Realisasi</th>`;
     var vw=this;
+    const KPI_RESULT='kpiresult';
+    const KPI_PROCESS='kpiprocess';
     var keymap=[
         {
             key:'pt_t',
@@ -37,6 +39,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
     vw.kpiprocessgroup=[];
     vw.employees=[];
     vw.contentMapping=[];
+    // vw.weighting={};
 
     var initKPIResultHeading=function(){
         for(var i=0;i<vw.kpiresultgroup.length;i++){
@@ -66,6 +69,53 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         heading_table_2.append(template_final);
     }
 
+    var getKPIAIndex=function(i,unit){
+        var rt=0;
+        var i=parseFloat(i);
+        switch(unit){
+            case '规模 Skala':
+            case '规模 Scale':
+                if(i<=0)
+                    rt=70;
+                else if(i==1)
+                    rt=80;
+                else if(i==2)
+                    rt=90;
+                else if(i==3)
+                    rt=100;
+                else if(i>=4)
+                    rt=120;
+            break;
+            case 'MT':
+                if(i<=0.8)
+                    rt=80;
+                else if(i>0.8 && i<=0.9)
+                    rt=90;
+                else if(i>0.9 && i<1)
+                    rt=95;
+                else if(i>=1 && i<=1.025)
+                    rt=102;
+                else if(i>1.025)
+                    rt=110;
+
+        }
+        return rt;
+    }
+
+    var getBColor=function(i){
+        i/=100;
+        if(i<=0.8)
+            return 'black-column';
+        else if(i>0.8 && i<=0.9)
+            return 'red-column';
+        else if(i>0.9 && i<1)
+            return 'green-column';
+        else if(i>=1 && i<=1.025)
+            return 'blue-column';
+        else if(i>1.025)
+            return 'gold-column';
+    }
+
     var getKPIAResult=function(kpiresult,e_result){
         var rC;
         var tC;
@@ -74,9 +124,19 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         rC=e_result['real_t'];
         tC=e_result['pt_t'];
 
-        rt=(parseFloat(rC)/parseFloat(tC))*100;
 
-        return rt;
+
+        switch(kpiresult.unit){
+            case 'MT':
+                rt=(parseFloat(rC)/parseFloat(tC));
+            break;
+            case '规模 Skala':
+            case '规模 Scale':
+                rt=rC;
+            break;
+        }
+
+        return getKPIAIndex(rt,kpiresult.unit);
     }
 
     var getKPIAProcess=function(kpiprocess,e_process){
@@ -84,25 +144,15 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         var rt;
 
         i=e_process.pivot.real;
-        if(i<=0)
-            rt=70;
-        else if(i===1)
-            rt=80;
-        else if(i===2)
-            rt=90;
-        else if(i===3)
-            rt=100;
-        else if(i>=4)
-            rt=120;
 
-        return rt;
+        return getKPIAIndex(i,kpiprocess.unit);
     }
 
     var setUnitFilter=function(d,type){
         var unit='';
-        if(type==='kpiresult')
+        if(type===KPI_RESULT)
             unit= d.kpiresult.unit;
-        else if(type==='kpiprocess')
+        else if(type===KPI_PROCESS)
             unit=d.unit;
 
         d.kpia_filter='addPercent';
@@ -127,28 +177,58 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         }
     }
 
+    var setWeighting=function(){
+        vw.weighting={
+            result:vw.kpitag.weight_result*100,
+            process:vw.kpitag.weight_process*100
+        };
+
+        //dataService.digest($scope);
+    }
+
     var setEmployeeData=function(){
         for(var i in vw.employees){
             var employee=vw.employees[i];
-            setFilter(employee.kpiresult,'kpiresult');
-            setFilter(employee.kpiprocess,'kpiprocess');
+            setFilter(employee.kpiresult,KPI_RESULT);
+            setFilter(employee.kpiprocess,KPI_PROCESS);
+            setTotalAchievement(employee)
         }
     }
 
+    var getTotalAchievement=function(data){
+        var sum=0;
+        var count=0;
+        for(var i in data){
+            var d=data[i];
+            sum+=d.kpia;
+            count++;
+        }
+        return sum/count;
+    }
+
+    var setTotalAchievement=function(employee){
+        var taR=getTotalAchievement(employee.kpiresult) * vw.kpitag.weight_result;
+        var taP=getTotalAchievement(employee.kpiprocess) * vw.kpitag.weight_process;
+        employee.ta=taR+taP;
+        employee.ia=kpiService.getAchievementIndex(employee.ta);
+    }
+
     var setKPIA=function(type){
-        var data=(type==='kpiresult')?vw.kpiresultgroup:vw.kpiprocessgroup;
+        var data=(type===KPI_RESULT)?vw.kpiresultgroup:vw.kpiprocessgroup;
         for(var i=0;i<data.length;i++){
             var d=data[i];
             for(var j=0;j<vw.employees.length;j++){
                 var employee=vw.employees[j];
-                if(type==='kpiresult'){
-                    var e_result=employee.kpiresult[d.id];
-                    e_result.kpia=getKPIAResult(d,e_result);
+                var e_data;
+                if(type===KPI_RESULT){
+                    e_data=employee.kpiresult[d.id];
+                    e_data.kpia=getKPIAResult(d,e_data);
                 }
-                else if(type==='kpiprocess'){
-                    var e_process=employee.kpiprocess[d.id];
-                    e_process.kpia=getKPIAProcess(d,e_process);
+                else if(type===KPI_PROCESS){
+                    e_data=employee.kpiprocess[d.id];
+                    e_data.kpia=getKPIAProcess(d,e_data);
                 }
+                e_data.kpiaBColor=getBColor(e_data.kpia);
             }
         }
     }
@@ -158,7 +238,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         var mapToData=function(type,id){
             for(var j in keymap){
                 var k=keymap[j];
-                var key=(type==='kpiresult')?k.key:k.keyP;
+                var key=(type===KPI_RESULT)?k.key:k.keyP;
                 vw.contentMapping.push({
                     type:type,
                     id:id,
@@ -172,12 +252,12 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         for(var i=0;i<vw.kpiresultgroup.length;i++){
             var d=vw.kpiresultgroup[i];
             var id=d.id;
-            mapToData('kpiresult',id);
+            mapToData(KPI_RESULT,id);
         }
         for(var i=0;i<vw.kpiprocessgroup.length;i++){
             var d=vw.kpiprocessgroup[i];
             var id=d.id;
-            mapToData('kpiprocess',id);
+            mapToData(KPI_PROCESS,id);
         }
 
         console.log(vw.contentMapping);
@@ -185,16 +265,17 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
 
     var initData=function(){
         const FUNCTION_NAME='add-content';
+
         initKPIResultHeading();
         initKPIProcessHeading();
         initFinalHeading();
         setContentMapping();
+        setKPIA(KPI_RESULT);
+        setKPIA(KPI_PROCESS);
         setEmployeeData();
-        setKPIA('kpiresult');
-        setKPIA('kpiprocess');
+        setWeighting();
 
-        dataService.digest($scope);
-        notifier.notifyGroup('add-content');
+        notifier.notifyGroup('rg.add-content');
         console.log(vw.employees);
     }
 
@@ -204,6 +285,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
         vw.kpiresultgroup=data.groupkpiresult;
         vw.kpiprocessgroup=data.groupkpiprocess;
         vw.employees=data.employees;
+        vw.kpitag=data;
         initData();
 
 
@@ -216,6 +298,5 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
     }
 
     vw.addContent=kpiService.addContent;
-
     loadData();
 }]);

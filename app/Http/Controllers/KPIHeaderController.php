@@ -54,6 +54,8 @@ class KPIHeaderController extends Controller
             }
         }
         $kpitag->employees=$employees;
+        $kpitag->weight_result=$header->weight_result;
+        $kpitag->weight_process=$header->weight_process;
         $kpitag->period=$curr_header->cPeriod()->format('Y-m-d');
         $kpitag->prevperiod=$curr_header->cPrevPeriod()->format('Y-m-d');
         unset($kpitag->grouprole);

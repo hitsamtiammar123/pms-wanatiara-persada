@@ -30,10 +30,10 @@
                             <th rowspan="3" class="heading-color-grey num">No</th>
                             <th rowspan="3" class="kpi heading-color-grey">Nama</th>
                             <th rowspan="3" class="kpi heading-color-grey">Penugasan</th>
-                            <th class="heading-color-green">20%</th>
+                            <th class="heading-color-green" notify-g-label="rg.add-content" auto-fill="true" belong-to="rg.weighting.result"  format="addPercent"></th>
                             <th colspan="4" class="heading-color-green">Sasaran Hasil</th>
                             <th class="heading-color-green"></th>
-                            <th class="heading-color-yellow">20%</th>
+                            <th class="heading-color-yellow" notify-g-label="rg.add-content" auto-fill="true" belong-to="rg.weighting.process"  format="addPercent"></th>
                             <th class="heading-color-yellow" colspan="7">Sasaran Proses</th>
                             <th class="heading-color-yellow"></th>
                             <th class="heading-color-grey" colspan="2">Total</th>
@@ -52,10 +52,11 @@
                         belong-to="employee[mapping.type][mapping.id].{{mapping.key}}"
                         format="{{employee[mapping.type][mapping.id][mapping.filter]}}"
                         format="{{employee[mapping.type][mapping.id][mapping.sanitize]}}"
+                        ng-class="employee[mapping.type][mapping.id][mapping.key+'BColor']"
                         auto-fill="true"></td>
 
-                        <td class="kpi-content">100%</td>
-                        <td class="kpi-content">A</td>
+                        <td class="kpi-content bold" belong-to="employee.ta" format="addPercent"></td>
+                        <td class="kpi-content bold" belong-to="employee.ia"></td>
                     </tr>
                 </tbody>
             </table>

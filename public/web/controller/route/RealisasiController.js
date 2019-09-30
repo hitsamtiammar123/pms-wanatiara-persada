@@ -241,39 +241,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setUserHeading();
     }
 
-    var getAchievementIndex=function(s){
-        var index='';
-        if(s<80){
-            index="D";
-        }
-        else if(s>=80 && s<82){
-            index="C"
-        }
-        else if(s>=82 && s<85){
-            index="C+"
-        }
-        else if(s>=85 && s<90){
-            index="B-"
-        }
-        else if(s>=90 && s<95){
-            index="B"
-        }
-        else if(s>=95 && s<100){
-            index="B+"
-        }
-        else if(s>=100 && s<102){
-            index="A-"
-        }
-        else if(s>=102 && s<105){
-            index="A"
-        }
-        else if(s>=105){
-            index="A+"
-        }
-
-        return index;
-    }
-
     var sumTotalAchievement=function(data,i){
         var s=0;
         var awIndex='aw_';
@@ -300,7 +267,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             if(isNaN(s))
                 continue;
             totalAchieveMent[q]=s.toFixed(1);
-            var index=getAchievementIndex(s);
+            var index=kpiService.getAchievementIndex(s);
             IndexAchieveMent[q]=index;
         }
 
@@ -320,8 +287,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         $scope.finalAchievement.t2_n=(t2_fr*$scope.header.weight_result+
                                     t2_fp*$scope.header.weight_process).toFixed(1);
 
-        $scope.finalAchievement.t1_i=getAchievementIndex($scope.finalAchievement.t1_n);
-        $scope.finalAchievement.t2_i=getAchievementIndex($scope.finalAchievement.t2_n);
+        $scope.finalAchievement.t1_i=kpiService.getAchievementIndex($scope.finalAchievement.t1_n);
+        $scope.finalAchievement.t2_i=kpiService.getAchievementIndex($scope.finalAchievement.t2_n);
 
         $scope.finalAchievement.t1_f=($scope.finalAchievement.t1_n-100).toFixed(1);
         $scope.finalAchievement.t2_f=($scope.finalAchievement.t2_n-100).toFixed(1);
