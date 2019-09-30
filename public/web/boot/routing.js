@@ -17,6 +17,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             config:{
                 templateUrl:'web/view/realisasi-group.html',
                 controller:'RealisasiGroup',
+                controllerAs:'rg',
                 resolve:{
 
                 }

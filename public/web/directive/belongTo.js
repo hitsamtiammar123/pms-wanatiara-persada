@@ -286,6 +286,8 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
 
     return {
         restrict:'A',
-        link:linkFunction
+        link:linkFunction,
+        replace: true,
+        transclude: true,
     };
 }])

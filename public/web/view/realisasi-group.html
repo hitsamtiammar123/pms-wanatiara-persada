@@ -38,35 +38,20 @@
                             <th class="heading-color-yellow"></th>
                             <th class="heading-color-grey" colspan="2">Total</th>
                     </tr>
-                    <tr id="heading-table-2"></tr>
-                        <tr id="heading-table-3"></tr>
+                    <tr id="heading-table-2">
+                    </tr>
+                    <tr id="heading-table-3"></tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="i in []|range:40">
-                        <td class="num">{{i+1}}</td>
-                        <td class="kpi">Kuded</td>
-                        <td class="kpi">Operator Hehe</td>
+                    <tr ng-repeat="employee in rg.employees track by $index">
+                        <td class="num">{{$index+1}}</td>
+                        <td class="kpi" belong-to="employee.name" auto-fill="true"></td>
+                        <td class="kpi" belong-to="employee.role.name" auto-fill="true"></td>
 
-                        <td class="kpi-content">100,000</td>
-                        <td class="kpi-content">150,000</td>
-                        <td class="kpi-content">100%</td>
-
-                        <td class="kpi-content">Baik</td>
-                        <td class="kpi-content">Baik</td>
-                        <td class="kpi-content">100%</td>
-
-                        <td class="kpi-content">Baik</td>
-                        <td class="kpi-content">Baik</td>
-                        <td class="kpi-content">100%</td>
-
-                        <td class="kpi-content">Baik</td>
-                        <td class="kpi-content">Baik</td>
-                        <td class="kpi-content">100%</td>
-
-                        <td class="kpi-content">Baik</td>
-                        <td class="kpi-content">Baik</td>
-                        <td class="kpi-content">100%</td>
-
+                        <td class="kpi-content" ng-repeat="mapping in rg.contentMapping"
+                        belong-to="employee[mapping.type][mapping.id].{{mapping.key}}"
+                        format="{{employee[mapping.type][mapping.id][mapping.filter]}}"
+                        auto-fill="true"></td>
 
                         <td class="kpi-content">100%</td>
                         <td class="kpi-content">A</td>

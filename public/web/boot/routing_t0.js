@@ -13,10 +13,11 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/realisasi-group',
+            url:'/realisasi-group/:tagID',
             config:{
                 templateUrl:'web/view/realisasi-group.html',
                 controller:'RealisasiGroup',
+                controllerAs:'rg',
                 resolve:{
 
                 }

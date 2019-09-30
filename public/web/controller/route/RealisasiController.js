@@ -797,7 +797,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var d=data[i];
             setDataFilter(d);
         }
-        console.log(data);
+        //console.log(data);
     }
 
     var applyCopiedTable=function(copyData,flag){

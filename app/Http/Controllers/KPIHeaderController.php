@@ -32,24 +32,30 @@ class KPIHeaderController extends Controller
         $employees=[];
         $_month=$request->input('month');
         $_year=$request->input('year');
+        $curr_header=$kpitag->grouprole[0]->employee[0]->getCurrentHeader();
 
         $month=is_null($_month)?Carbon::now()->month:$_month;
         $year=is_null($_year)?Carbon::now()->year:$_year;
         foreach($kpitag->grouprole as $role){
             foreach($role->employee as $e){
                 $header=$e->getHeader($month,$year);
+                $header->kpiresultheaders->each(function($d){
+                    $d->kpiresult;
+                });
                 $e_arr=[];
                 $e_arr['id']=$e->id;
                 $e_arr['name']=$e->name;
                 $e_arr['role']=$e->role;
-                $e_arr['kpiresult']=$header->kpiresultheaders->sortBy('created_at')->keyBy('id');
+                $e_arr['kpiresult']=$header->kpiresultheaders->sortBy('created_at')->keyBy('kpi_result_id');
                 $e_arr['kpiprocess']=$header->kpiprocesses->sortBy('created_at')->keyBy('id');
-              
+
                 $e->role;
                 $employees[]=$e_arr;
             }
         }
         $kpitag->employees=$employees;
+        $kpitag->period=$curr_header->cPeriod()->format('Y-m-d');
+        $kpitag->prevperiod=$curr_header->cPrevPeriod()->format('Y-m-d');
         unset($kpitag->grouprole);
 
         return $kpitag;

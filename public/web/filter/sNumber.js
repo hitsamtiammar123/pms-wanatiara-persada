@@ -6,19 +6,19 @@ app.filter('sNumber',function(){
         if(trash)
             input=input.replace(trash,'');
         return input;
-    }   
+    }
 
     return function(input){
         var c=input;
         if(input!==null && typeof(input)!=='string')
             input=input.toString();
-        
+
         var vNumber=/^\d+(\.\d+)?$/g;
         if(!vNumber.test(input)){
             input=checkRegex(input,/(\D+)$/gm);
             input=checkRegex(input,/^(\D+)/gm);
-            
-            
+
+
             var secondTest=vNumber.test(input);
             if(!secondTest)
                 input=input.replace(/\D+/gm,'');
@@ -26,4 +26,4 @@ app.filter('sNumber',function(){
         }
         return input;
     }
-}) 
+})

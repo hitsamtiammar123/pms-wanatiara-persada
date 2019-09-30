@@ -13,6 +13,7 @@ app.service('kpiService',['$filter',function($filter){
         }
     }
 
+
    this.addContent=function(context,setter){
         //debugger;
         var elem=context.elem;
@@ -34,4 +35,4 @@ app.service('kpiService',['$filter',function($filter){
         }
         //console.log({attrs,value,scope})
     }
-}]);  
+}]);
