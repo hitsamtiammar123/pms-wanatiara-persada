@@ -1,6 +1,6 @@
 app.controller('RealisasiController',function($scope,$rootScope,validator,loader,$route,
     $filter,notifier,copier,alertModal,dataService,user,$routeParams,formModal,confirmModal
-    ,$sce,pusher,months,$location,$parse,kpiKeys,kpiService){
+    ,$sce,pusher,months,$location,$parse,kpiKeys,kpiService,KPI_PROCESS,KPI_RESULT){
 
 
     $scope.totalAchieveMent={};
@@ -61,8 +61,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var kpiprocessstream=copier.stream(employeeIndex+'_kpiprocess');
     var kpiresultdeletestream=copier.stream(employeeIndex+'_kpiresult_delete_list');
     var kpiprocessdeletestream=copier.stream(employeeIndex+'_kpiprocess_delete_list');
-    const KPI_RESULT='kpiresult';
-    const KPI_PROCESS='kpiprocess';
     var kpiresult_elem=E('.realisasi-table tbody').eq(0);
     var kpiprocess_elem=E('.realisasi-table tbody').eq(1);
     var currentEmployee=user.employee;
@@ -1406,28 +1404,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         stream.pushData(list,copy_list);
     }
 
-    /**
-     * berfungsi untuk melakukan kalkulasi ulang setelah bobot diubah
-     *
-     * @param {string} flag variabel yang menentukan akan melakukan kalkulasi terhadap kpiresult atau kpiprocess
-     */
-    var calculateWeight=function(flag){
-        var w_r=$scope.display_weights.weight_result?parseInt($scope.display_weights.weight_result):0;
-        var w_p=$scope.display_weights.weight_process?parseInt($scope.display_weights.weight_process):0;
 
-        if(flag===KPI_RESULT){
-            w_p=100-w_r;
-        }
-        else if(flag===KPI_PROCESS)
-            w_r=100-w_p;
-        $scope.header.weight_result=w_r/100;
-        $scope.header.weight_process=w_p/100;
-        $scope.display_weights={
-            weight_process:w_p,
-            weight_result:w_r
-        };
-
-    }
+    var calculateWeight=kpiService.calculateWeight;
 
     $scope.openMenu=function($mdMenu,ev){
         $mdMenu.open(ev);
@@ -1481,12 +1459,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         var setter=$parse(attrs.belongTo);
         if(val_int<0 || val_int>100){
 
-            var default_val=(flag===KPI_RESULT)?($scope.header.weight_result*100):($scope.header.weight_process*100);
+            var default_val=kpiService.getDefaultWeighting(flag,$scope.header);
             setter.assign(scope,default_val);
             alertModal.display('Peringatan','Bobot harus diantara 0 dan 100');
         }
         else{
-            calculateWeight(flag);
+            calculateWeight(flag,$scope.display_weights,$scope.header);
         }
         setFinalAchivement();
     }

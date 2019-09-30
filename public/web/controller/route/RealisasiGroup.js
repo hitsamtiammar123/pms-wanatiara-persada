@@ -1,5 +1,5 @@
-app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal',
-function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
+app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS',
+function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS){
 
     var tagID=$routeParams.tagID;
     var heading_table_2=E('#heading-table-2');
@@ -12,8 +12,6 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
     <th rowspan="2" class="heading-color-grey kpi-content">Index</th>`;
     var template_heading_3=`<th class="{heading_color} kpi-content">Target</th><th class="{heading_color} kpi-content">Realisasi</th>`;
     var vw=this;
-    const KPI_RESULT='kpiresult';
-    const KPI_PROCESS='kpiprocess';
     var keymap=[
         {
             key:'pt_t',
@@ -179,8 +177,8 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
 
     var setWeighting=function(){
         vw.weighting={
-            result:vw.kpitag.weight_result*100,
-            process:vw.kpitag.weight_process*100
+            weight_result:vw.kpitag.weight_result*100,
+            weight_process:vw.kpitag.weight_process*100
         };
 
         //dataService.digest($scope);
@@ -298,5 +296,19 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal){
     }
 
     vw.addContent=kpiService.addContent;
+    vw.setWeight=function(elem,value,scope,attrs){
+        var val_int=value?parseInt(value):0;
+        var setter=$parse(attrs.belongTo);
+        var flag=attrs.flag;
+        if(val_int<0 || val_int>100){
+            var default_val=kpiService.getDefaultWeighting(flag,vw.kpitag);
+            setter.assign(scope,default_val);
+        }
+        else{
+            kpiService.calculateWeight(flag,vw.weighting,vw.kpitag);
+        }
+        notifier.notifyGroup('rg.add-content');
+    }
+
     loadData();
 }]);
