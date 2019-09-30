@@ -116,6 +116,7 @@ class KPIHeader extends Model
             $employee->role;
             $employee->verified=$this->hasEndorse($employee);
             unset($employee->atasan);
+            unset($employee->user);
             $r[$index+1]=$employee;
         }
 
