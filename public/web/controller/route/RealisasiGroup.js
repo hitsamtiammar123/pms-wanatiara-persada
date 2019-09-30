@@ -17,19 +17,22 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             key:'pt_t',
             keyP:'pivot.pt',
             keyfilter:'pt_filter',
-            keySanitize:'pt_sanitize'
+            keySanitize:'pt_sanitize',
+            keyContentEditable:'ptContentEditable'
         },
         {
             key:'real_t',
             keyfilter:'real_filter',
             keyP:'pivot.real',
-            keySanitize:'real_sanitize'
+            keySanitize:'real_sanitize',
+            keyContentEditable:'realContentEditable'
         },
         {
             key:'kpia',
             keyP:'kpia',
             keyfilter:'kpia_filter',
-            keySanitize:'kpia_sanitize'
+            keySanitize:'kpia_sanitize',
+            keyContentEditable:'kpiaContentEditable'
         }
     ];
 
@@ -180,8 +183,16 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             weight_result:vw.kpitag.weight_result*100,
             weight_process:vw.kpitag.weight_process*100
         };
+    }
 
-        //dataService.digest($scope);
+    var setContentEditable=function(data,flag){
+            for(var i in data){
+                var d=data[i];
+                d.kpiaContentEditable=false;
+                d.ptContentEditable=true;
+                d.realContentEditable=true;
+            }
+
     }
 
     var setEmployeeData=function(){
@@ -189,8 +200,11 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             var employee=vw.employees[i];
             setFilter(employee.kpiresult,KPI_RESULT);
             setFilter(employee.kpiprocess,KPI_PROCESS);
-            setTotalAchievement(employee)
+            setContentEditable(employee.kpiresult,KPI_RESULT);
+            setContentEditable(employee.kpiprocess,KPI_PROCESS);
+            setTotalAchievement(employee);
         }
+        //console.log(vw.employees);
     }
 
     var getTotalAchievement=function(data){
@@ -207,7 +221,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var setTotalAchievement=function(employee){
         var taR=getTotalAchievement(employee.kpiresult) * vw.kpitag.weight_result;
         var taP=getTotalAchievement(employee.kpiprocess) * vw.kpitag.weight_process;
-        employee.ta=taR+taP;
+        employee.ta=(taR+taP).toFixed(2);
         employee.ia=kpiService.getAchievementIndex(employee.ta);
     }
 
@@ -242,7 +256,8 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
                     id:id,
                     key:key,
                     filter:k.keyfilter,
-                    sanitize:k.keySanitize
+                    sanitize:k.keySanitize,
+                    contenteditable:k.keyContentEditable
                 });
             }
         }
@@ -277,6 +292,12 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         console.log(vw.employees);
     }
 
+    var setDataDetail=function(){
+        setKPIA(KPI_RESULT);
+        setKPIA(KPI_PROCESS);
+        setEmployeeData();
+    }
+
     var onSuccess=function(result){
         alertModal.hide();
         var data=result.data;
@@ -296,6 +317,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     }
 
     vw.addContent=kpiService.addContent;
+
     vw.setWeight=function(elem,value,scope,attrs){
         var val_int=value?parseInt(value):0;
         var setter=$parse(attrs.belongTo);
@@ -308,6 +330,13 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             kpiService.calculateWeight(flag,vw.weighting,vw.kpitag);
             setEmployeeData();
         }
+        notifier.notifyGroup('rg.add-content');
+    }
+
+    vw.onAfterEdit=function(elem,value,scope,attrs){
+        //console.log(value);
+        setDataDetail();
+        dataService.digest($scope);
         notifier.notifyGroup('rg.add-content');
     }
 

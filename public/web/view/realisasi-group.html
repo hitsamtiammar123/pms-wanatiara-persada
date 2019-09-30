@@ -51,8 +51,10 @@
                         <td class="kpi-content" ng-repeat="mapping in rg.contentMapping"
                         belong-to="employee[mapping.type][mapping.id].{{mapping.key}}"
                         format="{{employee[mapping.type][mapping.id][mapping.filter]}}"
-                        format="{{employee[mapping.type][mapping.id][mapping.sanitize]}}"
+                        sanitize="{{employee[mapping.type][mapping.id][mapping.sanitize]}}"
                         ng-class="employee[mapping.type][mapping.id][mapping.key+'BColor']"
+                        contenteditable="{{employee[mapping.type][mapping.id][mapping.contenteditable]}}"
+                        after-edit="rg.onAfterEdit" notify-g-label="rg.add-content"
                         auto-fill="true"></td>
 
                         <td class="kpi-content bold" notify-g-label="rg.add-content" belong-to="employee.ta" format="addPercent"></td>
