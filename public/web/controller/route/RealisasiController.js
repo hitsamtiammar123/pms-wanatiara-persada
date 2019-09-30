@@ -294,20 +294,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         notifier.notifyGroup('add-content');
     }
 
-    var formatContent=function(format,setter,elem,scope){
-        var v=setter(scope);
-        var f;
-        var sp_f=format.split('|');
-        for(var i=0;i<sp_f.length;i++){
-            var csp=sp_f[i];
-            var nvalue=$filter(csp)(v);
-            f=nvalue?nvalue:v;
-            elem.text(f)
-            v=f;
-        }
-    }
-
-
     var setCurrentMonth=function(month){
         var index=month.index;
         currMonth=$rootScope.month=index;
@@ -1493,7 +1479,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setter.assign(scope,getter);
 
         if(format){
-            formatContent(format,setter,elem,scope);
+            kpiService.formatContent(format,setter,elem,scope);
         }
         else{
             elem.text(getter);

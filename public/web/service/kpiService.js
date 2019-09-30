@@ -1,6 +1,7 @@
 app.service('kpiService',['$filter','KPI_PROCESS','KPI_RESULT',function($filter,KPI_PROCESS,KPI_RESULT){
+    var self=this;
 
-    var formatContent=function(format,setter,elem,scope){
+    this.formatContent=function(format,setter,elem,scope){
         var v=setter(scope);
         var f;
         var sp_f=format.split('|');
@@ -24,7 +25,7 @@ app.service('kpiService',['$filter','KPI_PROCESS','KPI_RESULT',function($filter,
         if(!isUndf(value)){
             var format=context.attrs.format;
             if(format){
-                formatContent(format,setter,elem,scope);
+                self.formatContent(format,setter,elem,scope);
             }
             else{
                 elem.text(value);

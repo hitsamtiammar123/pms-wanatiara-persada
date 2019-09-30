@@ -306,6 +306,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         }
         else{
             kpiService.calculateWeight(flag,vw.weighting,vw.kpitag);
+            setEmployeeData();
         }
         notifier.notifyGroup('rg.add-content');
     }
