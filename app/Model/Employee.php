@@ -189,11 +189,11 @@ class Employee extends Model
         if($this->checkHeader($period))
             return -1;
 
-        if($this->role->tier===0)
+        if(!$this->role || $this->role->tier===0)
             return 0;
 
         $curr_header=$this->getCurrentHeader();
-        $id=$this->id?$this->id:$this->getIDForTheFirstTime();
+        $id=$this->id!='0'?$this->id:$this->getIDForTheFirstTime();
 
         $header_id=KPIHeader::generateID($id);
         $header=KPIHeader::create([
@@ -205,7 +205,7 @@ class Employee extends Model
         ]);
 
         $header->makeKPIResult($curr_header,$header_id);
-        $header->makeEndorsement($header_id);
+
         $header->makeKPIProcess($curr_header,$header_id);
 
         return 1;
