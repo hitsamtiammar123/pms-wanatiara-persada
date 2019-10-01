@@ -77,22 +77,26 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             if(type===KPI_RESULT){
                 classname='heading-color-green';
                 belongTo=`rg.kpiresultgroup[${i}].name`;
+                contenteditable=true;
             }
             else if(type===KPI_PROCESS){
                 classname='heading-color-yellow';
                 belongTo=`rg.kpiprocessgroup[${i}].name`;
+                contenteditable=false;
             }
                 headmapping.attr={
                     class:classname,
                     colspan:2,
                     notifyGLabel:'add-content',
-                    belongTo:belongTo
+                    belongTo:belongTo,
+                    contenteditable:contenteditable
 
                 }
                 rPerT.attr={
                     class:classname+' kpi-content',
                     rowspan:2,
-                    belongTo:'rg.rPerTString'
+                    belongTo:'rg.rPerTString',
+                    contenteditable:false
                 };
 
             vw.headingmap2.push(headmapping);
