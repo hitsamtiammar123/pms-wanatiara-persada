@@ -28,11 +28,12 @@ class KPIHeaderController extends Controller
         $kpitag->representative;
         $kpitag->groupkpiresult;
         $kpitag->groupkpiprocess;
+        $kpitag->representative->atasan;
 
         $employees=[];
         $_month=$request->input('month');
         $_year=$request->input('year');
-        $curr_header=$kpitag->grouprole[0]->employee[0]->getCurrentHeader();
+
 
         $month=is_null($_month)?Carbon::now()->month:$_month;
         $year=is_null($_year)?Carbon::now()->year:$_year;
@@ -53,11 +54,12 @@ class KPIHeaderController extends Controller
                 $employees[]=$e_arr;
             }
         }
+        $curr_header=$kpitag->grouprole[0]->employee[0]->getHeader($month,$year);
         $kpitag->employees=$employees;
         $kpitag->weight_result=$header->weight_result;
         $kpitag->weight_process=$header->weight_process;
-        $kpitag->period=$curr_header->cPeriod()->format('Y-m-d');
-        $kpitag->prevperiod=$curr_header->cPrevPeriod()->format('Y-m-d');
+        $kpitag->period_end=$curr_header->cPeriod()->format('Y-m-d');
+        $kpitag->period_start=$curr_header->cPrevPeriod()->format('Y-m-d');
         unset($kpitag->grouprole);
 
         return $kpitag;

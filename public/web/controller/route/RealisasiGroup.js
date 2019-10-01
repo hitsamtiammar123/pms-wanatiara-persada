@@ -40,6 +40,28 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     vw.kpiprocessgroup=[];
     vw.employees=[];
     vw.contentMapping=[];
+    vw.datalist=[
+        {
+            data:'Sangat Buruk',
+            index:0
+        },
+        {
+            data:'Buruk',
+            index:1
+        },
+        {
+            data:'Sedang',
+            index:2
+        },
+        {
+            data:'Baik',
+            index:3
+        },
+        {
+            data:'Sangat Baik',
+            index:4
+        },
+    ];
     // vw.weighting={};
 
     var initKPIResultHeading=function(){
@@ -276,12 +298,17 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         console.log(vw.contentMapping);
     }
 
+    var setUserHeading=function(){
+        kpiService.setHeaderPeriod(vw,vw.kpitag);
+    }
+
     var initData=function(){
         const FUNCTION_NAME='add-content';
 
         initKPIResultHeading();
         initKPIProcessHeading();
         initFinalHeading();
+        setUserHeading();
         setContentMapping();
         setKPIA(KPI_RESULT);
         setKPIA(KPI_PROCESS);
@@ -290,6 +317,12 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
         notifier.notifyGroup('rg.add-content');
         console.log(vw.employees);
+    }
+
+    var onAfterEdit=function(){
+        setDataDetail();
+        dataService.digest($scope);
+        notifier.notifyGroup('rg.add-content');
     }
 
     var setDataDetail=function(){
@@ -334,10 +367,14 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     }
 
     vw.onAfterEdit=function(elem,value,scope,attrs){
-        //console.log(value);
-        setDataDetail();
-        dataService.digest($scope);
-        notifier.notifyGroup('rg.add-content');
+
+        onAfterEdit();
+    }
+
+    vw.onListSelected=function(data,context,setter){
+        var value=data.data.selected.index;
+        setter.assign(context.scope,value);
+        onAfterEdit();
     }
 
     loadData();

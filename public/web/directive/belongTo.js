@@ -1,4 +1,5 @@
-app.directive('belongTo',['$parse','$filter','notifier','$location','cP',function($parse,$filter,notifier,$location,cP){
+app.directive('belongTo',['$parse','$filter','notifier','cP','formModal',
+function($parse,$filter,notifier,cP,formModal){
 
     var scopeObj={
         outerIndex:'='
@@ -59,6 +60,10 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
         var edited=false;
         var elemID;
         var href;
+        var listData;
+        var listID;
+        var onListSelected;
+        var context={elem:elem,scope:scope,attrs:attrs};;
 
         var getId=function(){
             return new Date().getTime().toString().substr(6);
@@ -194,7 +199,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
             notifyLabel=attrs.notifyLabel||attrs.notifyGLabel;
             var sanitizeS;
             var nfunc;
-            var context={elem:elem,scope:scope,attrs:attrs};
+
             if(attrs.notifyLabel){
                 sanitizeS=$filter('sanitizeHash')(notifyLabel);
                 nfunc=$parse(sanitizeS)(scope);
@@ -209,6 +214,23 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
                 else
                     notifier.setNotifierGroup(notifySplit[0],nfunc,[context,setter],[notifyLabel],notifySplit[1]);
             }
+        }
+
+        if(attrs.listData){
+            listData=$parse(attrs.listData)(scope);
+            listID=attrs.listId?attrs.listId:'list'+getId();
+            onListSelected=$parse(attrs.onListSelected)(scope);
+            var m=attrs.type;
+
+            var data={
+                data:{
+                    type:'select',
+                    message:'',
+                    list:listData,
+                    label:'data'
+                }
+            }
+            formModal.init(listID,data,'Silakan pilih data');
         }
 
 
@@ -242,7 +264,7 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
             getter=setter(scope)
             elem.text(getter);
            // console.log(getter);
-        })
+        });
         elem.bind('focusout',function(){
             onFocusOut();
         });
@@ -265,6 +287,12 @@ app.directive('belongTo',['$parse','$filter','notifier','$location','cP',functio
         elem.on('click',function(e){
             if(ctrlPressed){
                 dataSelect();
+            }
+            if(listData){
+                var callback_f=onListSelected&&angular.isFunction(onListSelected)?onListSelected:function(){};
+                formModal(listID).then(function(data){
+                    callback_f(data,context,setter);
+                },function(){});
             }
         })
 

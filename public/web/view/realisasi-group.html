@@ -3,12 +3,20 @@
 
     <div class="table-100 heading-content" >
         <div class="row">
+                <div class="col-sm-3">Penilaian Group</div>
+                <div class="col-sm-2">: {{rg.kpitag.name}}</div>
                 <div class="col-sm-4">当月考核期 Periode bulan berjalan</div>
-                <div class="col-sm-3">: 16 Aug 八月 2019 - 16 Sept 九月 2019</div>
+                <div class="col-sm-3">: {{ rg.pb.start }} - {{ rg.pb.end }}</div>
         </div>
         <div class="row" style="margin-top:10px;">
+                <div class="col-sm-3">Penilai</div>
+                <div class="col-sm-2">: {{rg.kpitag.representative.name}}</div>
                 <div class="col-sm-4">当月累计考核期 Periode Kumulatif sampai bulan berjalan</div>
-                <div class="col-sm-3">: 16 Dec 十二月 2018 - 16 Sept 九月 2019</div>
+                <div class="col-sm-3">: {{ rg.pb.startB }} - {{ rg.pb.endB }}</div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+                <div class="col-sm-3">Atasan Penilai </div>
+                <div class="col-sm-2">: {{rg.kpitag.representative.atasan.name}}</div>
         </div>
     </div>
     <div class="table-100" style="margin-top:30px;">
@@ -54,6 +62,10 @@
                         sanitize="{{employee[mapping.type][mapping.id][mapping.sanitize]}}"
                         ng-class="employee[mapping.type][mapping.id][mapping.key+'BColor']"
                         contenteditable="{{employee[mapping.type][mapping.id][mapping.contenteditable]}}"
+                        list-data="{{mapping.type==='kpiprocess'?'rg.datalist':null}}"
+                        list-id="{{mapping.type==='kpiprocess'?'list-kpiprocess-selection':null}}"
+                        on-list-selected="{{mapping.type==='kpiprocess'?'rg.onListSelected':null}}"
+                        type="{{mapping.type}}"
                         after-edit="rg.onAfterEdit" notify-g-label="rg.add-content"
                         auto-fill="true"></td>
 

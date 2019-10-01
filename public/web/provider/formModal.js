@@ -33,7 +33,7 @@ app.provider('formModal',[function(){
                     var content=tem.replace('{m}','{{'+m+'}}').replace('{d}',d);
                     data.message=curr.hasOwnProperty('message')?curr.message:'';
                     data.text='';
-                    
+
                 }
                 else if(t==='select'){
                     var tem=select_t;
@@ -74,7 +74,7 @@ app.provider('formModal',[function(){
 
             if(modalData){
                 modalData.options.backdrop='static';
-                E(id).modal(); 
+                E(id).modal();
             }
             else{
                 E(id).modal({backdrop:'static'});
@@ -90,8 +90,8 @@ app.provider('formModal',[function(){
 
             var curr_content=template;
             var controllerName=id+'Controller';
-            
-            
+
+
             var scope=$rootScope.$new();
             var r=compileModal(data);
             curr_content=curr_content.replace('{content}',r.content)
@@ -121,4 +121,4 @@ app.provider('formModal',[function(){
 
         return modal;
     }];
-}]); 
+}]);

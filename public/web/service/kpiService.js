@@ -1,5 +1,9 @@
-app.service('kpiService',['$filter','KPI_PROCESS','KPI_RESULT',function($filter,KPI_PROCESS,KPI_RESULT){
+app.service('kpiService',['$filter','KPI_PROCESS','KPI_RESULT','months',
+function($filter,KPI_PROCESS,KPI_RESULT,months){
     var self=this;
+    var f=months.map(function(d){
+        return d.value;
+    });
 
     this.formatContent=function(format,setter,elem,scope){
         var v=setter(scope);
@@ -93,6 +97,22 @@ app.service('kpiService',['$filter','KPI_PROCESS','KPI_RESULT',function($filter,
         display_weights.weight_process=w_p;
         display_weights.weight_result=w_r;
 
+    }
+
+    this.setHeaderPeriod=function($scope,header){
+        var pbS=new Date(header.period_start);
+        pbS.setFullYear(pbS.getFullYear()-1);
+        pbS.setMonth(11);
+
+        var pbSb=new Date(header.period_start);
+        var pbEb=new Date(header.period_end);
+        $scope.pb={};
+
+        $scope.pb.start=pbSb.getDate()+' '+f[pbSb.getMonth()]+' '+pbSb.getFullYear();
+        $scope.pb.end=pbEb.getDate()+' '+f[pbEb.getMonth()]+' '+pbEb.getFullYear();
+
+        $scope.pb.startB=pbS.getDate()+' '+f[pbS.getMonth()]+' '+pbS.getFullYear();
+        $scope.pb.endB=pbEb.getDate()+' '+f[pbEb.getMonth()]+' '+pbEb.getFullYear();
     }
 
 }]);

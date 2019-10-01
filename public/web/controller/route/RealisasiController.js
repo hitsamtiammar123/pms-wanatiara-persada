@@ -21,20 +21,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.rContent=[];
     $scope.displayData=[];
     $scope.pb={};
-    $scope.f=[
-        'Jan 一月',
-        'Feb 二月',
-        'Mar 三月',
-        'Apr 四月',
-        'May 五月',
-        'June 六月',
-        'July 七月',
-        'Aug 八月',
-        'Sept 九月',
-        'Oct 十月',
-        'Nov 十一月',
-        'Dec 十二月'
-    ];;
+    $scope.f=months.map(function(d){
+        return d.value;
+    });
     $scope.kpiprocesses=[];
     $scope.headerLabelProcess=['Juni','Juli','Target Juni','Target Juli','Realisasi Juni','Realisasi Juli','Juni','Juli','Juni','Juli'];
     $scope.pw_indices=['pw_1','pw_2'];
@@ -219,18 +208,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     var setUserHeading=function(){
-        var pbS=new Date(kpiheaders.period_start);
-        pbS.setFullYear(pbS.getFullYear()-1);
-        pbS.setMonth(11);
-
-        var pbSb=new Date(kpiheaders.period_start);
-        var pbEb=new Date(kpiheaders.period_end);
-
-        $scope.pb.start=pbSb.getDate()+' '+$scope.f[pbSb.getMonth()]+' '+pbSb.getFullYear();
-        $scope.pb.end=pbEb.getDate()+' '+$scope.f[pbEb.getMonth()]+' '+pbEb.getFullYear();
-
-        $scope.pb.startB=pbS.getDate()+' '+$scope.f[pbS.getMonth()]+' '+pbS.getFullYear();
-        $scope.pb.endB=pbEb.getDate()+' '+$scope.f[pbEb.getMonth()]+' '+pbEb.getFullYear();
+        kpiService.setHeaderPeriod($scope,kpiheaders);
     }
 
     var setHeader=function(){
