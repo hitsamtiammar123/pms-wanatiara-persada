@@ -707,6 +707,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             break;
             case '$':
             case 'WMT':
+            case 'MT':
                 d.pt_filter='number';
                 d.real_filter='number';
                 d.pt_sanitize=d.real_sanitize='sNumber';
