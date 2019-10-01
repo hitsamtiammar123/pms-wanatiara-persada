@@ -28,9 +28,6 @@
             </div>
     </div>
     <div class="table-100">
-        <p class="table-title bold">
-            Operator Rotary Drier
-        </p>
         <div class="table-100 realisasi-table-group-content">
             <table class="realisasi-table-group table-striped">
                 <thead>
@@ -47,8 +44,13 @@
                             <th class="heading-color-grey" colspan="2">Total</th>
                     </tr>
                     <tr id="heading-table-2">
+                            <th ng-repeat="heading in rg.headingmap2 track by $index" class="{{heading.attr.class}}" rowspan="{{heading.attr.rowspan}}" colspan="{{heading.attr.colspan}}" notify-g-label="{{heading.attr.notifyGLabel}}" belong-to="{{heading.attr.belongTo}}"></th>
+                            <th rowspan="2" class="heading-color-grey kpi-content">Nilai</th>
+                            <th rowspan="2" class="heading-color-grey kpi-content">Index</th>
                     </tr>
-                    <tr id="heading-table-3"></tr>
+                    <tr id="heading-table-3">
+                            <th ng-repeat="heading in rg.headingmap3 track by $index" class="{{heading.attr.class}}">{{heading.value}}</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="employee in rg.employees track by $index">
@@ -58,14 +60,14 @@
 
                         <td class="kpi-content" ng-repeat="mapping in rg.contentMapping"
                         belong-to="employee[mapping.type][mapping.id].{{mapping.key}}"
-                        format="{{employee[mapping.type][mapping.id][mapping.filter]}}"
+                        format="{{employee[mapping.type][mapping.id][mapping.filter]}}" key="{{mapping.key}}" type="{{mapping.type}}"
                         sanitize="{{employee[mapping.type][mapping.id][mapping.sanitize]}}"
                         ng-class="employee[mapping.type][mapping.id][mapping.key+'BColor']"
                         contenteditable="{{employee[mapping.type][mapping.id][mapping.contenteditable]}}"
-                        list-data="{{mapping.type==='kpiprocess'?'rg.datalist':null}}"
-                        list-id="{{mapping.type==='kpiprocess'?'list-kpiprocess-selection':null}}"
-                        on-list-selected="{{mapping.type==='kpiprocess'?'rg.onListSelected':null}}"
-                        type="{{mapping.type}}"
+                        list-data="{{rg.isListed(mapping,employee[mapping.type][mapping.id])?'rg.datalist':null}}"
+                        list-id="{{rg.isListed(mapping,employee[mapping.type][mapping.id])?'list-kpiprocess-selection':null}}"
+                        on-list-selected="{{rg.isListed(mapping,employee[mapping.type][mapping.id])?'rg.onListSelected':null}}"
+                        type="{{mapping.type}}" d-id="{{mapping.id}}"
                         after-edit="rg.onAfterEdit" notify-g-label="rg.add-content"
                         auto-fill="true"></td>
 

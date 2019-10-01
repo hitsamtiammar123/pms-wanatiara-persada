@@ -62,34 +62,85 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             index:4
         },
     ];
-    // vw.weighting={};
+    vw.headingmap2=[];
+    vw.headingmap3=[];
+    vw.rPerTString='R/T (%)';
 
-    var initKPIResultHeading=function(){
-        for(var i=0;i<vw.kpiresultgroup.length;i++){
-            var d=vw.kpiresultgroup[i];
-            var t=template_kpiresult;
-            var t2=template_heading_3;
-            t=t.replace('{belongTo}','kpiresultgroup['+i+']').replace('{kpiresult}',d.name);
-            t2=t2.replace(/\{heading_color\}/g,'heading-color-green');
-            heading_table_2.append(t);
-            heading_table_3.append(t2);
+    var initHeading2ByData=function(data,type){
+        for(var i=0;i<data.length;i++){
+            var d=data[i];
+            var headmapping={};
+            var rPerT={};
+            var classname;
+            var belongTo;
+
+            if(type===KPI_RESULT){
+                classname='heading-color-green';
+                belongTo=`rg.kpiresultgroup[${i}].name`;
+            }
+            else if(type===KPI_PROCESS){
+                classname='heading-color-yellow';
+                belongTo=`rg.kpiprocessgroup[${i}].name`;
+            }
+                headmapping.attr={
+                    class:classname,
+                    colspan:2,
+                    notifyGLabel:'add-content',
+                    belongTo:belongTo
+
+                }
+                rPerT.attr={
+                    class:classname+' kpi-content',
+                    rowspan:2,
+                    belongTo:'rg.rPerTString'
+                };
+
+            vw.headingmap2.push(headmapping);
+            vw.headingmap2.push(rPerT);
         }
     }
 
-    var initKPIProcessHeading=function(){
-        for(var i=0;i<vw.kpiprocessgroup.length;i++){
-            var d=vw.kpiprocessgroup[i];
-            var t=template_kpiprocess;
-            var t2=template_heading_3;
-            t=t.replace('{belongTo}','kpiprocessgroup['+i+']').replace('{kpiprocess}',d.name);
-            t2=t2.replace(/\{heading_color\}/g,'heading-color-yellow');
-            heading_table_2.append(t);
-            heading_table_3.append(t2);
-        }
+    var initHeading2=function(){
+        initHeading2ByData(vw.kpiresultgroup,KPI_RESULT);
+        initHeading2ByData(vw.kpiprocessgroup,KPI_PROCESS);
+        //console.log(vw.headingmap2);
     }
 
-    var initFinalHeading=function(){
-        heading_table_2.append(template_final);
+    var initHeading3=function(){
+        initHeading3ByData(vw.kpiresultgroup,KPI_RESULT);
+        initHeading3ByData(vw.kpiprocessgroup,KPI_PROCESS);
+        //console.log(vw.headingmap3);
+    }
+
+    var initHeading3ByData=function(data,type){
+        for(var i=0;i<data.length;i++){
+            var headmapping={};
+            var headmapping2={};
+
+            if(type===KPI_RESULT){
+                classname='heading-color-green';
+            }
+            else if(type===KPI_PROCESS){
+                classname='heading-color-yellow';
+            }
+
+
+            headmapping.value='Target';
+            headmapping2.value='Realisasi';
+
+            // headmapping.attr=`class="${classname} kpi-content"`;
+            // headmapping2.attr=`class="${classname} kpi-content"`;
+            headmapping.attr={
+                class:classname+' kpi-content'
+            };
+            headmapping2.attr={
+                class:classname+' kpi-content'
+            };
+
+
+            vw.headingmap3.push(headmapping);
+            vw.headingmap3.push(headmapping2);
+        }
     }
 
     var getKPIAIndex=function(i,unit){
@@ -295,7 +346,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             mapToData(KPI_PROCESS,id);
         }
 
-        console.log(vw.contentMapping);
+        //console.log(vw.contentMapping);
     }
 
     var setUserHeading=function(){
@@ -305,9 +356,8 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var initData=function(){
         const FUNCTION_NAME='add-content';
 
-        initKPIResultHeading();
-        initKPIProcessHeading();
-        initFinalHeading();
+        initHeading2();
+        initHeading3()
         setUserHeading();
         setContentMapping();
         setKPIA(KPI_RESULT);
@@ -316,10 +366,22 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         setWeighting();
 
         notifier.notifyGroup('rg.add-content');
-        console.log(vw.employees);
+        //console.log(vw.employees);
     }
 
-    var onAfterEdit=function(){
+    var fillAll=function(attrs,value){
+        if(attrs.type===KPI_RESULT){
+            var id=attrs.dId;
+            var key=attrs.key;
+            for(var i in vw.employees){
+                var employee=vw.employees[i];
+                employee.kpiresult[id][key]=value;
+            }
+        }
+    }
+
+    var onAfterEdit=function(attrs,value){
+        fillAll(attrs,value);
         setDataDetail();
         dataService.digest($scope);
         notifier.notifyGroup('rg.add-content');
@@ -366,15 +428,21 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         notifier.notifyGroup('rg.add-content');
     }
 
-    vw.onAfterEdit=function(elem,value,scope,attrs){
+    vw.isListed=function(mapping,curr_data){
+        if((mapping.type==='kpiprocess' && mapping.key!=='kpia')||
+            (mapping.type==='kpiresult' && curr_data.kpiresult.unit==='规模 Scale' && mapping.key!=='kpia'))
+            return true;
+        return false;
+    }
 
-        onAfterEdit();
+    vw.onAfterEdit=function(elem,value,scope,attrs){
+        onAfterEdit(attrs,value);
     }
 
     vw.onListSelected=function(data,context,setter){
         var value=data.data.selected.index;
         setter.assign(context.scope,value);
-        onAfterEdit();
+        onAfterEdit(context.attrs,value);
     }
 
     loadData();
