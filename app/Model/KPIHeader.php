@@ -462,7 +462,7 @@ class KPIHeader extends Model
 
     }
 
-    protected function applyUpdateKPIProcessFromArray($kpiprocess,$kpiprocessdeletelist,&$kpiprocess_save,&$kpiprocess_save_n){
+    protected function applyUpdateKPIProcessFromArray($kpiprocess,$kpiprocessdeletelist){
         $curr_process_id=$kpiprocess['id'];
         $curr_process=$this->kpiprocesses()->find($curr_process_id);
         $kpiprocess=filter_is_number($kpiprocess,KPIProcess::FRONT_END_PROPERTY);
@@ -737,26 +737,21 @@ class KPIHeader extends Model
     public function updateKPIProcessFromArray($kpiprocesses,$kpiprocessdeletelist){
         $kpiprocess_save=[];
         $kpiprocess_save_n=[];
-        $header_prev=$this->getPrev();
         $updateMap=array_key_exists('updated',$kpiprocesses)?$kpiprocesses['updated']:[];
         $createMap=array_key_exists('created',$kpiprocesses)?$kpiprocesses['created']:[];
 
         foreach($updateMap as $kpiprocess){
             $this->applyUpdateKPIProcessFromArray(
                 $kpiprocess,
-                $kpiprocessdeletelist,
-                $kpiprocess_save,
-                $kpiprocess_save_n
+                $kpiprocessdeletelist
             );
         }
         foreach($createMap as $kpiprocess){
             $this->applyCreatedKPIProcessFromArray($kpiprocess);
         }
 
-        if(count($kpiprocessdeletelist)!==0){
-            $this->kpiprocesses()->detach($kpiprocessdeletelist);
-            $header_prev?$header_prev->kpiprocesses()->detach($kpiprocessdeletelist):null;
-        }
+        $this->applyDeletedKPIProcessFromArray($kpiprocessdeletelist);
+
     }
 
     /**
@@ -770,6 +765,33 @@ class KPIHeader extends Model
         }
     }
 
+    /**
+     * Menghapus data kpiprocess yang berelasi dengan header ini
+     *
+     * @param array $kpiprocessdeletelist daftar ID dari kpiprocess yang mau dihapus
+     * @return void
+     */
+    public function applyDeletedKPIProcessFromArray($kpiprocessdeletelist){
+        $header_prev=$this->getPrev();
+        $kpiprevdeletelist=[];
+        $now=Carbon::now();
+        if(count($kpiprocessdeletelist)!==0){
+            $this->kpiprocesses()->detach($kpiprocessdeletelist);
+            if($header_prev){
+                foreach($kpiprocessdeletelist as $to_delete){
+                    $d=$header_prev->kpiprocesses()->find($to_delete);
+
+                    if(!$d->pivot)
+                        continue;
+
+                    $curr_date=Carbon::parse($d->pivot->created_at);
+                    if($now->month === $curr_date->month && $now->year ===$curr_date->year)
+                        $kpiprevdeletelist[]=$to_delete;
+                }
+                $header_prev->kpiprocesses()->detach($kpiprevdeletelist);
+            }
+        }
+    }
 
     /**
      *
