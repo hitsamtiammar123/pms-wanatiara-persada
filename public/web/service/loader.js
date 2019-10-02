@@ -134,7 +134,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
             body.kpiresult
             );
         sentData.kpiprocesses=JSON.stringify(
-            dataService.only(body.kpiprocesses,kpiKeys.kpiprocess)
+            body.kpiprocesses
             );
         sentData.kpiresultdeletelist=JSON.stringify(
             body.kpiresultdeletelist

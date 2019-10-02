@@ -94,6 +94,7 @@ class KPIHeader extends Model
                 $r['id']=$curr_s->id;
                 $r['name']=$curr_s->name;
                 $r['unit']=$curr_s->unit;
+                $r['kpi_header_id']=$this->id;
                 $r['pw_1']=intval($curr_p->pivot->pw).'';
                 $r['pw_2']=intval($curr_s->pivot->pw).'';
                 $r['pt_1']=$curr_p->pivot->pt;
@@ -463,25 +464,59 @@ class KPIHeader extends Model
 
     protected function applyUpdateKPIProcessFromArray($kpiprocess,$kpiprocessdeletelist,&$kpiprocess_save,&$kpiprocess_save_n){
         $curr_process_id=$kpiprocess['id'];
-        $curr_process=KPIProcess::find($curr_process_id);
-        $curr_process->unit=$kpiprocess['unit'];
+        $curr_process=$this->kpiprocesses()->find($curr_process_id);
         $kpiprocess=filter_is_number($kpiprocess,KPIProcess::FRONT_END_PROPERTY);
 
-        if(!in_array($curr_process_id,$kpiprocessdeletelist)){
-            $kpiprocess_save[$curr_process_id]=[
-                'pw'=>$kpiprocess['pw_1'],
-                'pt'=>$kpiprocess['pt_1'],
-                'real'=>$kpiprocess['real_1']
-            ];
-            $kpiprocess_save_n[$curr_process_id]=[
-                'pw'=>$kpiprocess['pw_2'],
-                'pt'=>$kpiprocess['pt_2'],
-                'real'=>$kpiprocess['real_2']
-            ];
 
-            $curr_process->save();
-
+        if(!in_array($curr_process_id,$kpiprocessdeletelist) &&
+         (array_key_exists('kpi_header_id',$kpiprocess) && $kpiprocess['kpi_header_id'] ) ){
+            if(!is_null($curr_process)){
+                $curr_process_prev=$curr_process->getPrev();
+                !is_null($curr_process_prev)?$curr_process_prev->mapFromArr(KPIProcess::KPIPROCESSPREVKEY,$kpiprocess):null;
+                $curr_process->unit=array_key_exists('unit',$kpiprocess)?$kpiprocess['unit']:$curr_process->unit;
+                $curr_process->mapFromArr(KPIProcess::KPIPROCESSCURRKEY,$kpiprocess);
+                $curr_process->save();
+            }
+            else{
+                $this->applyCreatedKPIProcessFromArray($kpiprocess);
+            }
         }
+    }
+
+
+    /**
+     *
+     * @return void
+     */
+    protected function applyCreatedKPIProcessFromArray($kpiprocess){
+        $header_prev=$this->getPrev();
+        $kpi_process_id=$kpiprocess['id'];
+        $datamap=KPIProcess::getArrayMap(KPIProcess::KPIPROCESSCURRKEY,$kpiprocess);
+        $curr_process=$this->kpiprocesses()->find($kpi_process_id);
+        if(!$curr_process){
+            $this->kpiprocesses()->attach([
+                $kpiprocess['id'] => $datamap
+            ]);
+            if($header_prev){
+                $datamap2=KPIProcess::getArrayMap(KPIProcess::KPIPROCESSPREVKEY,$kpiprocess);
+                try{
+                    $header_prev->kpiprocesses()->attach([
+                        $kpiprocess['id'] => $datamap2
+                    ]);
+                }catch(Exception $err){
+
+                }
+            }
+        }
+        else{
+            $curr_process->mapFromArr(KPIProcess::KPIPROCESSCURRKEY,$kpiprocess);
+            $curr_process->save();
+            $curr_process_prev=$curr_process->getPrev();
+            !is_null($curr_process_prev)?$curr_process_prev->mapFromArr(KPIProcess::KPIPROCESSPREVKEY,$kpiprocess):null;
+        }
+
+
+
     }
 
     public static function generateID($employeeID){
@@ -703,8 +738,10 @@ class KPIHeader extends Model
         $kpiprocess_save=[];
         $kpiprocess_save_n=[];
         $header_prev=$this->getPrev();
+        $updateMap=array_key_exists('updated',$kpiprocesses)?$kpiprocesses['updated']:[];
+        $createMap=array_key_exists('created',$kpiprocesses)?$kpiprocesses['created']:[];
 
-        foreach($kpiprocesses as $kpiprocess){
+        foreach($updateMap as $kpiprocess){
             $this->applyUpdateKPIProcessFromArray(
                 $kpiprocess,
                 $kpiprocessdeletelist,
@@ -712,9 +749,14 @@ class KPIHeader extends Model
                 $kpiprocess_save_n
             );
         }
+        foreach($createMap as $kpiprocess){
+            $this->applyCreatedKPIProcessFromArray($kpiprocess);
+        }
 
-        $header_prev->kpiprocesses()->sync($kpiprocess_save);
-        $this->kpiprocesses()->sync($kpiprocess_save_n);
+        if(count($kpiprocessdeletelist)!==0){
+            $this->kpiprocesses()->detach($kpiprocessdeletelist);
+            $header_prev?$header_prev->kpiprocesses()->detach($kpiprocessdeletelist):null;
+        }
     }
 
     /**

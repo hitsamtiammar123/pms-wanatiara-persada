@@ -115,4 +115,36 @@ function($filter,KPI_PROCESS,KPI_RESULT,months){
         $scope.pb.endB=pbEb.getDate()+' '+f[pbEb.getMonth()]+' '+pbEb.getFullYear();
     }
 
+
+    /**
+     * untuk melakukan mapping pada data yang mau diubah
+     *
+     * @param {number} d index dari data KPIResult
+     * @param {string} i index dari data yang mau diubah
+     * @param {*} value nilai baru
+     */
+    this.mapChange=function(d,i,value,listData,_updateMap){
+        var data=listData[d];
+        if(!_updateMap.hasOwnProperty('updated'))
+            _updateMap.updated={};
+
+        if(!data.id)
+            return;
+
+        if(!_updateMap.updated.hasOwnProperty(data.id)){
+            _updateMap.updated[data.id]={
+                id:data.id,
+                kpi_header_id:data.kpi_header_id
+            };
+        }
+        var mapping=_updateMap.updated[data.id];
+        mapping[i]=value;
+    }
+
+    this.mapCreate=function(newdata,_updateMap){
+        if(!_updateMap.hasOwnProperty('created'))
+            _updateMap.created=[];
+        _updateMap.created.push(newdata);
+    }
+
 }]);

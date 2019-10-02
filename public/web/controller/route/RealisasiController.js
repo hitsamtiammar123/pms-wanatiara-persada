@@ -56,6 +56,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var deleteListResult=[];
     var deleteListProcess=[];
     var updateMap={};
+    var updateMapP={};
 
     $scope.currentMonth=$scope.months[currMonth];
     $scope.currendDate=new Date();
@@ -510,31 +511,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         return rt;
     }
 
-    /**
-     * untuk melakukan mapping pada data yang mau diubah
-     *
-     * @param {number} d index dari data KPIResult
-     * @param {string} i index dari data yang mau diubah
-     * @param {*} value nilai baru
-     */
-    var mapChange=function(d,i,value){
-        var data=$scope.data[d];
-        if(!updateMap.hasOwnProperty('updated'))
-            updateMap.updated={};
-
-        if(!data.id)
-            return;
-
-        if(!updateMap.updated.hasOwnProperty(data.id)){
-            updateMap.updated[data.id]={
-                id:data.id,
-                kpi_header_id:data.kpi_header_id
-            };
-        }
-        var mapping=updateMap.updated[data.id];
-        mapping[i]=value;
-    }
-
     var setBColorKPIAandPW=function(curr){
         for(var j=0;j<2;j++){
             var kpia_key='kpia_'+(j+1);
@@ -869,7 +845,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 }
                 if(ccdata!==''){
                     $scope.data[p_index][i_index]=ccdata;
-                    mapChange(p_index,i_index,ccdata);
+                    kpiService.mapChange(p_index,i_index,ccdata,$scope.data,updateMap);
                 }
 
                     c_index=0;
@@ -1231,6 +1207,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
         $scope.kpiprocesses.push(data);
         dataService.digest($scope);
+        return data;
     }
 
     var setKPIResultDetail=function(data,totalAchieveMent,IndexAchieveMent){
@@ -1511,10 +1488,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.saveChanged=function(){
 
         updateMap.created=dataService.only(updateMap.created,kpiKeys.kpiresult);
+        updateMapP.created=dataService.only(updateMapP.created,kpiKeys.kpiprocess);
 
         var body={
             kpiresult:updateMap,
-            kpiprocesses:$scope.kpiprocesses,
+            kpiprocesses:updateMapP,
             kpiresultdeletelist:deleteListResult?deleteListResult:[],
             kpiprocessdeletelist:deleteListProcess?deleteListProcess:[],
             weighting:{
@@ -1557,9 +1535,17 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.mapChange=function(elem,value,scope,attrs){
         var i=attrs.iIndex;
         var d=parseInt(attrs.dIndex);
-        mapChange(d,i,value);
+        kpiService.mapChange(d,i,value,$scope.data,updateMap);
         console.log(updateMap);
     }
+
+    $scope.mapChangeP=function(elem,value,scope,attrs){
+        var i=attrs.belongTo.replace('p.','');
+        var d=parseInt(attrs.dIndex);
+        kpiService.mapChange(d,i,value,$scope.kpiprocesses,updateMapP);
+        console.log({updateMapP});
+    }
+
 
     $scope.setEndorse=function(endorse){
         var message=!endorse.verified?'Apa anda yakin ini mengesahkan PMS ini':'Apa anda yakin ingin membalikan keadaan pada PMS ini?';
@@ -1603,21 +1589,18 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         kpiresult_elem.scrollTop(scrollHeight);
         setBColor($scope.data);
         setContentEditable($scope.data,KPI_RESULT);
-        if(!updateMap.hasOwnProperty('created'))
-            updateMap.created=[];
-        updateMap.created.push(
-           newdata
-        );
+        kpiService.mapCreate(newdata,updateMap);
         console.log(updateMap);
     }
 
     $scope.addPRow=function(){
         formModal('kpiprocess').then(function(data){
             var newProcess=data.kpiprocess.selected;
+            var newData;
             var checked=$scope.kpiprocesses.find(function(d){return d.id===newProcess.id});
             var copy_data=angular.copy($scope.kpiprocesses);
             if(!checked)
-                appendKPIProcess(data.kpiprocess.selected);
+                newData=appendKPIProcess(newProcess);
             else{
                 alertModal.display('Peringatan','Data Sasaran Proses sudah dimasukan sebelumnya',true,false);
                 return;
@@ -1629,6 +1612,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             kpiprocess_elem.scrollTop(scrollHeight);
             setBColorP($scope.kpiprocesses);
             setContentEditable($scope.kpiprocesses,KPI_PROCESS);
+            kpiService.mapCreate(newData,updateMapP);
+            console.log({updateMapP});
         });
     }
 
