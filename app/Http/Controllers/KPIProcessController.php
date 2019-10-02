@@ -15,7 +15,7 @@ class KPIProcessController extends Controller
     public function index()
     {
         //
-        return KPIProcess::get();
+        return KPIProcess::orderBy(\DB::raw("REPLACE(CONVERT(name USING ASCII),'?','')"))->get();
     }
 
 

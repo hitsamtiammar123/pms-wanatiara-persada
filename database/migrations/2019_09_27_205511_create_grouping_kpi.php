@@ -15,8 +15,8 @@ class CreateGroupingKpi extends Migration
     {
         Schema::create('groupingkpi', function (Blueprint $table) {
             $table->string('tag_id',18);
-            $table->string('role_id',15);
-            $table->primary(['tag_id','role_id']);
+            $table->string('employee_id',18);
+            $table->primary(['tag_id','employee_id']);
             $table->timestamps();
         });
     }

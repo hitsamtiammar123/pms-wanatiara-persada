@@ -16,7 +16,7 @@ class CreateKpiTag extends Migration
         Schema::create('kpitags', function (Blueprint $table) {
             $table->string('id',18);
             $table->string('representative_id');
-            $table->string('name',15);
+            $table->string('name');
             $table->primary('id');
             $table->softDeletes();
             $table->timestamps();

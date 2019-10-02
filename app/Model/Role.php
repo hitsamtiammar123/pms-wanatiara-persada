@@ -31,7 +31,5 @@ class Role extends Model
         return $this->hasMany(Employee::class);
     }
 
-    public function tags(){
-        return $this->belongsToMany(KPITag::class,'groupingkpi','role_id','tag_id')->withTimestamps();
-    }
+
 }

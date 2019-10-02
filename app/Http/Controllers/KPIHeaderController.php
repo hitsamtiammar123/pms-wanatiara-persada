@@ -37,30 +37,28 @@ class KPIHeaderController extends Controller
 
         $month=is_null($_month)?Carbon::now()->month:$_month;
         $year=is_null($_year)?Carbon::now()->year:$_year;
-        foreach($kpitag->grouprole as $role){
-            foreach($role->employee as $e){
-                $header=$e->getHeader($month,$year);
-                $header->kpiresultheaders->each(function($d){
-                    $d->kpiresult;
-                });
-                $e_arr=[];
-                $e_arr['id']=$e->id;
-                $e_arr['name']=$e->name;
-                $e_arr['role']=$e->role;
-                $e_arr['kpiresult']=$header->kpiresultheaders->sortBy('created_at')->keyBy('kpi_result_id');
-                $e_arr['kpiprocess']=$header->kpiprocesses->sortBy('created_at')->keyBy('id');
+        foreach($kpitag->groupemployee as $e){
+            $header=$e->getHeader($month,$year);
+            $header->kpiresultheaders->each(function($d){
+                $d->kpiresult;
+            });
+            $e_arr=[];
+            $e_arr['id']=$e->id;
+            $e_arr['name']=$e->name;
+            $e_arr['role']=$e->role;
+            $e_arr['kpiresult']=$header->kpiresultheaders->sortBy('created_at')->keyBy('kpi_result_id');
+            $e_arr['kpiprocess']=$header->kpiprocesses->sortBy('created_at')->keyBy('id');
 
-                $e->role;
-                $employees[]=$e_arr;
-            }
+            $e->role;
+            $employees[]=$e_arr;
         }
-        $curr_header=$kpitag->grouprole[0]->employee[0]->getHeader($month,$year);
+        $curr_header=$kpitag->groupemployee[0]->getHeader($month,$year);
         $kpitag->employees=$employees;
         $kpitag->weight_result=$header->weight_result;
         $kpitag->weight_process=$header->weight_process;
         $kpitag->period_end=$curr_header->cPeriod()->format('Y-m-d');
         $kpitag->period_start=$curr_header->cPrevPeriod()->format('Y-m-d');
-        unset($kpitag->grouprole);
+        unset($kpitag->groupemployee);
 
         return $kpitag;
     }

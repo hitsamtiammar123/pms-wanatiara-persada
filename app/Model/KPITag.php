@@ -38,8 +38,8 @@ class KPITag extends Model
         return $this->belongsToMany(KPIProcess::class,'kpiprocessgroup','tag_id','kpi_process_id');
     }
 
-    public function grouprole(){
-        return $this->belongsToMany(Role::class,'groupingkpi','tag_id','role_id')->withTimestamps();
+    public function groupemployee(){
+        return $this->belongsToMany(Employee::class,'groupingkpi','tag_id','employee_id')->withTimestamps();
     }
 
 }

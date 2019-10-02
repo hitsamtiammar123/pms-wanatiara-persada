@@ -15,7 +15,7 @@ class SetGroupingKpiForeign extends Migration
     {
         Schema::table('groupingkpi', function (Blueprint $table) {
             $table->foreign('tag_id')->references('id')->on('kpitags')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -28,7 +28,7 @@ class SetGroupingKpiForeign extends Migration
     {
         Schema::table('groupingkpi', function (Blueprint $table) {
             $table->dropForeign('groupingkpi_tag_id_foreign');
-            $table->dropForeign('groupingkpi_role_id_foreign');
+            $table->dropForeign('groupingkpi_employee_id_foreign');
         });
     }
 }

@@ -9,7 +9,6 @@ use App\Model\Traits\DynamicID;
 use App\Model\User;
 use Carbon\Carbon;
 use App\Notifications\RequestChange;
-use Illuminate\Support\Collection;
 
 class Employee extends Model
 {
@@ -276,5 +275,9 @@ class Employee extends Model
 
     public function kpiendorsements(){
         return $this->hasMany(KPIEndorsement::class);
+    }
+
+    public function tags(){
+        return $this->belongsToMany(KPITag::class,'groupingkpi','employee_id','tag_id')->withTimestamps();
     }
 }

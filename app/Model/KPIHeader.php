@@ -735,8 +735,6 @@ class KPIHeader extends Model
     }
 
     public function updateKPIProcessFromArray($kpiprocesses,$kpiprocessdeletelist){
-        $kpiprocess_save=[];
-        $kpiprocess_save_n=[];
         $updateMap=array_key_exists('updated',$kpiprocesses)?$kpiprocesses['updated']:[];
         $createMap=array_key_exists('created',$kpiprocesses)?$kpiprocesses['created']:[];
 
