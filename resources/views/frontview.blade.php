@@ -45,7 +45,7 @@
                                         <li class="dropdown-submenu"><a class="toogle">Area RD & CMP <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></a>
                                             <ul class="dropdown-menu dropdown-menu-right dropdown-group-pms" tag="smelter" m-right="-14vw" m-top="0vw">
                                                 <li><a>Ketua Grup RD & CMP</a></li>
-                                                <li><a>Operator Rotary Drier</a></li>
+                                                <li><a href="#!/realisasi-group/1938630853">Operator Rotary Drier</a></li>
                                                 <li><a>Operator CMP</a></li>
                                             </ul>
                                         </li>

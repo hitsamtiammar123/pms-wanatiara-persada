@@ -2,15 +2,6 @@ app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','
 function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS){
 
     var tagID=$routeParams.tagID;
-    var heading_table_2=E('#heading-table-2');
-    var heading_table_3=E('#heading-table-3');
-    var template_kpiresult=`<th colspan="2" class="heading-color-green" notify-g-label="add-content" belong-to="{belongTo}">{kpiresult}</th>
-    <th rowspan="2" class="heading-color-green kpi-content">R/T (%)</th>`;
-    var template_kpiprocess=`<th colspan="2" class="heading-color-yellow" notify-g-label="add-content"  belong-to="{belongTo}">{kpiprocess}</th>
-    <th rowspan="2" class="heading-color-yellow kpi-content">R/T (%)</th>`;
-    var template_final=`<th rowspan="2" class="heading-color-grey kpi-content">Nilai</th>
-    <th rowspan="2" class="heading-color-grey kpi-content">Index</th>`;
-    var template_heading_3=`<th class="{heading_color} kpi-content">Target</th><th class="{heading_color} kpi-content">Realisasi</th>`;
     var vw=this;
     var keymap=[
         {
@@ -107,13 +98,11 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var initHeading2=function(){
         initHeading2ByData(vw.kpiresultgroup,KPI_RESULT);
         initHeading2ByData(vw.kpiprocessgroup,KPI_PROCESS);
-        //console.log(vw.headingmap2);
     }
 
     var initHeading3=function(){
         initHeading3ByData(vw.kpiresultgroup,KPI_RESULT);
         initHeading3ByData(vw.kpiprocessgroup,KPI_PROCESS);
-        //console.log(vw.headingmap3);
     }
 
     var initHeading3ByData=function(data,type){
@@ -128,12 +117,9 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
                 classname='heading-color-yellow';
             }
 
-
             headmapping.value='Target';
             headmapping2.value='Realisasi';
 
-            // headmapping.attr=`class="${classname} kpi-content"`;
-            // headmapping2.attr=`class="${classname} kpi-content"`;
             headmapping.attr={
                 class:classname+' kpi-content'
             };
