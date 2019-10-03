@@ -115,18 +115,6 @@ class KPIEndorsementController extends Controller
 
         }
 
-        // $endorse=KPIEndorsement::find($id);
-        // if($endorse){
-        //     $endorse->verified=$request->verified;
-        //     $endorse->save();
-        //     $this->fireEndorsementEvent($endorse);
-
-        //     return [
-        //         'status'=>1,
-        //         'message'=>'Sudah disahkan',
-        //         'user'=>$endorse->kpiheader->employee
-        //     ];
-        // }
         return send_404_error('Data tidak ditemukan');
     }
 
