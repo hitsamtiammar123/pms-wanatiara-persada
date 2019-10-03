@@ -47,7 +47,8 @@
                             <th ng-repeat="heading in rg.headingmap2 track by $index" class="{{heading.attr.class}}"
                             contenteditable="{{heading.attr.contenteditable}}" rowspan="{{heading.attr.rowspan}}"
                             colspan="{{heading.attr.colspan}}" notify-g-label="{{heading.attr.notifyGLabel}}"
-                            belong-to="{{heading.attr.belongTo}}"></th>
+                            belong-to="{{heading.attr.belongTo}}" after-edit="{{heading.attr.afterEdit}}"
+                            data-Id="{{heading.attr.dataID}}"></th>
                             <th rowspan="2" class="heading-color-grey kpi-content">Nilai</th>
                             <th rowspan="2" class="heading-color-grey kpi-content">Index</th>
                     </tr>

@@ -27,6 +27,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         }
     ];
     var dataChanged={};
+    var headerChanged={};
 
     vw.kpiresultgroup=[];
     vw.kpiprocessgroup=[];
@@ -67,11 +68,14 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             var rPerT={};
             var classname;
             var belongTo;
+            var afterEdit='';
+            var dataID=d.id;
 
             if(type===KPI_RESULT){
                 classname='heading-color-green';
                 belongTo=`rg.kpiresultgroup[${i}].name`;
                 contenteditable=true;
+                afterEdit='rg.onHeaderChange';
             }
             else if(type===KPI_PROCESS){
                 classname='heading-color-yellow';
@@ -83,7 +87,9 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
                     colspan:2,
                     notifyGLabel:'add-content',
                     belongTo:belongTo,
-                    contenteditable:contenteditable
+                    contenteditable:contenteditable,
+                    afterEdit:afterEdit,
+                    dataID:dataID
 
                 }
                 rPerT.attr={
@@ -437,6 +443,10 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         },1000)
     }
 
+    var setWeightingChange=function(weighting){
+        headerChanged.weighting=weighting;
+    }
+
     vw.addContent=kpiService.addContent;
 
     vw.setWeight=function(elem,value,scope,attrs){
@@ -449,6 +459,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         }
         else{
             kpiService.calculateWeight(flag,vw.weighting,vw.kpitag);
+            setWeightingChange(vw.weighting);
             setEmployeeData();
         }
         notifier.notifyGroup('rg.add-content');
@@ -466,10 +477,18 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
     }
 
+    vw.onHeaderChange=function(elem,value,scope,attrs){
+
+        var dataID=attrs.id;
+        if(!headerChanged.hasOwnProperty('kpiresultgoup'))
+            headerChanged.kpiresultgoup={};
+        headerChanged.kpiresultgoup[dataID]=value;
+        console.log({attrs,headerChanged});
+    }
+
     vw.mapChange=function(elem,value,scope,attrs){
-        //console.log({attrs});
         mapChange(attrs,value);
-        console.log({dataChanged});
+        //console.log({dataChanged});
     }
 
     vw.onListSelected=function(data,context,setter){
@@ -480,7 +499,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     }
 
     vw.saveChanged=function(){
-        loader.savePMSGroup(tagID,dataChanged).then(saveSucess,function(){
+        loader.savePMSGroup(tagID,dataChanged,headerChanged).then(saveSucess,function(){
             console.log('Ada eror')
         }).finally(function(){
             alertModal.hide();

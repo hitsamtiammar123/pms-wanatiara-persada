@@ -50,10 +50,11 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url);
     }
 
-    this.savePMSGroup=function(tagID,dataChange){
+    this.savePMSGroup=function(tagID,dataChange,headerChanged){
         var url=this.route('kpitag',[tagID]);
         var sentData={};
         sentData.dataChanged=JSON.stringify(dataChange);
+        sentData.headerChanged=JSON.stringify(headerChanged);
 
         return $http.put(url,E.param(sentData),ajaxConfig2);
 

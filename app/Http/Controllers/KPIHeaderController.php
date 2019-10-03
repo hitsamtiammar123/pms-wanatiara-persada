@@ -9,6 +9,7 @@ use Illuminate\Support\Carbon;
 use App\Http\Controllers\Traits\BroadcastPMSChange;
 use App\Model\Employee;
 use App\Model\KPIProcess;
+use App\Model\KPIResult;
 use App\Model\KPITag;
 
 class KPIHeaderController extends Controller
@@ -105,6 +106,39 @@ class KPIHeaderController extends Controller
 
                 }
             }
+        }
+
+        if(array_key_exists('headerChanged',$res_data)){
+            $headerChanged=json_decode($res_data['headerChanged'],true);
+
+            if(array_key_exists('kpiresultgoup',$headerChanged)){
+                foreach($headerChanged['kpiresultgoup'] as $key => $value){
+                    $kpiresultObj=KPIResult::find($key);
+                    if(!is_null($kpiresultObj)){
+                        $kpiresultObj->name=$value;
+                        $kpiresultObj->save();
+                    }
+                }
+            }
+
+            if(array_key_exists('weighting',$headerChanged)){
+                $weighting=$headerChanged['weighting'];
+                $weight_result=array_key_exists('weight_result',$weighting)?
+                $weighting['weight_result']:null;
+                $weight_process=array_key_exists('weight_process',$weighting)?
+                $weighting['weight_process']:null;
+
+                foreach($kpitag->groupemployee as $employee){
+                    $header=$employee->getCurrentHeader();
+                    if($header){
+                        $weight_result?$header->weight_result=$weight_result/100:null;
+                        $weight_process?$header->weight_process=$weight_process/100:null;
+                        $header->save();
+                    }
+                }
+
+            }
+
         }
 
         return [
