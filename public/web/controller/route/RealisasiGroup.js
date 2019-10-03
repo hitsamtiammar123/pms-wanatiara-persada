@@ -58,6 +58,8 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     vw.headingmap3=[];
     vw.rPerTString='R/T (%)';
 
+    $scope.isSaving=false;
+
     var initHeading2ByData=function(data,type){
         for(var i=0;i<data.length;i++){
             var d=data[i];
@@ -484,6 +486,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             alertModal.hide();
         });
         alertModal.display('Peringatan','Menyimpan data, mohon tunggu',false,true);
+        $scope.isSaving=true;
     }
 
     loadData();
