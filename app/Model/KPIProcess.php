@@ -29,6 +29,12 @@ class KPIProcess extends Model
         'real'=>'real_1'
     ];
 
+    const KPIPROCESSORIGINALKEY=[
+        'pw' => 'pivot.pw',
+        'pt' => 'pivot.pt',
+        'real'=>'pivot.real'
+    ];
+
     protected function getFromHeader($header){
         if($header){
             $kpiprocess=$header->kpiprocesses->where('id',$this->id)->first();

@@ -50,6 +50,15 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url);
     }
 
+    this.savePMSGroup=function(tagID,dataChange){
+        var url=this.route('kpitag',[tagID]);
+        var sentData={};
+        sentData.dataChanged=JSON.stringify(dataChange);
+
+        return $http.put(url,E.param(sentData),ajaxConfig2);
+
+    }
+
     this.requestChange=function(employeID,data){
         var url=this.route('request-change',[employeID]);
         var fd=new FormData();

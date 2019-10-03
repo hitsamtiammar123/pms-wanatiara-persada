@@ -1,5 +1,5 @@
-app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS',
-function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS){
+app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route',
+function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route){
 
     var tagID=$routeParams.tagID;
     var vw=this;
@@ -26,6 +26,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             keyContentEditable:'kpiaContentEditable'
         }
     ];
+    var dataChanged={};
 
     vw.kpiresultgroup=[];
     vw.kpiprocessgroup=[];
@@ -359,6 +360,26 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         //console.log(vw.employees);
     }
 
+    var getEmployeeMapChange=function(employeeID,type){
+        if(!dataChanged.hasOwnProperty(employeeID))
+            dataChanged[employeeID]={};
+        var e_change=dataChanged[employeeID];
+        if(!e_change.hasOwnProperty(type))
+            e_change[type]={};
+        var r_change=e_change[type];
+        return r_change;
+    }
+
+    var mapChange=function(attrs,value){
+        var employeeID=attrs.employeeId;
+        var type=attrs.type;
+        var r_change=getEmployeeMapChange(employeeID,type);
+        var dId=attrs.dId;
+        var key=attrs.key;
+        var pIndex=parseInt(attrs.pIndex);
+        kpiService.mapChange(dId,key,value,vw.employees[pIndex][type],r_change);
+    }
+
     var fillAll=function(attrs,value){
         if(attrs.type===KPI_RESULT){
             var id=attrs.dId;
@@ -366,8 +387,13 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             for(var i in vw.employees){
                 var employee=vw.employees[i];
                 employee.kpiresult[id][key]=value;
+
+                var r_change=getEmployeeMapChange(employee.id,attrs.type);
+                kpiService.mapChange(id,key,value,employee.kpiresult,r_change);
             }
         }
+        else if(attrs.type===KPI_PROCESS)
+            mapChange(attrs,value);
     }
 
     var onAfterEdit=function(attrs,value){
@@ -375,6 +401,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         setDataDetail();
         dataService.digest($scope);
         notifier.notifyGroup('rg.add-content');
+        console.log({dataChanged});
     }
 
     var setDataDetail=function(){
@@ -399,6 +426,13 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         loader.getByGroupTag(tagID).then(onSuccess,function(){
             alertModal.display('Peringatan','Terjadi Kesalahan');
         });
+    }
+
+    var saveSucess=function(){
+
+        setTimeout(function(){
+            $route.reload();
+        },1000)
     }
 
     vw.addContent=kpiService.addContent;
@@ -427,12 +461,29 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
     vw.onAfterEdit=function(elem,value,scope,attrs){
         onAfterEdit(attrs,value);
+
+    }
+
+    vw.mapChange=function(elem,value,scope,attrs){
+        //console.log({attrs});
+        mapChange(attrs,value);
+        console.log({dataChanged});
     }
 
     vw.onListSelected=function(data,context,setter){
         var value=data.data.selected.index;
         setter.assign(context.scope,value);
         onAfterEdit(context.attrs,value);
+        //vw.mapChange(context.elem,value,context.scope,context.attrs);
+    }
+
+    vw.saveChanged=function(){
+        loader.savePMSGroup(tagID,dataChanged).then(saveSucess,function(){
+            console.log('Ada eror')
+        }).finally(function(){
+            alertModal.hide();
+        });
+        alertModal.display('Peringatan','Menyimpan data, mohon tunggu',false,true);
     }
 
     loadData();

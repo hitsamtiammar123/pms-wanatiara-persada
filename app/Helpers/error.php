@@ -18,5 +18,9 @@ if(!function_exists('send_406')){
         return response()->json(["error"=>401,"message"=>$message],401);
     }
 
+    function send_400_error($message="format data yang anda kirimkan salah"){
+        return response()->json(["error"=>401,"message"=>$message],400);
+    }
+
 
 };

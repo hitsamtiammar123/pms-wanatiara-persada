@@ -70,7 +70,7 @@
                         list-data="{{rg.isListed(mapping,employee[mapping.type][mapping.id])?'rg.datalist':null}}"
                         list-id="{{rg.isListed(mapping,employee[mapping.type][mapping.id])?'list-kpiprocess-selection':null}}"
                         on-list-selected="{{rg.isListed(mapping,employee[mapping.type][mapping.id])?'rg.onListSelected':null}}"
-                        type="{{mapping.type}}" d-id="{{mapping.id}}"
+                        type="{{mapping.type}}" d-id="{{mapping.id}}" employee-Id="{{employee.id}}" p-index="{{$parent.$index}}"
                         after-edit="rg.onAfterEdit" notify-g-label="rg.add-content"
                         auto-fill="true"></td>
 
@@ -80,6 +80,9 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="table-100">
+        <button class="btn btn-success save-change-btn" ng-click="rg.saveChanged()" >Simpan Perubahan 保存更改</button>
     </div>
 
 </div>

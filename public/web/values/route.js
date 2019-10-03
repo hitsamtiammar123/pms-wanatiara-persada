@@ -22,4 +22,4 @@ app.constant('route',{
         'notification-detail':'/pengesahan/detail/',
         'realisasi':'/realisasi/'
     }
-}); 
+});

@@ -20,6 +20,7 @@ class KPIResultHeader extends Model
     ];
     protected $hidden=['created_at','updated_at'];
     protected $fillable=['id','pw','pt_t','pt_k','real_t','real_k','kpi_header_id','kpi_result_header','kpi_result_id'];
+    protected $kpiresultdkey=[];
 
     const FRONT_END_PROPERTY=['pw_1','pw_2','pt_t1','pt_k1','pt_t2','pt_k2','real_t1','real_k1','real_t2','real_k2'];
     const KPIRESULTDKEY=[
@@ -30,7 +31,9 @@ class KPIResultHeader extends Model
         'real_t1' => 'real_t',
         'real_k1' => 'real_k',
         'real_t2' => 'real_t',
-        'real_k2' => 'real_k'
+        'real_k2' => 'real_k',
+        'pt_t' => 'pt_t',
+        'real_t' => 'real_t'
     ];
     const KPIRESULTPWKEY=[
         'pw_1'=>'pw',
@@ -58,6 +61,14 @@ class KPIResultHeader extends Model
         'kpia_2'
     ];
 
+    const KPIRESULTORIGINALKEY=[
+        'pw',
+        'pt_t',
+        'pt_k',
+        'real_t',
+        'real_k'
+    ];
+
     const KPIRESULTFRONTKEY=[
         'name' => 'name',
         'unit' =>'unit'
@@ -72,12 +83,12 @@ class KPIResultHeader extends Model
      * Data KPIresultHeader yang mau dimasukan
      * @return void
      */
-    protected function mapFromArr(array $mapping,$kpiresult){
+    public function mapFromArr(array $mapping,$kpiresult){
         $mapping=array_merge(
             $mapping,
             array_keys(self::KPIRESULTPWKEY)
         );
-        $kpiresultdkey=array_merge(KPIResultHeader::KPIRESULTPWKEY,KPIResultHeader::KPIRESULTDKEY);
+        $kpiresultdkey=$this->kpiresultdkey;
         foreach($kpiresult as $key => $value){
             if(in_array($key,$mapping)){
                 $map=$kpiresultdkey[$key];
@@ -152,6 +163,20 @@ class KPIResultHeader extends Model
             static::KPIRESULTKPIAKEY,
             array_values(static::KPIRESULTKPIAKEY)
         );
+    }
+
+        /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+
+        $this->kpiresultdkey=array_merge(KPIResultHeader::KPIRESULTPWKEY,KPIResultHeader::KPIRESULTDKEY);
+        parent::__construct($attributes);
+
     }
 
 

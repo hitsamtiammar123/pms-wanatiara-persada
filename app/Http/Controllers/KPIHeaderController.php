@@ -7,6 +7,8 @@ use App\Model\KPIHeader;
 use App\Model\KPIResultHeader;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Traits\BroadcastPMSChange;
+use App\Model\Employee;
+use App\Model\KPIProcess;
 use App\Model\KPITag;
 
 class KPIHeaderController extends Controller
@@ -61,6 +63,54 @@ class KPIHeaderController extends Controller
         unset($kpitag->groupemployee);
 
         return $kpitag;
+    }
+
+    public function updateGroup(Request $request, $id){
+        $kpitag=KPITag::find($id);
+        if(!$kpitag){
+            return send_404_error('Data Tidak ditemukan');
+        }
+
+        $res_data=$request->all();
+
+        if(!array_key_exists('dataChanged',$res_data))
+            return send_400_error();
+
+        $dataChanged=json_decode($res_data['dataChanged'],true);
+        $numberkeys=KPIResultHeader::numberKeys();
+
+        foreach($dataChanged as  $data){
+            //$employee=Employee::find($key);
+            if(array_key_exists('kpiresult',$data)){
+                $kpiresults=array_key_exists('updated',$data['kpiresult'])?
+                $data['kpiresult']['updated']:[];
+
+                foreach($kpiresults as $key2 =>$kpiresultheader){
+                    $kpiresultheaderObj=KPIResultHeader::find($key2);
+                    $kpiresultheader=filter_is_number($kpiresultheader,$numberkeys);
+                    $kpiresultheaderObj->mapFromArr(KPIResultHeader::KPIRESULTORIGINALKEY,$kpiresultheader);
+                    $kpiresultheaderObj->save();
+                }
+            }
+
+            if(array_key_exists('kpiprocess',$data)){
+                $kpiprocesses=array_key_exists('updated',$data['kpiprocess'])?
+                $data['kpiprocess']['updated']:[];
+
+
+                foreach($kpiprocesses as $key2 =>$kpiprocess){
+                    $kpiheader=KPIHeader::find($kpiprocess['kpi_header_id']);
+                    $kpiprocessObj=$kpiheader->kpiprocesses()->find($key2);
+                    $kpiprocessObj->mapFromArr(KPIProcess::KPIPROCESSORIGINALKEY,$kpiprocess);
+
+                }
+            }
+        }
+
+        return [
+            'message'=>'Berhasil'
+        ];
+
     }
 
 
