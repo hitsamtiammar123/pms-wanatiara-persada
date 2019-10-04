@@ -35,10 +35,10 @@
                             <th rowspan="3" class="heading-color-grey num">No</th>
                             <th rowspan="3" class="kpi heading-color-grey">Nama</th>
                             <th rowspan="3" class="kpi heading-color-grey">Penugasan</th>
-                            <th class="heading-color-green" notify-g-label="rg.add-content"  contenteditable="true" after-edit="rg.setWeight" auto-fill="true" belong-to="rg.weighting.weight_result" flag="kpiresult"  format="addPercent"></th>
+                            <th class="heading-color-green" notify-g-label="rg.add-content"  contenteditable="{{!rg.hasEndorse?true:false}}" after-edit="rg.setWeight" auto-fill="true" belong-to="rg.weighting.weight_result" flag="kpiresult"  format="addPercent"></th>
                             <th colspan="4" class="heading-color-green">Sasaran Hasil</th>
                             <th class="heading-color-green"></th>
-                            <th class="heading-color-yellow" notify-g-label="rg.add-content" contenteditable="true" after-edit="rg.setWeight" auto-fill="true" belong-to="rg.weighting.weight_process" flag="kpiprocess" format="addPercent"></th>
+                            <th class="heading-color-yellow" notify-g-label="rg.add-content" contenteditable="{{!rg.hasEndorse?true:false}}" after-edit="rg.setWeight" auto-fill="true" belong-to="rg.weighting.weight_process" flag="kpiprocess" format="addPercent"></th>
                             <th class="heading-color-yellow" colspan="7">Sasaran Proses</th>
                             <th class="heading-color-yellow"></th>
                             <th class="heading-color-grey" colspan="2">Total</th>
@@ -70,7 +70,7 @@
                         contenteditable="{{employee[mapping.type][mapping.id][mapping.contenteditable]}}"
                         list-data="{{rg.isListed(mapping,employee[mapping.type][mapping.id])?'rg.datalist':null}}"
                         list-id="{{rg.isListed(mapping,employee[mapping.type][mapping.id])?'list-kpiprocess-selection':null}}"
-                        on-list-selected="{{rg.isListed(mapping,employee[mapping.type][mapping.id])?'rg.onListSelected':null}}"
+                        on-list-selected="{{!rg.hasEndorse &&rg.isListed(mapping,employee[mapping.type][mapping.id])?'rg.onListSelected':null}}"
                         type="{{mapping.type}}" d-id="{{mapping.id}}" employee-Id="{{employee.id}}" p-index="{{$parent.$index}}"
                         after-edit="rg.onAfterEdit" notify-g-label="rg.add-content"
                         auto-fill="true"></td>
@@ -83,7 +83,7 @@
         </div>
     </div>
     <div class="table-100">
-        <button class="btn btn-success save-change-btn" ng-disabled="isSaving" ng-click="rg.saveChanged()" >Simpan Perubahan 保存更改</button>
+        <button class="btn btn-success save-change-btn" ng-hide="rg.hasEndorse" ng-disabled="isSaving" ng-click="rg.saveChanged()" >Simpan Perubahan 保存更改</button>
     </div>
     <div class="col-sm-12 footer-pengesahan">
         <div class="row pengesahan-header">

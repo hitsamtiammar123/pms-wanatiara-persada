@@ -27,7 +27,7 @@ class Employee extends Model
     protected $casts=['id'=>'string'];
     protected $hidden=['created_at','updated_at','deleted_at'];
 
-    protected $sendToRoleList=[
+    protected static $sendToRoleList=[
         0=>'1915282279',
         1=>'1915282265',
         2=>'1915282223',
@@ -124,7 +124,7 @@ class Employee extends Model
             $index_r=2;
         }
         else if($level===1){
-            if($this->role->id===$this->sendToRoleList[1])
+            if($this->role->id===self::$sendToRoleList[1])
                 $index_r=0;
             else
                 $index_r=1;
@@ -137,7 +137,7 @@ class Employee extends Model
             $index_r=3;
         }
 
-        $request_send_to=Employee::where('role_id',$this->sendToRoleList[$index_r])->first();
+        $request_send_to=Employee::where('role_id',self::$sendToRoleList[$index_r])->first();
         $request_send_to->role;
 
         return $request_send_to;

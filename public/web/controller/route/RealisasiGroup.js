@@ -58,6 +58,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     vw.headingmap2=[];
     vw.headingmap3=[];
     vw.rPerTString='R/T (%)';
+    vw.hasEndorse=true;
     vw.kpiendorsements={};
 
     $scope.isSaving=false;
@@ -75,7 +76,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             if(type===KPI_RESULT){
                 classname='heading-color-green';
                 belongTo=`rg.kpiresultgroup[${i}].name`;
-                contenteditable=true;
+                contenteditable=!vw.hasEndorse?true:false;
                 afterEdit='rg.onHeaderChange';
             }
             else if(type===KPI_PROCESS){
@@ -262,8 +263,15 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             for(var i in data){
                 var d=data[i];
                 d.kpiaContentEditable=false;
-                d.ptContentEditable=true;
-                d.realContentEditable=true;
+                if(vw.hasOwnProperty('hasEndorse') && vw.hasEndorse){
+                    d.ptContentEditable=false;
+                    d.realContentEditable=false;
+                }
+                else{
+                    d.ptContentEditable=true;
+                    d.realContentEditable=true;
+                }
+
             }
 
     }
@@ -360,6 +368,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var initData=function(){
         const FUNCTION_NAME='add-content';
 
+        setAggrements();
         initHeading2();
         initHeading3()
         setUserHeading();
@@ -368,7 +377,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         setKPIA(KPI_PROCESS);
         setEmployeeData();
         setWeighting();
-        setAggrements();
+
 
         notifier.notifyGroup('rg.add-content');
         //console.log(vw.employees);

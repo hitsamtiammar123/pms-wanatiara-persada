@@ -216,7 +216,7 @@ function($parse,$filter,notifier,cP,formModal){
             }
         }
 
-        if(attrs.listData){
+        if(attrs.listData && attrs.onListSelected!==''){
             listData=$parse(attrs.listData)(scope);
             listID=attrs.listId?attrs.listId:'list'+getId();
             onListSelected=$parse(attrs.onListSelected)(scope);

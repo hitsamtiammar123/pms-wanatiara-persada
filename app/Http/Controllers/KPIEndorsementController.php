@@ -17,11 +17,11 @@ class KPIEndorsementController extends Controller
     use ErrorMessages,BroadcastPMSChange;
 
 
-    protected function fireEndorsementEvent($endorse){
+    protected function fireEndorsementEvent($header){
         $auth_user=auth_user();
-        $header=$endorse->kpiheader;
+
         $employee=$auth_user->employee;
-        $userToSend=$endorse->employee->atasan->user;
+        $userToSend=$employee->atasan->user;
         $userToSend->notify(new EndorsementNotification($header,$employee));
 
         $employee=$header->employee;
@@ -51,6 +51,18 @@ class KPIEndorsementController extends Controller
             $user=$employee->user;
             $message= sprintf("Perubahan Status untuk periode %s sudah disetujui ",$header->period);
             $user->notify(new SendMessage($auth_user,$message));
+        }
+    }
+
+    protected function makeEndorsement(KPIHeader $header,Employee $employee,$level=null){
+        $employee_id=$employee->id;
+        if(!$header->kpiendorsements()->where('employee_id',$employee_id)->first()){
+            $level=is_null($level)?$employee->getEndorsementLevel($header->employee):$level;
+            $header->kpiendorsements()->create([
+                'id' =>KPIEndorsement::generateID($employee_id),
+                'employee_id'=>$employee_id,
+                'level'=>$level
+            ]);
         }
     }
 
@@ -98,15 +110,8 @@ class KPIEndorsementController extends Controller
         if($header){
             $auth_user=auth_user();
             $employee=$auth_user->employee;
-            $employee_id=$employee->id;
-
-            KPIEndorsement::create([
-                'id' =>KPIEndorsement::generateID($employee_id),
-                'kpi_header_id' =>$id,
-                'employee_id'=>$employee_id,
-                'level'=>$employee->getEndorsementLevel($header->employee)
-            ]);
-
+            $this->makeEndorsement($header,$employee);
+            $this->fireEndorsementEvent($header);
             return [
                 'status'=>1,
                 'message'=>'Sudah disahkan',
