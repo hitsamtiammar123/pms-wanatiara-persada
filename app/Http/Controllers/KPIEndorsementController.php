@@ -124,15 +124,14 @@ class KPIEndorsementController extends Controller
 
             foreach($kpitag->groupemployee as $employee){
                 $endorse_as=null;
-                if($employee->getEndorsementLevel($auth_user_employee)===1)
+                if($employee->getEndorsementLevel($auth_user_employee)===1 &&$employee->isUser())
                     $endorse_as=$employee;
                 else
                     $endorse_as=$auth_user->employee;
 
-                if(!$employee->isUser()){
-                    $header=$employee->getHeader($month,$year);
-                    $this->makeEndorsement($header,$endorse_as);
-                }
+                $header=$employee->getHeader($month,$year);
+                $this->makeEndorsement($header,$endorse_as);
+                
                  
             }
             $this->fireEndorsementEvent($kpitag,$kpitag->representative);

@@ -678,21 +678,21 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             case 'MV':
                 d.pt_filter='addPercent';
                 d.real_filter='addPercent';
-                d.pt_sanitize=d.real_sanitize='sNumber';
             break;
             case '$':
             case 'WMT':
             case 'MT':
                 d.pt_filter='number';
                 d.real_filter='number';
-                d.pt_sanitize=d.real_sanitize='sNumber';
+               
             break;
             case 'kwh':
                 d.pt_filter='kwh';
                 d.real_filter='number';
-                d.pt_sanitize=d.real_sanitize='sNumber';
+             
             break;
         }
+        d.pt_sanitize=d.real_sanitize='sNumber';
 
         applyUnitFilter(d);
     }
