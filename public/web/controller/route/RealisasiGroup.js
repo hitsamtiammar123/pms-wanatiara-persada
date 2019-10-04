@@ -58,47 +58,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     vw.headingmap2=[];
     vw.headingmap3=[];
     vw.rPerTString='R/T (%)';
-    vw.kpiendorsements={
-        "1": {
-            "id": "1915284140",
-            "name": "Suherman",
-            "gender": "male",
-            "role_id": "1915282279",
-            "atasan_id": "1915284162",
-            "level": 1,
-            "verified": false,
-            "role": {
-                "id": "1915282279",
-                "name": "副董事长 Vice President Director"
-            }
-        },
-        "2": {
-            "id": "1915284162",
-            "name": "Zhang Heng Xiang",
-            "gender": "male",
-            "role_id": "1915281248",
-            "atasan_id": "1915283145",
-            "level": 2,
-            "verified": false,
-            "role": {
-                "id": "1915281248",
-                "name": "董事长、总裁 President Director"
-            }
-        },
-        "3": {
-            "id": "1915283145",
-            "name": "Meily E. Karundeng",
-            "gender": "female",
-            "role_id": "1915283263",
-            "atasan_id": null,
-            "level": 3,
-            "verified": false,
-            "role": {
-                "id": "1915283263",
-                "name": "监事 Commisioner"
-            }
-        }
-    },
+    vw.kpiendorsements={};
 
     $scope.isSaving=false;
 
@@ -393,6 +353,10 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         kpiService.setHeaderPeriod(vw,vw.kpitag);
     }
 
+    var setAggrements=function(){
+        kpiService.setAggrements(vw,vw.kpitag.representative,vw.kpitag.representative.atasan);
+    }
+
     var initData=function(){
         const FUNCTION_NAME='add-content';
 
@@ -404,6 +368,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         setKPIA(KPI_PROCESS);
         setEmployeeData();
         setWeighting();
+        setAggrements();
 
         notifier.notifyGroup('rg.add-content');
         //console.log(vw.employees);
@@ -466,6 +431,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         vw.kpiprocessgroup=data.groupkpiprocess;
         vw.employees=data.employees;
         vw.kpitag=data;
+        vw.kpiendorsements=data.endorsements;
         initData();
 
 
@@ -515,7 +481,6 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
     vw.onAfterEdit=function(elem,value,scope,attrs){
         onAfterEdit(attrs,value);
-
     }
 
     vw.onHeaderChange=function(elem,value,scope,attrs){
@@ -547,6 +512,10 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         });
         alertModal.display('Peringatan','Menyimpan data, mohon tunggu',false,true);
         $scope.isSaving=true;
+    }
+
+    vw.isEndorseDisable=function(endorse){
+        return kpiService.isEndorseDisable(endorse,vw.kpiendorsements);
     }
 
     loadData();

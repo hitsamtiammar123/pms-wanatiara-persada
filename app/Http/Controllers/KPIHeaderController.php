@@ -30,7 +30,7 @@ class KPIHeaderController extends Controller
         $kpitag->representative;
         $kpitag->groupkpiresult;
         $kpitag->groupkpiprocess;
-        $kpitag->representative->atasan;
+
 
         $employees=[];
         $_month=$request->input('month');
@@ -60,6 +60,8 @@ class KPIHeaderController extends Controller
         $kpitag->weight_process=$header->weight_process;
         $kpitag->period_end=$curr_header->cPeriod()->format('Y-m-d');
         $kpitag->period_start=$curr_header->cPrevPeriod()->format('Y-m-d');
+        $kpitag->endorsements=$kpitag->fetchKPIEndorsement(KPIHeader::getDate($month,$year));
+        $kpitag->representative->atasan;
         unset($kpitag->groupemployee);
 
         return $kpitag;

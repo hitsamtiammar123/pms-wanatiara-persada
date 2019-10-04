@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Model\Interfaces\Endorseable;
 use Illuminate\Database\Eloquent\Model;
 use App\Model\Traits\DynamicID;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -40,5 +41,19 @@ class KPIEndorsement extends Model
         $code=add_zero($employee_index,1).$rand_num;
 
         return self::_generateID($a,$code);
+    }
+
+    public static function fetchFromHirarcialArr(array $hirarcial_employees,Endorseable $endorseable){
+        $r=[];
+
+        foreach($hirarcial_employees as $index => $employee){
+            $employee->level=$index+1;
+            $employee->role;
+            $employee->verified=$endorseable->hasEndorse($employee);
+            unset($employee->atasan);
+            unset($employee->user);
+            $r[$index+1]=$employee;
+        }
+        return $r;
     }
 }

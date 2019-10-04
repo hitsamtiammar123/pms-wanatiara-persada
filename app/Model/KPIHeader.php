@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Model\Traits\DynamicID;
 use Illuminate\Support\Carbon;
 use App\Model\Traits\Indexable;
+use App\Model\Interfaces\Endorseable;
 
 /**
  *
  * @author Hitsam Tiammar <hitsamtiammmar@gmail.com>
  */
 
-class KPIHeader extends Model
+class KPIHeader extends Model implements Endorseable
 {
     //
     use DynamicID,Indexable;
@@ -109,19 +110,9 @@ class KPIHeader extends Model
     }
 
     protected function fetchKPIEndorsement(){
-        $hirarcial_employees=$this->employee->getHirarcialEmployee();
-        $r=[];
-
-        foreach($hirarcial_employees as $index => $employee){
-            $employee->level=$index+1;
-            $employee->role;
-            $employee->verified=$this->hasEndorse($employee);
-            unset($employee->atasan);
-            unset($employee->user);
-            $r[$index+1]=$employee;
-        }
-
-        return $r;
+        return KPIEndorsement::fetchFromHirarcialArr(
+            $this->employee->getHirarcialEmployee(),$this
+        );
     }
 
     protected function sumTotalAchievement($data,$j){
@@ -545,6 +536,7 @@ class KPIHeader extends Model
         $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
         return $curr_date;
     }
+
 
     /**
      * berfungsi untuk mengambil data kpiheader untuk dikonsumsi oleh front end

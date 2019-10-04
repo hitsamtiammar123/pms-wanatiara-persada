@@ -8,7 +8,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.IndexAchieveMentP={};
     $scope.totalAchieveMentP={};
     $scope.finalAchievement={};
-    $scope.aggrements={};
     $scope.hasChanged=false;
     $scope.headerLabel=$scope.headerLabel?$scope.headerLabel:[];
     $scope.currentData=[];
@@ -1017,28 +1016,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var setAggrements=function(){
         //debugger;
         $scope.aggrementStr='';
-        $scope.aggrementCount=0;
-        for(var i in $scope.kpiendorsements){
-            var endorse=$scope.kpiendorsements[i];
-            $scope.aggrements[endorse.id]=(endorse.verified==true)?true:false;
-
-            if(endorse.verified==true){
-                $scope.aggrementCount++;
-            }
-
-            if(endorse.verified==false&& endorse.id===user.employee.id){
-                if($scope.employee.id===user.employee.id ||
-                    $scope.atasan.id===user.employee.id){
-                        $scope.hasEndorse=false;
-                    }
-            }
-
-        }
-
+        kpiService.setAggrements($scope,$scope.employee,$scope.atasan);
         $scope.aggrementStr='HRD <span class="glyphicon glyphicon-ok"></span>';
-        $scope.aggrementStr=$sce.trustAsHtml($scope.aggrementStr);
-
-
+        $scope.aggrementStr=$sce.trustAsHtml($scope.aggrementStr,$scope.employee);
     }
 
     var initData=function(){
@@ -1561,22 +1541,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     $scope.isEndorseDisable=function(endorse){
-        if(endorse.id===user.employee.id){
-            if(endorse.verified)
-                return true;
-            else{
-                var endorsements=$scope.kpiendorsements;
-                var level=endorse.level;
-                for(var i=1;i<level;i++){
-                    var curr_endorse=endorsements[i];
-                    if(curr_endorse && !curr_endorse.verified)
-                        return true;
-                }
-                return false;
-            }
-        }
-        else
-            return true;
+        return kpiService.isEndorseDisable(endorse,$scope.kpiendorsements);
     }
 
     $scope.addRow=function(){

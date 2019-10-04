@@ -2,11 +2,13 @@
 
 namespace App\Model;
 
+use App\Model\Interfaces\Endorseable;
 use App\Model\Traits\DynamicID;
 use App\Model\Traits\Indexable;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Employee;
 
-class KPITag extends Model
+class KPITag extends Model implements Endorseable
 {
 
     use DynamicID,Indexable;
@@ -19,6 +21,7 @@ class KPITag extends Model
         'id' => 'string'
     ];
     protected $hidden=['created_at','updated_at','deleted_at'];
+    protected $date;
 
     public static function generateID(){
         $a=8;
@@ -56,6 +59,24 @@ class KPITag extends Model
                 $header->save();
             }
         }
+    }
+
+    public function hasEndorse(Employee $employee){
+        $d=$this->date?$this->date:KPIHeader::getCurrentDate();
+        foreach($this->groupemployee as $curr){
+            $header=$curr->kpiheaders()->where('period',$d)->first();
+            $r=$header->kpiendorsements()->where('employee_id',$employee->id)->first();
+            if(is_null($r))
+                return false;
+        }
+        return true;
+    }
+
+    public function fetchKPIEndorsement($date=null){
+        $this->date=$date;
+        return KPIEndorsement::fetchFromHirarcialArr(
+            $this->representative->getHirarcialEmployee(),$this
+        );
     }
 
 }

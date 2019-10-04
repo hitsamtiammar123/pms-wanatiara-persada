@@ -1,5 +1,5 @@
-app.service('kpiService',['$filter','KPI_PROCESS','KPI_RESULT','months',
-function($filter,KPI_PROCESS,KPI_RESULT,months){
+app.service('kpiService',['$filter','KPI_PROCESS','KPI_RESULT','months','user',
+function($filter,KPI_PROCESS,KPI_RESULT,months,user){
     var self=this;
     var f=months.map(function(d){
         return d.value;
@@ -146,6 +146,48 @@ function($filter,KPI_PROCESS,KPI_RESULT,months){
         if(!_updateMap.hasOwnProperty('created'))
             _updateMap.created=[];
         _updateMap.created.push(newdata);
+    }
+
+    this.setAggrements=function($scope,employee,atasan){
+        $scope.aggrementCount=0;
+        $scope.aggrements={};
+        if(!$scope.hasOwnProperty('kpiendorsements'))
+            return;
+
+        for(var i in $scope.kpiendorsements){
+            var endorse=$scope.kpiendorsements[i];
+            $scope.aggrements[endorse.id]=(endorse.verified==true)?true:false;
+
+            if(endorse.verified==true){
+                $scope.aggrementCount++;
+            }
+
+            if(endorse.verified==false&& endorse.id===user.employee.id){
+                if(employee.id===user.employee.id ||
+                    atasan.id===user.employee.id){
+                        $scope.hasEndorse=false;
+                    }
+            }
+
+        }
+    }
+
+    this.isEndorseDisable=function(endorse,endorsements){
+        if(endorse.id===user.employee.id){
+            if(endorse.verified)
+                return true;
+            else{
+                var level=endorse.level;
+                for(var i=1;i<level;i++){
+                    var curr_endorse=endorsements[i];
+                    if(curr_endorse && !curr_endorse.verified)
+                        return true;
+                }
+                return false;
+            }
+        }
+        else
+            return true;
     }
 
 }]);
