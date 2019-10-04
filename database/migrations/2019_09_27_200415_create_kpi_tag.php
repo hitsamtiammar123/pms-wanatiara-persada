@@ -17,6 +17,7 @@ class CreateKpiTag extends Migration
             $table->string('id',18);
             $table->string('representative_id');
             $table->string('name');
+            $table->date('period');
             $table->primary('id');
             $table->softDeletes();
             $table->timestamps();

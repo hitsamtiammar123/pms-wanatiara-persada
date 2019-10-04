@@ -15,7 +15,7 @@ class KPITag extends Model implements Endorseable
 
     protected $table='kpitags';
     protected $fillable=[
-        'id','name','representative_id'
+        'id','name','representative_id','period'
     ];
     protected $casts=[
         'id' => 'string'
