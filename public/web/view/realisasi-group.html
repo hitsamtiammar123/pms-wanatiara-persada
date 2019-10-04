@@ -19,7 +19,7 @@
                 <div class="col-sm-2">: {{rg.kpitag.representative.atasan.name}}</div>
         </div>
     </div>
-    <div class="table-100" style="margin-top:30px;">
+    <div class="table-100" style="margin-top:30px;margin-bottom:30px;">
         <div class="row">
                 <div class="col-sm-4">
                         Pilih Bulan:
@@ -84,6 +84,33 @@
     </div>
     <div class="table-100">
         <button class="btn btn-success save-change-btn" ng-disabled="isSaving" ng-click="rg.saveChanged()" >Simpan Perubahan 保存更改</button>
+    </div>
+    <div class="col-sm-12 footer-pengesahan">
+        <div class="row pengesahan-header">
+                <div class="col-sm-6">
+                        <p class="bold">Pengesahan 批准</p>
+                    </div>
+                <div class="col-sm-6">
+                        <p class="blue-font bold right-text">
+                            HRD <span class="glyphicon glyphicon-ok"></span>
+                        </p>
+                </div>
+        </div>
+
+
+        <div class="col-sm-12">
+            <div ng-repeat="endorse in rg.kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-sm-4">
+                {{ endorse.role.name}}:
+                <input type="checkbox" ng-change="!isEndorseDisable(endorse)?setEndorse(endorse):null" ng-disabled="isEndorseDisable(endorse)" ng-model="aggrements[endorse.id]">
+            </div>
+        </div>
+        <div class="col-sm-12 tanda-tangan"></div>
+        <div class="col-sm-12">
+            <div ng-repeat="endorse in rg.kpiendorsements" ng-class="{'blue-check':aggrements[endorse.id],'pengesahan1':$index===0}" class="col-sm-4">
+                {{ endorse.name}}
+            </div>
+        </div>
+
     </div>
 
 </div>

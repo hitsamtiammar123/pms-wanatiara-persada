@@ -58,6 +58,47 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     vw.headingmap2=[];
     vw.headingmap3=[];
     vw.rPerTString='R/T (%)';
+    vw.kpiendorsements={
+        "1": {
+            "id": "1915284140",
+            "name": "Suherman",
+            "gender": "male",
+            "role_id": "1915282279",
+            "atasan_id": "1915284162",
+            "level": 1,
+            "verified": false,
+            "role": {
+                "id": "1915282279",
+                "name": "副董事长 Vice President Director"
+            }
+        },
+        "2": {
+            "id": "1915284162",
+            "name": "Zhang Heng Xiang",
+            "gender": "male",
+            "role_id": "1915281248",
+            "atasan_id": "1915283145",
+            "level": 2,
+            "verified": false,
+            "role": {
+                "id": "1915281248",
+                "name": "董事长、总裁 President Director"
+            }
+        },
+        "3": {
+            "id": "1915283145",
+            "name": "Meily E. Karundeng",
+            "gender": "female",
+            "role_id": "1915283263",
+            "atasan_id": null,
+            "level": 3,
+            "verified": false,
+            "role": {
+                "id": "1915283263",
+                "name": "监事 Commisioner"
+            }
+        }
+    },
 
     $scope.isSaving=false;
 
