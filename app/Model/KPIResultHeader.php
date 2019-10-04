@@ -165,6 +165,15 @@ class KPIResultHeader extends Model
         );
     }
 
+    public static function updateResultHeaderFromArr(array $kpiresults,$numberkeys){
+        foreach($kpiresults as $key2 =>$kpiresultheader){
+            $kpiresultheaderObj=static::find($key2);
+            $kpiresultheader=filter_is_number($kpiresultheader,$numberkeys);
+            $kpiresultheaderObj->mapFromArr(static::KPIRESULTORIGINALKEY,$kpiresultheader);
+            $kpiresultheaderObj->save();
+        }
+    }
+
         /**
      * Create a new Eloquent model instance.
      *

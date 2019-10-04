@@ -42,4 +42,20 @@ class KPITag extends Model
         return $this->belongsToMany(Employee::class,'groupingkpi','tag_id','employee_id')->withTimestamps();
     }
 
+    public function updateWeightingFromArr(array $weighting){
+        $weight_result=array_key_exists('weight_result',$weighting)?
+        $weighting['weight_result']:null;
+        $weight_process=array_key_exists('weight_process',$weighting)?
+        $weighting['weight_process']:null;
+
+        foreach($this->groupemployee as $employee){
+            $header=$employee->getCurrentHeader();
+            if($header){
+                $weight_result?$header->weight_result=$weight_result/100:null;
+                $weight_process?$header->weight_process=$weight_process/100:null;
+                $header->save();
+            }
+        }
+    }
+
 }

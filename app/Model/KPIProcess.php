@@ -60,6 +60,14 @@ class KPIProcess extends Model
         return self::_generateID($a);
     }
 
+    public static function updateProcessHeaderFromArr(array $kpiprocesses){
+        foreach($kpiprocesses as $key2 =>$kpiprocess){
+            $kpiheader=KPIHeader::find($kpiprocess['kpi_header_id']);
+            $kpiprocessObj=$kpiheader->kpiprocesses()->find($key2);
+            $kpiprocessObj->mapFromArr(static::KPIPROCESSORIGINALKEY,$kpiprocess);
+        }
+    }
+
 
     public function kpiheaders(){
         return $this->belongsToMany(KPIHeader::class,'kpiprocesses_kpiheaders','kpi_proccess_id','kpi_header_id')->withPivot(['pw','pt','real','kpi_header_id']);

@@ -56,6 +56,16 @@ class KPIResult extends Model
 
     }
 
+    public static function updateGroupFromArr(array $kpiresultgoup){
+        foreach($kpiresultgoup as $key => $value){
+            $kpiresultObj=static::find($key);
+            if(!is_null($kpiresultObj)){
+                $kpiresultObj->name=$value;
+                $kpiresultObj->save();
+            }
+        }
+    }
+
     public function kpiresultheaders(){
         return $this->hasMany(KPIResultHeader::class,'kpi_result_id','id');
     }
