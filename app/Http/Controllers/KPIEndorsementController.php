@@ -10,6 +10,8 @@ use App\Http\Controllers\Traits\ErrorMessages;
 use App\Notifications\SendMessage;
 use App\Http\Controllers\Traits\BroadcastPMSChange;
 use App\Model\KPIHeader;
+use App\Model\KPITag;
+use Illuminate\Support\Carbon;
 
 class KPIEndorsementController extends Controller
 {
@@ -17,15 +19,14 @@ class KPIEndorsementController extends Controller
     use ErrorMessages,BroadcastPMSChange;
 
 
-    protected function fireEndorsementEvent($header){
+    protected function fireEndorsementEvent($header,$h_employee){
         $auth_user=auth_user();
 
         $employee=$auth_user->employee;
         $userToSend=$employee->atasan->user;
         $userToSend->notify(new EndorsementNotification($header,$employee));
 
-        $employee=$header->employee;
-        $this->broadcastChange($employee);
+        $this->broadcastChange($h_employee);
 
     }
 
@@ -66,6 +67,15 @@ class KPIEndorsementController extends Controller
         }
     }
 
+    protected function doResetEndorsement($employee){
+        $header=$employee->getCurrentHeader();
+
+        $kpiendorsements=$header->kpiendorsements;
+        foreach($kpiendorsements as $endorse){
+            $endorse->delete();
+        }
+    }
+
 
     public function store(Request $request)
     {
@@ -82,15 +92,15 @@ class KPIEndorsementController extends Controller
         $employee=Employee::find($employeeID);
         if($employee){
             $notificationID=$request->notificationID;
-            $header=$employee->getCurrentHeader();
+            $this->doResetEndorsement($employee);
 
-            $kpiendorsements=$header->kpiendorsements;
-            foreach($kpiendorsements as $endorse){
-                $endorse->delete();
-            }
-
+            if($employee->representativeTags->count()!==0)
+                foreach($employee->representativeTags as $tag)
+                    foreach($tag->groupemployee as $rep_employee)
+                        $this->doResetEndorsement($rep_employee);
+                    
             $this->approvedEndorseChange($notificationID);
-            $this->sendApprovalRequest($employee,$header);
+            $this->sendApprovalRequest($employee,$employee->getCurrentHeader());
 
             return [
                 'status'=>'Status Pengesahan sudah diubah'
@@ -103,7 +113,40 @@ class KPIEndorsementController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function updateGroup(Request $request,$id){
+        $kpitag=KPITag::find($id);
+        if($kpitag){
+            $now=Carbon::now();
+            $month=$request->input('month',$now->month);
+            $year=$request->input('year',$now->year);
+            $auth_user=auth_user();
+            $auth_user_employee=$auth_user->employee;
+
+            foreach($kpitag->groupemployee as $employee){
+                $endorse_as=null;
+                if($employee->getEndorsementLevel($auth_user_employee)===1)
+                    $endorse_as=$employee;
+                else
+                    $endorse_as=$auth_user->employee;
+
+                if(!$employee->isUser()){
+                    $header=$employee->getHeader($month,$year);
+                    $this->makeEndorsement($header,$endorse_as);
+                }
+                 
+            }
+            $this->fireEndorsementEvent($kpitag,$kpitag->representative);
+            return [
+                'status'=>1,
+                'message'=>'PMS Group Sudah disahkan',
+                'user'=>$kpitag->representative
+            ];
+
+        }
+        return send_404_error('Data Tag tidak ditemukan');
+    }
+
+    public function update($id)
     {
 
         $header=KPIHeader::find($id);
@@ -111,7 +154,7 @@ class KPIEndorsementController extends Controller
             $auth_user=auth_user();
             $employee=$auth_user->employee;
             $this->makeEndorsement($header,$employee);
-            $this->fireEndorsementEvent($header);
+            $this->fireEndorsementEvent($header,$header->employee);
             return [
                 'status'=>1,
                 'message'=>'Sudah disahkan',

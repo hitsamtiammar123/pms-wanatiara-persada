@@ -1,5 +1,5 @@
-app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route',
-function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route){
+app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route','confirmModal',
+function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route,confirmModal){
 
     var tagID=$routeParams.tagID;
     var vw=this;
@@ -114,6 +114,13 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var initHeading3=function(){
         initHeading3ByData(vw.kpiresultgroup,KPI_RESULT);
         initHeading3ByData(vw.kpiprocessgroup,KPI_PROCESS);
+    }
+
+    var reloadPage=function(){
+        alertModal.hide();
+        setTimeout(function(){
+            $route.reload();
+        },1000)
     }
 
     var initHeading3ByData=function(data,type){
@@ -525,6 +532,18 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
     vw.isEndorseDisable=function(endorse){
         return kpiService.isEndorseDisable(endorse,vw.kpiendorsements);
+    }
+
+    vw.setEndorse=function(endorse){
+        var message=!endorse.verified?'Apa anda yakin ini mengesahkan PMS ini':'Apa anda yakin ingin membalikan keadaan pada PMS ini?';
+        confirmModal('Peringatan',message).then(function(){
+
+            loader.setEndorsementGroup(tagID).then(reloadPage);
+            alertModal.display('Peringatan','Mengirim data, mohon tunggu',false,true);
+            
+        },function(){
+            vw.aggrements[endorse.id]=!vw.aggrements[endorse.id];
+        });
     }
 
     loadData();

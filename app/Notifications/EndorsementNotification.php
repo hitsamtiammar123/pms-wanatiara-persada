@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Carbon\Carbon;
 use App\Model\Employee;
+use App\Model\Interfaces\Endorseable;
 
 class EndorsementNotification extends Notification
 {
@@ -17,35 +18,52 @@ class EndorsementNotification extends Notification
     protected $employee;
 
     protected function getRedirectLink(){
-        $employee_id=$this->header->employee->id;
-        $link="realisasi/$employee_id/".($this->header->cPeriod()->month-1);
+        $link='';
+        if($this->header instanceof \App\Model\KPIHeader){
+            $employee_id=$this->header->employee->id;
+            $link="realisasi/$employee_id/".($this->header->cPeriod()->month-1);
+        }
+        else if($this->header instanceof \App\Model\KPITag){
+            $link="realisasi-group/{$this->header->id}";
+        }
 
         return $link;
     }
 
     protected function getMessage(){
-        $message="%s sudah mengesahkan %s untuk periode %s";
+        $result='';
         $header=$this->header;
+       
+        if($header instanceof \App\Model\KPIHeader){
+            $message="%s sudah mengesahkan %s untuk periode %s";
+            $employee_name=$this->employee->name;
+            $headerTo='';
 
-        $employee_name=$this->employee->name;
-        $headerTo='';
+            if($header->employee->id === $this->employee->id){
+                $headerTo='PMS nya sendiri';
+            }
+            else{
+                $headerTo='PMS dari '.$header->employee->name;
+            }
 
-        if($header->employee->id === $this->employee->id){
-            $headerTo='PMS nya sendiri';
+
+            $period=Carbon::parse($header->period)->format('M Y');
+            $result=sprintf($message,$employee_name,$headerTo,$period);
         }
-        else{
-            $headerTo='PMS dari '.$header->employee->name;
+        else if($header instanceof \App\Model\KPITag){
+           
+            $message="%s sudah mengesahkan %s";
+            $employee_name=$this->employee->name;
+            $headerTo="PMS group dari \"{$header->name}\"";
+            $result=sprintf($message,$employee_name,$headerTo);
+
         }
 
-
-        $period=Carbon::parse($header->period)->format('M Y');
-
-        $result=sprintf($message,$employee_name,$headerTo,$period);
         return $result;
 
     }
 
-    public function __construct($header,$employee)
+    public function __construct(Endorseable $header,$employee)
     {
         $this->header=$header;
         $this->employee=$employee;

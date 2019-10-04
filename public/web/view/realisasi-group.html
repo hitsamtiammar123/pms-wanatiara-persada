@@ -101,7 +101,7 @@
         <div class="col-sm-12">
             <div ng-repeat="endorse in rg.kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-sm-4">
                 {{ endorse.role.name}}:
-                <input type="checkbox" ng-change="!isEndorseDisable(endorse)?setEndorse(endorse):null" ng-disabled="rg.isEndorseDisable(endorse)" ng-model="rg.aggrements[endorse.id]">
+                <input type="checkbox" ng-change="!rg.isEndorseDisable(endorse)?rg.setEndorse(endorse):null" ng-disabled="rg.isEndorseDisable(endorse)" ng-model="rg.aggrements[endorse.id]">
             </div>
         </div>
         <div class="col-sm-12 tanda-tangan"></div>

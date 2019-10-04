@@ -277,6 +277,10 @@ class Employee extends Model
         return $this->hasMany(KPIEndorsement::class);
     }
 
+    public function representativeTags(){
+        return $this->hasMany(KPITag::class,'representative_id','id');
+    }
+
     public function tags(){
         return $this->belongsToMany(KPITag::class,'groupingkpi','employee_id','tag_id')->withTimestamps();
     }

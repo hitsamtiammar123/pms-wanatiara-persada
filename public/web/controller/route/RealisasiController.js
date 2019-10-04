@@ -1537,7 +1537,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             alertModal.display('Peringatan','Mengirim data, mohon tunggu',false,true);
         },function(){
             $scope.aggrements[endorse.id]=!$scope.aggrements[endorse.id];
-        })
+        });
     }
 
     $scope.isEndorseDisable=function(endorse){

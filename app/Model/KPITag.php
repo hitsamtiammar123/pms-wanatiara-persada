@@ -45,6 +45,10 @@ class KPITag extends Model implements Endorseable
         return $this->belongsToMany(Employee::class,'groupingkpi','tag_id','employee_id')->withTimestamps();
     }
 
+    public function getZeroIndexEmployee(){
+        return $this->groupemployee[0];
+    }
+
     public function updateWeightingFromArr(array $weighting){
         $weight_result=array_key_exists('weight_result',$weighting)?
         $weighting['weight_result']:null;

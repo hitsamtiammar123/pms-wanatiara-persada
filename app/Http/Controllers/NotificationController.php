@@ -109,10 +109,11 @@ class NotificationController extends Controller
                 $hasEndorse=$header->hasEndorse($curr);
 
                 if($hasEndorse && !$curr->hasRequestChange()){
+                    $sendToUser=$curr->getSendToUser();
                     $r=[];
                     $r['id']=$curr->id;
                     $r['name']=$curr->name;
-                    $r['sendTo']=$curr->getSendToUser();
+                    $r['sendTo']=$sendToUser;
                     $result[]=$r;
                 }
             }

@@ -104,6 +104,11 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url);
     }
 
+    this.setEndorsementGroup=function(tagID){
+        var url=this.route('kpitag',[tagID,'endorse']);
+        return $http.put(url,[]);
+    }
+
     this.getSearchList=function(query){
         var url=this.route('search.autocomplete',null,{query:query});
         return $http.get(url);
