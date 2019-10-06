@@ -10,7 +10,7 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,dataService,$route){
             E(document).unbind(event);
         }
     }
-  
+
     $rootScope.$on('$locationChangeStart',function(event,next,current){
         //debugger;
         if($rootScope.loading)
@@ -21,8 +21,8 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,dataService,$route){
             func(event,next,current);
         }
 
-    }); 
-  
+    });
+
     $rootScope.$on('$routeChangeStart',function(event,next,current){
         //console.log(event,next,current);
         flushEvent();
@@ -34,7 +34,7 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,dataService,$route){
             event.preventDefault();
             return;
         }
-        
+
 
         var route=next.$$route.controller;
         var default_f=cP.onRouteChangeStart.default;
@@ -54,11 +54,11 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,dataService,$route){
         gEvents.push(event);
     }
 
-     
+
     var e=function(a,b,c){
         console.log('Something wrong');
         alertModal.display('Peringatan','Terjadi kesalahan pada saat memuat data, mohon muat ulang halaman',false,true);
-    } 
+    }
 
     var d=function(results,b,c){
         //debugger;
@@ -71,12 +71,13 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,dataService,$route){
         }
         alertModal.hide();
 
-    }     
+}
 
     var init=function(){
-        $rootScope.employees={};   
+        $rootScope.employees={};
+        $rootScope.kpitags={};
         $rootScope.month=new Date().getMonth();
-        
+
         var loading={
             title:'Peringatan',
             message:'Memuat Data. Mohon Tunggu',
@@ -88,4 +89,4 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,dataService,$route){
 
     init();
 
-}); 
+});

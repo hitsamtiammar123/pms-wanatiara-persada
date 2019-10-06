@@ -684,12 +684,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             case 'MT':
                 d.pt_filter='number';
                 d.real_filter='number';
-               
+
             break;
             case 'kwh':
                 d.pt_filter='kwh';
                 d.real_filter='number';
-             
+
             break;
         }
         d.pt_sanitize=d.real_sanitize='sNumber';

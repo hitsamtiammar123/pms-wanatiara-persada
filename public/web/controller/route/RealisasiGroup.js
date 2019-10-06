@@ -1,5 +1,5 @@
-app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route','confirmModal',
-function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route,confirmModal){
+app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route','confirmModal','$rootScope',
+function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route,confirmModal,$rootScope){
 
     var tagID=$routeParams.tagID;
     var vw=this;
@@ -28,6 +28,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     ];
     var dataChanged={};
     var headerChanged={};
+    var currMonth=$routeParams.month?parseInt($routeParams.month):$rootScope.month;
 
     vw.kpiresultgroup=[];
     vw.kpiprocessgroup=[];
@@ -431,7 +432,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         setDataDetail();
         dataService.digest($scope);
         notifier.notifyGroup('rg.add-content');
-        console.log({dataChanged});
+        //console.log({dataChanged});
     }
 
     var setDataDetail=function(){
@@ -440,23 +441,40 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         setEmployeeData();
     }
 
-    var onSuccess=function(result){
-        alertModal.hide();
-        var data=result.data;
+    var fetchData=function(data){
         vw.kpiresultgroup=data.groupkpiresult;
         vw.kpiprocessgroup=data.groupkpiprocess;
         vw.employees=data.employees;
         vw.kpitag=data;
         vw.kpiendorsements=data.endorsements;
         initData();
-
-
     }
-    var loadData=function(){
-        alertModal.upstream('loading');
-        loader.getByGroupTag(tagID).then(onSuccess,function(){
-            alertModal.display('Peringatan','Terjadi Kesalahan');
-        });
+
+    var onSuccess=function(result){
+        alertModal.hide();
+        var data=result.data;
+        $rootScope.kpitags[tagID][currMonth]=data;
+        fetchData(data);
+    }
+
+    var checkTag=function(){
+        if(!$rootScope.kpitags.hasOwnProperty(tagID))
+            $rootScope.kpitags[tagID]={}
+    }
+
+    var loadData=function(currMonth){
+        var kpitag=$rootScope.kpitags[tagID];
+
+        if(kpitag.hasOwnProperty(currMonth)){
+            var data=kpitag[currMonth];
+            fetchData(data);
+        }
+        else{
+            alertModal.upstream('loading');
+            loader.getByGroupTag(tagID).then(onSuccess,function(){
+                alertModal.display('Peringatan','Terjadi Kesalahan');
+            });
+        }
     }
 
     var saveSucess=function(){
@@ -540,11 +558,12 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
             loader.setEndorsementGroup(tagID).then(reloadPage);
             alertModal.display('Peringatan','Mengirim data, mohon tunggu',false,true);
-            
+
         },function(){
             vw.aggrements[endorse.id]=!vw.aggrements[endorse.id];
         });
     }
 
-    loadData();
+    checkTag();
+    loadData(currMonth);
 }]);

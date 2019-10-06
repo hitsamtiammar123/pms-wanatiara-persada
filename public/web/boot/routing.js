@@ -13,7 +13,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/realisasi-group/:tagID',
+            url:'/realisasi-group/:tagID/:month?',
             config:{
                 templateUrl:'web/view/realisasi-group.html',
                 controller:'RealisasiGroup',
