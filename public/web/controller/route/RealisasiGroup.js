@@ -478,8 +478,8 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     }
 
     var saveSucess=function(){
-
         setTimeout(function(){
+            delete $rootScope.kpitags[tagID][currMonth];
             $route.reload();
         },1000)
     }
