@@ -37,13 +37,13 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request,$user){
         $user->employee;
-        $request->session()->put('auth_user',$user);
+        //$request->session()->put('auth_user',$user);
     }
 
     protected function loggedOut(Request $request)
     {
         //
-       $request->session()->forget('auth_user');
+       //$request->session()->forget('auth_user');
     }
 
     protected function redirectTo(){
@@ -56,7 +56,7 @@ class LoginController extends Controller
     }
 
     public function username(){
-        return 'id';
+        return 'email';
     }
 
     public function showLoginForm()
@@ -69,7 +69,7 @@ class LoginController extends Controller
         $credentials=$this->credentials($request);
 
         $loggedIn=\Auth::attempt([
-                'id' => $credentials['id'],
+                'email' => $credentials['email'],
                 'password' => $credentials['password']],true);
 
         return $loggedIn;

@@ -7,8 +7,8 @@
             <form action="{{ route('login') }}" method="POST" class="form-horizontal">
                     @csrf
                     <div class="form-group">
-                        <label for="id">ID. 用户识别	: </label>
-                        <input class="form-control" id="id" type="text" name="id" required>
+                        <label for="id">Email. 电子邮件	: </label>
+                        <input class="form-control" id="email" type="text" name="email" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Kata Sandi 密码	:  </label>
