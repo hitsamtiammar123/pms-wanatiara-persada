@@ -135,15 +135,15 @@
                                     <td class="index-content">{{$loop->index+1}}</td>
                                     <td class="kpi-content">{{$kpiprocess['name']}}</td>
                                     <td class="text-center">{{$kpiprocess['unit']}}</td>
-                                    <td class="num-content">{{$kpiprocess['pw_1']}}</td>
+                                    <td class="num-content">{{@$kpiprocess['pw_1']}}</td>
                                     <td class="num-content">{{$kpiprocess['pw_2']}}</td>
-                                    <td class="num-content">{{$kpiprocess['pt_1']}}</td>
+                                    <td class="num-content">{{@$kpiprocess['pt_1']}}</td>
                                     <td class="num-content">{{$kpiprocess['pt_2']}}</td>
-                                    <td class="num-content">{{$kpiprocess['real_1']}}</td>
+                                    <td class="num-content">{{@$kpiprocess['real_1']}}</td>
                                     <td class="num-content">{{$kpiprocess['real_2']}}</td>
                                     <td class="num-content {{$kpiprocess['bColor_kpia_1']}}">{{$kpiprocess['kpia_1']}}</td>
                                     <td class="num-content {{$kpiprocess['bColor_kpia_2']}}">{{$kpiprocess['kpia_2']}}</td>
-                                    <td class="num-content">{{$kpiprocess['aw_1']}}</td>
+                                    <td class="num-content">{{@$kpiprocess['aw_1']}}</td>
                                     <td class="num-content">{{$kpiprocess['aw_2']}}</td>
                                 </tr>
                         @endforeach

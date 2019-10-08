@@ -58,7 +58,7 @@ class KPIHeader extends Model implements Endorseable
             $kpiresult=KPIResult::find($kpiresultheader->kpi_result_id);
             //$kpiresultheaderend=$kpiresultheader->getNext();
             $kpiresultheaderprev=$kpiresultheader->getPrev();
-            if(is_null($groupdata) && $kpiresultheaderprev ){
+            if($kpiresultheaderprev){
                 $r['pw_1']=intval($kpiresultheaderprev->pw).'';
                 $r['pt_t1']=$kpiresultheaderprev->pt_t;
                 $r['pt_k1']=$kpiresultheaderprev->pt_k;
@@ -101,7 +101,7 @@ class KPIHeader extends Model implements Endorseable
             $curr_e=$curr_s->getNext();
             $curr_p=$curr_s->getPrev();
 
-            if(is_null($groupdata) && $curr_p){
+            if( $curr_p){
                 $r['pw_1']=intval($curr_p->pivot->pw).'';
                 $r['pt_1']=$curr_p->pivot->pt;
                 $r['real_1']=$curr_p->pivot->real;
@@ -228,7 +228,7 @@ class KPIHeader extends Model implements Endorseable
         ];
     }
 
-    protected function filterData($result,$type){
+    protected function filterData($result,$type,$isgroup=false){
         for($i=0;$i<count($result);$i++){
             $curr=&$result[$i];
 
@@ -269,6 +269,9 @@ class KPIHeader extends Model implements Endorseable
                         break;
                         case '规模 Skala':
                         case '规模 Scale':
+                            if(!$isgroup)
+                                break;
+
                             $j=intval($curr[$key]);
                             if($j<=0)
                                 $curr[$key]='Sangat Buruk';
@@ -424,7 +427,7 @@ class KPIHeader extends Model implements Endorseable
         }
 
         $accumulated=$this->accumulateTotalAchievement($result,!is_null($groupdata));
-        $result=$this->filterData($result,'kpiresult');
+        $result=$this->filterData($result,'kpiresult',!is_null($groupdata));
         return [
             'data'=>$result,
             'totalAchievement'=>$accumulated['totalAchievement'],
@@ -461,7 +464,7 @@ class KPIHeader extends Model implements Endorseable
         }
 
         $accumulated=$this->accumulateTotalAchievement($result,!is_null($groupdata));
-        $result=$this->filterData($result,'kpiprocess');
+        $result=$this->filterData($result,'kpiprocess',!is_null($groupdata));
 
         return [
             'data'=>$result,
