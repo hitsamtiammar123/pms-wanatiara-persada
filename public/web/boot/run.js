@@ -76,7 +76,9 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,dataService,$route){
     var init=function(){
         $rootScope.employees={};
         $rootScope.kpitags={};
-        $rootScope.month=new Date().getMonth();
+        var curr_date=new Date();
+        $rootScope.month=curr_date.getMonth();
+        $rootScope.year=curr_date.getFullYear();
 
         var loading={
             title:'Peringatan',

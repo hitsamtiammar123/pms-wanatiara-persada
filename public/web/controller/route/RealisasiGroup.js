@@ -1,5 +1,5 @@
-app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route','confirmModal','$rootScope',
-function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route,confirmModal,$rootScope){
+app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route','confirmModal','$rootScope','months',
+function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route,confirmModal,$rootScope,months){
 
     var tagID=$routeParams.tagID;
     var vw=this;
@@ -30,6 +30,8 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var dataChanged={};
     var headerChanged={};
     var currMonth=$routeParams.month?parseInt($routeParams.month):$rootScope.month;
+    var currYear=$routeParams.year?parseInt($routeParams.year):$rootScope.year;
+    var currentMonthObj=months[currMonth];
 
     vw.kpiresultgroup=[];
     vw.kpiprocessgroup=[];
@@ -571,7 +573,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             return;
 
        loader.fetchPMSGroupPDF(vw.kpitag.id).then(function(result){
-            var filename='PMS Group - '+vw.kpitag.name+'.pdf';
+            var filename='PMS Group - '+vw.kpitag.name+' - '+currentMonthObj.value+' - '+currYear+'.pdf';
             loader.download(result.data,filename);
        },function(){
             alertModal.display('Peringatan','Terjadi kesalahan saat mengunduh berkas');
