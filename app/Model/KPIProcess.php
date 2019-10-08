@@ -23,6 +23,12 @@ class KPIProcess extends Model
         'real'=>'real_2'
     ];
 
+    const KPIPROCESSCURRKEYREVERSE=[
+        'pw_2'=>'pw',
+        'pt_2'=>'pt',
+        'real_2'=>'real'
+    ];
+
     const KPIPROCESSPREVKEY=[
         'pw'=>'pw_1',
         'pt'=>'pt_1',

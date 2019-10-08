@@ -29,7 +29,7 @@ app.controller('FrontController',function($scope,$rootScope,dataService,months,
     var dateLoop=function(){
         var date=new Date();
         var h=date.getHours();
-        
+
         $scope.date.day=days[date.getDay()];
         $scope.date.date=addZero(date.getDate());
         $scope.date.month=months[date.getMonth()].value;
@@ -47,7 +47,7 @@ app.controller('FrontController',function($scope,$rootScope,dataService,months,
             $scope.greting_message='Selamat Sore';
         else if((h>=19 && h<=23)||(h>=0 && h<=3))
             $scope.greting_message='Selamat Malam';
-        
+
         dataService.digest($scope);
 
     }
@@ -72,14 +72,14 @@ app.controller('FrontController',function($scope,$rootScope,dataService,months,
         $scope.unreadNotification=$rootScope.unreadNotification=notifications.unread;
         $rootScope.notifications=notifications;
         $rootScope.notification_list=notifications.data;
-        
+
         notifier.notify('notificationsHasLoad');
     }
 
     var fetchNotification=function(){
         loader.getNotifications(user.employee.id).then(notificationHasFetch);
     }
-  
+
     $scope.changed=function(){
         //console.log($scope.currentMonth);
         notifier.notify('changeMonth',[$scope.currentMonth]);
@@ -99,7 +99,7 @@ app.controller('FrontController',function($scope,$rootScope,dataService,months,
        });
        isDownloading=true;
        alertModal.display('Berkas sedang diunduh','Mohon Tunggu');
-        
+
     }
 
     $scope.toPrint=function(){
@@ -122,4 +122,4 @@ app.controller('FrontController',function($scope,$rootScope,dataService,months,
     initDate();
 
 
-});  
+});

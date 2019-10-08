@@ -3,6 +3,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
     var tagID=$routeParams.tagID;
     var vw=this;
+    var isDownloading=false;
     var keymap=[
         {
             key:'pt_t',
@@ -207,8 +208,6 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
         rC=e_result['real_t'];
         tC=e_result['pt_t'];
-
-
 
         switch(kpiresult.unit){
             case 'MT':
@@ -565,6 +564,23 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         },function(){
             vw.aggrements[endorse.id]=!vw.aggrements[endorse.id];
         });
+    }
+
+    vw.downloadPDF=function(){
+        if(isDownloading)
+            return;
+
+       loader.fetchPMSGroupPDF(vw.kpitag.id).then(function(result){
+            var filename='PMS Group - '+vw.kpitag.name+'.pdf';
+            loader.download(result.data,filename);
+       },function(){
+            alertModal.display('Peringatan','Terjadi kesalahan saat mengunduh berkas');
+       }).finally(function(){
+            isDownloading=false;
+       });
+       isDownloading=true;
+       alertModal.display('Berkas PMS Group sedang diunduh','Mohon Tunggu');
+
     }
 
     checkTag();

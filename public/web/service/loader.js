@@ -169,6 +169,11 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url,{responseType:'blob'});
     }
 
+    this.fetchPMSGroupPDF=function(id){
+        var url=this.route('pdf-pms-group',[id]);
+        return $http.get(url,{responseType:'blob'});
+    }
+
     this.uploadKPICompany=function(data){
         var form=new FormData();
         form.append('file',data.file);

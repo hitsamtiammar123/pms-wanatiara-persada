@@ -8,6 +8,7 @@ use App\Model\KPIHeader;
 use Carbon\Carbon;
 use PDF;
 use App\Http\Controllers\Traits\HeaderFetch;
+use App\Model\KPITag;
 
 class PDFController extends Controller
 {
@@ -42,5 +43,21 @@ class PDFController extends Controller
         $pdf=PDF::loadView('pdf.pdf-pms',$data);
         return $pdf->stream('test.pdf');
 
+    }
+
+    public function pmsGroup(Request $request,$tagID){
+        $kpitag=KPITag::find($tagID);
+        if(!$kpitag)
+            return send_404_error('Data PMS Group Tidak ditemukan');
+
+        $curr_header=$this->fetchInputHeader($request,$kpitag->getZeroIndexEmployee());
+
+        $data=[
+            'kpitag'=>$kpitag,
+            'curr_header'=>$curr_header
+        ];
+
+        $pdf=PDF::loadView('pdf.pdf-pms-group',$data);
+        return $pdf->stream('test.pdf');
     }
 }

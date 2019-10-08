@@ -15,6 +15,7 @@ app.constant('route',{
         'requestable-users':'api/v1/notification/requestableusers/',
         'request-change':'api/v1/notification/request-change/',
         'pdf-pms':'pdf/pms/',
+        'pdf-pms-group':'pdf/pms-group/',
         'print-pms':'print/pms/',
         'kpitag':'api/v1/kpitag/'
     },

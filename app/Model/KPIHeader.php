@@ -43,15 +43,20 @@ class KPIHeader extends Model implements Endorseable
 
 
 
-    protected function fetchKPIResult(){
+    protected function fetchKPIResult($groupdata=null){
 
         $result=[];
-        $kpi_results_header_start=$this->kpiresultheaders->sortBy('kpiresult.name');
+        if(is_null($groupdata))
+            $kpi_results_header_start=$this->kpiresultheaders->sortBy('kpiresult.name');
+        else{
+            $modelkey=$groupdata->modelKeys();
+            $kpi_results_header_start=$this->kpiresultheaders->whereIn('kpi_result_id',$modelkey)->sortBy('kpiresult.name');
+        }
 
         foreach($kpi_results_header_start as $kpiresultheader){
             $r=[];
             $kpiresult=KPIResult::find($kpiresultheader->kpi_result_id);
-            $kpiresultheaderend=$kpiresultheader->getNext();
+            //$kpiresultheaderend=$kpiresultheader->getNext();
             $kpiresultheaderprev=$kpiresultheader->getPrev();
 
             if($kpiresultheaderprev){
@@ -82,9 +87,14 @@ class KPIHeader extends Model implements Endorseable
         return $result;
     }
 
-    protected function fetchKPIProcess(){
+    protected function fetchKPIProcess($groupdata=null){
         $result=[];
-        $kpi_proccess_start=$this->kpiprocesses;
+        if(is_null($groupdata))
+            $kpi_proccess_start=$this->kpiprocesses;
+        else{
+            $modelkey=$groupdata->modelKeys();
+            $kpi_proccess_start=$this->kpiprocesses->whereIn('id',$modelkey);
+        }
 
         foreach($kpi_proccess_start as $curr_s){
             $r=[];
@@ -115,17 +125,25 @@ class KPIHeader extends Model implements Endorseable
         );
     }
 
-    protected function sumTotalAchievement($data,$j){
+    protected function sumTotalAchievement($data,$j,$isgroup=false){
         $s=0;
         $aw_key='aw_';
+        $kpia_key='kpia_';
         for($i=0;$i<count($data);$i++){
             $d=$data[$i];
-            $curr_index=$aw_key.($j+1);
-            $aw=$d[$curr_index];
-            $n=floatval($aw);
+            if(!$isgroup){
+                $curr_index=$aw_key.($j+1);
+                $aw=$d[$curr_index];
+                $n=floatval($aw);
+            }
+            else{
+                $curr_index=$kpia_key.($j+1);
+                $kpia=$d[$curr_index];
+                $n=floatval($kpia);
+            }
             $s+=$n;
         }
-        return $s;
+        return !$isgroup?$s:$s/count($data);
     }
 
     protected function getIndexAchievement($s){
@@ -188,14 +206,14 @@ class KPIHeader extends Model implements Endorseable
 
     }
 
-    protected function accumulateTotalAchievement($result){
+    protected function accumulateTotalAchievement($result,$isgroup=false){
         $totalAchivement=[];
         $indexAchivement=[];
         for($i=0;$i<2;$i++){
             $t='t'.($i+1);
-            $s=$this->sumTotalAchievement($result,$i);
+            $s=$this->sumTotalAchievement($result,$i,$isgroup);
 
-            $totalAchivement[$t]=round($s,1).'%';
+            $totalAchivement[$t]=round($s,2).'%';
 
             $index=$this->getIndexAchievement($s);
             $indexAchivement[$t]=$index;
@@ -217,12 +235,16 @@ class KPIHeader extends Model implements Endorseable
             $curr['aw_1']=$curr['aw_1'].'%';
             $curr['aw_2']=$curr['aw_2'].'%';
 
-            if($type==='kpiresult'){
+
                 $unit=$curr['unit'];
-                foreach(KPIResultHeader::KPIRESULTDKEY as $key => $index){
+            $mapping=($type==='kpiresult')?KPIResultHeader::KPIRESULTDKEY:KPIProcess::KPIPROCESSCURRKEYREVERSE;
+                foreach($mapping as $key => $index){
+                    if(!array_key_exists($key,$curr))
+                        continue;
                     switch($unit){
-                        case '$':
-                        case 'WMT':
+                    case '$':
+                    case 'MT':
+                    case 'WMT':
                             $curr[$key]=number_format($curr[$key]);
                         break;
                         case '%':
@@ -240,10 +262,24 @@ class KPIHeader extends Model implements Endorseable
                                 break;
                             }
                         break;
+                        case '规模 Skala':
+                        case '规模 Scale':
+                            $j=intval($curr[$key]);
+                            if($j<=0)
+                                $curr[$key]='Sangat Buruk';
+                            else if($j==1)
+                                $curr[$key]='Buruk';
+                            else if($j==2)
+                                $curr[$key]='Sedang';
+                            else if($j==3)
+                                $curr[$key]='Baik';
+                            else if($j>=4)
+                                $curr[$key]='Sangat Baik';
+                        break;
                     }
                 }
 
-            }
+
 
         }
 
@@ -278,8 +314,61 @@ class KPIHeader extends Model implements Endorseable
         return $r;
     }
 
-    protected function fetchAccumulatedKPIResult(){
-        $kpiresults=$this->fetchKPIResult();
+    protected function getKPIAByIndex($rt,$unit){
+        $i=floatval($rt);
+        switch($unit){
+            case '规模 Skala':
+            case '规模 Scale':
+                if($i<=0)
+                   $rt=70;
+                else if($i==1)
+                    $rt=80;
+                else if($i==2)
+                    $rt=90;
+                else if($i==3)
+                    $rt=100;
+                else if($i>=4)
+                    $rt=120;
+            break;
+            case 'MT':
+            case 'WMT':
+                if($i<=0.8)
+                    $rt=80;
+                else if($i>0.8 && $i<=0.9)
+                    $rt=90;
+                else if($i>0.9 && $i<1)
+                    $rt=95;
+                else if($i>=1 && $i<=1.025)
+                    $rt=102;
+                else if($i>1.025)
+                    $rt=110;
+
+        }
+        return $rt;
+    }
+
+    protected function getKPIAForGrouping($d,$j){
+        $unit=$d['unit'];
+        $r=0;
+        $pt_key='pt_t'.($j+1);
+        $real_key='real_t'.($j+1);
+        switch($unit){
+            case 'MT':
+            case 'WMT':
+                $r=(floatval($d[$real_key])/floatval($d[$pt_key]));
+            break;
+            case '规模 Skala':
+            case '规模 Scale':
+                $r=$d[$real_key];
+            break;
+        }
+
+        return $this->getKPIAByIndex($r,$unit);
+
+    }
+
+    protected function fetchAccumulatedKPIResult($groupdata=null){
+        $kpiresults=$this->fetchKPIResult($groupdata);
         $result=[];
         $totalAchivement=[];
         $indexAchivement=[];
@@ -292,12 +381,13 @@ class KPIHeader extends Model implements Endorseable
                 $real_key='real_t'.($i+1);
                 $pwq_key='pw_'.($i+1);
 
-                if(!array_key_exists($kpia_key,$d))
-                    $rt=$this->getKPIA($d,$i);
+                if(!array_key_exists($kpia_key,$d)){
+                    $rt=is_null($groupdata)?$this->getKPIA($d,$i):$this->getKPIAForGrouping($d,$i);
+                }
                 else
                     $rt=$d[$kpia_key];
 
-                $rt=round($rt,1);
+                $rt=round($rt,2);
                 $bColor='bColor_kpia_'.($i+1);
 
                 if($rt>=120){
@@ -316,13 +406,13 @@ class KPIHeader extends Model implements Endorseable
                 $d[$kpia_key]=$rt;
                 $pwq=$d[$pwq_key];
                 $calculate=$rt*$pwq/100;
-                $d[$aw_key]=round($calculate,1);
+                $d[$aw_key]=round($calculate,2);
             }
             $result[]=$d;
 
         }
 
-        $accumulated=$this->accumulateTotalAchievement($result);
+        $accumulated=$this->accumulateTotalAchievement($result,!is_null($groupdata));
         $result=$this->filterData($result,'kpiresult');
         return [
             'data'=>$result,
@@ -331,9 +421,9 @@ class KPIHeader extends Model implements Endorseable
         ];
     }
 
-    protected function fetchAccumulatedKPIProcess(){
+    protected function fetchAccumulatedKPIProcess($groupdata=null){
 
-        $kpiprocesses=$this->fetchKPIProcess();
+        $kpiprocesses=$this->fetchKPIProcess($groupdata);
         $result=[];
 
         foreach($kpiprocesses as $curr){
@@ -348,18 +438,18 @@ class KPIHeader extends Model implements Endorseable
             else
                 $kt_2=-1;
 
-            $curr['kpia_1']=$this->getKPIProcessIndex($kt_1);
-            $curr['kpia_2']=$this->getKPIProcessIndex($kt_2);
+            $curr['kpia_1']=is_null($groupdata)?$this->getKPIProcessIndex($kt_1):$this->getKPIAByIndex($curr['real_1'],$curr['unit']);
+            $curr['kpia_2']=is_null($groupdata)?$this->getKPIProcessIndex($kt_2):$this->getKPIAByIndex($curr['real_2'],$curr['unit']);
             $curr['bColor_kpia_1']=$this->getKPIProcessColor($kt_1);
             $curr['bColor_kpia_2']=$this->getKPIProcessColor($kt_2);
 
-            $curr['aw_1']=round(($curr['kpia_1']/100)*intval($curr['pw_1']),1);
-            $curr['aw_2']=round(($curr['kpia_2']/100)*intval($curr['pw_2']),1);
+            $curr['aw_1']=round(($curr['kpia_1']/100)*intval($curr['pw_1']),2);
+            $curr['aw_2']=round(($curr['kpia_2']/100)*intval($curr['pw_2']),2);
 
             $result[]=$curr;
         }
 
-        $accumulated=$this->accumulateTotalAchievement($result);
+        $accumulated=$this->accumulateTotalAchievement($result,!is_null($groupdata));
         $result=$this->filterData($result,'kpiprocess');
 
         return [
@@ -558,14 +648,14 @@ class KPIHeader extends Model implements Endorseable
 
         $final_achievements=[];
 
-        $final_achievements['t1_n']=round($t1_fr * $this->weight_result + $t1_fp * $this->weight_process,1);
-        $final_achievements['t2_n']=round($t2_fr * $this->weight_result + $t2_fp * $this->weight_process,1);
+        $final_achievements['t1_n']=round($t1_fr * $this->weight_result + $t1_fp * $this->weight_process,2);
+        $final_achievements['t2_n']=round($t2_fr * $this->weight_result + $t2_fp * $this->weight_process,2);
 
         $final_achievements['t1_i']=$this->getIndexAchievement($final_achievements['t1_n']);
         $final_achievements['t2_i']=$this->getIndexAchievement($final_achievements['t2_n']);
 
-        $final_achievements['t1_f']=round($final_achievements['t1_n']-100,1);
-        $final_achievements['t2_f']=round($final_achievements['t2_n']-100,1);
+        $final_achievements['t1_f']=round($final_achievements['t1_n']-100,2);
+        $final_achievements['t2_f']=round($final_achievements['t2_n']-100,2);
 
         return $final_achievements;
     }
@@ -700,12 +790,12 @@ class KPIHeader extends Model implements Endorseable
 
     }
 
-    public function fetchAccumulatedData($type){
+    public function fetchAccumulatedData($type,$groupdata=null){
         if($type==='kpiresult'){
-            return $this->fetchAccumulatedKPIResult();
+            return $this->fetchAccumulatedKPIResult($groupdata);
         }
         else if($type==='kpiprocess'){
-            return $this->fetchAccumulatedKPIProcess();
+            return $this->fetchAccumulatedKPIProcess($groupdata);
         }
         return null;
     }
