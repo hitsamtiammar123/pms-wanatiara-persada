@@ -72,19 +72,19 @@
                                 <td class="index-content">{{$loop->index+1}}</td>
                                 <td class="kpi-content">{{$kpiresult['name']}}</td>
                                 <td class="index-content">{{$kpiresult['unit']}}</td>
-                                <td class="num-content">{{$kpiresult['pw_1']}}</td>
+                                <td class="num-content">{{@$kpiresult['pw_1']}}</td>
                                 <td class="num-content">{{$kpiresult['pw_2']}}</td>
-                                <td class="num-content">{{$kpiresult['pt_t1']}}</td>
-                                <td class="num-content">{{$kpiresult['pt_k1']}}</td>
+                                <td class="num-content">{{@$kpiresult['pt_t1']}}</td>
+                                <td class="num-content">{{@$kpiresult['pt_k1']}}</td>
                                 <td class="num-content">{{$kpiresult['pt_t2']}}</td>
                                 <td class="num-content">{{$kpiresult['pt_k2']}}</td>
-                                <td class="num-content">{{$kpiresult['real_t1']}}</td>
-                                <td class="num-content">{{$kpiresult['real_k1']}}</td>
+                                <td class="num-content">{{@$kpiresult['real_t1']}}</td>
+                                <td class="num-content">{{@$kpiresult['real_k1']}}</td>
                                 <td class="num-content">{{$kpiresult['real_t2']}}</td>
                                 <td class="num-content">{{$kpiresult['real_k2']}}</td>
-                                <td class="num-content {{$kpiresult['bColor_kpia_1']}}">{{$kpiresult['kpia_1']}}</td>
+                                <td class="num-content {{$kpiresult['bColor_kpia_1']}}">{{@$kpiresult['kpia_1']}}</td>
                                 <td class="num-content {{$kpiresult['bColor_kpia_2']}}">{{$kpiresult['kpia_2']}}</td>
-                                <td class="num-content">{{$kpiresult['aw_1']}}</td>
+                                <td class="num-content">{{@$kpiresult['aw_1']}}</td>
                                 <td class="num-content">{{$kpiresult['aw_2']}}</td>
                             </tr>
                     @endforeach
