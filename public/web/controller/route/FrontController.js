@@ -102,11 +102,6 @@ app.controller('FrontController',function($scope,$rootScope,dataService,months,
 
     }
 
-    $scope.toPrint=function(){
-        var url=loader.route('print-pms',[user.employee.id]);
-        window.open(url);
-    }
-
     $scope.logout=function(){
         if(logoutForm.length!==0){
             pusher.dismiss();
