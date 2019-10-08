@@ -58,29 +58,29 @@ class KPIHeader extends Model implements Endorseable
             $kpiresult=KPIResult::find($kpiresultheader->kpi_result_id);
             //$kpiresultheaderend=$kpiresultheader->getNext();
             $kpiresultheaderprev=$kpiresultheader->getPrev();
+            if(is_null($groupdata) && $kpiresultheaderprev ){
+                $r['pw_1']=intval($kpiresultheaderprev->pw).'';
+                $r['pt_t1']=$kpiresultheaderprev->pt_t;
+                $r['pt_k1']=$kpiresultheaderprev->pt_k;
+                $r['real_t1']=$kpiresultheaderprev->real_t;
+                $r['real_k1']=$kpiresultheaderprev->real_k;
+                $r=$kpiresultheader->fetchFrontEndPriviledge($r,$kpiresultheaderprev);
+            }
 
-            if($kpiresultheaderprev){
                 $r['kpi_header_id']=$this->id;
                 $r['kpi_result_id']=$kpiresultheader->kpi_result_id;
                 $r['name']=$kpiresult->name;
                 $r['unit']=$kpiresult->unit;
-
                 $r['id']=$kpiresultheader->id;
-                $r['pw_1']=intval($kpiresultheaderprev->pw).'';
                 $r['pw_2']=intval($kpiresultheader->pw).'';
-                $r['pt_t1']=$kpiresultheaderprev->pt_t;
-                $r['pt_k1']=$kpiresultheaderprev->pt_k;
                 $r['pt_t2']=$kpiresultheader->pt_t;
                 $r['pt_k2']=$kpiresultheader->pt_k;
-                $r['real_t1']=$kpiresultheaderprev->real_t;
-                $r['real_k1']=$kpiresultheaderprev->real_k;
                 $r['real_t2']=$kpiresultheader->real_t;
                 $r['real_k2']=$kpiresultheader->real_k;
 
-                $r=$kpiresultheader->fetchFrontEndPriviledge($r,$kpiresultheaderprev);
 
                 $result[]=$r;
-            }
+
 
         }
 
@@ -101,19 +101,19 @@ class KPIHeader extends Model implements Endorseable
             $curr_e=$curr_s->getNext();
             $curr_p=$curr_s->getPrev();
 
-            if($curr_p){
-                $r['id']=$curr_s->id;
-                $r['name']=$curr_s->name;
-                $r['unit']=$curr_s->unit;
-                $r['kpi_header_id']=$this->id;
+            if(is_null($groupdata) && $curr_p){
                 $r['pw_1']=intval($curr_p->pivot->pw).'';
-                $r['pw_2']=intval($curr_s->pivot->pw).'';
                 $r['pt_1']=$curr_p->pivot->pt;
-                $r['pt_2']=$curr_s->pivot->pt;
                 $r['real_1']=$curr_p->pivot->real;
-                $r['real_2']=$curr_s->pivot->real;
-                $result[]=$r;
             }
+            $r['id']=$curr_s->id;
+            $r['name']=$curr_s->name;
+            $r['unit']=$curr_s->unit;
+            $r['kpi_header_id']=$this->id;
+            $r['pw_2']=intval($curr_s->pivot->pw).'';
+            $r['pt_2']=$curr_s->pivot->pt;
+            $r['real_2']=$curr_s->pivot->real;
+            $result[]=$r;
 
         }
         return $result;
@@ -130,20 +130,23 @@ class KPIHeader extends Model implements Endorseable
         $aw_key='aw_';
         $kpia_key='kpia_';
         for($i=0;$i<count($data);$i++){
+
+
             $d=$data[$i];
+            $n=0;
             if(!$isgroup){
                 $curr_index=$aw_key.($j+1);
-                $aw=$d[$curr_index];
+                $aw=array_key_exists($curr_index,$d)?$d[$curr_index]:0;;
                 $n=floatval($aw);
             }
             else{
                 $curr_index=$kpia_key.($j+1);
-                $kpia=$d[$curr_index];
+                $kpia=array_key_exists($curr_index,$d)?$d[$curr_index]:0;
                 $n=floatval($kpia);
             }
             $s+=$n;
         }
-        return !$isgroup?$s:$s/count($data);
+        return !$isgroup?$s:(count($data)!==0?$s/count($data):0);
     }
 
     protected function getIndexAchievement($s){
@@ -228,11 +231,13 @@ class KPIHeader extends Model implements Endorseable
     protected function filterData($result,$type){
         for($i=0;$i<count($result);$i++){
             $curr=&$result[$i];
-            $curr['pw_1']=$curr['pw_1'].'%';
+
+            $curr['pw_1']=@$curr['pw_1'].'%';
+            $curr['kpia_1']=@$curr['kpia_1'].'%';
+            $curr['aw_1']=@$curr['aw_1'].'%';
+
             $curr['pw_2']=$curr['pw_2'].'%';
-            $curr['kpia_1']=$curr['kpia_1'].'%';
             $curr['kpia_2']=$curr['kpia_2'].'%';
-            $curr['aw_1']=$curr['aw_1'].'%';
             $curr['aw_2']=$curr['aw_2'].'%';
 
 
@@ -352,6 +357,9 @@ class KPIHeader extends Model implements Endorseable
         $r=0;
         $pt_key='pt_t'.($j+1);
         $real_key='real_t'.($j+1);
+        if(!array_key_exists($real_key,$d) && !array_key_exists($pt_key,$d))
+            return 0;
+
         switch($unit){
             case 'MT':
             case 'WMT':
@@ -375,6 +383,9 @@ class KPIHeader extends Model implements Endorseable
 
         foreach($kpiresults as $d){
             for($i=0;$i<2;$i++){
+                if(!is_null($groupdata) && $i===0)
+                    continue;
+
                 $kpia_key='kpia_'.($i+1);
                 $aw_key='aw_'.($i+1);
                 $pt_key='pt_t'.($i+1);
@@ -428,8 +439,8 @@ class KPIHeader extends Model implements Endorseable
 
         foreach($kpiprocesses as $curr){
 
-            if(!is_null($curr['real_1'])&&!is_null($curr['pt_1']))
-                $kt_1=intval($curr['real_1'])-intval($curr['pt_1']);
+            if( !is_null(@$curr['real_1'])&&!is_null(@$curr['pt_1']))
+                $kt_1=intval(@$curr['real_1'])-intval(@$curr['pt_1']);
             else
                 $kt_1=-1;
 
@@ -438,12 +449,12 @@ class KPIHeader extends Model implements Endorseable
             else
                 $kt_2=-1;
 
-            $curr['kpia_1']=is_null($groupdata)?$this->getKPIProcessIndex($kt_1):$this->getKPIAByIndex($curr['real_1'],$curr['unit']);
+            $curr['kpia_1']=is_null($groupdata)?$this->getKPIProcessIndex($kt_1):$this->getKPIAByIndex(@$curr['real_1'],$curr['unit']);
             $curr['kpia_2']=is_null($groupdata)?$this->getKPIProcessIndex($kt_2):$this->getKPIAByIndex($curr['real_2'],$curr['unit']);
-            $curr['bColor_kpia_1']=$this->getKPIProcessColor($kt_1);
+            $curr['bColor_kpia_1']=@$this->getKPIProcessColor($kt_1);
             $curr['bColor_kpia_2']=$this->getKPIProcessColor($kt_2);
 
-            $curr['aw_1']=round(($curr['kpia_1']/100)*intval($curr['pw_1']),2);
+            $curr['aw_1']=round((@$curr['kpia_1']/100)*intval(@$curr['pw_1']),2);
             $curr['aw_2']=round(($curr['kpia_2']/100)*intval($curr['pw_2']),2);
 
             $result[]=$curr;
