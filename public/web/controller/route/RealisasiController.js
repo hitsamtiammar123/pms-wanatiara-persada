@@ -1310,7 +1310,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         alertModal.display('Peringatan','Data telah disalin',true,false);
     }
 
-    var onEndorseUpdated=function(result){
+    var onEndorseUpdated=function(){
         alertModal.hide();
         setTimeout(function(){
             $route.reload();

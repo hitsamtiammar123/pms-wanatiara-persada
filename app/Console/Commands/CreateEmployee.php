@@ -34,10 +34,11 @@ class CreateEmployee extends Command
      */
     protected function makeUser(array $data){
 
-        $faker=new Faker();
+        $faker=Faker::create();
 
         $employee=new Employee();
-        $employee->id=Employee::generateID();
+        $employee_id=Employee::generateID();
+        $employee->id=$employee_id;
         $employee->gender=array_key_exists('gender',$data) && $data['gender']==='female'?'female':'male';
         $employee->name=array_key_exists('name',$data)?$data['name']:$faker->name;
         $employee->role_id=array_key_exists('roleID',$data)?$data['roleID']:Role::getRandomID();
@@ -45,10 +46,11 @@ class CreateEmployee extends Command
 
         $employee->save();
         $uID=User::generateID();
+        $employee->id=$employee_id;
 
         array_key_exists('isUser',$data) && $data['isUser']?$employee->user()->create([
             'id'=>$uID,
-            'email'=>array_key_exists('email',$data)?$data['email']:$faker->safeEmail,
+            'email'=>array_key_exists('email',$data)?$data['email']:$faker->email,
             'password'=>bcrypt("pms_$uID")
         ]):null;
 

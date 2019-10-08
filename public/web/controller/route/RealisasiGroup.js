@@ -170,6 +170,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
                     rt=120;
             break;
             case 'MT':
+            case 'WMT':
                 if(i<=0.8)
                     rt=80;
                 else if(i>0.8 && i<=0.9)
@@ -211,6 +212,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
         switch(kpiresult.unit){
             case 'MT':
+            case 'WMT':
                 rt=(parseFloat(rC)/parseFloat(tC));
             break;
             case '规模 Skala':
@@ -246,6 +248,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
                 d.real_filter='scale';
             break;
             case 'MT':
+            case 'WMT':
                 d.pt_filter='number';
                 d.real_filter='number';
             break;
@@ -555,7 +558,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     vw.setEndorse=function(endorse){
         var message=!endorse.verified?'Apa anda yakin ini mengesahkan PMS ini':'Apa anda yakin ingin membalikan keadaan pada PMS ini?';
         confirmModal('Peringatan',message).then(function(){
-
+            endorse.verified=!endorse.verified;
             loader.setEndorsementGroup(tagID).then(reloadPage);
             alertModal.display('Peringatan','Mengirim data, mohon tunggu',false,true);
 

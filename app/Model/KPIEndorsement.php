@@ -19,14 +19,6 @@ class KPIEndorsement extends Model
     protected $casts=['id'=>'string'];
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at'];
 
-    public function employee(){
-        return $this->belongsTo(Employee::class);
-    }
-
-    public function kpiheader(){
-        return $this->belongsTo(KPIHeader::class,'kpi_header_id','id');
-    }
-
     public static function generateID($employeeID){
         $employee=Employee::find($employeeID);
 
@@ -56,4 +48,13 @@ class KPIEndorsement extends Model
         }
         return $r;
     }
+
+    public function employee(){
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function kpiheader(){
+        return $this->belongsTo(KPIHeader::class,'kpi_header_id','id');
+    }
+
 }

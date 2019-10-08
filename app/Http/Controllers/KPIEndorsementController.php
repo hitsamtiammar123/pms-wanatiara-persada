@@ -98,7 +98,7 @@ class KPIEndorsementController extends Controller
                 foreach($employee->representativeTags as $tag)
                     foreach($tag->groupemployee as $rep_employee)
                         $this->doResetEndorsement($rep_employee);
-                    
+
             $this->approvedEndorseChange($notificationID);
             $this->sendApprovalRequest($employee,$employee->getCurrentHeader());
 
@@ -124,15 +124,15 @@ class KPIEndorsementController extends Controller
 
             foreach($kpitag->groupemployee as $employee){
                 $endorse_as=null;
-                if($employee->getEndorsementLevel($auth_user_employee)===1 &&$employee->isUser())
+                if($auth_user_employee->getEndorsementLevel($auth_user_employee)===1 &&$employee->isUser())
                     $endorse_as=$employee;
                 else
                     $endorse_as=$auth_user->employee;
 
                 $header=$employee->getHeader($month,$year);
                 $this->makeEndorsement($header,$endorse_as);
-                
-                 
+
+
             }
             $this->fireEndorsementEvent($kpitag,$kpitag->representative);
             return [
