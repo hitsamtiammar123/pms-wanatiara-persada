@@ -162,7 +162,13 @@ class NotificationController extends Controller
 
         $skip=($page-1)*5;
 
-        $logs=PMSLog::get()->sortByDesc('created_at')->splice($skip)->take(5)->load('user.employee');
+        $logs=PMSLog::get()->sortByDesc('created_at')->splice($skip)
+        ->take(5)->load('user.employee');
+        $logs->each(function($data){
+            $cCarbon=Carbon::parse($data->created_at);
+            $data->created_at=$cCarbon->format('d F Y h:i:s');
+            $data->user->makeHidden(['email','email_verified_at']);
+        });
 
         return [
             'page'=>$page,
