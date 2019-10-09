@@ -21,10 +21,10 @@
 
         <h6 class="bold title margin-1">Staff/Bawahan 下属</h6>
         <div class="bottom-border"></div>
-        <div class="user-list-box">   
+
+        <div class="user-list-box">
             <span ng-repeat="employee in employeeList">{{ $index!==0?'&rarr;':'' }} <a ng-click="expandEmployee(employee,$index)">{{ employee.name }}</a> </span>
         </div>
-        
 
         <table class="table table-borderless table-beranda">
             <thead>
@@ -40,6 +40,26 @@
                 </tr>
             </tbody>
         </table>
+
+        <h6 class="bold title margin-1">Log</h6>
+        <div class="bottom-border"></div>
+
+        <div class="log-content">
+            <table class="table table-beranda">
+                <thead>
+                    <th>Pengguna</th>
+                    <th>Pesan</th>
+                    <th>Tanggal</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="i in []|range:10">
+                        <td>Zhang Hehe</td>
+                        <td>Zhang Hehe telah melakukan Login</td>
+                        <td>15 Januari 2019 10:20:30</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>  
+</div>
 

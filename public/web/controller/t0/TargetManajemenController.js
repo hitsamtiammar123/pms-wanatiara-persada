@@ -33,7 +33,7 @@ app.controller('TargetManajemenController',function(
             }
             return true;
         }
-        
+
         var sliceEmployeeList=function(employee){
             var index=$scope.employeeList.indexOf(employee);
             $scope.employeeList=$scope.employeeList.slice(0,index+1);

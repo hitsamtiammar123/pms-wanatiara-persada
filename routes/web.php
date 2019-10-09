@@ -1,9 +1,13 @@
 <?php
 
 use App\Model\KPIResult;
+use App\Model\User;
+use Illuminate\Http\Request;
 
-Route::get('/test',function(){
-    return KPIResult::deleteUnrelatesData();
+Route::get('/test',function(Request $request){
+    $user=User::find('1950300028');
+    $user->makeLog($request,'create','Test Log heeh');
+    return 'Berhasil';
 });
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');

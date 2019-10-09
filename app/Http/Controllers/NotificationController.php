@@ -9,6 +9,7 @@ use App\Notifications\RequestChange;
 use App\Notifications\SendMessage;
 use Carbon\Carbon;
 use App\Http\Controllers\Traits\ErrorMessages;
+use App\Model\PMSLog;
 
 class NotificationController extends Controller
 {
@@ -153,5 +154,20 @@ class NotificationController extends Controller
             $this->sendUserNotFound($employeeID);
 
 
+    }
+
+    public function getLogs(Request $request){
+        $page=$request->input('page');
+        $page=$page?intval($page):1;
+
+        $skip=($page-1)*5;
+
+        $logs=PMSLog::get()->sortByDesc('created_at')->splice($skip)->take(5)->load('user.employee');
+
+        return [
+            'page'=>$page,
+            'count'=>count($logs),
+            'data'=>$logs
+        ];
     }
 }

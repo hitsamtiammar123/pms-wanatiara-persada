@@ -71,6 +71,8 @@ Route::group(['prefix'=>'v1','middleware'=>['cors','web']
     Route::put('/kpitag/{tagID}','KPIHeaderController@updateGroup')->name('kpitag.update');
     Route::put('/kpitag/{tagID}/endorse','KPIEndorsementController@updateGroup')->name('kpiendorsement.update.tag');
 
+    Route::get('/log','NotificationController@getLogs')->name('log.show');
+
 });
 
 

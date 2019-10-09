@@ -34,8 +34,8 @@ if(!function_exists('log_path')){
 
 if(!function_exists('put_log')){
 
-    function put_log($log){
-        $filename=log_path('temp.log');
+    function put_log($log,$filename='temp.log'){
+        $filename=log_path($filename);
         $file=fopen($filename,'a+');
 
         $message= date('Y-M-d h:i:s').' >>> '.$log."\n";
@@ -50,7 +50,7 @@ if(!function_exists('put_error_log')){
         $c=get_class($err);
         $m=$err->getMessage();
         put_log(
-            "Error => {$c} message=>{$m}"
+            "Error => {$c} message=>{$m}",'error.log'
         );
     }
 }

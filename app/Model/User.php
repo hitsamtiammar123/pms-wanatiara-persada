@@ -6,8 +6,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 use App\Model\Traits\Indexable;
 use App\Model\Traits\DynamicID;
+use Exception;
 
 class User extends Authenticatable
 {
@@ -26,7 +28,7 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token','created_at','updated_at','deleted_at'
     ];
 
 
@@ -56,6 +58,20 @@ class User extends Authenticatable
 
         $n=$notifications->sortByDesc('created_at')->first();
         return $n;
+    }
+
+    public function makeLog(Request $request,$type,$message){
+        try{
+            PMSLog::create([
+                'user_id' => $this->id,
+                'type'=>$type,
+                'message'=>$message,
+                'ip'=>$request->ip()
+            ]);
+
+        }catch(Exception $err){
+            put_error_log($err);
+        }
     }
 
 }
