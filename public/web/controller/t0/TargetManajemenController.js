@@ -1,8 +1,13 @@
 app.controller('TargetManajemenController',function(
-    $scope,$rootScope,loader,notifier,alertModal,user,dataService,$location){
+    $scope,$rootScope,loader,alertModal,user,dataService,$location){
         $scope.user=user.employee;
         $scope.staffs;
         $scope.employeeList=$rootScope.employeeList?$rootScope.employeeList:[];
+        $scope.isLoadingLog=false;
+        $scope.isLogHide=false;
+        $scope.logs=[];
+
+        var logPage=1;
 
         var setInitialEmployee=function(){
             $scope.employeeList=[];
@@ -63,12 +68,34 @@ app.controller('TargetManajemenController',function(
 
         }
 
+        var onLogLoadSuccess=function(result){
+
+            var logData=result.data.data;
+            if(result.data.count!==0){
+                $scope.logs=$scope.logs.concat(logData);
+                logPage++;
+                dataService.digest($scope);
+            }
+            else
+                $scope.isLogHide=true;
+
+        }
+
         var loadEmployee=function(employee){
             loader.getEmployee(employee.id).then(loadEmployeeSuccess,loadEmployeeFail(employee));
             dataService.digest($scope,function(){
                 $scope.staffs=[];
             });
             $rootScope.loading=true;
+        }
+
+        var initLog=function(){
+            loader.fetchLog(logPage).then(onLogLoadSuccess,function(){
+                console.log('Terjadi kesalahan saat memuat log');
+            }).finally(function(){
+                $scope.isLoadingLog=false;
+            });
+            $scope.isLoadingLog=true;
         }
 
         $scope.expandEmployee=function(employee,$index){
@@ -109,5 +136,19 @@ app.controller('TargetManajemenController',function(
             //console.log(id);
         }
 
+        $scope.initLog=function(){
+            initLog();
+        }
+
+        $scope.refreshLog=function(){
+            if($scope.isLoadingLog)
+                return;
+            $scope.isLogHide=false;
+            logPage=1;
+            $scope.logs=[];
+            $scope.initLog();
+        }
+
+        initLog();
         setEmployeeList();
 });

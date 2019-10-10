@@ -174,6 +174,11 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url,{responseType:'blob'});
     }
 
+    this.fetchLog=function(page){
+        var url=this.route('log',[],{page:page});
+        return $http.get(url);
+    }
+
     this.uploadKPICompany=function(data){
         var form=new FormData();
         form.append('file',data.file);

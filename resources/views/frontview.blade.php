@@ -158,7 +158,7 @@
             var next_ul=$(this).next('ul');
             toogleTag(next_ul);
             next_ul.toggle();
-            var right=next_ul.attr('m-right');
+            var right='-12.3vw';
             var left=(-parseFloat(right))+'vw';
             var top=next_ul.attr('m-top');
             next_ul.css({

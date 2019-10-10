@@ -17,7 +17,8 @@ app.constant('route',{
         'pdf-pms':'pdf/pms/',
         'pdf-pms-group':'pdf/pms-group/',
         'print-pms':'print/pms/',
-        'kpitag':'api/v1/kpitag/'
+        'kpitag':'api/v1/kpitag/',
+        'log':'api/v1/log'
     },
     angular_route:{
         'notification-detail':'/pengesahan/detail/',

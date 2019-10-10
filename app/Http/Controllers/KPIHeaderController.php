@@ -61,7 +61,7 @@ class KPIHeaderController extends Controller
         $kpitag->period_end=$curr_header->cPeriod()->format('Y-m-d');
         $kpitag->period_start=$curr_header->cPrevPeriod()->format('Y-m-d');
         $kpitag->endorsements=$kpitag->fetchKPIEndorsement(KPIHeader::getDate($month,$year));
-        $kpitag->representative->atasan;
+        $kpitag->representative->atasan->role;
         unset($kpitag->groupemployee);
 
         return $kpitag;
