@@ -38,10 +38,10 @@
                             <th rowspan="3" class="kpi heading-color-grey">Nama</th>
                             <th rowspan="3" class="kpi heading-color-grey">Penugasan</th>
                             <th class="heading-color-green" notify-g-label="rg.add-content"  contenteditable="{{!rg.hasEndorse?true:false}}" after-edit="rg.setWeight" auto-fill="true" belong-to="rg.weighting.weight_result" flag="kpiresult"  format="addPercent"></th>
-                            <th colspan="4" class="heading-color-green">Sasaran Hasil</th>
+                            <th colspan="{{rg.kpiresultgroup.length*3-2}}" class="heading-color-green">Sasaran Hasil</th>
                             <th class="heading-color-green"></th>
                             <th class="heading-color-yellow" notify-g-label="rg.add-content" contenteditable="{{!rg.hasEndorse?true:false}}" after-edit="rg.setWeight" auto-fill="true" belong-to="rg.weighting.weight_process" flag="kpiprocess" format="addPercent"></th>
-                            <th class="heading-color-yellow" colspan="7">Sasaran Proses</th>
+                            <th class="heading-color-yellow" colspan="{{rg.kpiprocessgroup.length*3-2}}">Sasaran Proses</th>
                             <th class="heading-color-yellow"></th>
                             <th class="heading-color-grey" colspan="2">Total</th>
                     </tr>

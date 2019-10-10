@@ -32,6 +32,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var currMonth=$routeParams.month?parseInt($routeParams.month):$rootScope.month;
     var currYear=$routeParams.year?parseInt($routeParams.year):$rootScope.year;
     var currentMonthObj=months[currMonth];
+    var tableElem=E('.realisasi-table-group-content');
 
     vw.kpiresultgroup=[];
     vw.kpiprocessgroup=[];
@@ -365,8 +366,13 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             var id=d.id;
             mapToData(KPI_PROCESS,id);
         }
-
         //console.log(vw.contentMapping);
+    }
+
+    var setRealisasiTable=function(){
+        var width=40+150+150+160;
+        var extra_kpi=(vw.kpiprocessgroup.length+vw.kpiresultgroup.length)*80*3;
+        tableElem.css('width',(width+extra_kpi)+'px');
     }
 
     var setUserHeading=function(){
@@ -389,6 +395,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         setKPIA(KPI_PROCESS);
         setEmployeeData();
         setWeighting();
+        setRealisasiTable();
 
 
         notifier.notifyGroup('rg.add-content');
