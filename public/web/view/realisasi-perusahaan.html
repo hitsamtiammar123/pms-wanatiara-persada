@@ -1,18 +1,20 @@
 <div class="padding-elem"></div>
 <div id="realisasi-perusahaan">
+    <div class="table-realisasi-perusahaan-div">
+        <table class="table realisasi-table realisasi-perusahaan-table">
+            <thead>
+                <tr>
+                    <th ng-repeat="head in headers" ng-class="getClass(keys[$index],$index,'heading')">{{head}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-class="getRowClass(data)" ng-repeat="data in kpicompanydata track by $index">
+                    <td ng-repeat="i in keys" format="{{data[i+'_filter']}}" belong-to="data[i]" contenteditable="false" auto-fill="true" ng-class="getClass(i,data[i],'content')"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <table class="table realisasi-table realisasi-perusahaan-table">
-        <thead>
-            <tr>
-                <th ng-repeat="head in headers" ng-class="getClass(keys[$index],$index,'heading')">{{head}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-class="getRowClass(data)" ng-repeat="data in kpicompanydata track by $index">
-                <td ng-repeat="i in keys" format="{{data[i+'_filter']}}" belong-to="data[i]" contenteditable="false" auto-fill="true" ng-class="getClass(i,data[i],'content')"></td>
-            </tr>
-        </tbody>
-    </table>
 
     <div class="form-inline" ng-show="show_upload">
         <label for="kpi-company-file">Anda dapat meng-unggah berkas excel KPI Perusahaan</label>

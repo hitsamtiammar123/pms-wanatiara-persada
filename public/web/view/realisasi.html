@@ -58,7 +58,8 @@
 
 
         </p>
-        <table class="table table-striped realisasi-table">
+        <div class="table-realisasi-div">
+            <table class="table table-striped realisasi-table">
                 <thead>
                         <tr>
                             <th class="f-column-num f-column light-grey" rowspan="2">序号 No.</th>
@@ -134,6 +135,8 @@
                             </tr>
                     </tbody>
         </table>
+        </div>
+
         <div flex="30">
                 <button class="btn btn-danger" ng-hide="hasEndorse || !dlt_result.toogle_delete" ng-click="toogleDelete(dlt_result)" ng-disabled="hasChanged">{{dlt_result.dlt_message}}</button>
         </div>
@@ -169,7 +172,8 @@
                         </div>
 
         </p>
-        <table class="table table-striped realisasi-table">
+        <div class="table-realisasi-div">
+            <table class="table table-striped realisasi-table">
                 <thead>
                         <tr>
                             <th class="f-column f-column-num light-grey" rowspan="2">序号 No.</th>
@@ -222,6 +226,8 @@
 
                     </tbody>
         </table>
+        </div>
+
 
         <div class="col-sm-4">
                 <table class="table table-bordered">
@@ -247,7 +253,7 @@
                             </tr>
 
                         </thead>
-                    </table>
+                </table>
         </div>
 
 
