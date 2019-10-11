@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use App\Model\Traits\Indexable;
 use App\Model\Traits\DynamicID;
 use Exception;
+use App\Events\NewLog;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
 
 class User extends Authenticatable
 {
@@ -39,10 +42,24 @@ class User extends Authenticatable
 
     protected $dates=['deleted_at'];
 
+    protected function broadCastLog(){
+        $log=$this->logs->sortByDesc('created_at')->load('user.employee')->first();
+        $cCarbon=Carbon::parse($log->created_at);
+        $log->created_at=$cCarbon->format('d F Y H:i:s');
+        event(new newLog($log->toArray()));
+
+    }
 
     public static function generateID(){
         $a=0;
         return self::_generateID($a);
+    }
+
+    public static function getTierZeroUsers(){
+        $data=static::whereHas('employee.role',function(Builder $query){
+            $query->where('roles.tier','0');
+        })->get();
+        return $data;
     }
 
     public function employee(){
@@ -60,6 +77,10 @@ class User extends Authenticatable
         return $n;
     }
 
+    public function logs(){
+        return $this->hasMany(PMSLog::class,'user_id','id');
+    }
+
     public function makeLog(Request $request,$type,$message){
         try{
             PMSLog::create([
@@ -68,6 +89,7 @@ class User extends Authenticatable
                 'message'=>$message,
                 'ip'=>$request->ip()
             ]);
+            $this->broadCastLog();
 
         }catch(Exception $err){
             put_error_log($err);

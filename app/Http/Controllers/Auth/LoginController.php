@@ -36,14 +36,32 @@ class LoginController extends Controller
      * @return void
      */
     protected function authenticated(Request $request,$user){
-        $user->employee;
-        //$request->session()->put('auth_user',$user);
+        $user->makeLog($request,'login',"{$user->employee->name} Sudah melakukan login");
+
+    }
+
+        /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+
+        $user=auth_user();
+        is_null($user)?:$user->makeLog($request,'logout',"{$user->employee->name} Sudah melakukan logout");
+
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return $this->loggedOut($request) ?: redirect('/');
     }
 
     protected function loggedOut(Request $request)
     {
-        //
-       //$request->session()->forget('auth_user');
+
     }
 
     protected function redirectTo(){

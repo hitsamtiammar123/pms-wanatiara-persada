@@ -166,7 +166,7 @@ class NotificationController extends Controller
         ->take(5)->load('user.employee');
         $logs->each(function($data){
             $cCarbon=Carbon::parse($data->created_at);
-            $data->created_at=$cCarbon->format('d F Y h:i:s');
+            $data->created_at=$cCarbon->format('d F Y H:i:s');
             $data->user->makeHidden(['email','email_verified_at']);
         });
 

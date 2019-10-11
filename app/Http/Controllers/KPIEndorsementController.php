@@ -19,14 +19,15 @@ class KPIEndorsementController extends Controller
     use ErrorMessages,BroadcastPMSChange;
 
 
-    protected function fireEndorsementEvent($header,$h_employee){
+    protected function fireEndorsementEvent($request,$header,$h_employee){
         $auth_user=auth_user();
 
         $employee=$auth_user->employee;
         $userToSend=$employee->atasan->user;
         $userToSend->notify(new EndorsementNotification($header,$employee));
 
-        $this->broadcastChange($h_employee);
+        $this->broadcastChange($request,$h_employee);
+        $this->broadcastLogEndorsementPMS($request,$h_employee,$header);
 
     }
 
@@ -134,7 +135,7 @@ class KPIEndorsementController extends Controller
 
 
             }
-            $this->fireEndorsementEvent($kpitag,$kpitag->representative);
+            $this->fireEndorsementEvent($request,$kpitag,$kpitag->representative);
             return [
                 'status'=>1,
                 'message'=>'PMS Group Sudah disahkan',
@@ -145,7 +146,7 @@ class KPIEndorsementController extends Controller
         return send_404_error('Data Tag tidak ditemukan');
     }
 
-    public function update($id)
+    public function update(Request $request,$id)
     {
 
         $header=KPIHeader::find($id);
@@ -153,7 +154,7 @@ class KPIEndorsementController extends Controller
             $auth_user=auth_user();
             $employee=$auth_user->employee;
             $this->makeEndorsement($header,$employee);
-            $this->fireEndorsementEvent($header,$header->employee);
+            $this->fireEndorsementEvent($request,$header,$header->employee);
             return [
                 'status'=>1,
                 'message'=>'Sudah disahkan',

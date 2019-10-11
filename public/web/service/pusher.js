@@ -29,4 +29,4 @@ function(pusher_settings,user,TOKEN,$route){
     }
 
 
-}]); 
+}]);

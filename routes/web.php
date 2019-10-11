@@ -5,9 +5,8 @@ use App\Model\User;
 use Illuminate\Http\Request;
 
 Route::get('/test',function(Request $request){
-    $user=User::find('1950300028');
-    $user->makeLog($request,'create','Test Log heeh');
-    return 'Berhasil';
+    $d=User::getTierZeroUsers();
+    return $d;
 });
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');

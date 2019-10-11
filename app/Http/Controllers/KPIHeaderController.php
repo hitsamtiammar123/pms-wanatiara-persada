@@ -105,6 +105,7 @@ class KPIHeaderController extends Controller
                 $kpitag->updateWeightingFromArr($headerChanged['weighting']);
         }
 
+        $this->broadcastGroupChange($request,$kpitag);
         return [
             'message'=>'Berhasil'
         ];
@@ -172,7 +173,8 @@ class KPIHeaderController extends Controller
         $header->updateKPIProcessFromArray($kpiprocesses,$kpiprocessdeletelist);
         $header->updateWeighting($weighting);
 
-        $this->broadcastChange($header->employee);
+        $this->broadcastChange($request,$header->employee);
+        $this->broadcastLogPMS($request,$header->employee);
         put_log(
             'updated =>'.json_encode($updatedlists).'created =>'.json_encode($createdlists)
         );

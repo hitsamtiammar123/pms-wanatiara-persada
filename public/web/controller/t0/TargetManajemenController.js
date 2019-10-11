@@ -1,5 +1,5 @@
 app.controller('TargetManajemenController',function(
-    $scope,$rootScope,loader,alertModal,user,dataService,$location){
+    $scope,$rootScope,loader,alertModal,user,dataService,$location,pusher){
         $scope.user=user.employee;
         $scope.staffs;
         $scope.employeeList=$rootScope.employeeList?$rootScope.employeeList:[];
@@ -98,6 +98,12 @@ app.controller('TargetManajemenController',function(
             $scope.isLoadingLog=true;
         }
 
+        var logListener=function(result){
+            console.log({result});
+            if(!$scope.isLoadingLog)
+                $scope.logs.unshift(result.data);
+        }
+
         $scope.expandEmployee=function(employee,$index){
 
             var data=$scope.employeeList.find(function(d,index){
@@ -151,4 +157,5 @@ app.controller('TargetManajemenController',function(
 
         initLog();
         setEmployeeList();
+        pusher.on('log-listener',logListener);
 });
