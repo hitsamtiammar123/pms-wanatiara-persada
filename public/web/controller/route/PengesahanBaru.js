@@ -12,7 +12,7 @@ function($scope,loader,user,dataService,$location,alertModal){
         $location.path('/target-manajemen');
 
     }
-    
+
     var sendHasDone=function(){
         $scope.isSending=true;
     }
@@ -53,4 +53,4 @@ function($scope,loader,user,dataService,$location,alertModal){
 
     getRequestableUsers();
 
-}]); 
+}]);

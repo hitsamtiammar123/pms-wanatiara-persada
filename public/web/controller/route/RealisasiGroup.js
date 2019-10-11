@@ -80,13 +80,13 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
 
             if(type===KPI_RESULT){
                 classname='heading-color-green';
-                belongTo=`rg.kpiresultgroup[${i}].name`;
+                belongTo='rg.kpiresultgroup['+i+'].name';
                 contenteditable=!vw.hasEndorse?true:false;
                 afterEdit='rg.onHeaderChange';
             }
             else if(type===KPI_PROCESS){
                 classname='heading-color-yellow';
-                belongTo=`rg.kpiprocessgroup[${i}].name`;
+                belongTo='rg.kpiprocessgroup['+i+'].name';
                 contenteditable=false;
             }
                 headmapping.attr={
@@ -534,7 +534,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         if(!headerChanged.hasOwnProperty('kpiresultgoup'))
             headerChanged.kpiresultgoup={};
         headerChanged.kpiresultgoup[dataID]=value;
-        console.log({attrs,headerChanged});
+       // console.log({attrs,headerChanged});
     }
 
     vw.mapChange=function(elem,value,scope,attrs){

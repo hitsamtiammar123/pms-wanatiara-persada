@@ -138,6 +138,7 @@ class NotificationController extends Controller
                     $toUser->user->notify(new RequestChange($forUser,$fromUser,$request->message,$request->subject));
                     $forUser->user->notify(new SendMessage($fromUser,$this->getRequestMessage($fromUser)));
 
+                    $fromUser->makeLog($request,'endorse',"{$fromUser->employee->name} telah meminta perubahan status pengesahan untuk {$forUser->name}");
                     return [
                         'status'=>'Permintaan Perubahan status sudah dikirim'
                     ];

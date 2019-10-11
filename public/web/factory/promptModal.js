@@ -1,11 +1,6 @@
 app.factory('promptModal',['$compile','$rootScope','$q','dataService','notifier',
 function($compile,$rootScope,$q,dataService,notifier){
-    var content=`<div id="promptModal" ng-controller="PromptModalController" 
-    class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title">
-    {{title}}</h4></div><div class="modal-body"><div class="form-group"><label for="msg">{{message}}</label><input type="{{type}}" class="form-control"
-     ng-model="input_text" id="msg"></div></div><div class="modal-footer"><button type="button" 
-    class="btn btn-success" data-dismiss="modal" ng-click="resolve()">Ok</button><button type="button" 
-    class="btn btn-danger"  data-dismiss="modal" ng-click="reject()">Cancel</button></div></div></div></div>`;
+    var content='<div id="promptModal" ng-controller="PromptModalController"class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title">{{title}}</h4></div><div class="modal-body"><div class="form-group"><label for="msg">{{message}}</label><input type="{{type}}" class="form-control"ng-model="input_text" id="msg"></div></div><div class="modal-footer"><button type="button"class="btn btn-success" data-dismiss="modal" ng-click="resolve()">Ok</button><button type="button"class="btn btn-danger"  data-dismiss="modal" ng-click="reject()">Cancel</button></div></div></div></div>';
 
     var id='#promptModal';
     var hasShown=false;
@@ -30,7 +25,7 @@ function($compile,$rootScope,$q,dataService,notifier){
 
         if(modalData){
             modalData.options.backdrop='static';
-            E(id).modal(); 
+            E(id).modal();
         }
         else{
             E(id).modal({backdrop:'static'});
@@ -50,4 +45,4 @@ function($compile,$rootScope,$q,dataService,notifier){
     }
 
     return modal;
-}]); 
+}]);

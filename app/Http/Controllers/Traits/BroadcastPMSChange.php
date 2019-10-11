@@ -77,7 +77,10 @@ trait BroadcastPMSChange{
                     }
                     else if($header instanceof KPITag){
                         $for_pms="PMS Group \"{$header->name}\"";
-                        $cPeriod=$header->getZeroIndexEmployee()->getCurrentHeader()->cPeriod();
+                        $period_arr=$this->getPeriodFromRequest($request);
+                        $month=$period_arr['month'];
+                        $year=$period_arr['year'];
+                        $cPeriod=$header->getZeroIndexEmployee()->getHeader($month,$year)->cPeriod();
                         $period=$cPeriod->format('F Y');
                     }
 

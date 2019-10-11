@@ -16,6 +16,10 @@
     text-align: left;
 }
 
+.table-beranda thead th.num,.table-beranda tbody tr td.num{
+    width: 200px;
+}
+
 .title{
     font-size: 15px;
     color:grey;

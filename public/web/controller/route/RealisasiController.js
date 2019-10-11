@@ -786,12 +786,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         if(flag===KPI_RESULT){
             _undoDt=kpiresultstream.undoData();
             deleteListResult=_undoDt?kpiresultdeletestream.undoData():deleteListResult;
-            console.log({deleteListResult});
+            console.log(deleteListResult,'deleteListResult');
         }
         else if(flag===KPI_PROCESS){
             _undoDt=kpiprocessstream.undoData();
             deleteListProcess=_undoDt?kpiprocessdeletestream.undoData():deleteListProcess;
-            console.log({deleteListProcess});
+            console.log(deleteListProcess,'deleteListProcess');
         }
         applyCopiedTable(_undoDt,flag);
 
@@ -802,12 +802,12 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         if(flag===KPI_RESULT){
             _redoDt=kpiresultstream.redoData();
             deleteListResult=_redoDt?kpiresultdeletestream.redoData():deleteListResult;
-            console.log({deleteListResult});
+            console.log(deleteListResult,'deleteListResult');
         }
         else if(flag===KPI_PROCESS){
             _redoDt=kpiprocessstream.redoData();
             deleteListProcess=_redoDt?kpiprocessdeletestream.redoData():deleteListProcess;
-            console.log({deleteListProcess});
+            console.log(deleteListProcess,'deleteListProcess');
         }
         applyCopiedTable(_redoDt,flag);
     }
@@ -1243,7 +1243,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
         }
         dataService.digest($scope);
-        console.log({dataSelected});
+        //console.log({dataSelected});
     }
 
     var onDataEscaped=function(context,data,dataList,flag){
@@ -1305,7 +1305,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             e.preventDefault();
         }
         c.clearData();
-        console.log({result});
+        //console.log({result});
         c.setData('text/plain',result);
         alertModal.display('Peringatan','Data telah disalin',true,false);
     }
@@ -1523,7 +1523,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         var i=attrs.belongTo.replace('p.','');
         var d=parseInt(attrs.dIndex);
         kpiService.mapChange(d,i,value,$scope.kpiprocesses,updateMapP);
-        console.log({updateMapP});
+        //console.log({updateMapP});
     }
 
 
@@ -1578,7 +1578,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             setBColorP($scope.kpiprocesses);
             setContentEditable($scope.kpiprocesses,KPI_PROCESS);
             kpiService.mapCreate(newData,updateMapP);
-            console.log({updateMapP});
+            //console.log({updateMapP});
         });
     }
 

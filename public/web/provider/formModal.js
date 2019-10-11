@@ -7,13 +7,13 @@ app.provider('formModal',[function(){
     }
 
     this.$get=['notifier','$compile','$rootScope','$q',function(notifier,$compile,$rootScope,$q){
-        var template=`<div id="{id}" form-controller="{name}" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title">{{title}}</h4></div><div class="modal-body">{content}</div><div class="modal-footer"><button type="button" class="btn btn-success" data-dismiss="modal" ng-click="ok()">Ok</button><button type="button" class="btn btn-danger"  data-dismiss="modal" ng-click="cancel()">Cancel</button></div></div></div></div>`;
+        var template='<div id="{id}" form-controller="{name}" class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title">{{title}}</h4></div><div class="modal-body">{content}</div><div class="modal-footer"><button type="button" class="btn btn-success" data-dismiss="modal" ng-click="ok()">Ok</button><button type="button" class="btn btn-danger"  data-dismiss="modal" ng-click="cancel()">Cancel</button></div></div></div></div>';
 
-        var input_t=`<div class="form-group"><label>{m}</label><input type="text" class="form-control" ng-model="{d}" ></div>`;
+        var input_t='<div class="form-group"><label>{m}</label><input type="text" class="form-control" ng-model="{d}" ></div>';
 
-        var password_t=`<div class="form-group"><label>{m}</label><input type="password" class="form-control" ng-model="{d}" ></div>`;
+        var password_t='<div class="form-group"><label>{m}</label><input type="password" class="form-control" ng-model="{d}" ></div>';
 
-        var select_t=`<div class="form-group"><label>{m}</label><select class="form-control" ng-model="{selected}" ng-options="{label} for item in {list}"></select></div>`;
+        var select_t='<div class="form-group"><label>{m}</label><select class="form-control" ng-model="{selected}" ng-options="{label} for item in {list}"></select></div>';
 
         var compileModal=function(input){
             var result={};

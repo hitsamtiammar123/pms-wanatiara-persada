@@ -1,13 +1,7 @@
 app.factory('confirmModal',['$compile','$rootScope','$q','dataService','notifier',
 function($compile,$rootScope,$q,dataService,notifier){
 
-    var content=`<div id="confirmModal" ng-controller="ConfirmModalController" 
-    class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content">
-    <div class="modal-header"><h4 class="modal-title">
-    {{title}}</h4></div><div class="modal-body"><p class="modal-message">
-    {{message}}</p></div><div class="modal-footer"><button type="button" 
-    class="btn btn-success" data-dismiss="modal" ng-click="resolve()">{{btnMessage.yes}}</button><button type="button" 
-    class="btn btn-danger"  data-dismiss="modal" ng-click="reject()">{{btnMessage.no}}</button></div></div></div></div>`
+    var content='<div id="confirmModal" ng-controller="ConfirmModalController"class="modal fade" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h4 class="modal-title">{{title}}</h4></div><div class="modal-body"><p class="modal-message">{{message}}</p></div><div class="modal-footer"><button type="button"class="btn btn-success" data-dismiss="modal" ng-click="resolve()">{{btnMessage.yes}}</button><button type="button"class="btn btn-danger"  data-dismiss="modal" ng-click="reject()">{{btnMessage.no}}</button></div></div></div></div>'
     var id='#confirmModal';
 
     var hasShown=false;
@@ -29,7 +23,7 @@ function($compile,$rootScope,$q,dataService,notifier){
         notifier.notify('setConfirmModalPromise',[deffer]);
         if(modalData){
             modalData.options.backdrop='static';
-            E(id).modal(); 
+            E(id).modal();
         }
         else{
             E(id).modal({backdrop:'static'});

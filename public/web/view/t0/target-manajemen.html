@@ -48,14 +48,14 @@
         <div class="log-content">
             <table class="table table-beranda">
                 <thead>
-                    <th>Pengguna</th>
-                    <th>Pesan</th>
+                    <th class="num">Pengguna</th>
+                    <th >Pesan</th>
                     <th>Tanggal</th>
                 </thead>
                 <tbody>
                     <tr ng-repeat="log in logs">
-                        <td>{{log.user.employee.name}}</td>
-                        <td>{{log.message}}</td>
+                        <td class="num">{{log.user.employee.name}}</td>
+                        <td >{{log.message}}</td>
                         <td>{{log.created_at}}</td>
                     </tr>
                 </tbody>

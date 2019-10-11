@@ -47,12 +47,13 @@ class KPIEndorsementController extends Controller
     }
 
 
-    protected function sendApprovalRequest($employee,$header){
+    protected function sendApprovalRequest(Request $request,$employee,$header){
         if($employee->isUser()){
             $auth_user=auth_user();
             $user=$employee->user;
             $message= sprintf("Perubahan Status untuk periode %s sudah disetujui ",$header->period);
             $user->notify(new SendMessage($auth_user,$message));
+            $auth_user->makeLog($request,'endorse',"Perubahan status pengesahan untuk {$employee->name} periode {$header->period} sudah disetujui");
         }
     }
 
@@ -77,16 +78,12 @@ class KPIEndorsementController extends Controller
         }
     }
 
-
-    public function store(Request $request)
-    {
-        //
-    }
-
-
-    public function show($id)
-    {
-        //
+    protected function getPeriodFromRequest(Request $request){
+        $now=Carbon::now();
+        return [
+            'month'=>$request->input('month',$now->month),
+            'year'=>$request->input('year',$now->year)
+        ];
     }
 
     public function reset(Request $request,$employeeID){
@@ -101,7 +98,8 @@ class KPIEndorsementController extends Controller
                         $this->doResetEndorsement($rep_employee);
 
             $this->approvedEndorseChange($notificationID);
-            $this->sendApprovalRequest($employee,$employee->getCurrentHeader());
+            $this->sendApprovalRequest($request,$employee,$employee->getCurrentHeader());
+
 
             return [
                 'status'=>'Status Pengesahan sudah diubah'
@@ -117,9 +115,9 @@ class KPIEndorsementController extends Controller
     public function updateGroup(Request $request,$id){
         $kpitag=KPITag::find($id);
         if($kpitag){
-            $now=Carbon::now();
-            $month=$request->input('month',$now->month);
-            $year=$request->input('year',$now->year);
+            $period_arr=$this->getPeriodFromRequest($request);
+            $month=$period_arr['month'];
+            $year=$period_arr['year'];
             $auth_user=auth_user();
             $auth_user_employee=$auth_user->employee;
 
