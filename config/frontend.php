@@ -48,7 +48,8 @@ return [
             'notification/notificationMessage.js',
             'notification/notificationRedirect.js',
             'notification/NotificationRequestChange.js',
-            'route/EditProfileController.js'
+            'route/EditProfileController.js',
+            'route/EditPasswordController.js'
 
         ],
         't0'=>[

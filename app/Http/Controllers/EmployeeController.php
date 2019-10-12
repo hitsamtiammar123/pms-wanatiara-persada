@@ -7,6 +7,7 @@ use App\Model\Employee;
 use App\Model\Role;
 use App\Model\KPIHeader;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
@@ -88,6 +89,26 @@ class EmployeeController extends Controller
         return [
             'status'=>'berhasil'
         ];
+    }
+
+    public function updatePassword(Request $request, $id){
+        $employee=Employee::find($id);
+        $validateInput=$request->validate([
+            'password'=>['required',function($attribute, $value, $fail)use($employee){
+                if(!Hash::check($value, $employee->user->password,[]))
+                    $fail('Password lama tidak sesuai');
+            }],
+            'new'=>'required',
+            'retype'=>'required|same:new'
+        ]);
+
+        $employee->user->password=bcrypt($validateInput['new']);
+        $employee->push();
+
+        return [
+            'status'=>'berhasil'
+        ];
+
     }
 
     public function ikhtisar(Request $request){

@@ -1,22 +1,26 @@
-app.controller('EditProfileController',['$scope','$rootScope','user','alertModal','loader',
-function($scope,$rootScope,user,alertModal,loader){
+app.controller('EditPasswordController',['$scope','alertModal','loader','user',
+function($scope,alertModal,loader,user){
     var ep=this;
 
-    ep.user={
-        name:user.employee.name,
-        gender:user.employee.gender,
-        email:user.email
+    ep.password={
+        password:'',
+        new:'',
+        retype:''
     };
     ep.disabledSubmit=false;
     ep.errors={};
 
     var validateInput=function(){
-        if(ep.user.name===''){
-            alertModal.display('Input Salah','Tolong masukan nama anda',true,false);
+        if(ep.password.password===''){
+            alertModal.display('Input Salah','Tolong masukan kata sandi lama anda',true,false);
             return false;
         }
-        else if(ep.user.email===''){
-            alertModal.display('Input Salah','Tolong masukan email anda',true,false);
+        else if(ep.password.new===''){
+            alertModal.display('Input Salah','Tolong masukan kata sandi baru anda',true,false);
+            return false;
+        }
+        else if(ep.password.retype===''){
+            alertModal.display('Input Salah','Tolong masukan kembali kata sandi baru anda',true,false);
             return false;
         }
         return true;
@@ -24,7 +28,6 @@ function($scope,$rootScope,user,alertModal,loader){
 
     var fetchErrors=function(err){
         var errors=err.data.errors;
-        ep.errors={};
         for(var i in errors){
             var d=errors[i];
             ep.errors[i]=d[0];
@@ -38,20 +41,19 @@ function($scope,$rootScope,user,alertModal,loader){
     }
 
     var onUpdateFail=function(err){
-        console.log(err);
+        //console.log(err);
         if(err.status===422)
             fetchErrors(err);
     }
 
     ep.submit=function(){
         if(validateInput()){
-            loader.updateProfile(user.employee.id,ep.user).then(onSuccessUpdate,onUpdateFail).finally(function(){
+            loader.updatePassword(user.employee.id,ep.password).then(onSuccessUpdate,onUpdateFail).finally(function(){
                 ep.disabledSubmit=false;
                 alertModal.hide();
             });
             alertModal.display('Peringatan','Mengubah profile, mohon tunggu',false,true);
             ep.disabledSubmit=true;
         }
-
     }
 }]);

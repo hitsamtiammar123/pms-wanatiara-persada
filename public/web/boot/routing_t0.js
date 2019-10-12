@@ -146,6 +146,17 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
 
                 }
             }
+        },
+        {
+            url:'/edit-password',
+            config:{
+                templateUrl:'web/view/profile/edit-password.html',
+                controller:'EditPasswordController',
+                controllerAs:'ep',
+                resolve:{
+
+                }
+            }
         }
     ]
 

@@ -129,9 +129,12 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'retype' => [
+            'same' => 'Kata Sandi tidak cocok',
         ],
+        'name'=>[
+            'alpha'=>'Nama harus berupa huruf'
+        ]
     ],
 
     /*

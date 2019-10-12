@@ -102,6 +102,7 @@
                         <li><a class="dropdown-toggle" data-toggle="dropdown" >Profil <span class="caret"></span>
                             <ul class="dropdown-menu">
                                 <li><a href="#!edit-profile">Sunting Profil</a></li>
+                                <li><a href="#!edit-password">Sunting Kata Sandi</a></li>
                             </ul>
                         </li>
                   </ul>
