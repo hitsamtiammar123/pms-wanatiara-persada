@@ -98,6 +98,11 @@
                                 <li><a>Divisi Mining</a></li>
                             </ul>
                         </li>
+                        <li><a class="dropdown-toggle" data-toggle="dropdown" >Profil <span class="caret"></span>
+                            <ul class="dropdown-menu">
+                                <li><a>Sunting Profil</a></li>
+                            </ul>
+                        </li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     <li class="greetings-nav">
