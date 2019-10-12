@@ -3,26 +3,23 @@
     E=angular.element;
     isUndf=angular.isUndefined;
     isArr=angular.isArray;
-   
 
-    const controllerlist=["http://localhost/pms-wanatiara-persada-v1-angular/web/controller/misc/AlertModalController.js","http://localhost/pms-wanatiara-persada-v1-angular/web/controller/misc/ConfirmModalController.js","http://localhost/pms-wanatiara-persada-v1-angular/web/controller/misc/PromptModalController.js","http://localhost/pms-wanatiara-persada-v1-angular/web/controller/route/DummyController.js","http://localhost/pms-wanatiara-persada-v1-angular/web/controller/route/FrontController.js","http://localhost/pms-wanatiara-persada-v1-angular/web/controller/route/IkhtisarController.js","http://localhost/pms-wanatiara-persada-v1-angular/web/controller/route/PencarianController.js","http://localhost/pms-wanatiara-persada-v1-angular/web/controller/route/RealisasiController.js","http://localhost/pms-wanatiara-persada-v1-angular/web/controller/route/TargetManajemenController.js"]
+    const controllerlist=["web/controller/misc/AlertModalController.js","web/controller/misc/ConfirmModalController.js","web/controller/misc/PromptModalController.js","web/controller/route/DummyController.js","web/controller/route/FrontController.js","web/controller/route/IkhtisarController.js","web/controller/route/NotifikasiPengesahan.js","web/controller/route/PencarianController.js","web/controller/route/PengesahanBaru.js","web/controller/route/PengesahanDetail.js","web/controller/route/RealisasiController.js","web/controller/route/RealisasiGroup.js","web/controller/route/RealisasiPerusahaanController.js","web/controller/notification/notificationMessage.js","web/controller/notification/notificationRedirect.js","web/controller/notification/NotificationRequestChange.js","web/controller/route/EditProfileController.js","web/controller/route/EditPasswordController.js","web/controller/t0/TargetManajemenController.js"]
 
-    const servicelist=["http://localhost/pms-wanatiara-persada-v1-angular/web/service/alertModal.js","http://localhost/pms-wanatiara-persada-v1-angular/web/service/copier.js","http://localhost/pms-wanatiara-persada-v1-angular/web/service/dataService.js","http://localhost/pms-wanatiara-persada-v1-angular/web/service/loader.js","http://localhost/pms-wanatiara-persada-v1-angular/web/service/notifier.js","http://localhost/pms-wanatiara-persada-v1-angular/web/service/validator.js"];
-    const valueList=["http://localhost/pms-wanatiara-persada-v1-angular/web/values/commisioner.js","http://localhost/pms-wanatiara-persada-v1-angular/web/values/digestT.js","http://localhost/pms-wanatiara-persada-v1-angular/web/values/dIndex.js","http://localhost/pms-wanatiara-persada-v1-angular/web/values/dumb.js","http://localhost/pms-wanatiara-persada-v1-angular/web/values/months.js","http://localhost/pms-wanatiara-persada-v1-angular/web/values/route.js","http://localhost/pms-wanatiara-persada-v1-angular/web/values/unitFilter.js","http://localhost/pms-wanatiara-persada-v1-angular/web/values/user.js"];
-    const directivelist=["http://localhost/pms-wanatiara-persada-v1-angular/web/directive/belongTo.js","http://localhost/pms-wanatiara-persada-v1-angular/web/directive/changeFor.js","http://localhost/pms-wanatiara-persada-v1-angular/web/directive/formController.js"];
-    const factorylist=["http://localhost/pms-wanatiara-persada-v1-angular/web/factory/confirmModal.js","http://localhost/pms-wanatiara-persada-v1-angular/web/factory/promptModal.js"];
-    const filterlist=["http://localhost/pms-wanatiara-persada-v1-angular/web/filter/addPercent.js","http://localhost/pms-wanatiara-persada-v1-angular/web/filter/range.js","http://localhost/pms-wanatiara-persada-v1-angular/web/filter/sanitizeHash.js","http://localhost/pms-wanatiara-persada-v1-angular/web/filter/sanitizeNewline.js","http://localhost/pms-wanatiara-persada-v1-angular/web/filter/sNumber.js"];
-    const providerlist=["http://localhost/pms-wanatiara-persada-v1-angular/web/provider/formModal.js"];
-    const bootlist=["http://localhost/pms-wanatiara-persada-v1-angular/web/boot/resolve.js","http://localhost/pms-wanatiara-persada-v1-angular/web/boot/routing.js","http://localhost/pms-wanatiara-persada-v1-angular/web/boot/providerConf.js","http://localhost/pms-wanatiara-persada-v1-angular/web/boot/config.js","http://localhost/pms-wanatiara-persada-v1-angular/web/boot/run.js"];
-    
+    const servicelist=["web/service/alertModal.js","web/service/copier.js","web/service/dataService.js","web/service/kpiService.js","web/service/loader.js","web/service/notificationService.js","web/service/notifier.js","web/service/pusher.js","web/service/validator.js"];
+    const valueList=["javascript/user","javascript/csrf-token","web/values/commisioner.js","web/values/days.js","web/values/digestT.js","web/values/dIndex.js","web/values/dumb.js","web/values/KPI.js","web/values/kpiKeys.js","web/values/months.js","web/values/pusher_settings.js","web/values/route.js","web/values/unitFilter.js"];
+    const directivelist=["web/directive/belongTo.js","web/directive/changeFor.js","web/directive/formController.js","web/directive/ngFile.js"];
+    const factorylist=["web/factory/confirmModal.js","web/factory/promptModal.js"];
+    const filterlist=["web/filter/addPercent.js","web/filter/integer.js","web/filter/kwh.js","web/filter/prependTab.js","web/filter/range.js","web/filter/sanitizeHash.js","web/filter/sanitizeNewline.js","web/filter/scale.js","web/filter/sNumber.js"];
+    const pfile='javascript/provider';
 
     var script_string='<script src="{path}"></script>';
 
     var head=angular.element('head');
     var h=document.querySelector('head');
     var count=0;
-    var total=34;
-    var totalBoot=4;
+    var total=37;
+    var totalDynamic=37;
     var appElem;
 
 
@@ -51,14 +48,20 @@
         appElem.append('Terjadi kesalahan saat memuat halaman');
     }
 
+    function hasLoad(){
+       
+        E.get('app/front-view',viewSuccess).fail(viewFail).always(viewDone)
+       
+    }
+
     function incrementC(){
         count++;
-        //console.log("total Files: "+(total+totalBoot)+" total :"+total+" totalBoot :"+totalBoot+" count: "+count);
-        if(count===total+totalBoot){
-            //angular.bootstrap(document,['app']);
-            E.get('web/view/frontView.html',viewSuccess).fail(viewFail).always(viewDone)
-            //console.log('app',app);
+        if(count===totalDynamic){
+            appendScript(pfile,function(){
+                hasLoad();
+            });
         }
+
     }
 
     function loadFiles(list){
@@ -77,16 +80,14 @@
         loadFiles(directivelist);
         loadFiles(factorylist);
         loadFiles(filterlist);
-        loadFiles(providerlist);
         loadFiles(servicelist);
         loadFiles(valueList);
-        loadFiles(bootlist);
     }
-
-    init();
 
     $(document).ready(function(){
         angular.element('[data-toggle="popover"]').popover();
+        appElem=E('#app');
+        init();
     });
 
 })()
