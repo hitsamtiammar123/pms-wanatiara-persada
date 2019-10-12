@@ -114,7 +114,7 @@
                   <div class="col-sm-6">
                       <div class="row">
                           @if (!Browser::isChrome()&&!Browser::isFirefox())
-                          <div class="title2 browser-unrecommended">Kami sarankan anda menggunakan Browser chrome dan firefox untuk performa yang lebih baik</div>
+                          <div class="title2 browser-unrecommended">Kami sarankan anda menggunakan Browser chrome atau firefox untuk performa yang lebih baik</div>
                           @endif
                           <h3 class="title1">Sistem Manajemen Kinerja (PMS) 绩效考核管理体系 </h3>
                           <h4 class="title2">PT Wanatiara Persada <span>{{ $tahunkiwari }}</span> </h4>
