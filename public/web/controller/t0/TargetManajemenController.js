@@ -160,7 +160,7 @@ app.controller('TargetManajemenController',function(
         }
 
         $scope.searchLog=function(){
-            if($scope.isLoadingLog)
+            if($scope.isLoadingLog || $scope.searchTextLog==='')
                 return;
             $scope.logs=[];
             logPage=1;

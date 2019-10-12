@@ -22,7 +22,7 @@ Route::group(['prefix'=>'v1','middleware'=>['cors','web']
     ]);
 
     Route::apiResource('employee', 'EmployeeController',[
-        'only'=>['show']
+        'only'=>['show','update']
     ]);
 
     Route::apiResource('kpiprocess', 'KPIProcessController',[

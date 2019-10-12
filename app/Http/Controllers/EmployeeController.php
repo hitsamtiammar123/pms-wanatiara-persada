@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use App\Model\Employee;
 use App\Model\Role;
 use App\Model\KPIHeader;
-use App\Model\KPIResult;
-use App\Model\User;
+use Illuminate\Validation\Rule;
 
 class EmployeeController extends Controller
 {
@@ -73,7 +72,22 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+
+        $employee=Employee::find($id);
+        $validateInput=$request->validate([
+            'email'=>['required','email',Rule::unique('users')->ignore($employee->user->id)],
+            'name'=>'required',
+            'gender'=>'required|in:male,female'
+        ]);
+
+        $employee->name=$validateInput['name'];
+        $employee->user->email=$validateInput['email'];
+        $employee->gender=$validateInput['gender'];
+        $employee->push();
+
+        return [
+            'status'=>'berhasil'
+        ];
     }
 
     public function ikhtisar(Request $request){

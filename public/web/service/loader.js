@@ -197,6 +197,12 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
        return $http.put(url,E.param(data),ajaxConfig2);
     }
 
+    this.updateProfile=function(id,profile){
+        var url=this.route('employee',[id]);
+
+        return $http.put(url,E.param(profile),ajaxConfig2);
+    }
+
     this.setEndorsement=function(data){
         var url=this.route('kpiendorsement',[data.id]);
         return $http.put(url,data);

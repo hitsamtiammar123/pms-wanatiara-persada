@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="css/pencarian.css">
 <link rel="stylesheet" href="css/pengesahan.css">
 <link rel="stylesheet" href="css/realisasi-group.css">
+<link rel="stylesheet" href="css/profile.css">
 <div ng-controller="FrontController">
   <div class="row web-header index-bar nav-bar-fixed" >
 
@@ -100,7 +101,7 @@
                         </li>
                         <li><a class="dropdown-toggle" data-toggle="dropdown" >Profil <span class="caret"></span>
                             <ul class="dropdown-menu">
-                                <li><a>Sunting Profil</a></li>
+                                <li><a href="#!edit-profile">Sunting Profil</a></li>
                             </ul>
                         </li>
                   </ul>

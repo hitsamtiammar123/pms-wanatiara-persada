@@ -135,6 +135,17 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
 
                 }
             }
+        },
+        {
+            url:'/edit-profile',
+            config:{
+                templateUrl:'web/view/profile/edit-profile.html',
+                controller:'EditProfileController',
+                controllerAs:'ep',
+                resolve:{
+
+                }
+            }
         }
     ]
 
