@@ -41,11 +41,20 @@
             </tbody>
         </table>
 
-        <h6 class="bold title margin-1">Log <a ng-click="refreshLog()"><span class="glyphicon glyphicon-refresh refresh-log black-font"></span></a></h6>
+        <h6 class="bold title margin-1">Log
+            <a ng-click="refreshLog()"><span class="glyphicon glyphicon-refresh refresh-log black-font"></span></a>
+
+        </h6>
 
         <div class="bottom-border"></div>
 
         <div class="log-content">
+            <form class="form-inline form-log">
+                    <div class="form-group">
+                      <input type="text" placeholder="masukan nama karyawan yang ingin dicari" ng-model="searchTextLog" class="form-control" id="email">
+                      <button type="button" ng-click="searchLog()" class="btn btn-success">Cari</button>
+                    </div>
+                  </form>
             <table class="table table-beranda">
                 <thead>
                     <th class="num">Pengguna</th>

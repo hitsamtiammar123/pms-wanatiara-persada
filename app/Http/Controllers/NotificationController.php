@@ -10,6 +10,7 @@ use App\Notifications\SendMessage;
 use Carbon\Carbon;
 use App\Http\Controllers\Traits\ErrorMessages;
 use App\Model\PMSLog;
+use Illuminate\Database\Eloquent\Builder;
 
 class NotificationController extends Controller
 {
@@ -35,6 +36,12 @@ class NotificationController extends Controller
             'message'=>'Notifikasi sudah dibaca sebelumnya',
             'data'=>$n
         ];
+    }
+
+    protected function fetchLogs($searchText){
+        return PMSLog::whereHas('user.employee',function(Builder $query)use($searchText){
+            is_null($searchText)?:$query->where('employees.name','like','%'.$searchText.'%');
+        })->get();
     }
 
     public function getNotification($employeeID,$id){
@@ -159,12 +166,13 @@ class NotificationController extends Controller
 
     public function getLogs(Request $request){
         $page=$request->input('page');
+        $searchText=$request->input('q');
         $page=$page?intval($page):1;
 
         $skip=($page-1)*5;
 
-        $logs=PMSLog::get()->sortByDesc('created_at')->splice($skip)
-        ->take(5)->load('user.employee');
+        $logs=$this->fetchLogs($searchText)->sortByDesc('created_at')->splice($skip)
+        ->take(5);
         $logs->each(function($data){
             $cCarbon=Carbon::parse($data->created_at);
             $data->created_at=$cCarbon->format('d F Y H:i:s');

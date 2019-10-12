@@ -113,8 +113,8 @@
                   </div>
                   <div class="col-sm-6">
                       <div class="row">
-                          @if (Browser::isIE())
-                          <div class="title2 browser-unrecommended">Beberapa fitur tidak support pada browser yang anda gunakan. Silakan anda mengganti ke browser teranyar seperti chrome atau firefox untuk performa aplikasi yang lebih baik</div>
+                          @if (!Browser::isChrome()&&!Browser::isFirefox())
+                          <div class="title2 browser-unrecommended">Kami sarankan anda menggunakan Browser chrome dan firefox untuk performa yang lebih baik</div>
                           @endif
                           <h3 class="title1">Sistem Manajemen Kinerja (PMS) 绩效考核管理体系 </h3>
                           <h4 class="title2">PT Wanatiara Persada <span>{{ $tahunkiwari }}</span> </h4>

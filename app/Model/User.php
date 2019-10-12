@@ -40,7 +40,10 @@ class User extends Authenticatable
         'id'=>'string'
     ];
 
+    protected $with = ['employee'];
+
     protected $dates=['deleted_at'];
+    protected $table='users';
 
     protected function broadCastLog(){
         $log=$this->logs->sortByDesc('created_at')->load('user.employee')->first();

@@ -17,6 +17,7 @@ class Employee extends Model
 
     protected $dates=['deleted_at'];
     protected static $listID=[];
+    protected $table='employees';
 
 
     const HIDDEN_PROPERTY=['created_at','updated_at','deleted_at','role_id','atasan_id'];
@@ -254,7 +255,7 @@ class Employee extends Model
     }
 
     public function user(){
-        return $this->hasOne(User::class);
+        return $this->hasOne(User::class,'employee_id','id');
     }
 
     public function role(){

@@ -174,8 +174,12 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url,{responseType:'blob'});
     }
 
-    this.fetchLog=function(page){
-        var url=this.route('log',[],{page:page});
+    this.fetchLog=function(page,searchtext){
+        var param={};
+        param.page=page;
+        searchtext?param.q=searchtext:null;
+
+        var url=this.route('log',[],param);
         return $http.get(url);
     }
 
