@@ -92,7 +92,7 @@ app.controller('TargetManajemenController',function(
 
         var initLog=function(searchText){
             var fetcher=!searchText?loader.fetchLog(logPage):loader.fetchLog(logPage,searchText)
-            $scope.logs=[];
+
             fetcher.then(onLogLoadSuccess,function(){
                 console.log('Terjadi kesalahan saat memuat log');
             }).finally(function(){
@@ -146,13 +146,14 @@ app.controller('TargetManajemenController',function(
         }
 
         $scope.initLog=function(){
-            initLog(null);
+            initLog($scope.searchTextLog);
         }
 
         $scope.refreshLog=function(){
             if($scope.isLoadingLog)
                 return;
             $scope.isLogHide=false;
+            $scope.logs=[];
             logPage=1;
             $scope.initLog();
         }
@@ -160,8 +161,14 @@ app.controller('TargetManajemenController',function(
         $scope.searchLog=function(){
             if($scope.isLoadingLog)
                 return;
+            $scope.logs=[];
             logPage=1;
             initLog($scope.searchTextLog);
+        }
+
+        $scope.onLogKeyUp=function(e){
+            if(e.keyCode===13)
+                $scope.searchLog();
         }
 
         initLog();

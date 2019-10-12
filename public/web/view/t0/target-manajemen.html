@@ -51,7 +51,7 @@
         <div class="log-content">
             <form class="form-inline form-log">
                     <div class="form-group">
-                      <input type="text" placeholder="masukan nama karyawan yang ingin dicari" ng-model="searchTextLog" class="form-control" id="email">
+                      <input type="text" ng-keyup="onLogKeyUp($event)" placeholder="masukan nama karyawan yang ingin dicari" ng-model="searchTextLog" class="form-control" id="email">
                       <button type="button" ng-click="searchLog()" class="btn btn-success">Cari</button>
                     </div>
                   </form>
