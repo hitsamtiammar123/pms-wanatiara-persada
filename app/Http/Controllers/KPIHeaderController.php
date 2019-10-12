@@ -86,6 +86,7 @@ class KPIHeaderController extends Controller
         }
 
         $res_data=$request->all();
+        $hasChange=false;
 
         if(!array_key_exists('dataChanged',$res_data))
             return send_400_error();
@@ -95,12 +96,14 @@ class KPIHeaderController extends Controller
 
         foreach($dataChanged as  $data){
             if(array_key_exists('kpiresult',$data)){
+                $hasChange=true;
                 $kpiresults=array_key_exists('updated',$data['kpiresult'])?
                 $data['kpiresult']['updated']:[];
                 KPIResultHeader::updateResultHeaderFromArr($kpiresults,$numberkeys);
             }
 
             if(array_key_exists('kpiprocess',$data)){
+                $hasChange=true;
                 $kpiprocesses=array_key_exists('updated',$data['kpiprocess'])?
                 $data['kpiprocess']['updated']:[];
                 KPIProcess::updateProcessHeaderFromArr($kpiprocesses);
@@ -110,14 +113,18 @@ class KPIHeaderController extends Controller
         if(array_key_exists('headerChanged',$res_data)){
             $headerChanged=json_decode($res_data['headerChanged'],true);
 
-            if(array_key_exists('kpiresultgoup',$headerChanged))
+            if(array_key_exists('kpiresultgoup',$headerChanged)){
                 KPIResult::updateGroupFromArr($headerChanged['kpiresultgoup']);
+                $hasChange=true;
+            }
 
-            if(array_key_exists('weighting',$headerChanged))
+            if(array_key_exists('weighting',$headerChanged)){
                 $kpitag->updateWeightingFromArr($headerChanged['weighting']);
+                $hasChange=true;
+            }
         }
 
-        $this->broadcastGroupChange($request,$kpitag);
+        $this->broadcastGroupChange($request,$kpitag,$hasChange);
         return [
             'message'=>'Berhasil'
         ];

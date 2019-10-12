@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\BroadcastException;
 
 trait BroadcastPMSChange{
 
-    public function broadcastChange($request,$employee){
+    protected function broadcastChange($request,$employee){
         if($employee->isUser()){
             $auth_user=auth_user();
             try{
@@ -23,16 +23,16 @@ trait BroadcastPMSChange{
         }
     }
 
-    public function broadcastGroupChange($request,$kpitag){
+    protected function broadcastGroupChange($request,$kpitag,$hasChange=false){
         $auth_user=auth_user();
         if($auth_user){
             $name_tag=$kpitag->name;
             $message="{$auth_user->employee->name} telah melakukan perubahan terhadap group PMS \"{$name_tag}\"";
-            $auth_user->makeLog($request,'update',$message);
+            !$hasChange?:$auth_user->makeLog($request,'update',$message);
         }
     }
 
-    public function broadcastLogPMS($request,$employee){
+    protected function broadcastLogPMS($request,$employee){
         if($employee->isUser()){
             $auth_user=auth_user();
             if($auth_user){
@@ -52,7 +52,7 @@ trait BroadcastPMSChange{
         }
     }
 
-    public function broadcastLogEndorsementPMS($request,$employee,$header){
+    protected function broadcastLogEndorsementPMS($request,$employee,$header){
         if($employee->isUser()){
             $auth_user=auth_user();
             if($auth_user){
