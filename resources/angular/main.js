@@ -49,9 +49,9 @@
     }
 
     function hasLoad(){
-        appElem=$('#app');
+       
         E.get({frontview},viewSuccess).fail(viewFail).always(viewDone)
-        appElem.append('<p id="wait">Mohon Tunggu....</p>');
+       
     }
 
     function incrementC(){
@@ -74,17 +74,20 @@
         }
     }
 
-    loadFiles(controllerlist);
-    loadFiles(directivelist);
-    loadFiles(factorylist);
-    loadFiles(filterlist);
-    loadFiles(servicelist);
-    loadFiles(valueList);
-
-
+    function init(){
+        appElem.append('<p id="wait">Mohon Tunggu....</p>');
+        loadFiles(controllerlist);
+        loadFiles(directivelist);
+        loadFiles(factorylist);
+        loadFiles(filterlist);
+        loadFiles(servicelist);
+        loadFiles(valueList);
+    }
 
     $(document).ready(function(){
         angular.element('[data-toggle="popover"]').popover();
+        appElem=E('#app');
+        init();
     });
 
 })()
