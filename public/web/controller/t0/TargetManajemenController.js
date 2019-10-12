@@ -102,7 +102,7 @@ app.controller('TargetManajemenController',function(
         }
 
         var logListener=function(result){
-            console.log({result});
+            //console.log({result});
             if(!$scope.isLoadingLog)
                 $scope.logs.unshift(result.data);
         }
@@ -155,6 +155,7 @@ app.controller('TargetManajemenController',function(
             $scope.isLogHide=false;
             $scope.logs=[];
             logPage=1;
+            $scope.searchTextLog='';
             $scope.initLog();
         }
 
