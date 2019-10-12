@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/realisasi-group.css">
 <div ng-controller="FrontController">
   <div class="row web-header index-bar nav-bar-fixed" >
+
       <div class="col-sm-12">
               <nav class="navbar navbar-default navbar-wanatiara">
                   <ul class="nav navbar-nav">
@@ -101,6 +102,7 @@
                   <ul class="nav navbar-nav navbar-right">
                     <li class="greetings-nav">
                         <div class="col-sm-12">{!! $curr_date !!}</div>
+
                     </li>
                   </ul>
               </nav>
@@ -111,8 +113,14 @@
                   </div>
                   <div class="col-sm-6">
                       <div class="row">
+                          @if (Browser::isIE())
+                          <div class="title2 browser-unrecommended">Beberapa fitur tidak support pada browser yang anda gunakan. Silakan anda mengganti ke browser teranyar seperti chrome atau firefox untuk performa aplikasi yang lebih baik</div>
+                          @endif
                           <h3 class="title1">Sistem Manajemen Kinerja (PMS) 绩效考核管理体系 </h3>
                           <h4 class="title2">PT Wanatiara Persada <span>{{ $tahunkiwari }}</span> </h4>
+                      </div>
+                      <div class="row">
+
                       </div>
                   </div>
       </div>

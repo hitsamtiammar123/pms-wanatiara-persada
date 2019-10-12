@@ -301,14 +301,18 @@ td{
 
 /*Navbar submenu*/
 
-.dropdown-group-pms{
-    /* left: 13.6vw;
-    right:-13.6vw; */
-}
 
 .dropdown-group-pms>li>a{
     /* max-width: 120px; */
     white-space:normal;
+}
+
+/*Browser Unrecommended*/
+
+.browser-unrecommended{
+    font-style: italic;
+    font-size: 12px;
+    color: red;
 }
 
 
