@@ -8,11 +8,12 @@ use App\Model\Role;
 use App\Model\KPIHeader;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Traits\ErrorMessages;
 
 class EmployeeController extends Controller
 {
 
-
+    use ErrorMessages;
 
     private function fetchIkhtisar($item){
         $item->load('role');
@@ -75,6 +76,9 @@ class EmployeeController extends Controller
     {
 
         $employee=Employee::find($id);
+        if(!$employee)
+            return $this->sendUserNotFound($id);
+
         $validateInput=$request->validate([
             'email'=>['required','email',Rule::unique('users')->ignore($employee->user->id)],
             'name'=>'required',
@@ -93,6 +97,9 @@ class EmployeeController extends Controller
 
     public function updatePassword(Request $request, $id){
         $employee=Employee::find($id);
+        if(!$employee)
+            return $this->sendUserNotFound($id);
+
         $validateInput=$request->validate([
             'password'=>['required',function($attribute, $value, $fail)use($employee){
                 if(!Hash::check($value, $employee->user->password,[]))
