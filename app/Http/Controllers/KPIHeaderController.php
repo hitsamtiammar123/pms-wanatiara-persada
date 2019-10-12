@@ -16,6 +16,18 @@ class KPIHeaderController extends Controller
 
     use BroadcastPMSChange;
 
+    protected function isPMSHasChange($kpiresults,$kpiprocesses,$kpiresultdeletelist,$kpiprocessdeletelist){
+
+        if(
+        count(array_keys(@$kpiresults['updated']?@$kpiresults['updated']:[]))!==0 || count(array_keys(@$kpiresults['created']?@$kpiresults['created']:[]))!==0 ||
+        count(array_keys(@$kpiprocesses['updated']?@$kpiprocesses['updated']:[]))!==0 || count(array_keys(@$kpiprocesses['created']?@$kpiprocesses['created']:[]))!==0 ||
+        count($kpiresultdeletelist)!==0 || count($kpiprocessdeletelist)!==0
+        )
+            return true;
+        return false;
+
+    }
+
     public function index()
     {
         //
@@ -174,7 +186,8 @@ class KPIHeaderController extends Controller
         $header->updateWeighting($weighting);
 
         $this->broadcastChange($request,$header->employee);
-        $this->broadcastLogPMS($request,$header->employee);
+        if($this->isPMSHasChange($kpiresults,$kpiprocesses,$kpiresultdeletelist,$kpiprocessdeletelist))
+            $this->broadcastLogPMS($request,$header->employee);
         put_log(
             'updated =>'.json_encode($updatedlists).'created =>'.json_encode($createdlists)
         );

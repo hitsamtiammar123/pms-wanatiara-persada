@@ -75,7 +75,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var PMSHasChanged=function(){
         var curr=$route.current.$$route.controller;
         flushStreamAndHeader();
-        if(curr==='RealisasiController'){
+        if(curr==='RealisasiController' && !$rootScope.loading ){
             alertModal.display('Peringatan','Terjadi Perubahan Data',false,true);
             setTimeout($route.reload,1500);
         }

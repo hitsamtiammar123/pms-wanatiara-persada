@@ -9,6 +9,11 @@ class KPICompanyController extends Controller
 {
     //
 
+    protected function logKPICompanyChange(Request $request){
+        $auth_user=auth_user();
+        $auth_user->makeLog($request,'update',"{$auth_user->employee->name} telah menggungah berkas PMS Perusahaan yang baru");
+    }
+
     public function getCurrentKPICompany(){
         return kpi_company();
     }
@@ -33,6 +38,7 @@ class KPICompanyController extends Controller
             $import->import($path);
 
             $import->save();
+            $this->logKPICompanyChange($request);
 
             return ['status'=>1,
                     'message'=>'Berkas berhasil disimpan',];

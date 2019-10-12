@@ -12,7 +12,7 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
             $scope.kpicompanydata=$rootScope.kpicompanydata=result.data.result;
             $scope.keys=$rootScope.kpicompanykeys=result.data.keys;
             $scope.headers=$rootScope.kpicompanyheaders=result.data.headers;
-            
+
         }
         else{
             $scope.kpicompanydata=[];
@@ -32,7 +32,7 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
         alertModal.hide();
         if(result.data.hasOwnProperty('status')&&result.data.status===1){
             setTimeout(function(){
-               
+
                 $scope.kpicompanydata=[];
                 loadData();
             },1500)
@@ -86,7 +86,7 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
     $scope.getClass=function(key,val,type){
         var c='';
         var target_column=curr_date.getFullYear()+'_target_'+curr_date.getFullYear();
-       
+
         switch(key){
             case 'deskripsi':
                 c+='kpi';
@@ -110,11 +110,11 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
             break;
         }
 
-        
+
 
         return c;
     }
 
     loadData();
 
-}); 
+});

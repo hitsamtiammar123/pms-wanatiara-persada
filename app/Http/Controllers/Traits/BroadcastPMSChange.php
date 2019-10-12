@@ -13,13 +13,8 @@ trait BroadcastPMSChange{
         if($employee->isUser()){
             $auth_user=auth_user();
             try{
-
-                if($auth_user->employee_id===$employee->atasan->id)
-                    event(new PMSHasChanged($employee->user,$employee));
-
-                else if($auth_user->employee_id===$employee->id)
-                    event(new PMSHasChanged($employee->atasan->user,$employee));
-
+                event(new PMSHasChanged($employee->user,$employee));
+                event(new PMSHasChanged($employee->atasan->user,$employee));
             }
             catch(BroadcastException $err){
                 $message="PMS dari {$employee->name} sudah diubah oleh {$auth_user->employee->name}";
