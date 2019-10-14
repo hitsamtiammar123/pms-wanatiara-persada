@@ -131,6 +131,9 @@ class EmployeeController extends Controller
         }
         else{
             $employee=Employee::find($employee_id);
+            if(is_null($employee))
+                return send_404_error();
+
             $this->fetchIkhtisar($employee);
 
             return ['data'=>[$employee]];

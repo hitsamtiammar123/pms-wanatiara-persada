@@ -4,6 +4,8 @@ app.service('alertModal',['notifier','$rootScope','$compile','dataService',funct
     var hasShown=false;
     var listUpstream={};
     var self=this;
+    var isShown=false;
+    var hasHide=false;
 
     var init=function(title,message,_isShowButton){
         var c=E(content);
@@ -14,6 +16,14 @@ app.service('alertModal',['notifier','$rootScope','$compile','dataService',funct
         $compile(c)(scope);
         E('#app').append(c);
         hasShown=true;
+    }
+
+    var showTimeout=function(title,message,isShowButton,isStatic){
+        self.hide();
+        setTimeout(function(){
+            self.display(title,message,isShowButton,isStatic);
+        },500);
+        hasHide=false;
     }
 
     this.setUpstream=function(name,obj){
@@ -28,7 +38,8 @@ app.service('alertModal',['notifier','$rootScope','$compile','dataService',funct
 
     this.display=function(title,message,isShowButton,isStatic){
         const FUNCTION_NAME='display-alertModal';
-        var option={};
+
+
         var _isShowButton=!isUndf(isShowButton)?isShowButton:true;
         var _isStatic=!isUndf(isStatic)?isStatic:true;
 
@@ -37,6 +48,11 @@ app.service('alertModal',['notifier','$rootScope','$compile','dataService',funct
             init(title,message,_isShowButton);
         }
         else{
+            if(isShown || hasHide){
+                showTimeout(title,message,isShowButton,isStatic);
+                return;
+            }
+
             notifier.notify('setAlertModalTitle',[title]);
             notifier.notify('setAlertModalMessage',[message]);
             notifier.notify('setAlertModalHideButton',[_isShowButton]);
@@ -55,12 +71,17 @@ app.service('alertModal',['notifier','$rootScope','$compile','dataService',funct
         else{
             E(alertmodal).modal({backdrop:(_isStatic?'static':true)});
         }
+        isShown=true;
 
 
     }
 
     this.hide=function(){
-        E(alertmodal).modal('hide');
+        if(isShown){
+            E(alertmodal).modal('hide');
+            isShown=false;
+            hasHide=true;
+        }
     }
 
 }]);

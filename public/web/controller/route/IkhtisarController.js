@@ -1,5 +1,5 @@
 app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
-    notifier,alertModal,$routeParams){
+    notifier,alertModal,$routeParams,errorResponse){
 
     var totalData=[];
     var currMonth=$rootScope.month;
@@ -9,7 +9,7 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
 
 
     $scope.dIndex=$rootScope.dIndex!==undefined?$rootScope.dIndex:dIndex;
-    $scope.headerList=[]; 
+    $scope.headerList=[];
     $scope.disable_load_btn=false;
     $scope.hide_load_btn=false;
     $scope.f=[
@@ -26,16 +26,14 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         'Nov 十一月',
         'Dec 十二月'
     ];
-    vm.ikhtisar=[]; 
-  
-    var sI=function(res){ 
-        $scope.data=totalData=$rootScope.ikhtisarData=res.data;
-    } 
+    vm.ikhtisar=[];
 
-    var e=function(a,b,c){
-        alertModal.display('Peringatan','Terjadi kesalahan saat memuat data');
-    } 
- 
+    var sI=function(res){
+        $scope.data=totalData=$rootScope.ikhtisarData=res.data;
+    }
+
+    var e=errorResponse;
+
     var setCurrentMonth=function(month){
         currMonth=$rootScope.month=month.index;
         setHeader();
@@ -54,7 +52,7 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
             var rC=curr[real_key];
             var tC=curr[pt_key];
             var rt;
-        
+
             rt=(parseFloat(rC)/parseFloat(tC))*100
 
             if(isNaN(rt)||!isFinite(rt)){
@@ -63,8 +61,8 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
             else
                 rt=rt.toFixed(1);
 
-            
-            curr[kpia_key]=rt+'%'; 
+
+            curr[kpia_key]=rt+'%';
             var pwqIndex='pw';
             var pwq=curr[pwqIndex];
             var calculate=rt*parseFloat(pwq)/100;
@@ -91,7 +89,7 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
     var getKPIAchivement=function(kpiresults,date){
         var kpiAchievement;
         var awIndex='aw';
-    
+
             var aw_total=0;
             var month=date.getMonth();
             for(var j=0;j<kpiresults.length;j++){
@@ -147,7 +145,7 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         }
         vm.ikhtisar=vm.ikhtisar.concat(ikhtisars);
     }
-  
+
     var onSuccess=function(results){
         var result=results.data;
         //debugger;
@@ -163,7 +161,7 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         }
         alertModal.hide();
     }
-    
+
     var loadIkhtisarData=function(){
         if(isUndf(employee_id))
             loader.getIkhtisar(page).then(onSuccess,e);
@@ -199,11 +197,11 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
 
         return color;
     }
- 
+
 
     notifier.setNotifier('changeMonth',setCurrentMonth);
     //setHeader();
     loadIkhtisarData();
     //setIkhtisar();
 
-}); 
+});

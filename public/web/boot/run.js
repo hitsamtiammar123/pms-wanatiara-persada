@@ -1,4 +1,4 @@
-app.run(function($rootScope,cP,$http,notifier,alertModal,dataService,$route){
+app.run(function($rootScope,cP,$http,notifier,alertModal,alertModalUpstreams){
     var appB=E('[ng-app="app"]');
     var values=['value.php?value=jabatan.json','value.php?value=users.json','value.php?value=realisasi.json'];
     var variables=['jabatan','users','realisasi'];
@@ -71,22 +71,26 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,dataService,$route){
         }
         alertModal.hide();
 
-}
+    }
 
-    var init=function(){
+    var setAlertModelUpstream=function(){
+        for(var i in alertModalUpstreams){
+            var options=alertModalUpstreams[i];
+            alertModal.setUpstream(i,options);
+        }
+    }
+
+    var initGlobalData=function(){
         $rootScope.employees={};
         $rootScope.kpitags={};
         var curr_date=new Date();
         $rootScope.month=curr_date.getMonth();
         $rootScope.year=curr_date.getFullYear();
+    }
 
-        var loading={
-            title:'Peringatan',
-            message:'Memuat Data. Mohon Tunggu',
-            isShowButton:false,
-            isStatic:true
-        }
-        alertModal.setUpstream('loading',loading);
+    var init=function(){
+        initGlobalData();
+        setAlertModelUpstream();
     }
 
     init();

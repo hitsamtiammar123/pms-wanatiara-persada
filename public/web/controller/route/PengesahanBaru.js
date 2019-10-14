@@ -1,5 +1,5 @@
-app.controller('PengesahanBaru',['$scope','loader','user','dataService','$location','alertModal',
-function($scope,loader,user,dataService,$location,alertModal){
+app.controller('PengesahanBaru',['$scope','loader','user','errorResponse','$location','alertModal',
+function($scope,loader,user,errorResponse,$location,alertModal){
     $scope.requestable_users=[];
     $scope.noRequestable=true;
     $scope.curr_user=null;
@@ -17,9 +17,7 @@ function($scope,loader,user,dataService,$location,alertModal){
         $scope.isSending=true;
     }
 
-    var loadFail=function(a){
-        console.log(a);
-    }
+    var loadFail=errorResponse;
 
     var loadSuccess=function(result){
         $scope.requestable_users=result.data;

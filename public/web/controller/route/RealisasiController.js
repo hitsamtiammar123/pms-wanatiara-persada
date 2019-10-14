@@ -1,6 +1,6 @@
 app.controller('RealisasiController',function($scope,$rootScope,validator,loader,$route,
     $filter,notifier,copier,alertModal,dataService,user,$routeParams,formModal,confirmModal
-    ,$sce,pusher,months,$location,$parse,kpiKeys,kpiService,KPI_PROCESS,KPI_RESULT){
+    ,$sce,pusher,months,$location,$parse,kpiKeys,kpiService,KPI_PROCESS,KPI_RESULT,errorResponse){
 
 
     $scope.totalAchieveMent={};
@@ -1086,9 +1086,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         loadDoneEmployee(employee);
     }
 
-    var loadFail=function(){
-        alertModal.display('Peringatan','Terjadi Kesalahan pada saat memuat data',false,true);
-    }
+    var loadFail=errorResponse;
 
     var checkEmployee=function(){
         if(!$rootScope.employees.hasOwnProperty(employeeIndex)){

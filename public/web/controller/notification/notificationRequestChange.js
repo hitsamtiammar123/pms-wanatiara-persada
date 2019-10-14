@@ -1,6 +1,6 @@
 app.controller('NotificationRequestChange',['$scope','$routeParams','notifier',
-'$location','alertModal','loader','confirmModal','notificationService',
-function($scope,$routeParams,notifier,$location,alertModal,loader,confirmModal,notificationService){
+'$location','alertModal','loader','confirmModal','notificationService','errorResponse',
+function($scope,$routeParams,notifier,$location,alertModal,loader,confirmModal,notificationService,errorResponse){
     var id=$routeParams.id;
 
     $scope.currNotification;
@@ -27,9 +27,7 @@ function($scope,$routeParams,notifier,$location,alertModal,loader,confirmModal,n
         $location.path('/target-manajemen');
     }
 
-    var onFail=function(){
-        alertModal.display('Peringatan','Terjadi kesalahan saat mengubah data');
-    }
+    var onFail=errorResponse;
 
 
     $scope.toPMS=function(){

@@ -1,5 +1,5 @@
-app.service('notificationService',['$rootScope','loader','alertModal','user',
-function($rootScope,loader,alertModal,user){
+app.service('notificationService',['$rootScope','loader','alertModal','user','errorResponse',
+function($rootScope,loader,alertModal,user,errorResponse){
 
     var setNotification=null;
     var scope={};
@@ -11,10 +11,7 @@ function($rootScope,loader,alertModal,user){
         setNotification?setNotification():null;
     }
 
-    var onFail=function(){
-        console.log('Fail to load notification');
-        alertModal.display('Peringatan','Terjadi Kesalahan saat memuat data',false,true);
-    }
+    var onFail=errorResponse;
 
     var fetchNotification=function(){
         loader.getNotification(user.employee.id,id).then(onLoadSuccess,onFail);

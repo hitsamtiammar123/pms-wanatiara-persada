@@ -1,4 +1,4 @@
-app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader,alertModal){
+app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader,alertModal,errorResponse){
     $scope.headers=$rootScope.kpicompanyheaders?$rootScope.kpicompanyheaders:[];
     $scope.kpicompanydata=$rootScope.kpicompanydata?$rootScope.kpicompanydata:[];
     $scope.keys=$rootScope.kpicompanykeys?$rootScope.kpicompanykeys:[];
@@ -23,10 +23,7 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
         alertModal.hide();
     }
 
-    var loadFail=function(r){
-        alertModal.display('Peringatan','Terjadi kesalahan saat menyimpan data');
-        alertModal.hide();
-    }
+    var loadFail=errorResponse;
 
     var uploadSuccess=function(result){
         alertModal.hide();

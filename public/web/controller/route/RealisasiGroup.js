@@ -1,5 +1,5 @@
-app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route','confirmModal','$rootScope','months',
-function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route,confirmModal,$rootScope,months){
+app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route','confirmModal','$rootScope','months','errorResponse',
+function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route,confirmModal,$rootScope,months,errorResponse){
 
     var tagID=$routeParams.tagID;
     var vw=this;
@@ -482,9 +482,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         }
         else{
             alertModal.upstream('loading');
-            loader.getByGroupTag(tagID).then(onSuccess,function(){
-                alertModal.display('Peringatan','Terjadi Kesalahan');
-            });
+            loader.getByGroupTag(tagID).then(onSuccess,errorResponse);
         }
     }
 
@@ -550,9 +548,8 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     }
 
     vw.saveChanged=function(){
-        loader.savePMSGroup(tagID,dataChanged,headerChanged).then(saveSucess,function(){
-            console.log('Ada eror')
-        }).finally(function(){
+        loader.savePMSGroup(tagID,dataChanged,headerChanged).then(saveSucess,errorResponse)
+        .finally(function(){
             alertModal.hide();
         });
         alertModal.display('Peringatan','Menyimpan data, mohon tunggu',false,true);
