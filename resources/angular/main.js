@@ -23,13 +23,14 @@
     var appElem;
 
 
-    function appendScript(src,callback){
+    function appendScript(src,callback,onerror){
 	    var s=document.createElement('script');
 	    var a=document.createAttribute('src');
 	    a.value=src;
         s.attributes.setNamedItem(a);
         s.type="text/javascript";
         s.onload=callback;
+        s.onerror=onerror;
         h.appendChild(s);
 
     }
@@ -49,9 +50,9 @@
     }
 
     function hasLoad(){
-       
+
         E.get({frontview},viewSuccess).fail(viewFail).always(viewDone)
-       
+
     }
 
     function incrementC(){
@@ -70,7 +71,7 @@
             var file=list[l];
             var s=$('<script>').attr({src:file,type:'text/javascript'});
             //head.append(s);
-            appendScript(file,incrementC);
+            appendScript(file,incrementC,incrementC);
         }
     }
 

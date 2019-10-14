@@ -19,7 +19,7 @@ app.constant('alertModalUpstreams',{
     },
     'internal-server-error':{
         title:'Peringatan',
-        message:'Terjadi kesalahan. Silakan anda kembali ke halaman sebelumnya atau muat ulang halaman ini',
+        message:'Terjadi error dalam server. Silakan anda kembali ke halaman sebelumnya atau muat ulang halaman ini',
         isShowButton:true,
         isStatic:true
     },
