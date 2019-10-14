@@ -31,6 +31,9 @@ class KPICompanyController extends Controller
             $saveTo='kpicompany/'.$dir;
 
             $file=$request->file('file');
+            if(!in_array($file->extension(),['xlsx','xls','csv']))
+               return send_415_error('Berkas yang harus diunggah harus memiliki format .xlsx,.xls atau .csv');
+
             $file->store($saveTo,'local');
 
             $path=$file->getPathName();

@@ -11,6 +11,12 @@ app.factory('errorResponse',['alertModal',function(alertModal){
         },
         503:function(){
             alertModal.upstream('maintenance');
+        },
+        415:function(){
+            alertModal.upstream('file-not-supported');
+        },
+        'default':function(){
+            alertModal.upstream('something-wrong');
         }
 
     };
@@ -21,6 +27,8 @@ app.factory('errorResponse',['alertModal',function(alertModal){
             var callback=errorResponseDefault[status];
             callback(err);
         }
+        else
+            errorResponseDefault.default(err);
     }
 
     return res;

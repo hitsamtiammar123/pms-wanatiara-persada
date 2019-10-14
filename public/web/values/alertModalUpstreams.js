@@ -28,5 +28,17 @@ app.constant('alertModalUpstreams',{
         message:'Server sedang dalam tahap pemeliharaan. Silakan anda tutup halaman web ini dan kembali dalam beberapa saat lagi',
         isShowButton:false,
         isStatic:true
+    },
+    'something-wrong':{
+        title:'Peringatan',
+        message:'Terjadi Kesalahan',
+        isShowButton:true,
+        isStatic:true
+    },
+    'file-not-supported':{
+        title:'Peringatan',
+        message:'Berkas yang anda unggah tidak memiliki format yang sesuai. Silakan anda unggah kembali berkas yang sesuai.',
+        isShowButton:true,
+        isStatic:true
     }
 });

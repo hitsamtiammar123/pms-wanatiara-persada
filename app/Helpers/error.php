@@ -21,7 +21,7 @@ if(!function_exists('send_401_error')){
 
 if(!function_exists('send_400_error')){
     function send_400_error($message="format data yang anda kirimkan salah"){
-        return response()->json(["error"=>401,"message"=>$message],400);
+        return response()->json(["error"=>400,"message"=>$message],400);
     }
 
 }
@@ -29,5 +29,11 @@ if(!function_exists('send_400_error')){
 if(!function_exists('send_406_error')){
     function send_406_error($message="Data yang tidak dimasukan tidak valid"){
         return response()->json(["error"=>406,"message"=>$message],406);
+    }
+};
+
+if(!function_exists('send_415_error')){
+    function send_415_error($message="Berkas yang anda kirim tidak sesuai"){
+        return response()->json(["error"=>415,"message"=>$message],415);
     }
 };
