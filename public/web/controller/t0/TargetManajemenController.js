@@ -103,8 +103,10 @@ app.controller('TargetManajemenController',function(
 
         var logListener=function(result){
             //console.log({result});
-            if(!$scope.isLoadingLog)
+            if(!$scope.isLoadingLog){
+                result.data.style='bold';
                 $scope.logs.unshift(result.data);
+            }
         }
 
         $scope.expandEmployee=function(employee,$index){

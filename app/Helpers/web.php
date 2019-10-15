@@ -21,8 +21,8 @@ if(!function_exists('style')){
 
 if(!function_exists('res_url')){
     function res_url($d){
-        //return env('APP_RES').'/'.$d;
-        return $d;
+        return url('/'.$d);
+        //return $d;
      }
 }
 

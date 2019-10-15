@@ -33,7 +33,7 @@ class SendNewNotification
         $notification=$user->getLatestNotification();
 
         try{
-            event(new NewNotification($user,Employee::frontEndNotification($notification)));
+            is_null($notification)?:event(new NewNotification($user,Employee::frontEndNotification($notification)));
         }catch(BroadcastException $err){
             put_log('Notifikasi baru sudah muncul untuk '.$user->employee->name);
         }
