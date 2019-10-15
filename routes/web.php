@@ -5,8 +5,10 @@ use App\Model\User;
 use Illuminate\Http\Request;
 
 Route::get('/test',function(Request $request){
-    $d=User::getTierZeroUsers();
-    return $d;
+    return view('mail.reset-password',[
+        'email'=>'lala@gmail.com',
+        'token'=>str_random(100)
+    ]);
 });
 
 Route::get('/', 'PageController@index')->name('index')->middleware('guest');

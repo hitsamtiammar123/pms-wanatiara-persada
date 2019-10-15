@@ -13,6 +13,7 @@ use Exception;
 use App\Events\NewLog;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable
 {
@@ -82,6 +83,17 @@ class User extends Authenticatable
 
     public function logs(){
         return $this->hasMany(PMSLog::class,'user_id','id');
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     public function makeLog(Request $request,$type,$message){
