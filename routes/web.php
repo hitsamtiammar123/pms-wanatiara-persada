@@ -29,6 +29,3 @@ Route::get('/javascript/csrf-token','JavascriptController@token')->name('js.toke
 Route::get('/app/front-view','PageController@appfront')->name('app.frontview');
 
 Auth::routes();
-
-
-Route::get('/home', 'HomeController@index')->name('home');

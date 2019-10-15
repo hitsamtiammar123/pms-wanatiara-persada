@@ -73,7 +73,7 @@ class JavascriptController extends Controller
 
     protected function loadControllers(){
         $user=auth_user();
-        $tier=$user->employee->role->tier;
+        $tier=$user->employee->role?$user->employee->role->tier:3;
         $controllers=[];
         $defaults=config('frontend.controllers.default');
         $tier_controllers=[];
@@ -209,7 +209,7 @@ class JavascriptController extends Controller
         $user=auth_user();
 
         if($user){
-            $tier=$user->employee->role->tier;
+            $tier=$user->employee->role?$user->employee->role->tier:3;
 
             switch($tier){
                 case 0:
