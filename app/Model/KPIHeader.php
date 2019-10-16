@@ -898,18 +898,26 @@ class KPIHeader extends Model implements Endorseable
 
         try{
 
-            if(!is_null($curr_header) && $this->kpiresultheaders->count()===0 ){
+            if(!is_null($curr_header) ){
                 foreach($curr_header->kpiresultheaders as $resultheader){
-                    KPIResultHeader::create([
-                        'id'=>KPIResultHeader::generateID($this->employee->id,$header_id),
-                        'kpi_result_id'=>$resultheader->kpi_result_id,
-                        'kpi_header_id'=>$header_id,
-                        'pw'=>$resultheader->pw,
-                        'pt_t'=>$resultheader->pt_t,
-                        'pt_k'=>$resultheader->pt_k,
-                        'real_t'=>$resultheader->real_t,
-                        'real_k'=>$resultheader->real_k
-                    ]);
+                    $check_result_header=$this->kpiresultheaders()->where('kpi_result_id',$resultheader->kpiresult->id)->first();
+                    if($check_result_header)
+                        continue;
+
+                    try{
+                        KPIResultHeader::create([
+                            'id'=>KPIResultHeader::generateID($this->employee->id,$header_id),
+                            'kpi_result_id'=>$resultheader->kpi_result_id,
+                            'kpi_header_id'=>$header_id,
+                            'pw'=>$resultheader->pw,
+                            'pt_t'=>0,
+                            'pt_k'=>0,
+                            'real_t'=>0,
+                            'real_k'=>0
+                        ]);
+                    }catch(\Exception $err){
+                        put_error_log($err);
+                    }
                 }
             }
         }catch(\Exception $err){
@@ -933,13 +941,17 @@ class KPIHeader extends Model implements Endorseable
             $h=$this;
             try{
                 foreach($curr_header->kpiprocesses as $kpiprocess){
-                    $h->kpiprocesses()->attach([
-                        $kpiprocess->id=>[
-                            'pw'=>$kpiprocess->pivot->pw,
-                            'pt'=>$kpiprocess->pivot->pt,
-                            'real'=>$kpiprocess->pivot->real
-                        ]
-                    ]);
+                    try{
+                        $h->kpiprocesses()->attach([
+                            $kpiprocess->id=>[
+                                'pw'=>$kpiprocess->pivot->pw,
+                                'pt'=>0,
+                                'real'=>0
+                            ]
+                        ]);
+                    }catch(\Exception $err){
+                        put_error_log($err);
+                    }
                 }
             }catch(\Exception $err){
                 put_error_log($err);
