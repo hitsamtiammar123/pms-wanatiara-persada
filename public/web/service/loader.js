@@ -164,8 +164,8 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.put(url,E.param(sentData),ajaxConfig2);
     }
 
-    this.fetchPMSPDF=function(id){
-        var url=this.route('pdf-pms',[id]);
+    this.fetchPMSPDF=function(id,option){
+        var url=this.route('pdf-pms',[id],option);
         return $http.get(url,{responseType:'blob'});
     }
 

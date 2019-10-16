@@ -56,6 +56,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var deleteListProcess=[];
     var updateMap={};
     var updateMapP={};
+    var isDownloading=false;
+    var curr_employee={};
 
     $scope.currentMonth=$scope.months[currMonth];
     $scope.currendDate=new Date();
@@ -1636,6 +1638,24 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         dataService.digest($scope);
         notifier.notifyGroup('realisasi-content');
         //console.log($scope.data);
+    }
+
+
+    $scope.downloadPDF=function(){
+        if(isDownloading)
+            return;
+
+       loader.fetchPMSPDF(curr_employee.id,{month:$scope.currentMonth.index}).then(function(result){
+            var filename='PMS '+curr_employee.name+' - '+$scope.currentMonth.value+' '+$scope.currendDate.getFullYear()+'.pdf';
+            loader.download(result.data,filename);
+       },function(){
+            alertModal.display('Peringatan','Terjadi kesalahan saat mengunduh berkas');
+       }).finally(function(){
+            isDownloading=false;
+       });
+       isDownloading=true;
+       alertModal.display('Berkas sedang diunduh','Mohon Tunggu');
+
     }
 
     $scope.dataSelected=function(context,data,toogle){
