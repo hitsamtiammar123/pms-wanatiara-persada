@@ -59,8 +59,8 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
         {
             url:'/dummy',
             config:{
-                templateUrl:'web/view/dummy.html',
-                controller:'DummyController',
+                templateUrl:'web/view/notification/log-update.html',
+                controller:'LogUpdate',
                 resolve:{
 
                 }

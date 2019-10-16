@@ -53,7 +53,8 @@ return [
 
         ],
         't0'=>[
-            't0/TargetManajemenController.js'
+            't0/TargetManajemenController.js',
+            'notification/notificationLogUpdate.js',
         ],
         't1'=>[
             'route/TargetManajemenController.js',
