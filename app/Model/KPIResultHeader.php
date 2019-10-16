@@ -352,6 +352,40 @@ class KPIResultHeader extends Model
         }
     }
 
+    public function setAsNewData(){
+        $unit=$this->kpiresult->unit;
+        $prev=$this->getPrev();
+
+
+        switch($unit){
+            case '$':
+            case 'WMT':
+            case 'MT':
+            if($prev){
+                $pt_k1=$prev->pt_k;
+                $pt_t2=$this->pt_t;
+
+                $this->pt_k=intval($pt_k1)+intval($pt_t2);
+
+                $real_k1=$prev->real_k;
+                $real_t2=$this->real_t;
+
+                $this->real_k=intval($real_k1)+intval($real_t2);
+                $this->pt_t=0;
+                $this->real_t=0;
+
+                break;
+            }
+            default:
+
+                $this->pt_t=0;
+                $this->pt_k=0;
+                $this->real_t=0;
+                $this->real_k=0;
+            break;
+        }
+    }
+
         /**
      * Melakukan mapping untuk data KPIResult Priviledge
      *

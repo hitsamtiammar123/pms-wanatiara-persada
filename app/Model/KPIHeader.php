@@ -905,15 +905,16 @@ class KPIHeader extends Model implements Endorseable
                         continue;
 
                     try{
+                        $resultheader->setAsNewData();
                         KPIResultHeader::create([
                             'id'=>KPIResultHeader::generateID($this->employee->id,$header_id),
                             'kpi_result_id'=>$resultheader->kpi_result_id,
                             'kpi_header_id'=>$header_id,
                             'pw'=>$resultheader->pw,
-                            'pt_t'=>0,
-                            'pt_k'=>0,
-                            'real_t'=>0,
-                            'real_k'=>0
+                            'pt_t'=>$resultheader->pt_t,
+                            'pt_k'=>$resultheader->pt_k,
+                            'real_t'=>$resultheader->real_t,
+                            'real_k'=>$resultheader->real_k
                         ]);
                     }catch(\Exception $err){
                         put_error_log($err);
