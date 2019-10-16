@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Model\KPIResultHeader;
 use App\Model\KPITag;
+use App\Model\KPIHeader;
 use Illuminate\Console\Command;
 
 class TestCommand extends Command
@@ -32,6 +33,17 @@ class TestCommand extends Command
         parent::__construct();
     }
 
+    public function syncKPIHeader($period){
+        $headers=KPIHeader::where('period','2019-10-16')->get();
+        foreach($headers as $header){
+            $curr_header=$header->getPrev();
+            $header->makeKPIResult($curr_header);
+            $header->makeKPIProcess($curr_header);
+            printf("Header dari %s untuk period %s sudah dibuat KPInya\n",$header->employee->name,$period);
+            sleep(1);
+        }
+    }
+
     /**
      * Execute the console command.
      *
@@ -39,60 +51,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $tag=KPITag::find('1938630853');
-        $kpiresultslist=$tag->groupkpiresult;
-        $kpiprocesslist=$tag->groupkpiprocess;
-
-        foreach($tag->grouprole as $role){
-            foreach($role->employee as $employee){
-                $header=$employee->getCurrentHeader();
-                $total_result=[];
-                $total_process=[];
-                foreach($kpiresultslist as $kpiresult){
-                    $id=$kpiresult->id;
-                    $data=[];
-                    switch($id){
-                        case '195307034861': 
-                            $data=[
-                                'kpi_result_id' => $id,
-                                'id' => KPIResultHeader::generateID($employee->id,$header->id),
-                                'pw' => 15,
-                                'pt_t' => 100000,
-                                'real_t' =>150000,
-                                'pt_k' =>10000,
-                                'real_k' =>250000
-                            ];
-                        break;
-                        case '190496534861': 
-                            $data=[
-                                'kpi_result_id' => $id,
-                                'id' => KPIResultHeader::generateID($employee->id,$header->id),
-                                'pw' => 15,
-                                'pt_t' => 1,
-                                'real_t' =>1,
-                                'pt_k' =>1,
-                                'real_k' =>1
-                            ];
-                        break;
-
-                    }
-                    $total_result[]=$data;
-                }
-                $header->kpiresultheaders()->createMany($total_result);
-
-                foreach($kpiprocesslist as $kpiprocess){
-                    $id=$kpiprocess->id;
-                    $total_process[$id]=[
-                        'pw' =>20,
-                        'pt' => 1,
-                        'real' =>1
-                    ];
-                }
-                $header->kpiprocesses()->sync($total_process);
-                $this->info("Data untuk \"{$employee->name}\" sudah dibuat ");   
-            }
-        }
-
-
+        //$this->syncKPIHeader('2019-10-16');
     }
 }

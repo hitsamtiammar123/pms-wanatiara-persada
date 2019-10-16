@@ -192,7 +192,7 @@ class Employee extends Model
         if(!$this->role || $this->role->tier===0)
             return 0;
 
-        $curr_header=$this->getCurrentHeader();
+        $curr_header=$this->getCurrentHeader()->getPrev();
         $id=$this->id!='0'?$this->id:$this->getIDForTheFirstTime();
 
         $header_id=KPIHeader::generateID($id);

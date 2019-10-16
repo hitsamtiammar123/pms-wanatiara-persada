@@ -898,7 +898,7 @@ class KPIHeader extends Model implements Endorseable
 
         try{
 
-            if(!is_null($curr_header)){
+            if(!is_null($curr_header) && $this->kpiresultheaders->count()===0 ){
                 foreach($curr_header->kpiresultheaders as $resultheader){
                     KPIResultHeader::create([
                         'id'=>KPIResultHeader::generateID($this->employee->id,$header_id),

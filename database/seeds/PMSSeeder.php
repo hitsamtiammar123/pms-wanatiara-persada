@@ -48,7 +48,9 @@ class PMSSeeder extends Seeder
     protected $d2tables=[
         'employees',
         'users',
-        'kpiheaders'
+        'kpiheaders',
+        'kpitags',
+        'pmslogs'
     ];
 
     /**
@@ -60,7 +62,10 @@ class PMSSeeder extends Seeder
         'kpiresultsheader',
         'kpiprocesses_kpiheaders',
         'kpiendorsements',
-        'priviledgeresultskpia'
+        'priviledgeresultskpia',
+        'groupingkpi',
+        'kpiprocessgroup',
+        'kpiresultgroup'
     ];
 
     /**

@@ -293,15 +293,15 @@ class KPIResultHeader extends Model
         array_key_exists('name',$kpiresult)?$this->kpiresult->name=$kpiresult['name']:null;
         array_key_exists('unit',$kpiresult)?$this->kpiresult->unit=$kpiresult['unit']:null;
 
-        $result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
+        //$result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
         $this->mapFromArr(KPIResultHeader::KPIRESULTCURRENTKEY,$kpiresult);
 
         $this->push();
-        $result_prev->save();
+        //$result_prev->save();
 
-            $id=array_key_exists(0,$ids)?$ids[0]:null;
-            $kpia_1=array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null;
-            $result_prev->mapPriviledge($kpia_1,$id);
+            // $id=array_key_exists(0,$ids)?$ids[0]:null;
+            // $kpia_1=array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null;
+            // $result_prev->mapPriviledge($kpia_1,$id);
 
             $id=array_key_exists(1,$ids)?$ids[1]:null;
             $kpia_2=array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null;

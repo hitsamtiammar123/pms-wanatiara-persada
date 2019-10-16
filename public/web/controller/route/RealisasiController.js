@@ -846,7 +846,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 }
                 if(ccdata!==''){
                     $scope.data[p_index][i_index]=ccdata;
-                    kpiService.mapChange(p_index,i_index,ccdata,$scope.data,updateMap);
+                    if($scope.data[p_index]['id'])
+                        kpiService.mapChange(p_index,i_index,ccdata,$scope.data,updateMap);
+
                 }
 
                     c_index=0;
@@ -864,6 +866,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
 
             }
+            if(!$scope.data[p_index]['id'])
+                kpiService.mapCreate($scope.data[p_index],updateMap);
+
             p_index++;
             d_flag=first_flag;
 
@@ -1456,6 +1461,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         data.real_contentEditable=[];
         $scope.data.push(data);
         hasNew=true;
+
         return data
     }
 
