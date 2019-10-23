@@ -28,7 +28,7 @@ class SetKpiResultForeign extends Migration
     {
         Schema::table('kpiresultgroup', function (Blueprint $table) {
             $table->dropForeign('kpiresultgroup_kpi_result_id_foreign');
-            $table->dropColumn('kpiresultgroup_tag_id_foreign');
+            $table->dropForeign('kpiresultgroup_tag_id_foreign');
         });
     }
 }
