@@ -1539,8 +1539,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             endorse.verified=!endorse.verified;
             loader.setEndorsement({
                 id:kpiheaders.id
-            }).then(onEndorseUpdated);
+            }).then(onEndorseUpdated,loadFail).finally(saveDone);
             alertModal.display('Peringatan','Mengirim data, mohon tunggu',false,true);
+            $scope.hasChanged=true;
+            $rootScope.loading=true;
         },function(){
             $scope.aggrements[endorse.id]=!$scope.aggrements[endorse.id];
         });

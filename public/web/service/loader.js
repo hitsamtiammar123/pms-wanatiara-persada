@@ -55,8 +55,9 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         var sentData={};
         sentData.dataChanged=JSON.stringify(dataChange);
         sentData.headerChanged=JSON.stringify(headerChanged);
+        sentData._method='PUT'
 
-        return $http.put(url,E.param(sentData),ajaxConfig2);
+        return $http.post(url,E.param(sentData),ajaxConfig2);
 
     }
 
@@ -106,7 +107,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
     this.setEndorsementGroup=function(tagID){
         var url=this.route('kpitag',[tagID,'endorse']);
-        return $http.put(url,[]);
+        return $http.post(url,E.param({_method:'PUT'}));
     }
 
     this.getSearchList=function(query){
@@ -160,8 +161,9 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         sentData.weighting=JSON.stringify(
             body.weighting
         );
+        sentData._method='PUT';
 
-        return $http.put(url,E.param(sentData),ajaxConfig2);
+        return $http.post(url,E.param(sentData),ajaxConfig2);
     }
 
     this.fetchPMSPDF=function(id,option){
@@ -193,25 +195,29 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
     this.resetEndorsement=function(id,data){
         var url=this.route('kpiendorsement',[id,'reset']);
+        data._method='PUT';
 
-       return $http.put(url,E.param(data),ajaxConfig2);
+       return $http.post(url,E.param(data),ajaxConfig2);
     }
 
     this.updateProfile=function(id,profile){
         var url=this.route('employee',[id]);
+        profile._method='PUT';
 
-        return $http.put(url,E.param(profile),ajaxConfig2);
+        return $http.post(url,E.param(profile),ajaxConfig2);
     }
 
     this.updatePassword=function(id,password){
         var url=this.route('employee',[id,'password']);
+        password._method='PUT';
 
-        return $http.put(url,E.param(password),ajaxConfig2);
+        return $http.post(url,E.param(password),ajaxConfig2);
     }
 
     this.setEndorsement=function(data){
         var url=this.route('kpiendorsement',[data.id]);
-        return $http.put(url,data);
+        data._method='PUT';
+        return $http.post(url,data);
     }
 
     this.route=function(name,param,param_url){
