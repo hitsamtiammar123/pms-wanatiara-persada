@@ -285,4 +285,8 @@ class Employee extends Model
     public function tags(){
         return $this->belongsToMany(KPITag::class,'groupingkpi','employee_id','tag_id')->withTimestamps();
     }
+
+    public function hasTags(){
+        return count($this->tags)!==0;
+    }
 }

@@ -118,7 +118,7 @@ class KPIResultHeader extends Model
         foreach($kpiresultdeletelist as $todelete){
             $curr_delete=self::find($todelete);
             $curr_delete_prev=$curr_delete->getPrev();
-            if($curr_delete){
+            if($curr_delete && !$curr_delete->kpiheader->employee->hasTags() ){
                 $curr_delete->delete();
                 is_null($curr_delete_prev)?:$curr_delete_prev->delete();
             }
@@ -290,8 +290,10 @@ class KPIResultHeader extends Model
     public function saveFromArray($kpiresult, KPIResultHeader $_prev=null,$ids=[]){
         $result_prev=!is_null($_prev)?$_prev:$this->getPrev();
 
-        array_key_exists('name',$kpiresult)?$this->kpiresult->name=$kpiresult['name']:null;
-        array_key_exists('unit',$kpiresult)?$this->kpiresult->unit=$kpiresult['unit']:null;
+        if(!$this->kpiheader->employee->hasTags()){
+            array_key_exists('name',$kpiresult)?$this->kpiresult->name=$kpiresult['name']:null;
+            array_key_exists('unit',$kpiresult)?$this->kpiresult->unit=$kpiresult['unit']:null;
+        }
 
         //$result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
         $this->mapFromArr(KPIResultHeader::KPIRESULTCURRENTKEY,$kpiresult);
@@ -318,6 +320,7 @@ class KPIResultHeader extends Model
      */
 
     public function setUpdatedList($kpiresult, array &$updatedlist){
+
         $keys=array_merge(static::KPIRESULTDKEY,static::KPIRESULTFRONTKEY);
         $total=[];
         $char_set=['name','unit'];

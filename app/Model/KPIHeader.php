@@ -504,6 +504,9 @@ class KPIHeader extends Model implements Endorseable
     }
 
     protected function applyCreatedKPIResultFromArray($kpiresults,KPIHeader $header_prev,array &$createdlist){
+        if($this->employee->hasTags())
+            return;
+
         foreach($kpiresults as $k){
             if(!$header_prev)
                 return;
@@ -566,11 +569,7 @@ class KPIHeader extends Model implements Endorseable
         if(!in_array($curr_process_id,$kpiprocessdeletelist) &&
          (array_key_exists('kpi_header_id',$kpiprocess) && $kpiprocess['kpi_header_id'] ) ){
             if(!is_null($curr_process)){
-                $curr_process_prev=$curr_process->getPrev();
-                !is_null($curr_process_prev)?$curr_process_prev->mapFromArr(KPIProcess::KPIPROCESSPREVKEY,$kpiprocess):null;
-                $curr_process->unit=array_key_exists('unit',$kpiprocess)?$kpiprocess['unit']:$curr_process->unit;
-                $curr_process->mapFromArr(KPIProcess::KPIPROCESSCURRKEY,$kpiprocess);
-                $curr_process->save();
+                $curr_process->saveFromArray(KPIProcess::KPIPROCESSCURRKEY,$kpiprocess);
             }
             else{
                 $this->applyCreatedKPIProcessFromArray($kpiprocess);
@@ -584,10 +583,14 @@ class KPIHeader extends Model implements Endorseable
      * @return void
      */
     protected function applyCreatedKPIProcessFromArray($kpiprocess){
+        if($this->employee->hasTags())
+            return;
+
         $header_prev=$this->getPrev();
         $kpi_process_id=$kpiprocess['id'];
         $datamap=KPIProcess::getArrayMap(KPIProcess::KPIPROCESSCURRKEY,$kpiprocess);
         $curr_process=$this->kpiprocesses()->find($kpi_process_id);
+
         if(!$curr_process){
             $this->kpiprocesses()->attach([
                 $kpiprocess['id'] => $datamap
@@ -869,7 +872,7 @@ class KPIHeader extends Model implements Endorseable
         $header_prev=$this->getPrev();
         $kpiprevdeletelist=[];
         $now=Carbon::now();
-        if(count($kpiprocessdeletelist)!==0){
+        if(count($kpiprocessdeletelist)!==0 && !$this->employee->hasTags()){
             $this->kpiprocesses()->detach($kpiprocessdeletelist);
             if($header_prev){
                 foreach($kpiprocessdeletelist as $to_delete){
