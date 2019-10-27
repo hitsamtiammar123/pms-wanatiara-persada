@@ -37,8 +37,8 @@ class TestCommand extends Command
         $headers=KPIHeader::where('period','2019-10-16')->get();
         foreach($headers as $header){
             $curr_header=$header->getPrev();
-            $header->makeKPIResult($curr_header);
-            $header->makeKPIProcess($curr_header);
+            $header->kpiresultheaders->count()==!0?:$header->makeKPIResult($curr_header);
+            $header->kpiprocesses->count()==!0?:$header->makeKPIProcess($curr_header);
             printf("Header dari %s untuk period %s sudah dibuat KPInya\n",$header->employee->name,$period);
             sleep(1);
         }
@@ -51,6 +51,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        //$this->syncKPIHeader('2019-10-16');
+        $this->syncKPIHeader('2019-10-16');
     }
 }
