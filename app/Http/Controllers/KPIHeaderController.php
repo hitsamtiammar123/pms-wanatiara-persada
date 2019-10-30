@@ -36,7 +36,7 @@ class KPIHeaderController extends Controller
     public function showGroup(Request $request,$id){
         $kpitag=KPITag::find($id);
         if(!$kpitag){
-            return send_404_error('Data tidak ditemukan');
+            return send_404_error('Data KPITag ditemukan');
         }
 
         $kpitag->representative;
@@ -53,6 +53,9 @@ class KPIHeaderController extends Controller
         $year=is_null($_year)?Carbon::now()->year:$_year;
         foreach($kpitag->groupemployee as $e){
             $header=$e->getHeader($month,$year);
+            if(is_null($header))
+                continue;
+
             $header->kpiresultheaders->each(function($d){
                 $d->kpiresult;
             });
@@ -67,9 +70,11 @@ class KPIHeaderController extends Controller
             $employees[]=$e_arr;
         }
         $curr_header=$kpitag->groupemployee[0]->getHeader($month,$year);
+        if(!$curr_header)
+            return send_404_error('Data KPIHeader ditemukan');
         $kpitag->employees=$employees;
-        $kpitag->weight_result=$header->weight_result;
-        $kpitag->weight_process=$header->weight_process;
+        $kpitag->weight_result=$curr_header->weight_result;
+        $kpitag->weight_process=$curr_header->weight_process;
         $kpitag->period_end=$curr_header->cPeriod()->format('Y-m-d');
         $kpitag->period_start=$curr_header->cPrevPeriod()->format('Y-m-d');
         $kpitag->endorsements=$kpitag->fetchKPIEndorsement(KPIHeader::getDate($month,$year));

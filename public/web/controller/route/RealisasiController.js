@@ -1653,7 +1653,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         if(isDownloading)
             return;
 
-       loader.fetchPMSPDF(curr_employee.id,{month:$scope.currentMonth.index}).then(function(result){
+       loader.fetchPMSPDF(curr_employee.id,{month:$scope.currentMonth.index+1}).then(function(result){
             var filename='PMS '+curr_employee.name+' - '+$scope.currentMonth.value+' '+$scope.currendDate.getFullYear()+'.pdf';
             loader.download(result.data,filename);
        },function(){

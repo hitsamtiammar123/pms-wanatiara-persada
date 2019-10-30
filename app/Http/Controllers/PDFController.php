@@ -51,6 +51,8 @@ class PDFController extends Controller
             return send_404_error('Data PMS Group Tidak ditemukan');
 
         $curr_header=$this->fetchInputHeader($request,$kpitag->getZeroIndexEmployee());
+        if(!$curr_header)
+            return send_404_error('Data KPI Header Tidak ditemukan');
 
         $data=[
             'kpitag'=>$kpitag,

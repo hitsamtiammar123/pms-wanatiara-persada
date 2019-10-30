@@ -44,8 +44,8 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return p+p_u;
     }
 
-    this.getByGroupTag=function(tagID){
-        var url=this.route('kpitag',[tagID]);
+    this.getByGroupTag=function(tagID,month){
+        var url=this.route('kpitag',[tagID],{month:month});
 
         return $http.get(url);
     }
@@ -171,8 +171,8 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url,{responseType:'blob'});
     }
 
-    this.fetchPMSGroupPDF=function(id){
-        var url=this.route('pdf-pms-group',[id]);
+    this.fetchPMSGroupPDF=function(id,option){
+        var url=this.route('pdf-pms-group',[id],option);
         return $http.get(url,{responseType:'blob'});
     }
 
