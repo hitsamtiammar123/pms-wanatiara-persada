@@ -340,8 +340,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                         case 'WMT':
                         case 'MT':
                         case 'kwh':
-                            curr.pt_contentEditable[j]=false;
-                            curr.real_contentEditable[j]=false;
+                            // curr.pt_contentEditable[j]=false;
+                            // curr.real_contentEditable[j]=false;
                         break;
                         default:
                                 curr.pt_contentEditable[j]=true;

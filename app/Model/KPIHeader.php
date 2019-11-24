@@ -77,7 +77,7 @@ class KPIHeader extends Model implements Endorseable
                 $r['pt_k2']=$kpiresultheader->pt_k;
                 $r['real_t2']=$kpiresultheader->real_t;
                 $r['real_k2']=$kpiresultheader->real_k;
-
+                $this->filterKPIResultByUnit($r);
 
                 $result[]=$r;
 
@@ -182,17 +182,32 @@ class KPIHeader extends Model implements Endorseable
         return $index;
     }
 
-    protected function getKPIProcessColor($r){
-        if($r<0)
-            return 'black-column';
-        else if($r===0)
-            return 'green-column';
-        else if($r===1)
-            return 'blue-column';
-        else if($r>1)
-            return 'gold-column';
-        else
-            return '';
+    protected function getKPIProcessColor($r,$groupdata=null){
+        if(is_null($groupdata)){
+            if($r<0)
+                return 'black-column';
+            else if($r===0)
+                return 'green-column';
+            else if($r===1)
+                return 'blue-column';
+            else if($r>1)
+                return 'gold-column';
+            else
+                return '';
+        }
+        else{
+            $r/=100;
+            if($r<=0.8)
+                return 'black-column';
+            else if($r>0.8 && $r<=0.9)
+                return 'red-column';
+            else if($r>0.9 && $r<1)
+                return 'green-column';
+            else if($r>=1 && $r<=1.025)
+                return 'blue-column';
+            else if($r>1.025)
+                return 'gold-column';
+        }
     }
 
     protected function getKPIProcessIndex($r){
@@ -323,7 +338,7 @@ class KPIHeader extends Model implements Endorseable
     }
 
     protected function getKPIAByIndex($rt,$unit){
-        $i=floatval($rt);
+        $i=is_numeric($rt)?floatval($rt):$rt;
         switch($unit){
             case '规模 Skala':
             case '规模 Scale':
@@ -340,6 +355,11 @@ class KPIHeader extends Model implements Endorseable
             break;
             case 'MT':
             case 'WMT':
+                if($i==='division by zero'){
+                    $rt=0;
+                    break;
+                }
+
                 if($i<=0.8)
                     $rt=80;
                 else if($i>0.8 && $i<=0.9)
@@ -366,7 +386,13 @@ class KPIHeader extends Model implements Endorseable
         switch($unit){
             case 'MT':
             case 'WMT':
-                $r=(floatval($d[$real_key])/floatval($d[$pt_key]));
+                $f_pt=floatval($d[$pt_key]);
+                $f_real=floatval($d[$real_key]);
+                if($f_pt==0)
+                    $r='division by zero';
+                else
+                    $r=$f_real/$f_pt;
+
             break;
             case '规模 Skala':
             case '规模 Scale':
@@ -454,8 +480,10 @@ class KPIHeader extends Model implements Endorseable
 
             $curr['kpia_1']=is_null($groupdata)?$this->getKPIProcessIndex($kt_1):$this->getKPIAByIndex(@$curr['real_1'],$curr['unit']);
             $curr['kpia_2']=is_null($groupdata)?$this->getKPIProcessIndex($kt_2):$this->getKPIAByIndex($curr['real_2'],$curr['unit']);
-            $curr['bColor_kpia_1']=@$this->getKPIProcessColor($kt_1);
-            $curr['bColor_kpia_2']=$this->getKPIProcessColor($kt_2);
+            $kpia_1=is_null($groupdata)?$kt_1:$curr['kpia_1'];
+            $kpia_2=is_null($groupdata)?$kt_2:$curr['kpia_2'];
+            $curr['bColor_kpia_1']=@$this->getKPIProcessColor($kpia_1,$groupdata);
+            $curr['bColor_kpia_2']=$this->getKPIProcessColor($kpia_2,$groupdata);
 
             $curr['aw_1']=round((@$curr['kpia_1']/100)*intval(@$curr['pw_1']),2);
             $curr['aw_2']=round(($curr['kpia_2']/100)*intval($curr['pw_2']),2);
@@ -482,19 +510,19 @@ class KPIHeader extends Model implements Endorseable
             case '$':
             case 'WMT':
             case 'MT':
-                if(in_array(['pt_k1','pt_t2','pt_k2'],$keys)){
-                    $pt_k1=$kpiresult['pt_k1'];
-                    $pt_t2=$kpiresult['pt_t2'];
+                //if(in_array(['pt_k1','pt_t2','pt_k2'],$keys)){
+                    $pt_k1=@$kpiresult['pt_k1'];
+                    $pt_t2=@$kpiresult['pt_t2'];
 
                     $kpiresult['pt_k2']=intval($pt_k1+$pt_t2).'';
-                }
+                //}
 
-                if(in_array(['real_k1','real_t2','real_k2'],$keys)){
-                    $real_k1=$kpiresult['real_k1'];
-                    $real_t2=$kpiresult['real_t2'];
+                //if(in_array(['real_k1','real_t2','real_k2'],$keys)){
+                    $real_k1=@$kpiresult['real_k1'];
+                    $real_t2=@$kpiresult['real_t2'];
 
                     $kpiresult['real_k2']=intval($real_k1+$real_t2).'';
-                }
+                //}
             break;
             case '%':
             case 'MV':
@@ -909,8 +937,9 @@ class KPIHeader extends Model implements Endorseable
 
                     try{
                         $resultheader->setAsNewData();
-                        KPIResultHeader::create([
-                            'id'=>KPIResultHeader::generateID($this->employee->id,$header_id),
+                        $id=KPIResultHeader::generateID($this->employee->id,$header_id);
+                        $newresult=KPIResultHeader::create([
+                            'id'=>$id,
                             'kpi_result_id'=>$resultheader->kpi_result_id,
                             'kpi_header_id'=>$header_id,
                             'pw'=>$resultheader->pw,
@@ -919,6 +948,10 @@ class KPIHeader extends Model implements Endorseable
                             'real_t'=>$resultheader->real_t,
                             'real_k'=>$resultheader->real_k
                         ]);
+                        if(!is_null($resultheader->priviledge) && $resultheader->isPriviledge())
+                            $newresult->mapPriviledge($resultheader->priviledge->value,$id);
+
+
                     }catch(\Exception $err){
                         put_error_log($err);
                     }
@@ -946,6 +979,7 @@ class KPIHeader extends Model implements Endorseable
             try{
                 foreach($curr_header->kpiprocesses as $kpiprocess){
                     try{
+                        $h->id=$header_id;
                         $h->kpiprocesses()->attach([
                             $kpiprocess->id=>[
                                 'pw'=>$kpiprocess->pivot->pw,

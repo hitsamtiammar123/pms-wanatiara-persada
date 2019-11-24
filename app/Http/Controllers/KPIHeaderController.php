@@ -22,7 +22,7 @@ class KPIHeaderController extends Controller
         count(array_keys(@$kpiresults['updated']?@$kpiresults['updated']:[]))!==0 || count(array_keys(@$kpiresults['created']?@$kpiresults['created']:[]))!==0 ||
         count(array_keys(@$kpiprocesses['updated']?@$kpiprocesses['updated']:[]))!==0 || count(array_keys(@$kpiprocesses['created']?@$kpiprocesses['created']:[]))!==0 ||
         count($kpiresultdeletelist)!==0 || count($kpiprocessdeletelist)!==0
-        )
+    )
             return true;
         return false;
 

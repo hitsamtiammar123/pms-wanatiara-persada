@@ -6,8 +6,8 @@
     $cNextPeriod=$curr_header->cNextPeriod();
     $cPrevPeriod=$curr_header->cPrevPeriod();
     $cCumPeriod=$curr_header->cCumStartPeriod();
-    $m=$curr_header->month;
-    $y=$curr_header->year;
+    $m=$cPeriod->month;
+    $y=$cPeriod->year;
     $kpiprocessgroup=$kpitag->groupkpiprocess;
     $kpiresultgroup=$kpitag->groupkpiresult;
 @endphp
@@ -55,7 +55,7 @@
                     <th colspan="2">Total</th>
                 </tr>
                 <tr>
-                    @foreach ($kpiresultgroup as $kpiresult)
+                    @foreach ($kpiresultgroup->sortBy('kpiresult.name') as $kpiresult)
                         <th colspan="2">{{$kpiresult->name}}</th>
                         <th rowspan="2">R/T(%)</th>
                     @endforeach
