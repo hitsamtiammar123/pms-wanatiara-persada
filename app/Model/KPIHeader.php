@@ -923,40 +923,59 @@ class KPIHeader extends Model implements Endorseable
      *
      * @return int Nilai balik 1 jika berhasil, 0 jika gagal
      */
-    public function makeKPIResult(KPIHeader $curr_header=null,$header_id=null){
+    public function makeKPIResult(Endorseable $curr_header=null,$header_id=null){
 
         $header_id=is_null($header_id)?$this->id:$header_id;
 
         try{
 
-            if(!is_null($curr_header) ){
-                foreach($curr_header->kpiresultheaders as $resultheader){
-                    $check_result_header=$this->kpiresultheaders()->where('kpi_result_id',$resultheader->kpiresult->id)->first();
-                    if($check_result_header)
-                        continue;
+            if(!is_null($curr_header)){
+                if($curr_header instanceof KPIHeader){
+                    foreach($curr_header->kpiresultheaders as $resultheader){
+                        $check_result_header=$this->kpiresultheaders()->where('kpi_result_id',$resultheader->kpiresult->id)->first();
+                        if($check_result_header)
+                            continue;
 
-                    try{
-                        $resultheader->setAsNewData();
+                        try{
+                            $resultheader->setAsNewData();
+                            $id=KPIResultHeader::generateID($this->employee->id,$header_id);
+                            $newresult=KPIResultHeader::create([
+                                'id'=>$id,
+                                'kpi_result_id'=>$resultheader->kpi_result_id,
+                                'kpi_header_id'=>$header_id,
+                                'pw'=>$resultheader->pw,
+                                'pt_t'=>$resultheader->pt_t,
+                                'pt_k'=>$resultheader->pt_k,
+                                'real_t'=>$resultheader->real_t,
+                                'real_k'=>$resultheader->real_k
+                            ]);
+                            if(!is_null($resultheader->priviledge) && $resultheader->isPriviledge())
+                                $newresult->mapPriviledge($resultheader->priviledge->value,$id);
+
+
+                        }catch(\Exception $err){
+                            put_error_log($err);
+                        }
+                    }
+                }
+                else if($curr_header instanceof KPITag){
+                    foreach($curr_header->groupkpiresult as $kpiresult){
                         $id=KPIResultHeader::generateID($this->employee->id,$header_id);
                         $newresult=KPIResultHeader::create([
                             'id'=>$id,
-                            'kpi_result_id'=>$resultheader->kpi_result_id,
+                            'kpi_result_id'=>$kpiresult->id,
                             'kpi_header_id'=>$header_id,
-                            'pw'=>$resultheader->pw,
-                            'pt_t'=>$resultheader->pt_t,
-                            'pt_k'=>$resultheader->pt_k,
-                            'real_t'=>$resultheader->real_t,
-                            'real_k'=>$resultheader->real_k
+                            'pw'=>0,
+                            'pt_t'=>0,
+                            'pt_k'=>0,
+                            'real_t'=>0,
+                            'real_k'=>0
                         ]);
-                        if(!is_null($resultheader->priviledge) && $resultheader->isPriviledge())
-                            $newresult->mapPriviledge($resultheader->priviledge->value,$id);
-
-
-                    }catch(\Exception $err){
-                        put_error_log($err);
                     }
                 }
             }
+
+
         }catch(\Exception $err){
             put_error_log($err);
             return 0;
@@ -972,25 +991,39 @@ class KPIHeader extends Model implements Endorseable
      *
      * @return int 1 jika berhasil, 0 jika ada error
      */
-    public function makeKPIProcess(KPIHeader $curr_header=null,$header_id=null){
+    public function makeKPIProcess(Endorseable $curr_header=null,$header_id=null){
 
         if(!is_null($curr_header)){
             $h=$this;
             try{
-                foreach($curr_header->kpiprocesses as $kpiprocess){
-                    try{
-                        $h->id=$header_id;
-                        $h->kpiprocesses()->attach([
-                            $kpiprocess->id=>[
-                                'pw'=>$kpiprocess->pivot->pw,
-                                'pt'=>0,
-                                'real'=>0
-                            ]
-                        ]);
-                    }catch(\Exception $err){
-                        put_error_log($err);
+                $kpiproceses=[];
+
+                if($curr_header instanceof KPIHeader)
+                    $kpiproceses=$curr_header->kpiprocesses;
+                else if($curr_header instanceof KPITag)
+                    $kpiproceses=$curr_header->groupkpiprocess;
+
+                    foreach($kpiproceses as $kpiprocess){
+                        try{
+
+                            $h->id=$header_id;
+                            if($curr_header instanceof KPIHeader)
+                                $pw=$kpiprocess->pivot->pw;
+                            else if($curr_header instanceof KPITag)
+                                $pw=100/count($kpiproceses);
+                            $h->kpiprocesses()->attach([
+                                $kpiprocess->id=>[
+                                    'pw'=>$pw,
+                                    'pt'=>0,
+                                    'real'=>0
+                                ]
+                            ]);
+                        }catch(\Exception $err){
+                            put_error_log($err);
+                        }
                     }
-                }
+
+
             }catch(\Exception $err){
                 put_error_log($err);
                 return 0;

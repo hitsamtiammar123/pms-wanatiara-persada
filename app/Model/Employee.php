@@ -183,7 +183,7 @@ class Employee extends Model
         return $r;
     }
 
-    public function createHeader($year,$month){
+    public function createHeader($year,$month,KPITag $tag=null){
         $period=KPIHeader::getDate($month,$year);
 
         if($this->checkHeader($period))
@@ -204,8 +204,10 @@ class Employee extends Model
             'weight_process'=>!is_null($curr_header)?$curr_header->weight_process:0.4
         ]);
 
-        $header->makeKPIResult($curr_header,$header_id);
-        $header->makeKPIProcess($curr_header,$header_id);
+        $endorseable=is_null($tag)?$curr_header:$tag;
+
+        $header->makeKPIResult($endorseable,$header_id);
+        $header->makeKPIProcess($endorseable,$header_id);
 
         return 1;
 
