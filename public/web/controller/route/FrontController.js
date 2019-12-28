@@ -1,5 +1,6 @@
 app.controller('FrontController',function($scope,$rootScope,dataService,months,
     notifier,user,loader,notifier,pusher,alertModal,days){
+    
     $scope.tahunkiwari=new Date().getFullYear();
     $scope.months=months;
     $scope.pmsIndex=user.employee.id;

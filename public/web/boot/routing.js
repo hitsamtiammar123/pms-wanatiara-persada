@@ -24,7 +24,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/realisasi/:index/:month?',
+            url:'/realisasi/:index/:month?/:year?',
             config:{
                 templateUrl:'web/view/realisasi.html',
                 controller:'RealisasiController',

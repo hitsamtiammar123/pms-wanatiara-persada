@@ -126,9 +126,9 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url);
     }
 
-    this.getHeaders=function(id,month){
+    this.getHeaders=function(id,month,year){
 
-        var url=this.route('kpiheader',[id],{month:month});
+        var url=this.route('kpiheader',[id],{month:month,year:year});
         return $http.get(url);
     }
 

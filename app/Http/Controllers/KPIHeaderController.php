@@ -142,8 +142,9 @@ class KPIHeaderController extends Controller
         //
 
         $month=$request->input('month');
+        $year=$request->input('year');
         if($month){
-            $curr_date=KPIHeader::getDate($month);
+            $curr_date=KPIHeader::getDate($month,$year);
         }
         else{
             $curr_date=KPIHeader::getCurrentDate();

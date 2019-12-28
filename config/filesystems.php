@@ -62,7 +62,7 @@ return [
         ],
         'web'=>[
             'driver'=>'local',
-            'root'=>base_path('../pms-wanatiara-persada-v1-angular/web'),
+            'root'=>public_path('web'),
             'visibility'=>'public'
         ],
         'angular_resource'=>[

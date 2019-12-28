@@ -23,8 +23,11 @@
                                 <a ng-click="downloadPDF()"><span class="glyphicon glyphicon-download black-font"></span></a>
                                 Pilih Bulan:
                                <select ng-change="changeMonth()" ng-options="m.value for m in months" ng-model="currentMonth"></select>
+                               Pilih Tahun:
+                               <select ng-change="changeYear()" ng-options="y for y in years" ng-model="currentYear"></select>
                         </div>
                 </div>
+                
 
         </div>
     <div class="table-100">

@@ -1,6 +1,6 @@
 app.controller('RealisasiController',function($scope,$rootScope,validator,loader,$route,
     $filter,notifier,copier,alertModal,dataService,user,$routeParams,formModal,confirmModal
-    ,$sce,pusher,months,$location,$parse,kpiKeys,kpiService,KPI_PROCESS,KPI_RESULT,errorResponse){
+    ,$sce,pusher,months,$location,$parse,kpiKeys,kpiService,KPI_PROCESS,KPI_RESULT,errorResponse,years){
 
 
     $scope.totalAchieveMent={};
@@ -34,6 +34,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     $scope.user=user;
     $scope.hasEndorse=true;
     $scope.months=months;
+    $scope.years=years;
     $scope.display_weights={};
 
 
@@ -60,6 +61,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     var curr_employee={};
 
     $scope.currentMonth=$scope.months[currMonth];
+    $scope.currentYear=$routeParams.year?parseInt($routeParams.year):$rootScope.year;
     $scope.currendDate=new Date();
 
 
@@ -1071,7 +1073,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         var header=result.data;
         kpiheaders=header;
         $scope.header=kpiheaders;
-        $rootScope.employees[employeeIndex].headers[currMonth]=kpiheaders;
+        $rootScope.employees[employeeIndex].headers[$scope.currentYear][currMonth]=kpiheaders;
         //user=header.employee;
         $scope.data=header.kpiresults;
         $scope.kpiprocesses=header.kpiprocesses;
@@ -1100,6 +1102,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             $rootScope.employees[employeeIndex]={};
             $rootScope.employees[employeeIndex].headers={};
         }
+        
     }
 
     var flushHeaderPropertyOnRootScope=function(){
@@ -1154,12 +1157,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     var loadHeader=function(month){
-        var headers=$rootScope.employees[employeeIndex].headers;
+        $rootScope.employees[employeeIndex].headers[$scope.currentYear]?null:$rootScope.employees[employeeIndex].headers[$scope.currentYear]={};
+        var headers=$rootScope.employees[employeeIndex].headers[$scope.currentYear];
 
 
        if(!headers.hasOwnProperty(month)){
-            alertModal.upstream('loading');
-            loader.getHeaders(employeeIndex,month+1).then(loadSuccessHeader,loadFail);
+            //alertModal.upstream('loading');
+            loader.getHeaders(employeeIndex,month+1,$scope.currentYear).then(loadSuccessHeader,loadFail);
        }
        else{
            var header=headers[month];
@@ -1374,6 +1378,13 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         //console.log($scope.currentMonth);
         var index=$scope.currentMonth.index;
         var url=loader.angular_route('realisasi',[employeeIndex,index]);
+        $location.path(url);
+    }
+
+    $scope.changeYear=function(){
+        //console.log($scope.currentMonth);
+        var index=$scope.currentMonth.index;
+        var url=loader.angular_route('realisasi',[employeeIndex,index,$scope.currentYear]);
         $location.path(url);
     }
 
