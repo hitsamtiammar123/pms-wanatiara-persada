@@ -490,7 +490,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             fetchData(data);
         }
         else{
-            alertModal.upstream('loading');
+            //alertModal.upstream('loading');
             loader.getByGroupTag(tagID,currMonth+1,currYear).then(onSuccess,errorResponse);
         }
     }
