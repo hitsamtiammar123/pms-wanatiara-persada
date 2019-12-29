@@ -44,8 +44,8 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return p+p_u;
     }
 
-    this.getByGroupTag=function(tagID,month){
-        var url=this.route('kpitag',[tagID],{month:month});
+    this.getByGroupTag=function(tagID,month,year){
+        var url=this.route('kpitag',[tagID],{month:month,year:year});
 
         return $http.get(url);
     }

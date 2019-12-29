@@ -1,5 +1,7 @@
-app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route','confirmModal','$rootScope','months','errorResponse','$location',
-function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route,confirmModal,$rootScope,months,errorResponse,$location){
+app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS',
+'$route','confirmModal','$rootScope','months','errorResponse','$location','years',
+function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,
+    KPI_RESULT,KPI_PROCESS,$route,confirmModal,$rootScope,months,errorResponse,$location,years){
 
     var tagID=$routeParams.tagID;
     var vw=this;
@@ -66,9 +68,11 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     vw.hasEndorse=true;
     vw.kpiendorsements={};
     vw.months=months;
+    vw.years=years;
 
     $scope.isSaving=false;
     $scope.currentMonth=months[currMonth];
+    $scope.currentYear=currYear;
 
     var initHeading2ByData=function(data,type){
         for(var i=0;i<data.length;i++){
@@ -467,7 +471,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var onSuccess=function(result){
         alertModal.hide();
         var data=result.data;
-        $rootScope.kpitags[tagID][currMonth]=data;
+        $rootScope.kpitags[tagID][$scope.currentYear][currMonth]=data;
         fetchData(data);
     }
 
@@ -476,16 +480,18 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             $rootScope.kpitags[tagID]={}
     }
 
-    var loadData=function(currMonth){
+    var loadData=function(currMonth,currYear){
         var kpitag=$rootScope.kpitags[tagID];
+        kpitag[currYear]?kpitag[currYear]:kpitag[currYear]={};
 
-        if(kpitag.hasOwnProperty(currMonth)){
-            var data=kpitag[currMonth];
+        
+        if(kpitag[currYear].hasOwnProperty(currMonth)){
+            var data=kpitag[currYear][currMonth];
             fetchData(data);
         }
         else{
             alertModal.upstream('loading');
-            loader.getByGroupTag(tagID,currMonth+1).then(onSuccess,errorResponse);
+            loader.getByGroupTag(tagID,currMonth+1,currYear).then(onSuccess,errorResponse);
         }
     }
 
@@ -598,6 +604,13 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         $location.path(url);
     }
 
+    vw.changeYear=function(){
+        //console.log($scope.currentMonth);
+        var index=$scope.currentMonth.index;
+        var url=loader.angular_route('realisasi-group',[tagID,index,$scope.currentYear]);
+        $location.path(url);
+    }
+
     checkTag();
-    loadData(currMonth);
+    loadData(currMonth,$scope.currentYear);
 }]);
