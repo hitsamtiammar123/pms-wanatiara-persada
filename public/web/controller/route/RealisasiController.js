@@ -1156,6 +1156,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
     }
 
+
     var loadHeader=function(month){
         $rootScope.employees[employeeIndex].headers[$scope.currentYear]?null:$rootScope.employees[employeeIndex].headers[$scope.currentYear]={};
         var headers=$rootScope.employees[employeeIndex].headers[$scope.currentYear];
@@ -1163,7 +1164,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
        if(!headers.hasOwnProperty(month)){
             //alertModal.upstream('loading');
-            loader.getHeaders(employeeIndex,month+1,$scope.currentYear).then(loadSuccessHeader,loadFail);
+            loader.getHeaders(employeeIndex,month+1,$scope.currentYear).then(loadSuccessHeader,loadFail).finally(kpiService.onDone);
+            $rootScope.loading=true;
        }
        else{
            var header=headers[month];

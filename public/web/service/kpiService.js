@@ -1,5 +1,5 @@
-app.service('kpiService',['$filter','KPI_PROCESS','KPI_RESULT','months','user',
-function($filter,KPI_PROCESS,KPI_RESULT,months,user){
+app.service('kpiService',['$filter','KPI_PROCESS','KPI_RESULT','months','user','$rootScope',
+function($filter,KPI_PROCESS,KPI_RESULT,months,user,$rootScope){
     var self=this;
     var f=months.map(function(d){
         return d.value;
@@ -188,6 +188,10 @@ function($filter,KPI_PROCESS,KPI_RESULT,months,user){
         }
         else
             return true;
+    }
+
+    this.onDone=function(){
+        $rootScope.loading=false;
     }
 
 }]);

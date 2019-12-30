@@ -51,6 +51,7 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        $this->syncKPIHeader('2019-10-16');
+        //$this->syncKPIHeader('2019-10-16');
+        echo 'test';
     }
 }

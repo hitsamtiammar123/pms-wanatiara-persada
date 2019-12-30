@@ -1,4 +1,4 @@
-app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader,alertModal,errorResponse){
+app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader,alertModal,errorResponse,kpiService){
     $scope.headers=$rootScope.kpicompanyheaders?$rootScope.kpicompanyheaders:[];
     $scope.kpicompanydata=$rootScope.kpicompanydata?$rootScope.kpicompanydata:[];
     $scope.keys=$rootScope.kpicompanykeys?$rootScope.kpicompanykeys:[];
@@ -38,8 +38,8 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
 
     var loadData=function(){
         if($scope.kpicompanydata.length===0){
-            loader.getKPICompany().then(loadSuccess,loadFail);
-            alertModal.upstream('loading')
+            loader.getKPICompany().then(loadSuccess,loadFail).finally(kpiService.onDone);
+            //alertModal.upstream('loading');
         }
         else{
             setFilter();

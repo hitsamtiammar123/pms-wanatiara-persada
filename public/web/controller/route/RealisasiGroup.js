@@ -475,6 +475,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         fetchData(data);
     }
 
+
     var checkTag=function(){
         if(!$rootScope.kpitags.hasOwnProperty(tagID))
             $rootScope.kpitags[tagID]={}
@@ -491,7 +492,8 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         }
         else{
             //alertModal.upstream('loading');
-            loader.getByGroupTag(tagID,currMonth+1,currYear).then(onSuccess,errorResponse);
+            loader.getByGroupTag(tagID,currMonth+1,currYear).then(onSuccess,errorResponse).finally(kpiService.onDone);
+            $rootScope.loading=true;
         }
     }
 

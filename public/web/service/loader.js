@@ -97,6 +97,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
     this.getKPICompany=function(){
         var url=this.route('kpicompany');
+        $rootScope.loading=true;
         return $http.get(url);
     }
 
@@ -117,12 +118,14 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
     this.getIkhtisarWithEmployeeID=function(id){
         var url=this.route('ikhtisar',null,{employee:id});
+        $rootScope.loading=true;
         return $http.get(url);
     }
 
 
     this.getIkhtisar=function(page){
         var url=this.route('ikhtisar',null,{page:page});
+        $rootScope.loading=true;
         return $http.get(url);
     }
 

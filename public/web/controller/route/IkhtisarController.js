@@ -1,5 +1,5 @@
 app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
-    notifier,alertModal,$routeParams,errorResponse){
+    notifier,alertModal,$routeParams,errorResponse,kpiService){
 
     var totalData=[];
     var currMonth=$rootScope.month;
@@ -164,12 +164,12 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
 
     var loadIkhtisarData=function(){
         if(isUndf(employee_id))
-            loader.getIkhtisar(page).then(onSuccess,e);
+            loader.getIkhtisar(page).then(onSuccess,e).finally(kpiService.onDone);
         else{
-            loader.getIkhtisarWithEmployeeID(employee_id).then(onSuccess,e);
+            loader.getIkhtisarWithEmployeeID(employee_id).then(onSuccess,e).finally(kpiService.onDone);
             $scope.hide_load_btn=true;
         }
-        alertModal.upstream('loading');
+        //alertModal.upstream('loading');
         $scope.disable_load_btn=true;
     }
 
