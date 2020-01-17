@@ -116,15 +116,15 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url);
     }
 
-    this.getIkhtisarWithEmployeeID=function(id){
-        var url=this.route('ikhtisar',null,{employee:id});
+    this.getIkhtisarWithEmployeeID=function(id,year){
+        var url=this.route('ikhtisar',null,{employee:id,year:year});
         $rootScope.loading=true;
         return $http.get(url);
     }
 
 
-    this.getIkhtisar=function(page){
-        var url=this.route('ikhtisar',null,{page:page});
+    this.getIkhtisar=function(page,year){
+        var url=this.route('ikhtisar',null,{page:page,year:year});
         $rootScope.loading=true;
         return $http.get(url);
     }

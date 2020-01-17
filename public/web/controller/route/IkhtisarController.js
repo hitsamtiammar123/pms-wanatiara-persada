@@ -1,5 +1,5 @@
 app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
-    notifier,alertModal,$routeParams,errorResponse,kpiService){
+    notifier,alertModal,$routeParams,errorResponse,kpiService,years,$location){
 
     var totalData=[];
     var currMonth=$rootScope.month;
@@ -26,6 +26,8 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         'Nov 十一月',
         'Dec 十二月'
     ];
+    $scope.currentYear=$routeParams.year?parseInt($routeParams.year):$rootScope.year;
+    $scope.years=years;
     vm.ikhtisar=[];
 
     var sI=function(res){
@@ -163,10 +165,10 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
     }
 
     var loadIkhtisarData=function(){
-        if(isUndf(employee_id))
-            loader.getIkhtisar(page).then(onSuccess,e).finally(kpiService.onDone);
+        if(isUndf(employee_id) || employee_id==='year')
+            loader.getIkhtisar(page,$scope.currentYear).then(onSuccess,e).finally(kpiService.onDone);
         else{
-            loader.getIkhtisarWithEmployeeID(employee_id).then(onSuccess,e).finally(kpiService.onDone);
+            loader.getIkhtisarWithEmployeeID(employee_id,$scope.currentYear).then(onSuccess,e).finally(kpiService.onDone);
             $scope.hide_load_btn=true;
         }
         //alertModal.upstream('loading');
@@ -174,7 +176,7 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
     }
 
     $scope.loadMore=function(){
-        if(!employee_id)
+        if(isUndf(employee_id) || employee_id==='year')
             loadIkhtisarData();
     }
 
@@ -198,10 +200,13 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         return color;
     }
 
+    $scope.changeDate=function(){
+        var url=loader.angular_route('ikhtisar',[employee_id?employee_id:'year',$scope.currentYear]);
+        $location.path(url);
+    }
+
 
     notifier.setNotifier('changeMonth',setCurrentMonth);
-    //setHeader();
     loadIkhtisarData();
-    //setIkhtisar();
 
 });

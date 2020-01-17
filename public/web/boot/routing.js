@@ -34,7 +34,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/ikhtisar/:id?',
+            url:'/ikhtisar/:id?/:year?',
             config:{
                 templateUrl:'web/view/ikhtisar.html',
                 controller:'IkhtisarController',
