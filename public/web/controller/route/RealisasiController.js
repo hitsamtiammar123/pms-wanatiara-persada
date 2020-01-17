@@ -1376,18 +1376,11 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         redoData(KPI_PROCESS);
     }
 
-    $scope.changeMonth=function(){
-        //console.log($scope.currentMonth);
-        var index=$scope.currentMonth.index;
-        var url=loader.angular_route('realisasi',[employeeIndex,index]);
-        $location.path(url);
-    }
-
-    $scope.changeYear=function(){
-        //console.log($scope.currentMonth);
-        var index=$scope.currentMonth.index;
-        var url=loader.angular_route('realisasi',[employeeIndex,index,$scope.currentYear]);
-        $location.path(url);
+    $scope.changeDate=function(){
+            //console.log($scope.currentMonth);
+            var index=$scope.currentMonth.index;
+            var url=loader.angular_route('realisasi',[employeeIndex,index,$scope.currentYear]);
+            $location.path(url);
     }
 
     $scope.addContent=kpiService.addContent;

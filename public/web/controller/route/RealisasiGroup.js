@@ -599,14 +599,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
        alertModal.display('Berkas PMS Group sedang diunduh','Mohon Tunggu');
     }
 
-    vw.changeMonth=function(){
-        //console.log($scope.currentMonth);
-        var index=$scope.currentMonth.index;
-        var url=loader.angular_route('realisasi-group',[tagID,index]);
-        $location.path(url);
-    }
-
-    vw.changeYear=function(){
+    vw.changeDate=function(){
         //console.log($scope.currentMonth);
         var index=$scope.currentMonth.index;
         var url=loader.angular_route('realisasi-group',[tagID,index,$scope.currentYear]);

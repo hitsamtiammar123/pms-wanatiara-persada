@@ -24,9 +24,10 @@
                 <div class="col-sm-4">
                         <a ng-click="rg.downloadPDF()"><span class="glyphicon glyphicon-download black-font"></span></a>
                         Pilih Bulan:
-                       <select ng-change="rg.changeMonth()" ng-options="m.value for m in rg.months" ng-model="currentMonth"></select>
+                       <select ng-options="m.value for m in rg.months" ng-model="currentMonth"></select>
                        Pilih Tahun:
-                       <select ng-change="rg.changeYear()" ng-options="m for m in rg.years" ng-model="currentYear"></select>
+                       <select  ng-options="m for m in rg.years" ng-model="currentYear"></select>
+                       <a ng-click="rg.changeDate()"><span class="glyphicon glyphicon-chevron-right black-font"></span></a>
                 </div>
 
             </div>
