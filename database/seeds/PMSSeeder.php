@@ -10,7 +10,7 @@ class PMSSeeder extends Seeder
      *
      * @var string
      */
-    protected $storage='local';
+    protected $storage='resource';
 
     /**
      * Nama dari folder backup
@@ -157,9 +157,7 @@ class PMSSeeder extends Seeder
      *
      * @return void
      */
-    public function __construct($storage=null,$dir=null){
-        $this->storage=!is_null($storage)?$storage:'local';
-        $this->dir=!is_null($dir)?$dir:'backup';
+    public function __construct(){
         $this->disk=\Storage::disk($this->storage);
 
     }
