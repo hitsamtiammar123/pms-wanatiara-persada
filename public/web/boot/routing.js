@@ -67,7 +67,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/realisasi-perusahaan',
+            url:'/realisasi-perusahaan/:month?/:year?',
             config:{
                 templateUrl:'web/view/realisasi-perusahaan.html',
                 controller:'RealisasiPerusahaanController',

@@ -17,7 +17,7 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
     protected $storage;
 
     public function __construct(){
-        $this->storage=\Storage::disk('local');
+        $this->storage=\Storage::disk('resource');
     }
 
     protected function filterNum($row){
@@ -28,15 +28,15 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
         return $row;
     }
 
-    public function save(){
+    public function save($dir_date){
         $dir='kpicompany/';
-        $filename=$dir.'kpicompany_'.date('Y').'_'.date('M');
+        $filename=$dir.'kpicompany_'.$dir_date;
 
         $data=$this->frontEndData();
 
         if($data){
             $str_data=json_encode($data);
-            $this->storage->put($filename,$str_data);
+            $this->storage->put($filename,$str_data,'public');
         }
 
     }

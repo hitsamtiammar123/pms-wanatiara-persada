@@ -24,6 +24,7 @@ app.constant('route',{
         'notification-detail':'/pengesahan/detail/',
         'realisasi':'/realisasi/',
         'realisasi-group':'/realisasi-group/',
-        'ikhtisar':'/ikhtisar/'
+        'ikhtisar':'/ikhtisar/',
+        'realisasi-perusahaan':'/realisasi-perusahaan/'
     }
 });

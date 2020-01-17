@@ -95,8 +95,8 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
     }
 
 
-    this.getKPICompany=function(){
-        var url=this.route('kpicompany');
+    this.getKPICompany=function(month,year){
+        var url=this.route('kpicompany',[],{year:year,month:month});
         $rootScope.loading=true;
         return $http.get(url);
     }
@@ -190,7 +190,8 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
     this.uploadKPICompany=function(data){
         var form=new FormData();
-        form.append('file',data.file);
+        for(var i in data)
+            form.append(i,data[i]);
 
         var url=this.route('kpicompany.upload',[data.id]);
         return $http.post(url,form,ajaxConfig);
