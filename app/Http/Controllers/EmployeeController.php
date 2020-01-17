@@ -9,22 +9,33 @@ use App\Model\KPIHeader;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Traits\ErrorMessages;
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
 
     use ErrorMessages;
 
-    private function fetchIkhtisar($item){
+    private function fetchIkhtisar($item,$currYear){
         $item->load('role');
         $item->load('kpiheaders');
         $item->makeHidden(Employee::HIDDEN_PROPERTY);
         if($item->role!==null)
             $item->role->makeHidden(Role::HIDDEN_PROPERTY);
-        $item->kpiheaders->each(function($d){
-            $d->kpiresultheaders;
-            $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
+
+        $item->kpiheaders->each(function($d,$index)use($item,$currYear){
+            $carbon=Carbon::parse($d->period);
+            if($carbon->year==$currYear){
+                $d->kpiresultheaders;
+                $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
+            }
+            else
+                $item->kpiheaders->forget($index);
         });
+        $values=$item->kpiheaders->values()->all();
+        unset($item->kpiheaders);
+        $item->kpiheaders=$values;
+        
     }
 
 
@@ -120,12 +131,13 @@ class EmployeeController extends Controller
 
     public function ikhtisar(Request $request){
         $employee_id=$request->input('employee');
+        $year=$request->input('year',Carbon::now()->year);
 
         if(!$employee_id){
             $employees=Employee::where('role_id','!=','1915283263')->paginate(10);
             $items=$employees->items();
             foreach($items as $item){
-                $this->fetchIkhtisar($item);
+                $this->fetchIkhtisar($item,$year);
             }
             return $employees;
         }
@@ -134,7 +146,7 @@ class EmployeeController extends Controller
             if(is_null($employee))
                 return send_404_error();
 
-            $this->fetchIkhtisar($employee);
+            $this->fetchIkhtisar($employee,$year);
 
             return ['data'=>[$employee]];
         }
