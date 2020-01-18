@@ -17,11 +17,15 @@ app.factory('errorResponse',['alertModal',function(alertModal){
         },
         'default':function(){
             alertModal.upstream('something-wrong');
+        },
+        '-1':function(){
+            alertModal.upstream('connection-lost');
         }
 
     };
 
     var res=function(err){
+        //console.log('error,',err);
         var status=err.status;
         if(errorResponseDefault.hasOwnProperty(status)){
             var callback=errorResponseDefault[status];

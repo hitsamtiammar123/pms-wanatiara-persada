@@ -40,5 +40,11 @@ app.constant('alertModalUpstreams',{
         message:'Berkas yang anda unggah tidak memiliki format yang sesuai. Silakan anda unggah kembali berkas yang sesuai.',
         isShowButton:true,
         isStatic:true
+    },
+    'connection-lost':{
+        title:'Peringatan',
+        message:'Koneksi Terputus, silahkan muat ulang halaman',
+        isShowButton:false,
+        isStatic:true
     }
 });
