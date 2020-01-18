@@ -24,7 +24,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         return d.value;
     });
     $scope.kpiprocesses=[];
-    $scope.headerLabelProcess=['Juni','Juli','Target Juni','Target Juli','Realisasi Juni','Realisasi Juli','Juni','Juli','Juni','Juli'];
+    $scope.headerLabelProcess=[];
     $scope.pw_indices=['pw_1','pw_2'];
     $scope.pt_indices=['pt_t1','pt_k1','pt_t2','pt_k2'];
     $scope.real_indices=['real_t1','real_k1','real_t2','real_k2'];
@@ -80,7 +80,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         var curr=$route.current.$$route.controller;
         flushStreamAndHeader();
         if(curr==='RealisasiController' && !$rootScope.loading ){
-            alertModal.display('Peringatan','Terjadi Perubahan Data',false,true);
+            //alertModal.display('Peringatan','Terjadi Perubahan Data',false,true);
             setTimeout($route.reload,1500);
         }
     }
@@ -178,11 +178,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     var setHeaderProcessLabel=function(){
-        $scope.headerLabelProcess=[];
         var t;
         for(var i=0;i<10;i++){
             var input=''
-            t=(i%2===0)?currMonth-1:currMonth;
+            t=(i%2===0)?currMonth!==0?currMonth-1:11:currMonth;
 
             switch(i){
                 case 2:
@@ -1106,11 +1105,15 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     }
 
     var flushHeaderPropertyOnRootScope=function(){
-        for(var i=0;i<12;i++){
-            if($rootScope.employees[employeeIndex].headers.hasOwnProperty(i)){
-                delete $rootScope.employees[employeeIndex].headers[i];
+        for(var j=0;j<years.length;j++){
+            var listOnYears=$rootScope.employees[employeeIndex].headers[years[j]];
+            for(var i=0;i<12 &&listOnYears ;i++){
+                if(listOnYears.hasOwnProperty(i)){
+                    delete listOnYears[i];
+                }
             }
         }
+
     }
 
     var flushStreamAndHeader=function(){
@@ -1709,5 +1712,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
     loadHeader(currMonth);
     pusher.on('pms-has-changed-'+employeeIndex,PMSHasChanged);
     vanishDisturbingColumn();
+    $scope.currendDate.setFullYear($scope.currentYear);
 
 });

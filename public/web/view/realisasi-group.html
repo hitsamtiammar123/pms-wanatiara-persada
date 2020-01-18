@@ -3,25 +3,25 @@
 
     <div class="table-100 heading-content" >
         <div class="row">
-                <div class="col-sm-3">Penilaian Group</div>
-                <div class="col-sm-2">: {{rg.kpitag.name}}</div>
-                <div class="col-sm-4">当月考核期 Periode bulan berjalan</div>
-                <div class="col-sm-3">: {{ rg.pb.start }} - {{ rg.pb.end }}</div>
+                <div class="col-xs-3">Penilaian Group</div>
+                <div class="col-xs-2">: {{rg.kpitag.name}}</div>
+                <div class="col-xs-4">当月考核期 Periode bulan berjalan</div>
+                <div class="col-xs-3">: {{ rg.pb.start }} - {{ rg.pb.end }}</div>
         </div>
         <div class="row" style="margin-top:10px;">
-                <div class="col-sm-3">Penilai</div>
-                <div class="col-sm-2">: {{rg.kpitag.representative.role.name}}</div>
-                <div class="col-sm-4">当月累计考核期 Periode Kumulatif sampai bulan berjalan</div>
-                <div class="col-sm-3">: {{ rg.pb.startB }} - {{ rg.pb.endB }}</div>
+                <div class="col-xs-3">Penilai</div>
+                <div class="col-xs-2">: {{rg.kpitag.representative.role.name}}</div>
+                <div class="col-xs-4">当月累计考核期 Periode Kumulatif sampai bulan berjalan</div>
+                <div class="col-xs-3">: {{ rg.pb.startB }} - {{ rg.pb.endB }}</div>
         </div>
         <div class="row" style="margin-top:10px;">
-                <div class="col-sm-3">Atasan Penilai </div>
-                <div class="col-sm-2">: {{rg.kpitag.representative.atasan.role.name}}</div>
+                <div class="col-xs-3">Atasan Penilai </div>
+                <div class="col-xs-2">: {{rg.kpitag.representative.atasan.role.name}}</div>
         </div>
     </div>
     <div class="table-100" style="margin-top:30px;margin-bottom:30px;">
         <div class="row">
-                <div class="col-sm-4">
+                <div class="col-xs-4">
                         <a ng-click="rg.downloadPDF()"><span class="glyphicon glyphicon-download black-font"></span></a>
                         Pilih Bulan:
                        <select ng-options="m.value for m in rg.months" ng-model="currentMonth"></select>
@@ -90,12 +90,12 @@
     <div class="table-100">
         <button class="btn btn-success save-change-btn" ng-hide="rg.hasEndorse" ng-disabled="isSaving" ng-click="rg.saveChanged()" >Simpan Perubahan 保存更改</button>
     </div>
-    <div class="col-sm-12 footer-pengesahan">
+    <div class="col-xs-12 footer-pengesahan">
         <div class="row pengesahan-header">
-                <div class="col-sm-6">
+                <div class="col-xs-6">
                         <p class="bold">Pengesahan 批准</p>
                     </div>
-                <div class="col-sm-6">
+                <div class="col-xs-6">
                         <p class="blue-font bold right-text">
                             HRD <span class="glyphicon glyphicon-ok"></span>
                         </p>
@@ -103,15 +103,15 @@
         </div>
 
 
-        <div class="col-sm-12">
-            <div ng-repeat="endorse in rg.kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-sm-4">
+        <div class="col-xs-12">
+            <div ng-repeat="endorse in rg.kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-xs-4">
                 {{ endorse.role.name}}:
                 <input type="checkbox" ng-change="!rg.isEndorseDisable(endorse)?rg.setEndorse(endorse):null" ng-disabled="rg.isEndorseDisable(endorse)" ng-model="rg.aggrements[endorse.id]">
             </div>
         </div>
-        <div class="col-sm-12 tanda-tangan"></div>
-        <div class="col-sm-12">
-            <div ng-repeat="endorse in rg.kpiendorsements" ng-class="{'blue-check':rg.aggrements[endorse.id],'pengesahan1':$index===0}" class="col-sm-4">
+        <div class="col-xs-12 tanda-tangan"></div>
+        <div class="col-xs-12">
+            <div ng-repeat="endorse in rg.kpiendorsements" ng-class="{'blue-check':rg.aggrements[endorse.id],'pengesahan1':$index===0}" class="col-xs-4">
                 {{ endorse.name}}
             </div>
         </div>

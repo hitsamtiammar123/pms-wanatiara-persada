@@ -20,7 +20,7 @@
 <div ng-controller="FrontController">
   <div class="row web-header index-bar nav-bar-fixed" >
 
-      <div class="col-sm-12">
+      <div class="col-xs-12">
               <nav class="navbar navbar-default navbar-wanatiara">
                   <ul class="nav navbar-nav">
                         <li class=""><a class="dropdown-toggle" data-toggle="dropdown" >Berkas 文件<span class="caret"></span></a>
@@ -108,17 +108,17 @@
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     <li class="greetings-nav">
-                        <div class="col-sm-12">{!! $curr_date !!}</div>
+                        <div class="col-xs-12">{!! $curr_date !!}</div>
 
                     </li>
                   </ul>
               </nav>
       </div>
-      <div class="col-sm-12 margin-top-20" style="margin-top:-20px">
-              <div class="col-sm-2">
+      <div class="col-xs-12 margin-top-20" style="margin-top:-20px">
+              <div class="col-xs-2">
                       <img src="img/logo.png" alt="" class="logo">
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-xs-6">
                       <div class="row">
                           @if (!Browser::isChrome()&&!Browser::isFirefox())
                           <div class="title2 browser-unrecommended">Kami sarankan anda menggunakan Browser chrome atau firefox untuk performa yang lebih baik</div>
@@ -131,7 +131,7 @@
                       </div>
                   </div>
       </div>
-      <div class="col-sm-9 navigation margin-top-20" style="margin-top: -20px;">
+      <div class="col-xs-9 navigation margin-top-20" style="margin-top: -20px;">
         <ul class="nav-bar nav-bar-pms">
             <li><a href="#!target-manajemen" tab-target="#target-manajemen" >Beranda 主页</a></li>
             @can('tier-except-0', Auth::user())
