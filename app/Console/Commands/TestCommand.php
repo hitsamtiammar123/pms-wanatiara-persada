@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Model\KPIResultHeader;
-use App\Model\KPITag;
-use App\Model\KPIHeader;
 use Illuminate\Console\Command;
+use Storage;
 
 class TestCommand extends Command
 {
@@ -33,16 +31,7 @@ class TestCommand extends Command
         parent::__construct();
     }
 
-    public function syncKPIHeader($period){
-        $headers=KPIHeader::where('period','2019-10-16')->get();
-        foreach($headers as $header){
-            $curr_header=$header->getPrev();
-            $header->kpiresultheaders->count()==!0?:$header->makeKPIResult($curr_header);
-            $header->kpiprocesses->count()==!0?:$header->makeKPIProcess($curr_header);
-            printf("Header dari %s untuk period %s sudah dibuat KPInya\n",$header->employee->name,$period);
-            sleep(1);
-        }
-    }
+
 
     /**
      * Execute the console command.
@@ -52,6 +41,18 @@ class TestCommand extends Command
     public function handle()
     {
         //$this->syncKPIHeader('2019-10-16');
-        echo 'test';
+
+        $path=resource_path('kpicompany/test.json');
+        $f=fopen($path,'w+');
+
+        if($f){
+            \fputs($f,'{"test":"test"}');
+            echo 'berhasil';
+        }
+        else
+            echo 'gagal';
+        fclose($f);
+
+
     }
 }

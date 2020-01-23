@@ -30,13 +30,20 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
 
     public function save($dir_date){
         $dir='kpicompany/';
-        $filename=$dir.'kpicompany_'.$dir_date;
+        $filename=$dir.'kpicompany_'.$dir_date.'.json';
 
         $data=$this->frontEndData();
 
         if($data){
             $str_data=json_encode($data);
-            $this->storage->put($filename,$str_data,'public');
+            //$this->storage->put($filename,$str_data,'public');
+            $path=resource_path($filename);
+            $f=fopen($path,'w+');
+
+            if($f){
+                \fputs($f,$str_data);
+            }
+            fclose($f);
         }
 
     }

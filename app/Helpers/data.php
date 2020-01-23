@@ -57,16 +57,15 @@ if(!function_exists('kpi_company')){
         $c=Carbon::now();
         $c->year=$_year;
         $c->month=$_month;
-        $file="kpicompany/kpicompany_{$c->year}_{$c->shortEnglishMonth}";
+        $file="kpicompany/kpicompany_{$c->year}_{$c->shortEnglishMonth}.json";
 
-        $real_path=$disk->getAdapter()->getPathPrefix().'/'.$file;
-
-        if(file_exists($real_path)){
-            $kpi_company=file_get_contents($real_path);
-            return json_decode($kpi_company,true);
+        if($disk->exists($file)){
+            $content=$disk->get($file);
+            return json_decode($content,true);
         }
         else
             return [];
+
     }
 }
 
