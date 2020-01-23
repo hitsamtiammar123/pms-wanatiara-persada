@@ -75,7 +75,17 @@ return [
         ],
         'resource'=>[
             'driver'=>'local',
-            'root'=>resource_path()
+            'root'=>resource_path(),
+            'permissions' => [
+                'file' => [
+                    'public' => 0664,
+                    'private' => 0600,
+                ],
+                'dir' => [
+                    'public' => 0775,
+                    'private' => 0700,
+                ],
+            ],
         ]
 
     ],

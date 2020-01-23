@@ -36,14 +36,14 @@ class KPICompany implements ToCollection,WithHeadingRow,WithCalculatedFormulas
 
         if($data){
             $str_data=json_encode($data);
-            //$this->storage->put($filename,$str_data,'public');
-            $path=resource_path($filename);
-            $f=fopen($path,'w+');
+            $this->storage->put($filename,$str_data,'public');
+            // $path=resource_path($filename);
+            // $f=fopen($path,'w+');
 
-            if($f){
-                \fputs($f,$str_data);
-            }
-            fclose($f);
+            // if($f){
+            //     fputs($f,$str_data);
+            // }
+            // fclose($f);
         }
 
     }
