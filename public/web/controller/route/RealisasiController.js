@@ -317,8 +317,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             curr.pw_contentEditable[j]=false;
         }
         else{
-            if(j===0)
-                curr.pw_contentEditable[j]=false;
+            if(j===0){
+                curr.pw_contentEditable[j]=curr.hasNew?true:false;
+            }
             else if(j===1)
                 curr.pw_contentEditable[j]=true;
         }
@@ -331,8 +332,14 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
         else{
             if(j<2){
-                curr.pt_contentEditable[j]=false;
-                curr.real_contentEditable[j]=false;
+                if(!curr.hasNew){
+                    curr.pt_contentEditable[j]=false;
+                    curr.real_contentEditable[j]=false;
+                }
+                else{
+                    curr.pt_contentEditable[j]=true;
+                    curr.real_contentEditable[j]=true;
+                }
             }
             else if(j>=2){
                 if(j===3){
@@ -424,12 +431,19 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                     curr.contentEditable.real_2=false;
                 }
                 else{
+                    if(curr.hasNew===true){
+                        curr.contentEditable.pw_1=true;
+                        curr.contentEditable.pt_1=true;
+                        curr.contentEditable.real_1=true;
+                    }
+                    else{
+                        curr.contentEditable.pw_1=false;
+                        curr.contentEditable.pt_1=false;
+                        curr.contentEditable.real_1=false;
+                    }
                     curr.contentEditable.unit=true;
-                    curr.contentEditable.pw_1=false;
                     curr.contentEditable.pw_2=true;
-                    curr.contentEditable.pt_1=false;
                     curr.contentEditable.pt_2=true;
-                    curr.contentEditable.real_1=false;
                     curr.contentEditable.real_2=true;
                 }
 
@@ -1101,7 +1115,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             $rootScope.employees[employeeIndex]={};
             $rootScope.employees[employeeIndex].headers={};
         }
-        
+
     }
 
     var flushHeaderPropertyOnRootScope=function(){
@@ -1198,6 +1212,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         data.pt_2=0;
         data.real_1=0;
         data.real_2=0;
+        data.kpi_header_id=kpiheaders.id;
+
+        data.hasNew=true;
 
         $scope.kpiprocesses.push(data);
         dataService.digest($scope);
@@ -1465,6 +1482,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         data.aw_1=0;
         data.aw_2=0;
 
+        data.hasNew=true;
+
         data.pt_contentEditable=[];
         data.pw_contentEditable=[];
         data.real_contentEditable=[];
@@ -1538,7 +1557,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         var i=attrs.belongTo.replace('p.','');
         var d=parseInt(attrs.dIndex);
         kpiService.mapChange(d,i,value,$scope.kpiprocesses,updateMapP);
-        //console.log({updateMapP});
+        console.log({updateMapP});
     }
 
 

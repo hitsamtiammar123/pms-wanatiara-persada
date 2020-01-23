@@ -7,6 +7,7 @@ use App\Model\Traits\DynamicID;
 use Illuminate\Support\Carbon;
 use App\Model\Traits\Indexable;
 use App\Model\Interfaces\Endorseable;
+use Illuminate\Database\QueryException;
 
 /**
  *
@@ -53,6 +54,8 @@ class KPIHeader extends Model implements Endorseable
             $kpi_results_header_start=$this->kpiresultheaders->whereIn('kpi_result_id',$modelkey)->sortBy('kpiresult.name');
         }
 
+        $count_not_found=0;
+
         foreach($kpi_results_header_start as $kpiresultheader){
             $r=[];
             $kpiresult=KPIResult::find($kpiresultheader->kpi_result_id);
@@ -65,7 +68,6 @@ class KPIHeader extends Model implements Endorseable
                 $r['real_t1']=$kpiresultheaderprev->real_t;
                 $r['real_k1']=$kpiresultheaderprev->real_k;
                 $r=$kpiresultheader->fetchFrontEndPriviledge($r,$kpiresultheaderprev);
-            }
 
                 $r['kpi_header_id']=$this->id;
                 $r['kpi_result_id']=$kpiresultheader->kpi_result_id;
@@ -80,11 +82,13 @@ class KPIHeader extends Model implements Endorseable
                 $this->filterKPIResultByUnit($r);
 
                 $result[]=$r;
-
+            }
+            else
+                $count_not_found++;
 
         }
 
-        return $result;
+        return $count_not_found!==count($kpi_results_header_start)?$result:null;
     }
 
     protected function fetchKPIProcess($groupdata=null){
@@ -96,6 +100,7 @@ class KPIHeader extends Model implements Endorseable
             $kpi_proccess_start=$this->kpiprocesses->whereIn('id',$modelkey);
         }
 
+        $count_not_found=0;
         foreach($kpi_proccess_start as $curr_s){
             $r=[];
             $curr_e=$curr_s->getNext();
@@ -105,15 +110,19 @@ class KPIHeader extends Model implements Endorseable
                 $r['pw_1']=intval($curr_p->pivot->pw).'';
                 $r['pt_1']=$curr_p->pivot->pt;
                 $r['real_1']=$curr_p->pivot->real;
+
+                $r['id']=$curr_s->id;
+                $r['name']=$curr_s->name;
+                $r['unit']=$curr_s->unit;
+                $r['kpi_header_id']=$this->id;
+                $r['pw_2']=intval($curr_s->pivot->pw).'';
+                $r['pt_2']=$curr_s->pivot->pt;
+                $r['real_2']=$curr_s->pivot->real;
+                $result[]=$r;
             }
-            $r['id']=$curr_s->id;
-            $r['name']=$curr_s->name;
-            $r['unit']=$curr_s->unit;
-            $r['kpi_header_id']=$this->id;
-            $r['pw_2']=intval($curr_s->pivot->pw).'';
-            $r['pt_2']=$curr_s->pivot->pt;
-            $r['real_2']=$curr_s->pivot->real;
-            $result[]=$r;
+            else
+                $count_not_found++;
+
 
         }
         return $result;
@@ -558,11 +567,12 @@ class KPIHeader extends Model implements Endorseable
                 $curr_result_prev->id=$curr_result_prev_id;
                 $curr_result_prev->kpi_header_id=$header_prev->id;
                 $curr_result_prev->kpi_result_id=$new_result_id;
-
+                $k['hasPrev']=false;
             }
             else{
                 $new_result_id=$curr_result_prev->kpi_result_id;
                 $curr_result_prev_id=$curr_result_prev->id;
+                $k['hasPrev']=true;
             }
 
             $curr_result=new KPIResultHeader();
@@ -610,35 +620,34 @@ class KPIHeader extends Model implements Endorseable
      *
      * @return void
      */
-    protected function applyCreatedKPIProcessFromArray($kpiprocess){
+    protected function applyCreatedKPIProcessFromArray($kpiprocess,$updatedMap=[]){
         if($this->employee->hasTags())
             return;
 
-        $header_prev=$this->getPrev();
         $kpi_process_id=$kpiprocess['id'];
+        if(in_array($kpi_process_id,$updatedMap))
+            return;
+
+        $header_prev=$this->getPrev();
         $datamap=KPIProcess::getArrayMap(KPIProcess::KPIPROCESSCURRKEY,$kpiprocess);
         $curr_process=$this->kpiprocesses()->find($kpi_process_id);
-
         if(!$curr_process){
             $this->kpiprocesses()->attach([
-                $kpiprocess['id'] => $datamap
+                $kpi_process_id => $datamap
             ]);
             if($header_prev){
                 $datamap2=KPIProcess::getArrayMap(KPIProcess::KPIPROCESSPREVKEY,$kpiprocess);
-                try{
-                    $header_prev->kpiprocesses()->attach([
-                        $kpiprocess['id'] => $datamap2
-                    ]);
-                }catch(Exception $err){
-
-                }
+                $curr_process_prev=$header_prev->kpiprocesses()->find($kpiprocess['id']);
+                $header_prev->kpiprocesses()->attach([
+                    $kpi_process_id => $datamap2
+                ]);
             }
         }
         else{
             $curr_process->mapFromArr(KPIProcess::KPIPROCESSCURRKEY,$kpiprocess);
             $curr_process->save();
             $curr_process_prev=$curr_process->getPrev();
-            !is_null($curr_process_prev)?$curr_process_prev->mapFromArr(KPIProcess::KPIPROCESSPREVKEY,$kpiprocess):null;
+            !is_null($curr_process_prev) && $curr_process_prev->getPrev()===null ?$curr_process_prev->mapFromArr(KPIProcess::KPIPROCESSPREVKEY,$kpiprocess):null;
         }
 
 
@@ -872,7 +881,7 @@ class KPIHeader extends Model implements Endorseable
             );
         }
         foreach($createMap as $kpiprocess){
-            $this->applyCreatedKPIProcessFromArray($kpiprocess);
+            $this->applyCreatedKPIProcessFromArray($kpiprocess,array_keys($updateMap));
         }
 
         $this->applyDeletedKPIProcessFromArray($kpiprocessdeletelist);
@@ -899,20 +908,16 @@ class KPIHeader extends Model implements Endorseable
     public function applyDeletedKPIProcessFromArray($kpiprocessdeletelist){
         $header_prev=$this->getPrev();
         $kpiprevdeletelist=[];
-        $now=Carbon::now();
         if(count($kpiprocessdeletelist)!==0 && !$this->employee->hasTags()){
-            $this->kpiprocesses()->detach($kpiprocessdeletelist);
+
             if($header_prev){
                 foreach($kpiprocessdeletelist as $to_delete){
                     $d=$header_prev->kpiprocesses()->find($to_delete);
-
-                    if(!$d->pivot)
-                        continue;
-
-                    $curr_date=Carbon::parse($d->pivot->created_at);
-                    if($now->month === $curr_date->month && $now->year ===$curr_date->year)
+                    $curr_process_prev=$d->getPrev();
+                    if(is_null($curr_process_prev))
                         $kpiprevdeletelist[]=$to_delete;
                 }
+                $this->kpiprocesses()->detach($kpiprocessdeletelist);
                 $header_prev->kpiprocesses()->detach($kpiprevdeletelist);
             }
         }

@@ -102,7 +102,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
     }
 
     this.getSearchResult=function(item){
-        var url=this.route('search.result',null,{search:item.item,type:item.type});
+        var url=this.route('search.result',null,{search:item.item,type:item.type,isAuto:item.isAuto?item.isAuto:false});
         return $http.get(url);
     }
 

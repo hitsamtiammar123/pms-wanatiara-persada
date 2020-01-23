@@ -1,4 +1,4 @@
-@php
+ @php
     $user=Auth::user();
     if($user)
         $pmsIndex='#!realisasi/'.$user->employee->id;

@@ -119,8 +119,13 @@ class KPIResultHeader extends Model
             $curr_delete=self::find($todelete);
             $curr_delete_prev=$curr_delete->getPrev();
             if($curr_delete && !$curr_delete->kpiheader->employee->hasTags() ){
+                //is_null($curr_delete_prev)?:$curr_delete_prev->delete();
+                
+                if(!is_null($curr_delete_prev) && $curr_delete_prev->getPrev()===null){
+                    $curr_delete_prev->delete();
+                }
+                $curr_delete->kpiresult->kpiresultheaders->count()!==0?:$curr_delete->kpiresult->delete();
                 $curr_delete->delete();
-                is_null($curr_delete_prev)?:$curr_delete_prev->delete();
             }
         }
     }
@@ -294,20 +299,23 @@ class KPIResultHeader extends Model
             array_key_exists('name',$kpiresult)?$this->kpiresult->name=$kpiresult['name']:null;
             array_key_exists('unit',$kpiresult)?$this->kpiresult->unit=$kpiresult['unit']:null;
         }
+        
+        if($kpiresult['hasNew']===true && $kpiresult['hasPrev']===false){
+            $result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
+            $result_prev->save();
 
-        //$result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
+            $id=array_key_exists(0,$ids)?$ids[0]:null;
+            $kpia_1=array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null;
+            $result_prev->mapPriviledge($kpia_1,$id);
+        }
+        
+
         $this->mapFromArr(KPIResultHeader::KPIRESULTCURRENTKEY,$kpiresult);
-
         $this->push();
-        //$result_prev->save();
 
-            // $id=array_key_exists(0,$ids)?$ids[0]:null;
-            // $kpia_1=array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null;
-            // $result_prev->mapPriviledge($kpia_1,$id);
-
-            $id=array_key_exists(1,$ids)?$ids[1]:null;
-            $kpia_2=array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null;
-            $this->mapPriviledge($kpia_2,$id);
+        $id=array_key_exists(1,$ids)?$ids[1]:null;
+        $kpia_2=array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null;
+        $this->mapPriviledge($kpia_2,$id);
 
     }
 

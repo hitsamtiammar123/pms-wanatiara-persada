@@ -153,21 +153,24 @@ class KPIHeaderController extends Controller
         $prev_month=$nc->addMonth(-1);
 
         $kpiheader=KPIHeader::findForFrontEnd($id,$curr_date);
-        if(!$kpiheader){
+        if(!$kpiheader || $kpiheader->getPrev()===null ){
             return send_404_error('Data tidak ditemukan');
         }
 
         $kpiheader->load('employee');
         $kpiheader_arr=$kpiheader->toArray();
         $kpiheader_arr['kpiresults']=$kpiheader->fetchFrontEndData('kpiresult');
+        if(is_null($kpiheader_arr['kpiresults']))
+            return send_404_error('Data pada bulan sebelumnya tidak ditemukan');
+
         $kpiheader_arr['kpiendorsements']=$kpiheader->fetchFrontEndData('kpiendorsement');
         $kpiheader_arr['kpiprocesses']=$kpiheader->fetchFrontEndData('kpiprocess');
         $kpiheader_arr['period_end']=$kpiheader_arr['period'];
         $kpiheader_arr['period_start']=$prev_month->format('Y-m-d') ;
-
+        
         unset($kpiheader_arr['period']);
 
-        return $kpiheader_arr;
+        return  $kpiheader_arr;
     }
 
 

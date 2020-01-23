@@ -4,6 +4,7 @@ app.controller('PencarianController',function($scope,loader,$q,$timeout,$locatio
     var deffered;
     var hasSelected=false;
     var result_data={};
+    var searchLoading=false;
 
     $scope.searchText='';
     $scope.selectedItem;
@@ -25,6 +26,7 @@ app.controller('PencarianController',function($scope,loader,$q,$timeout,$locatio
 
     var onFetchDone=function(){
         $scope.loadingMessage='';
+        searchLoading=false;
     }
 
     var onFetchResultSuccess=function(result){
@@ -32,14 +34,26 @@ app.controller('PencarianController',function($scope,loader,$q,$timeout,$locatio
         if(result_data!==''){
             $scope.hasSearch=false;
             hasSelected=false;
-           
+
         }
-        
+
     }
 
     var ferchResultData=function(){
         //console.log($scope.selectedItem);
-        loader.getSearchResult($scope.selectedItem).then(onFetchResultSuccess,onFetchFail).finally(onFetchDone);
+        var selectedItem={};
+        if(hasSelected){
+            selectedItem=$scope.selectedItem;
+        }
+        else{
+            selectedItem={
+                item:$scope.searchText,
+                type:'employee',
+                isAuto:true
+            }
+        }
+
+        loader.getSearchResult(selectedItem).then(onFetchResultSuccess,onFetchFail).finally(onFetchDone);
     }
 
     var fetchResultList=function(){
@@ -73,10 +87,11 @@ app.controller('PencarianController',function($scope,loader,$q,$timeout,$locatio
     }
 
     $scope.cari=function(){
-        if(hasSelected){
+            if(searchLoading)
+                return;
             $scope.loadingMessage='Memuat...';
             ferchResultData();
-        }
+            searchLoading=true;
     }
 
     $scope.filterData=function(){
