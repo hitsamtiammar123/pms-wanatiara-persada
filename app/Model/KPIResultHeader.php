@@ -120,7 +120,7 @@ class KPIResultHeader extends Model
             $curr_delete_prev=$curr_delete->getPrev();
             if($curr_delete && !$curr_delete->kpiheader->employee->hasTags() ){
                 //is_null($curr_delete_prev)?:$curr_delete_prev->delete();
-                
+
                 if(!is_null($curr_delete_prev) && $curr_delete_prev->getPrev()===null){
                     $curr_delete_prev->delete();
                 }
@@ -262,7 +262,7 @@ class KPIResultHeader extends Model
      * @param App\Model\KPIResultHeader $prev data dari kpiresult yang sebelumnya
      * @return array
      */
-    public function fetchFrontEndPriviledge(array $kpiresult,KPIResultHeader $prev){
+    public function fetchFrontEndPriviledge(array &$kpiresult,KPIResultHeader $prev){
         if($this->isPriviledge()){
             if(!is_null($this->priviledge) && !is_null($prev->priviledge)){
                 $kpiresult['kpia_1']=$prev->priviledge->value;
@@ -299,7 +299,7 @@ class KPIResultHeader extends Model
             array_key_exists('name',$kpiresult)?$this->kpiresult->name=$kpiresult['name']:null;
             array_key_exists('unit',$kpiresult)?$this->kpiresult->unit=$kpiresult['unit']:null;
         }
-        
+
         if($kpiresult['hasNew']===true && $kpiresult['hasPrev']===false){
             $result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
             $result_prev->save();
@@ -308,7 +308,7 @@ class KPIResultHeader extends Model
             $kpia_1=array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null;
             $result_prev->mapPriviledge($kpia_1,$id);
         }
-        
+
 
         $this->mapFromArr(KPIResultHeader::KPIRESULTCURRENTKEY,$kpiresult);
         $this->push();

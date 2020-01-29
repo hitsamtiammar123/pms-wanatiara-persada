@@ -63,8 +63,8 @@ class KPIHeaderController extends Controller
             $e_arr['id']=$e->id;
             $e_arr['name']=$e->name;
             $e_arr['role']=$e->role;
-            $e_arr['kpiresult']=$header->kpiresultheaders->sortBy('created_at')->keyBy('kpi_result_id');
-            $e_arr['kpiprocess']=$header->kpiprocesses->sortBy('created_at')->keyBy('id');
+            $e_arr['kpiresult']=$header->fetchFrontEndKPIResult()->sortBy('created_at')->keyBy('kpi_result_id');
+            $e_arr['kpiprocess']=$header->fetchFrontEndKPIProcess()->sortBy('created_at')->keyBy('id');
 
             $e->role;
             $employees[]=$e_arr;
@@ -167,7 +167,7 @@ class KPIHeaderController extends Controller
         $kpiheader_arr['kpiprocesses']=$kpiheader->fetchFrontEndData('kpiprocess');
         $kpiheader_arr['period_end']=$kpiheader_arr['period'];
         $kpiheader_arr['period_start']=$prev_month->format('Y-m-d') ;
-        
+
         unset($kpiheader_arr['period']);
 
         return  $kpiheader_arr;

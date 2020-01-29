@@ -28,6 +28,10 @@ class EmployeeController extends Controller
             if($carbon->year==$currYear){
                 $d->kpiresultheaders;
                 $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
+                $d->fetchFrontEndKPIProcess();
+                $d->fetchFrontEndKPIResult();
+                $d->hasTags=$d->employee->hasTags();
+
             }
             else
                 $item->kpiheaders->forget($index);
@@ -35,7 +39,7 @@ class EmployeeController extends Controller
         $values=$item->kpiheaders->values()->all();
         unset($item->kpiheaders);
         $item->kpiheaders=$values;
-        
+
     }
 
 

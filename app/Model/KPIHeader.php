@@ -67,7 +67,7 @@ class KPIHeader extends Model implements Endorseable
                 $r['pt_k1']=$kpiresultheaderprev->pt_k;
                 $r['real_t1']=$kpiresultheaderprev->real_t;
                 $r['real_k1']=$kpiresultheaderprev->real_k;
-                $r=$kpiresultheader->fetchFrontEndPriviledge($r,$kpiresultheaderprev);
+                $kpiresultheader->fetchFrontEndPriviledge($r,$kpiresultheaderprev);
 
                 $r['kpi_header_id']=$this->id;
                 $r['kpi_result_id']=$kpiresultheader->kpi_result_id;
@@ -1137,5 +1137,42 @@ class KPIHeader extends Model implements Endorseable
     public function hasEndorse(Employee $employee){
         $r=$this->kpiendorsements()->where('employee_id',$employee->id)->first();
         return !is_null($r);
+    }
+
+    public function fetchFrontEndKPIResult(){
+        $kpiresults=$this->kpiresultheaders;
+        $result=collect([]);
+        foreach($kpiresults as $curr){
+            if($curr->isPriviledge() &&!is_null($curr->priviledge) ){
+                $curr->kpia=$curr->priviledge->value;
+            }
+            $curr->unit=$curr->kpiresult->unit;
+            $result->push($curr);
+        }
+        unset($this->kpiresultheaders);
+        $this->kpiresultheaders=$result;
+        return $this->kpiresultheaders;
+    }
+
+    public function fetchFrontEndKPIProcess(){
+        $kpiproceses=$this->kpiprocesses;
+        $result=collect([]);
+        foreach($kpiproceses as $curr){
+            $r=[];
+            $r['id']=$curr->id;
+            $r['name']=$curr->name;
+            $r['unit']=$curr->unit;
+            if($curr->pivot){
+                $r['kpi_header_id']=$curr->pivot->kpi_header_id;
+                $r['pw']=$curr->pivot->pw;
+                $r['pt']=$curr->pivot->pt;
+                $r['real']=$curr->pivot->real;
+            }
+            $result->push($r);
+        }
+        unset($this->kpiprocesses);
+        $this->kpiprocesses=$result;
+        return $this->kpiprocesses;
+
     }
 }

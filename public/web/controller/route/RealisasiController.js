@@ -220,20 +220,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         setUserHeading();
     }
 
-    var sumTotalAchievement=function(data,i){
-        var s=0;
-        var awIndex='aw_';
-        for(var j=0;j<data.length;j++){
-            var curr=data[j];
-            var currIndex=awIndex+(i+1);
-            var aw=curr[currIndex];
-            var n=parseFloat(aw);
-            s+=n;
-        }
-        return s;
-    }
-
-
     var setTotalAchievement=function(data,totalAchieveMent,IndexAchieveMent){
         const FUNCTION_NAME='add-content';
       	if(!data)
@@ -241,13 +227,9 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
         //debugger;
         for(var i=0;i<2;i++){
-            var s=sumTotalAchievement(data,i);
             var q='t'+(i+1);
-            if(isNaN(s))
-                continue;
-            totalAchieveMent[q]=s.toFixed(1);
-            var index=kpiService.getAchievementIndex(s);
-            IndexAchieveMent[q]=index;
+            var aw_index='aw_'+(i+1);
+            kpiService.setTotalAchievement(data,totalAchieveMent,IndexAchieveMent,q,aw_index);
         }
 
         notifier.notifyGroup('add-content');
@@ -256,22 +238,16 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
     var setFinalAchivement=function(){
         const FUNCTION_NAME='add-content';
-        var t1_fr=parseFloat($scope.totalAchieveMent.t1);
-        var t1_fp=parseFloat($scope.totalAchieveMentP.t1);
-        var t2_fr=parseFloat($scope.totalAchieveMent.t2);
-        var t2_fp=parseFloat($scope.totalAchieveMentP.t2);
+        for(var i=1;i<=2;i++){
+            var keys={};
+            keys.tr='t'+i;
+            keys.tp='t'+i;
+            keys.t_n='t'+i+'_n';
+            keys.t_i='t'+i+'_i';
+            keys.t_f='t'+i+'_f';
 
-        $scope.finalAchievement.t1_n=(t1_fr*$scope.header.weight_result+
-                                    t1_fp*$scope.header.weight_process).toFixed(1);
-        $scope.finalAchievement.t2_n=(t2_fr*$scope.header.weight_result+
-                                    t2_fp*$scope.header.weight_process).toFixed(1);
-
-        $scope.finalAchievement.t1_i=kpiService.getAchievementIndex($scope.finalAchievement.t1_n);
-        $scope.finalAchievement.t2_i=kpiService.getAchievementIndex($scope.finalAchievement.t2_n);
-
-        $scope.finalAchievement.t1_f=($scope.finalAchievement.t1_n-100).toFixed(1);
-        $scope.finalAchievement.t2_f=($scope.finalAchievement.t2_n-100).toFixed(1);
-
+            kpiService.setFinalAchievement($scope.totalAchieveMent,$scope.totalAchieveMentP,$scope.header,$scope.finalAchievement,keys);
+        }
         notifier.notifyGroup('add-content');
     }
 
@@ -375,8 +351,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 curr.kpia_contentEditable[i]=false;
             }
             else{
-                var rt=getKPIA(curr,i);
-                if(isPriviledgesKPIResult(curr,i)){
+                if(kpiService.isPriviledgesKPIResult(curr,'pt_t'+(i+1),kpiheaders )){
                     curr.kpia_contentEditable[i]=true;
                 }
                 else
@@ -451,38 +426,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
     }
 
-    /**
-     * berfungsi untuk mendapatkan nilai KPIAchievement pada suatu KPIResult
-     *
-     * @param {Object} d
-     * @param {number} j
-     *
-     * @return number
-     */
-    var getKPIA=function(d,j){
-        var unit=d.unit;
-
-        var pt_key='pt_t'+(j+1);
-        var real_key='real_t'+(j+1);
-        var real_k_key='real_k'+(j+1);
-        var pt_k_key='pt_k'+(j+1);
-        var rC;
-        var tC;
-        var rt;
-        switch(unit){
-            case '$':
-                rC=d[real_k_key];
-                tC=d[pt_k_key];
-                break;
-            default:
-                rC=d[real_key];
-                tC=d[pt_key];
-            break;
-        }
-        rt=(parseFloat(rC)/parseFloat(tC))*100;
-
-        return rt;
-    }
 
     /**
      * Berfungsi untuk menentukan apakah KPIResult adalah KPIResult dengan priviledge tertentu
@@ -507,26 +450,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         return false;
     }
 
-    /**
-     *
-     * @param {JSON} curr Data KPIResult yang bersangkutan
-     * @param {string} kpia_key property dari curr
-     * @param {Object} obj_priviledge object berisi property priviledge yang menetukan tipe priviledge dari suatu KPIResult
-     *
-     * @returns number
-     */
-    var getKPIAByPriviledge=function(curr,kpia_key){
-        var rt=0;
-        if(curr.hasOwnProperty(kpia_key)){
-            rt=parseInt(curr[kpia_key]);
-        }
-        else
-            rt=100;
-
-
-        return rt;
-    }
-
     var setBColorKPIAandPW=function(curr){
         for(var j=0;j<2;j++){
             var kpia_key='kpia_'+(j+1);
@@ -534,19 +457,19 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             var pw_key=$scope.pw_indices[j];
             var rt;
 
-            if(!isPriviledgesKPIResult(curr,j)){
-                rt=getKPIA(curr,j);
+            var keys={};
+            keys.pt_t='pt_t'+(j+1);
+            keys.real_t='real_t'+(j+1);
+            keys.real_k='real_k'+(j+1);
+            keys.pt_k='pt_k'+(j+1);
 
-                if(isNaN(rt)||!isFinite(rt)){
-                    rt=0;
-                }
-                else
-                    rt=rt.toFixed(1);
 
-            }
-            else{
-                rt=getKPIAByPriviledge(curr,kpia_key);
-            }
+            if(!kpiService.isPriviledgesKPIResult(curr,'pt_t'+(j+1),kpiheaders))
+                rt=kpiService.getKPIAKPIResult(curr,keys);
+
+            else
+                rt=kpiService.getKPIAKPIResultByPriviledge(curr,kpia_key);
+
 
             curr[kpia_key]=rt+'%';
             var bColor='bColor_kpia_'+(j+1);
@@ -564,9 +487,10 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                 curr[bColor]='red-column'
             }
             var pwqIndex='pw_'+(j+1);
-            var pwq=curr[pwqIndex];
-            var calculate=rt*parseFloat(pwq)/100;
-            curr[aw_key]=(calculate.toFixed(1));
+            // var pwq=curr[pwqIndex];
+            // var calculate=rt*parseFloat(pwq)/100;
+            // curr[aw_key]=(calculate.toFixed(1));
+            kpiService.setAW(curr,pwqIndex,aw_key,rt);
 
             if(j===1)
                 curr['bColor_'+pw_key]='can-edit-content';
@@ -589,7 +513,6 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         //debugger;
         for(var i=0;i<data.length;i++){
             var curr=data[i];
-            var counter=1;
             curr.kpiColor='';
             curr.unitColor='';
             setBColorKPIAandPW(curr);
@@ -601,29 +524,16 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
 
     var setBColorP=function(data){
         var getKPIAColor=function(r){
-            if(r<0)
+            if(r<=80)
                 return 'black-column';
-            else if(r===0)
+            else if(r===100)
                 return 'green-column';
-            else if(r===1)
+            else if(r===110)
                 return 'blue-column';
-            else if(r>1)
+            else if(r>=120)
                 return 'gold-column';
             else
                 return '';
-        }
-
-        var getIndex=function(r){
-            if(r<0)
-                return 80;
-            else if(r===0)
-                return 100;
-            else if(r===1)
-                return 110;
-            else if(r>1)
-                return 120;
-            else
-                return 0;
         }
 
         var getEditableColor=function(hasEndorse){
@@ -640,18 +550,16 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             curr.aw_filter='addPercent';
             curr.pw_filter='addPercent';
 
-            var kt_1=parseInt(curr.real_1)-parseInt(curr.pt_1);
-            var kt_2=parseInt(curr.real_2)-parseInt(curr.pt_2);
-            curr.kpia_1=getIndex(kt_1);
-            curr.kpia_2=getIndex(kt_2);
-            curr.bColor_kpia_1=getKPIAColor(kt_1);
-            curr.bColor_kpia_2=getKPIAColor(kt_2);
+            curr.kpia_1=kpiService.getKPIAKPIProcess(curr,{real:'real_1',pt:'pt_1'});
+            curr.kpia_2=kpiService.getKPIAKPIProcess(curr,{real:'real_2',pt:'pt_2'});
+            curr.bColor_kpia_1=getKPIAColor(curr.kpia_1);
+            curr.bColor_kpia_2=getKPIAColor(curr.kpia_2);
             curr.bColor_real=getEditableColor($scope.hasEndorse);
             curr.bColor_pt=getEditableColor($scope.hasEndorse);
             curr.bColor_pw=getEditableColor($scope.hasEndorse);
 
-            curr.aw_1=((curr.kpia_1/100)*parseInt(curr.pw_1)).toFixed(1);
-            curr.aw_2=((curr.kpia_2/100)*parseInt(curr.pw_2)).toFixed(1);
+            kpiService.setAW(curr,'pw_1','aw_1',curr.kpia_1);
+            kpiService.setAW(curr,'pw_2','aw_2',curr.kpia_2);
         }
     }
 

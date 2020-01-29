@@ -15,7 +15,7 @@ class SearchController extends Controller
 
     protected function fetchRoleResults($query,$role_level){
         $result=Role::select([DB::raw("name as item"),DB::raw("'role' as type")])
-        ->where('name','like','%'.$query.'%')->where('level','>',$role_level)->get()->take(10);
+        ->where('name','like','%'.$query.'%')->where('level','>=',$role_level)->get()->take(10);
         return $result;
 
     }
@@ -23,7 +23,7 @@ class SearchController extends Controller
     protected function fetchEmployeeResults($query,$role_level){
         return Employee::select([DB::raw("employees.name as item"),DB::raw("'employee' as type")])
         ->join('roles','employees.role_id','=','roles.id')
-        ->where('employees.name','like','%'.$query.'%')->where('roles.level','>',$role_level)->get()->take(10);
+        ->where('employees.name','like','%'.$query.'%')->where('roles.level','>=',$role_level)->get()->take(10);
     }
 
     protected function getRoleData($search,$role_level,$get_fetch=false){
@@ -39,7 +39,7 @@ class SearchController extends Controller
 
     protected function getEmployeeData($search,$role_level){
         return Employee::select(DB::raw('employees.*'))->join('roles','employees.role_id','=','roles.id')->
-        where('employees.name','=',$search)->where('roles.level','>',$role_level)->first();
+        where('employees.name','=',$search)->where('roles.level','>=',$role_level)->first();
     }
 
     public function autocomplete(Request $request){
