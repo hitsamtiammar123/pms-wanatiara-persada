@@ -41,18 +41,15 @@ class TestCommand extends Command
     public function handle()
     {
         //$this->syncKPIHeader('2019-10-16');
+        $file='D:\document\document_creo\trade\money record.txt';
 
-        $path=resource_path('kpicompany/test.json');
-        $f=fopen($path,'w+');
+        $content=file_get_contents($file);
+        $split_arr=explode("\n",$content);
+        $total=array_reduce($split_arr,function($t,$c){
+            return intval($t)+intval($c);
+        },0);
 
-        if($f){
-            \fputs($f,'{"test":"test"}');
-            echo 'berhasil';
-        }
-        else
-            echo 'gagal';
-        fclose($f);
-
+        echo "Total is $total";
 
     }
 }

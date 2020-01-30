@@ -11,7 +11,7 @@ class SearchController extends Controller
 {
     //
 
-    protected $display_only=['id','name'];
+    protected $display_only=['id','name','tag'];
 
     protected function fetchRoleResults($query,$role_level){
         $result=Role::select([DB::raw("name as item"),DB::raw("'role' as type")])
@@ -33,18 +33,29 @@ class SearchController extends Controller
         if($result){
             $result->load('employee');
             $result=$result->employee->count()!==0?$result->employee[0]:null;
+            if(!is_null($result) && $result->hasTags() ){
+                $result->load('tag');
+            }
         }
         return $result;
     }
 
     protected function getEmployeeData($search,$role_level){
-        return Employee::select(DB::raw('employees.*'))->join('roles','employees.role_id','=','roles.id')->
+        $result=Employee::select(DB::raw('employees.*'))->join('roles','employees.role_id','=','roles.id')->
         where('employees.name','=',$search)->where('roles.level','>=',$role_level)->first();
+        if(!is_null($result) && $result->hasTags() ){
+            $result->tag=$result->tags[0];
+        }
+
+        return $result;
     }
 
     public function autocomplete(Request $request){
         $query=$request->input('query');
         $auth_user=auth_user();
+
+        if(!$auth_user)
+            return send_401_error();
 
         $role_level=$auth_user->employee->role->level;
 

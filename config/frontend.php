@@ -12,8 +12,7 @@ return [
             'vendor/js/angular-aria.min.js',
             'vendor/js/angular-messages.min.js',
             'vendor/js/angular-material.min.js',
-            'vendor/js/pusher.min.js',
-            'prototype.js'
+            'vendor/js/pusher.min.js'
     ],
     'css_vendor'=>[
         'vendor/css/bootstrap.min.css',

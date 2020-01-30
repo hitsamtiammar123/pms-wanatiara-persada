@@ -71,13 +71,17 @@ app.controller('PencarianController',function($scope,loader,$q,$timeout,$locatio
 
     $scope.toPMSPage=function(){
         var r=result_data;
-        var url='/realisasi/'+r.id;
+        var url='';
+        if(r.tag===null)
+            url='/realisasi/'+r.id;
+        else
+            url='/realisasi-group/'+r.tag.id;
         $location.path(url);
     }
 
     $scope.toIkhtisarPage=function(){
         var r=result_data;
-        var url='/ikhtisar/'+r.id;
+        url='/ikhtisar/'+r.id;
         $location.path(url);
     }
 
