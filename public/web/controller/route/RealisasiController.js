@@ -579,8 +579,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             case 'WMT':
             case 'MT':
             case 'kwh':
-                d.pt_k2=(parseInt(d.pt_k1)+parseInt(d.pt_t2))+'';
-                d.real_k2=(parseInt(d.real_k1)+parseInt(d.real_t2))+'';
+                // d.pt_k2=(parseInt(d.pt_k1)+parseInt(d.pt_t2))+'';
+                // d.real_k2=(parseInt(d.real_k1)+parseInt(d.real_t2))+'';
             if(d.unit!=='kwh')
                 break;
             case 'kwh':

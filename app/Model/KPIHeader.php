@@ -519,19 +519,19 @@ class KPIHeader extends Model implements Endorseable
             case '$':
             case 'WMT':
             case 'MT':
-                //if(in_array(['pt_k1','pt_t2','pt_k2'],$keys)){
+                if(in_array(['pt_k1','pt_t2','pt_k2'],$keys)){
                     $pt_k1=@$kpiresult['pt_k1'];
                     $pt_t2=@$kpiresult['pt_t2'];
 
                     $kpiresult['pt_k2']=intval($pt_k1+$pt_t2).'';
-                //}
+                }
 
-                //if(in_array(['real_k1','real_t2','real_k2'],$keys)){
+                if(in_array(['real_k1','real_t2','real_k2'],$keys)){
                     $real_k1=@$kpiresult['real_k1'];
                     $real_t2=@$kpiresult['real_t2'];
 
                     $kpiresult['real_k2']=intval($real_k1+$real_t2).'';
-                //}
+                }
             break;
             case '%':
             case 'MV':

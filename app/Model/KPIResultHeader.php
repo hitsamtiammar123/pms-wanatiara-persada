@@ -300,7 +300,8 @@ class KPIResultHeader extends Model
             array_key_exists('unit',$kpiresult)?$this->kpiresult->unit=$kpiresult['unit']:null;
         }
 
-        if($kpiresult['hasNew']===true && $kpiresult['hasPrev']===false){
+        if(array_key_exists('hasNew',$kpiresult) && array_key_exists('hasPrev',$kpiresult) &&
+        $kpiresult['hasNew']===true && $kpiresult['hasPrev']===false){
             $result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
             $result_prev->save();
 

@@ -26,16 +26,21 @@ class SearchController extends Controller
         ->where('employees.name','like','%'.$query.'%')->where('roles.level','>=',$role_level)->get()->take(10);
     }
 
+    protected function fetchTagIfHasTags($result){
+        if(!is_null($result) && $result->hasTags() ){
+            $result->tag=$result->tags[0];
+        }
+        return $result;
+    }
+
     protected function getRoleData($search,$role_level,$get_fetch=false){
         $query=Role::where('level','>',$role_level);
         //$result=Role::where('name',$search)->where(DB::raw('level > '.$role_level))->first();
         $result=!$get_fetch?$query->where('name',$search)->first():$query->where('name','like','%'.$search.'%')->first();
         if($result){
             $result->load('employee');
-            $result=$result->employee->count()!==0?$result->employee[0]:null;
-            if(!is_null($result) && $result->hasTags() ){
-                $result->load('tag');
-            }
+            $result=$result->employee->count()!==0?$this->fetchTagIfHasTags($result->employee[0]):null;
+
         }
         return $result;
     }
@@ -43,9 +48,7 @@ class SearchController extends Controller
     protected function getEmployeeData($search,$role_level){
         $result=Employee::select(DB::raw('employees.*'))->join('roles','employees.role_id','=','roles.id')->
         where('employees.name','=',$search)->where('roles.level','>=',$role_level)->first();
-        if(!is_null($result) && $result->hasTags() ){
-            $result->tag=$result->tags[0];
-        }
+        $result=$this->fetchTagIfHasTags($result);
 
         return $result;
     }

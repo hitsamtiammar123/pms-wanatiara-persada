@@ -45,11 +45,15 @@ class TestCommand extends Command
 
         $content=file_get_contents($file);
         $split_arr=explode("\n",$content);
-        $total=array_reduce($split_arr,function($t,$c){
-            return intval($t)+intval($c);
-        },0);
+        $total=0;
+        $i=0;
+        foreach($split_arr as  $num){
+            echo $i." -> ".$num."\n";
+            $total+=intval($num);
+            $i++;
+        }
 
-        echo "Total is $total";
+        echo "Total is ".$total;
 
     }
 }

@@ -46,7 +46,7 @@ return [
             'route/RealisasiPerusahaanController.js',
             'notification/notificationMessage.js',
             'notification/notificationRedirect.js',
-            'notification/NotificationRequestChange.js',
+            'notification/notificationRequestChange.js',
             'route/EditProfileController.js',
             'route/EditPasswordController.js'
 
