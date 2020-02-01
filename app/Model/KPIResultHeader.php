@@ -364,7 +364,7 @@ class KPIResultHeader extends Model
         }
     }
 
-    public function setAsNewData(){
+    public function setAsNewData($flag=false){
         $unit=$this->kpiresult->unit;
         $prev=$this->getPrev();
 
@@ -383,12 +383,14 @@ class KPIResultHeader extends Model
                 $real_t2=$this->real_t;
 
                 $this->real_k=intval($real_k1)+intval($real_t2);
-                $this->pt_t=0;
-                $this->real_t=0;
+                $this->pt_t=$flag===true?$this->pt_t:0;
+                $this->real_t=$flag===true?$this->real_t:0;
 
                 break;
             }
             default:
+                if($flag===true)
+                    break;
 
                 $this->pt_t=0;
                 $this->pt_k=0;

@@ -79,7 +79,7 @@ class KPIHeader extends Model implements Endorseable
                 $r['pt_k2']=$kpiresultheader->pt_k;
                 $r['real_t2']=$kpiresultheader->real_t;
                 $r['real_k2']=$kpiresultheader->real_k;
-                $this->filterKPIResultByUnit($r);
+                //$this->filterKPIResultByUnit($r);
 
                 $result[]=$r;
             }
@@ -511,27 +511,36 @@ class KPIHeader extends Model implements Endorseable
     }
 
     protected function filterKPIResultByUnit(&$kpiresult){
-        if(!array_key_exists('unit',$kpiresult))
+        if( !array_key_exists('id',$kpiresult) )
             return;
-        $unit=$kpiresult['unit'];
         $keys=array_keys($kpiresult);
+        $id=$kpiresult['id'];
+        $kpiresultheader=KPIResultHeader::find($id);
+        if(is_null($kpiresultheader))
+            return;
+        $unit=$kpiresultheader->kpiresult?$kpiresultheader->kpiresult->unit:'';
+        $kpiresultheader_prev=$kpiresultheader->getPrev();
         switch($unit){
             case '$':
             case 'WMT':
             case 'MT':
-                if(in_array(['pt_k1','pt_t2','pt_k2'],$keys)){
-                    $pt_k1=@$kpiresult['pt_k1'];
-                    $pt_t2=@$kpiresult['pt_t2'];
+                //if(in_array(['pt_k1','pt_t2'],$keys)){
+                    $pt_k1=array_key_exists('pt_k1',$kpiresult)?$kpiresult['pt_k1']:
+                    !is_null($kpiresultheader_prev)?$kpiresultheader_prev->pt_k:0;
+                    $pt_t2=array_key_exists('pt_t2',$kpiresult)?$kpiresult['pt_t2']:$kpiresultheader->pt_t;
 
                     $kpiresult['pt_k2']=intval($pt_k1+$pt_t2).'';
-                }
+                //}
 
-                if(in_array(['real_k1','real_t2','real_k2'],$keys)){
-                    $real_k1=@$kpiresult['real_k1'];
-                    $real_t2=@$kpiresult['real_t2'];
+                //if(in_array(['real_k1','real_t2'],$keys)){
+                    // $real_k1=@$kpiresult['real_k1'];
+                    // $real_t2=@$kpiresult['real_t2'];
+                    $real_k1=array_key_exists('real_k1',$kpiresult)?$kpiresult['real_k1']:
+                    !is_null($kpiresultheader_prev)?$kpiresultheader_prev->real_k:0;
+                    $real_t2=array_key_exists('real_t2',$kpiresult)?$kpiresult['real_t2']:$kpiresultheader->real_t;
 
                     $kpiresult['real_k2']=intval($real_k1+$real_t2).'';
-                }
+                //}
             break;
             case '%':
             case 'MV':
@@ -672,16 +681,6 @@ class KPIHeader extends Model implements Endorseable
     }
 
 
-    public static function getDate($month,$year=null){
-        $curr=Carbon::now();
-        $year=$year?$year:$curr->year;
-        $month=$month;
-        $date=16;
-        $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
-        return $curr_date;
-    }
-
-
     /**
      * berfungsi untuk mengambil data kpiheader untuk dikonsumsi oleh front end
      *
@@ -805,7 +804,24 @@ class KPIHeader extends Model implements Endorseable
     public static function getCurrentDate(){
         $curr_date=self::getDate(Carbon::now()->month);
         return $curr_date;
+    }
 
+    public static function getDate($month,$year=null){
+        $curr=Carbon::now();
+        $year=$year?$year:$curr->year;
+        $month=$month;
+        $date=16;
+        $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
+        return $curr_date;
+    }
+
+    public static function getDateDifferences($date1,$date2){
+        $date1=Carbon::parse($date1);
+        $date2=Carbon::parse($date2);
+
+        $result=$date1->diffInMonths($date2);
+
+        return $result;
     }
 
     /**

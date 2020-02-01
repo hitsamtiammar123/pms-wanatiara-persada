@@ -324,8 +324,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
                         case 'WMT':
                         case 'MT':
                         case 'kwh':
-                            // curr.pt_contentEditable[j]=false;
-                            // curr.real_contentEditable[j]=false;
+                            curr.pt_contentEditable[j]=false;
+                            curr.real_contentEditable[j]=false;
                         break;
                         default:
                                 curr.pt_contentEditable[j]=true;
@@ -573,14 +573,16 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             rI();
     }
 
-    var applyUnitFilter=function(d){
+    var applyUnitFilter=function(d,isApply){
+        if(!isApply)
+            return;
         switch(d.unit){
             case '$':
             case 'WMT':
             case 'MT':
             case 'kwh':
-                // d.pt_k2=(parseInt(d.pt_k1)+parseInt(d.pt_t2))+'';
-                // d.real_k2=(parseInt(d.real_k1)+parseInt(d.real_t2))+'';
+                d.pt_k2=(parseInt(d.pt_k1)+parseInt(d.pt_t2))+'';
+                d.real_k2=(parseInt(d.real_k1)+parseInt(d.real_t2))+'';
             if(d.unit!=='kwh')
                 break;
             case 'kwh':
@@ -589,7 +591,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
     }
 
-    var setDataFilter=function(d){
+    var setDataFilter=function(d,isApply){
         var unit=d.unit.trim();
         d.pw_filter='integer|addPercent';
         d.pt_filter='';
@@ -619,13 +621,14 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         }
         d.pt_sanitize=d.real_sanitize='sNumber';
 
-        applyUnitFilter(d);
+        applyUnitFilter(d,isApply);
     }
 
-    var setFilter=function(data){
+    var setFilter=function(data,isApply){
+        isApply=!isUndf(isApply)?isApply:true;
         for(var i=0;data&&i<data.length;i++){
             var d=data[i];
-            setDataFilter(d);
+            setDataFilter(d,isApply);
         }
         //console.log(data);
     }
@@ -956,7 +959,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         const FUNCTION_NAME='realisasi-content';
         setHeader();
         setUsers();
-        setFilter($scope.data);
+        setFilter($scope.data,false);
         setBColor($scope.data);
         setTotalAchievement($scope.data,$scope.totalAchieveMent,$scope.IndexAchieveMent);
         setTotalW($scope.data,$scope.totalW);

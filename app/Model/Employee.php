@@ -90,12 +90,14 @@ class Employee extends Model
         return $result;
     }
 
-    public function getCurrentHeader(){
-        $headers=$this->kpiheaders;
-        $currDate=KPIHeader::getCurrentDate();
-        $curr_header=$headers->where('period',$currDate)->first();
+    public function getPreviousHeader(){
+        $currDate=Carbon::now()->subMonth();
+        return $this->getHeader($currDate->month,$currDate->year);
+    }
 
-        return $curr_header;
+    public function getCurrentHeader(){
+        $currDate=Carbon::now();
+        return $this->getHeader($currDate->month,$currDate->year);
     }
 
     public function getHeader($month,$year){
@@ -192,7 +194,21 @@ class Employee extends Model
         if($this->role && $this->role->tier==0)
             return 0;
 
-        $curr_header=$this->getCurrentHeader();
+        $currentDate=KPIHeader::getCurrentDate();
+        $curr_header=null;
+        $diff=KPIHeader::getDateDifferences($currentDate,$period);
+        if($diff===1)
+            $curr_header=$this->getCurrentHeader();
+        else if($diff===0)
+            $curr_header=$this->getPreviousHeader();
+        else{
+            $temp_h=$this->getHeader($year,$month);
+            $curr_header=$temp_h?$temp_h->getPrev():$this->getCurrentHeader();
+        }
+
+        if(is_null($curr_header))
+            return 0;
+
         $id=$this->id!='0'?$this->id:$this->getIDForTheFirstTime();
 
         $header_id=KPIHeader::generateID($id);
