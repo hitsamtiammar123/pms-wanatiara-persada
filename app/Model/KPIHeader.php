@@ -47,6 +47,7 @@ class KPIHeader extends Model implements Endorseable
     protected function fetchKPIResult($groupdata=null){
 
         $result=[];
+        $isgroupdatanull=is_null($groupdata);
         if(is_null($groupdata))
             $kpi_results_header_start=$this->kpiresultheaders->sortBy('kpiresult.name');
         else{
@@ -60,7 +61,7 @@ class KPIHeader extends Model implements Endorseable
             $r=[];
             $kpiresult=KPIResult::find($kpiresultheader->kpi_result_id);
             //$kpiresultheaderend=$kpiresultheader->getNext();
-            $kpiresultheaderprev=$kpiresultheader->getPrev();
+            $kpiresultheaderprev=$isgroupdatanull?$kpiresultheader->getPrev():$kpiresultheader;
             if($kpiresultheaderprev){
                 $r['pw_1']=intval($kpiresultheaderprev->pw).'';
                 $r['pt_t1']=$kpiresultheaderprev->pt_t;
@@ -93,6 +94,7 @@ class KPIHeader extends Model implements Endorseable
 
     protected function fetchKPIProcess($groupdata=null){
         $result=[];
+        $isgroupdatanull=is_null($groupdata);
         if(is_null($groupdata))
             $kpi_proccess_start=$this->kpiprocesses;
         else{
@@ -104,7 +106,7 @@ class KPIHeader extends Model implements Endorseable
         foreach($kpi_proccess_start as $curr_s){
             $r=[];
             $curr_e=$curr_s->getNext();
-            $curr_p=$curr_s->getPrev();
+            $curr_p=$isgroupdatanull?$curr_s->getPrev():$curr_e;
 
             if( $curr_p){
                 $r['pw_1']=intval($curr_p->pivot->pw).'';
@@ -692,7 +694,7 @@ class KPIHeader extends Model implements Endorseable
         return KPIHeader::where('employee_id',$id)->where('period',$curr_date)->first();
     }
 
-    public function getFinalAchivement(array $kpiresults,array $kpiproceses){
+    public function getFinalAchivement(array $kpiresults,array $kpiproceses,array $weighting=[]){
 
         $t1_fr=floatval($kpiresults['totalAchievement']['t1']);
         $t1_fp=floatval($kpiproceses['totalAchievement']['t1']);
@@ -701,8 +703,11 @@ class KPIHeader extends Model implements Endorseable
 
         $final_achievements=[];
 
-        $final_achievements['t1_n']=round($t1_fr * $this->weight_result + $t1_fp * $this->weight_process,2);
-        $final_achievements['t2_n']=round($t2_fr * $this->weight_result + $t2_fp * $this->weight_process,2);
+        array_key_exists('weight_result',$weighting)?$weighting['weight_result']:$weighting['weight_result']=$this->weight_result;
+        array_key_exists('weight_process',$weighting)?$weighting['weight_process']:$weighting['weight_process']=$this->weight_result;
+
+        $final_achievements['t1_n']=round($t1_fr * $weighting['weight_result'] + $t1_fp * $weighting['weight_process'],2);
+        $final_achievements['t2_n']=round($t2_fr * $weighting['weight_result'] + $t2_fp * $weighting['weight_process'],2);
 
         $final_achievements['t1_i']=$this->getIndexAchievement($final_achievements['t1_n']);
         $final_achievements['t2_i']=$this->getIndexAchievement($final_achievements['t2_n']);

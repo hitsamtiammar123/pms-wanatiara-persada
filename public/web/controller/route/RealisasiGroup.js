@@ -505,7 +505,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         if(isDownloading)
             return;
 
-       loader.fetchPMSGroupPDF(vw.kpitag.id,{month:currMonth+1}).then(function(result){
+       loader.fetchPMSGroupPDF(vw.kpitag.id,{month:currMonth+1,year:currYear}).then(function(result){
             var filename='PMS Group - '+vw.kpitag.name+' - '+currentMonthObj.value+' - '+currYear+'.pdf';
             loader.download(result.data,filename);
        },function(){

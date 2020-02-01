@@ -184,6 +184,7 @@ class JavascriptController extends Controller
             $auth_user->employee->role;
             $auth_user->employee->bawahan->each(function($d){
                 $d->load('role');
+                $d->load('tags');
             });
             $userJS=str_replace('{user}',$auth_user->toJSON(),$userJS);
         }

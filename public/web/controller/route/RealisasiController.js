@@ -245,8 +245,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             keys.t_n='t'+i+'_n';
             keys.t_i='t'+i+'_i';
             keys.t_f='t'+i+'_f';
-
-            kpiService.setFinalAchievement($scope.totalAchieveMent,$scope.totalAchieveMentP,$scope.header,$scope.finalAchievement,keys);
+            var w=(i===2)?{weight_result:$scope.header.weight_result,weight_process:$scope.header.weight_process}:$scope.header.weighing_prev
+            kpiService.setFinalAchievement($scope.totalAchieveMent,$scope.totalAchieveMentP,w,$scope.finalAchievement,keys);
         }
         notifier.notifyGroup('add-content');
     }
@@ -1006,6 +1006,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             weight_result:header.weight_result*100,
             weight_process:header.weight_process*100
         };
+        $scope.hasTags=header.hasTags;
+        header.hasTags?$scope.tags=header.tags:null;
         // $scope.kpiendorsements=$scope.kpiendorsements.sort(function(d1,d2){
         //     return parseInt(d1.level)-parseInt(d2.level);
         // });
@@ -1096,19 +1098,8 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
             $rootScope.loading=true;
        }
        else{
-           var header=headers[month];
-
-           kpiheaders=header;
-           $scope.header=kpiheaders;
-           $scope.data=header.kpiresults;
-           $scope.kpiprocesses=header.kpiprocesses;
-           $scope.kpiendorsements=header.kpiendorsements;
-           $scope.kpiendorsementIndex=Object.keys($scope.kpiendorsements).reverse();
-           $scope.display_weights={
-                weight_result:header.weight_result*100,
-                weight_process:header.weight_process*100
-            };
-           loadEmployee();
+            var header=headers[month];
+            loadSuccessHeader({data:header});
        }
     }
 
@@ -1592,7 +1583,7 @@ app.controller('RealisasiController',function($scope,$rootScope,validator,loader
         if(isDownloading)
             return;
 
-       loader.fetchPMSPDF(curr_employee.id,{month:$scope.currentMonth.index+1}).then(function(result){
+       loader.fetchPMSPDF(curr_employee.id,{month:$scope.currentMonth.index+1,year:$scope.currentYear}).then(function(result){
             var filename='PMS '+curr_employee.name+' - '+$scope.currentMonth.value+' '+$scope.currendDate.getFullYear()+'.pdf';
             loader.download(result.data,filename);
        },function(){

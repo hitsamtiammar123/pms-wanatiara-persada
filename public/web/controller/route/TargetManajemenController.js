@@ -33,7 +33,7 @@ app.controller('TargetManajemenController',function(
             }
             return true;
         }
-        
+
         var sliceEmployeeList=function(employee){
             var index=$scope.employeeList.indexOf(employee);
             $scope.employeeList=$scope.employeeList.slice(0,index+1);
@@ -106,6 +106,15 @@ app.controller('TargetManajemenController',function(
                     $scope.staffs=user.employee.bawahan;
             }
             //console.log(id);
+        }
+
+        $scope.toPMS=function(bawahan){
+            var url='';
+            if(bawahan.tags.length===0)
+                url='realisasi/'+bawahan.id;
+            else
+                url='realisasi-group/'+bawahan.tags[0].id;
+            $location.path(url);
         }
 
         setEmployeeList();

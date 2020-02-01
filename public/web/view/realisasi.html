@@ -18,6 +18,11 @@
 
         </div>
         <div class="table-100" style="margin-top:30px;">
+                <div class="row" ng-if="hasTags">
+                    <div class="col-sm-8">
+                        <div class="bold undeline" style="font-style: italic;">PMS ini masuk di kelompok PMS Group {{tags[0].name}}. klik <a href="#!realisasi-group/{{tags[0].id}}">disini</a> untuk mengalihkan</div>
+                    </div>
+                </div>
                 <div class="row">
                         <div class="col-sm-4">
                                 <a ng-click="downloadPDF()"><span class="glyphicon glyphicon-download black-font"></span></a>

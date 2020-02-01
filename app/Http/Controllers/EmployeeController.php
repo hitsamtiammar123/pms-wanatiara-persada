@@ -20,10 +20,11 @@ class EmployeeController extends Controller
         $item->load('role');
         $item->load('kpiheaders');
         $item->makeHidden(Employee::HIDDEN_PROPERTY);
+        $hasTag=$item->hasTags();
         if($item->role!==null)
             $item->role->makeHidden(Role::HIDDEN_PROPERTY);
 
-        $item->kpiheaders->each(function($d,$index)use($item,$currYear){
+        $item->kpiheaders->each(function($d,$index)use($item,$currYear,$hasTag){
             $carbon=Carbon::parse($d->period);
             if($carbon->year==$currYear){
                 $d->kpiresultheaders;
@@ -31,6 +32,11 @@ class EmployeeController extends Controller
                 $d->fetchFrontEndKPIProcess();
                 $d->fetchFrontEndKPIResult();
                 $d->hasTags=$d->employee->hasTags();
+                if($hasTag){
+                    $tag=$item->tags[0];
+                    $d->weight_result=$tag->weight_result;
+                    $d->weight_process=$tag->weight_process;
+                }
 
             }
             else
@@ -71,6 +77,7 @@ class EmployeeController extends Controller
             $employee->bawahan=$employee->bawahan->makeHidden(Employee::HIDDEN_PROPERTY);
             $employee->bawahan->each(function($data,$key){
                 $data->role->makeHidden(Role::HIDDEN_PROPERTY);
+                $data->load('tags');
             });
         }
 

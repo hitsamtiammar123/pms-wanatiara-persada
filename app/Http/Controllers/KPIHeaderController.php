@@ -69,12 +69,10 @@ class KPIHeaderController extends Controller
             $e->role;
             $employees[]=$e_arr;
         }
-        $curr_header=$kpitag->groupemployee[0]->getHeader($month,$year);
+        $curr_header=$kpitag->getHeader($month,$year);
         if(!$curr_header)
             return send_404_error('Data KPIHeader ditemukan');
         $kpitag->employees=$employees;
-        $kpitag->weight_result=$curr_header->weight_result;
-        $kpitag->weight_process=$curr_header->weight_process;
         $kpitag->period_end=$curr_header->cPeriod()->format('Y-m-d');
         $kpitag->period_start=$curr_header->cPrevPeriod()->format('Y-m-d');
         $kpitag->endorsements=$kpitag->fetchKPIEndorsement(KPIHeader::getDate($month,$year));
@@ -153,7 +151,7 @@ class KPIHeaderController extends Controller
         $prev_month=$nc->addMonth(-1);
 
         $kpiheader=KPIHeader::findForFrontEnd($id,$curr_date);
-        if(!$kpiheader || $kpiheader->getPrev()===null ){
+        if(!$kpiheader || ($header_prev=$kpiheader->getPrev())===null ){
             return send_404_error('Data tidak ditemukan');
         }
 
@@ -167,6 +165,12 @@ class KPIHeaderController extends Controller
         $kpiheader_arr['kpiprocesses']=$kpiheader->fetchFrontEndData('kpiprocess');
         $kpiheader_arr['period_end']=$kpiheader_arr['period'];
         $kpiheader_arr['period_start']=$prev_month->format('Y-m-d') ;
+        $kpiheader_arr['hasTags']=$kpiheader->employee->hasTags();
+        $kpiheader_arr['hasTags']?$kpiheader_arr['tags']=$kpiheader->employee->tags:null;
+        $kpiheader_arr['weighing_prev']=[
+            'weight_result'=>$header_prev->weight_result,
+            'weight_process'=>$header_prev->weight_process
+        ];
 
         unset($kpiheader_arr['period']);
 
@@ -187,6 +191,13 @@ class KPIHeaderController extends Controller
         if(!$header_prev){
             return send_404_error('Data pada bulan sebelumnya Tidak ditemukan');
         }
+
+        $e=$header->employee;
+        if($e && $e->hasTags())
+            return [
+                'message'=>'Berhasil',
+                'code' =>4
+            ];
 
         $res_data=$request->all();
         $kpiresults=json_decode($res_data['kpiresult'],true);

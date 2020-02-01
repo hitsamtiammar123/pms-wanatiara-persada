@@ -46,8 +46,40 @@ class KPITag extends Model implements Endorseable
         return $this->belongsToMany(Employee::class,'groupingkpi','tag_id','employee_id')->withTimestamps();
     }
 
-    public function getZeroIndexEmployee(){
-        return $this->groupemployee[0];
+    public function fetchHeaderAndEmployee($month,$year){
+        $i=0;
+        $header=null;
+        $count_e=count($this->groupemployee);
+
+        do{
+            $header=$this->groupemployee[$i]->getHeader($month,$year);
+            $i++;
+        }while(is_null($header) && $i<$count_e);
+
+        $employee=$i<$count_e?$this->groupemployee[$i]:null;
+
+        return [
+            'header'=>$header,
+            'employee'=>$employee
+        ];
+    }
+
+    public function getZeroIndexEmployee($month=null,$year=null){
+        $c=Carbon::now();
+        $month=is_null($month)?$c->month:$month;
+        $year=is_null($year)?$c->year:$year;
+        $data=$this->fetchHeaderAndEmployee($month,$year);
+        return $data['employee'];
+    }
+
+    public function getHeader($month,$year){
+        $data=$this->fetchHeaderAndEmployee($month,$year);
+        return $data['header'];
+    }
+
+    public function getCurrentHeader(){
+        $c=Carbon::now();
+        return $this->getHeader($c->month,$c->year);
     }
 
     public function createHeaderIfNotExists($period=null){
@@ -97,20 +129,18 @@ class KPITag extends Model implements Endorseable
         $weight_process=array_key_exists('weight_process',$weighting)?
         $weighting['weight_process']:null;
 
-        foreach($this->groupemployee as $employee){
-            $header=$employee->getCurrentHeader();
-            if($header){
-                $weight_result?$header->weight_result=$weight_result/100:null;
-                $weight_process?$header->weight_process=$weight_process/100:null;
-                $header->save();
-            }
-        }
+        $weight_result?$this->weight_result=$weight_result/100:null;
+        $weight_process?$this->weight_process=$weight_process/100:null;
+
+        $this->save();
     }
 
     public function hasEndorse(Employee $employee){
         $d=$this->date?$this->date:KPIHeader::getCurrentDate();
         foreach($this->groupemployee as $curr){
             $header=$curr->kpiheaders()->where('period',$d)->first();
+            if(is_null($header))
+                continue;
             if($this->representative->getEndorsementLevel($employee)==1)
                 $curr_e=$curr->isUser()?$curr:$employee;
             else
