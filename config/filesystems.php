@@ -55,6 +55,15 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
         ],
+        'pms-live'=>[
+            'driver'=>'sftp',
+            'host' => env('PMS_LIVE_HOST'),
+            'username' => env('PMS_LIVE_USER'),
+            'password' => env('PMS_LIVE_PASSWORD'),
+            'root' => env('PMS_LIVE_ROOT'),
+            'port'=>22,
+            'timeout'=>20
+        ],
         'public'=>[
             'driver'=>'local',
             'root'=>public_path(),

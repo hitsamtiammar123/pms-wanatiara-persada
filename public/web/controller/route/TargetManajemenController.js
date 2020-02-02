@@ -92,9 +92,7 @@ app.controller('TargetManajemenController',function(
             else{
 
                 if($scope.employeeList[$scope.employeeList.length-1]===employee){
-                    var id=employee.id;
-                    var url=loader.angular_route('realisasi',[id]);
-                    $location.path(url);
+                    $scope.toPMS(employee);
                     return;
                 }
 

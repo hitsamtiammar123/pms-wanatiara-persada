@@ -1,7 +1,12 @@
  @php
     $user=Auth::user();
-    if($user)
-        $pmsIndex='#!realisasi/'.$user->employee->id;
+    if($user){
+        $employee=$user->employee;
+        if(!$employee->hasTags())
+            $pmsIndex='#!realisasi/'.$employee->id;
+        else
+            $pmsIndex='#!realisasi-group/'.$employee->tags[0]->id;
+    }
     else
         $pmsIndex='';
 

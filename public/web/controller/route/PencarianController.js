@@ -1,4 +1,4 @@
-app.controller('PencarianController',function($scope,loader,$q,$timeout,$location){
+app.controller('PencarianController',function($scope,loader,$q,$timeout,$location,$rootScope){
 
     var interval=[];
     var deffered;
@@ -81,7 +81,11 @@ app.controller('PencarianController',function($scope,loader,$q,$timeout,$locatio
 
     $scope.toIkhtisarPage=function(){
         var r=result_data;
-        url='/ikhtisar/'+r.id;
+        var url='';
+        if(r.tag===null || $scope.selectedItem.type ==='employee')
+            url='/ikhtisar/'+r.id;
+        else
+             url='/ikhtisar/'+r.tag.id+'/'+$rootScope.year+'/tag';
         $location.path(url);
     }
 

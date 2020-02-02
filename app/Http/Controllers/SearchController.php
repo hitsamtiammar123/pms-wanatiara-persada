@@ -34,7 +34,7 @@ class SearchController extends Controller
     }
 
     protected function getRoleData($search,$role_level,$get_fetch=false){
-        $query=Role::where('level','>',$role_level);
+        $query=Role::where('level','>=',$role_level);
         //$result=Role::where('name',$search)->where(DB::raw('level > '.$role_level))->first();
         $result=!$get_fetch?$query->where('name',$search)->first():$query->where('name','like','%'.$search.'%')->first();
         if($result){

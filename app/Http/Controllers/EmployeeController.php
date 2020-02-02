@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Model\Employee;
 use App\Model\Role;
 use App\Model\KPIHeader;
+use App\Model\KPITag;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Traits\ErrorMessages;
@@ -46,6 +47,12 @@ class EmployeeController extends Controller
         unset($item->kpiheaders);
         $item->kpiheaders=$values;
 
+    }
+
+    private function fetchGroup($items,$year){
+        foreach($items as $item){
+            $this->fetchIkhtisar($item,$year);
+        }
     }
 
 
@@ -142,17 +149,10 @@ class EmployeeController extends Controller
 
     public function ikhtisar(Request $request){
         $employee_id=$request->input('employee');
+        $tag_id=$request->input('tag');
         $year=$request->input('year',Carbon::now()->year);
 
-        if(!$employee_id){
-            $employees=Employee::where('role_id','!=','1915283263')->paginate(10);
-            $items=$employees->items();
-            foreach($items as $item){
-                $this->fetchIkhtisar($item,$year);
-            }
-            return $employees;
-        }
-        else{
+        if($employee_id){
             $employee=Employee::find($employee_id);
             if(is_null($employee))
                 return send_404_error();
@@ -160,6 +160,21 @@ class EmployeeController extends Controller
             $this->fetchIkhtisar($employee,$year);
 
             return ['data'=>[$employee]];
+        }
+        else if($tag_id){
+            $tag=KPITag::find($tag_id);
+            if(is_null($tag))
+                return send_404_error();
+            $employees=$tag->groupemployee;
+            $this->fetchGroup($employees,$year);
+            return ['data'=>$employees];
+
+        }
+        else{
+            $employees=Employee::where('role_id','!=','1915283263')->paginate(10);
+            $items=$employees->items();
+            $this->fetchGroup($items,$year);
+            return $employees;
         }
 
     }

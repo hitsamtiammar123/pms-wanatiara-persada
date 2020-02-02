@@ -6,6 +6,7 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
     var vm=this;
     var page=1;
     var employee_id=$routeParams.id;
+    var tag=$routeParams.tag;
 
 
     $scope.dIndex=$rootScope.dIndex!==undefined?$rootScope.dIndex:dIndex;
@@ -203,7 +204,10 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         if(isUndf(employee_id) || employee_id==='year')
             loader.getIkhtisar(page,$scope.currentYear).then(onSuccess,e).finally(kpiService.onDone);
         else{
-            loader.getIkhtisarWithEmployeeID(employee_id,$scope.currentYear).then(onSuccess,e).finally(kpiService.onDone);
+            if(!isUndf(tag))
+                loader.getIkhtisarWithTagID(employee_id,$scope.currentYear).then(onSuccess,e).finally(kpiService.onDone);
+            else
+                loader.getIkhtisarWithEmployeeID(employee_id,$scope.currentYear).then(onSuccess,e).finally(kpiService.onDone);
             $scope.hide_load_btn=true;
         }
         //alertModal.upstream('loading');
@@ -236,7 +240,9 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
     }
 
     $scope.changeDate=function(){
-        var url=loader.angular_route('ikhtisar',[employee_id?employee_id:'year',$scope.currentYear]);
+        var routeParams=[employee_id?employee_id:'year',$scope.currentYear];
+        !isUndf(tag)?routeParams.push('tag'):null;
+        var url=loader.angular_route('ikhtisar',routeParams);
         $location.path(url);
     }
 

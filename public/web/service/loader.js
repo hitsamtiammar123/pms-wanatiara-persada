@@ -117,14 +117,19 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
     }
 
     this.getIkhtisarWithEmployeeID=function(id,year){
-        var url=this.route('ikhtisar',null,{employee:id,year:year});
-        $rootScope.loading=true;
-        return $http.get(url);
+        return that.getIkhtisarWithOption({employee:id,year:year});
     }
 
+    this.getIkhtisarWithTagID=function(id,year){
+        return that.getIkhtisarWithOption({tag:id,year:year});
+    }
 
     this.getIkhtisar=function(page,year){
-        var url=this.route('ikhtisar',null,{page:page,year:year});
+        return that.getIkhtisarWithOption({page:page,year:year});
+    }
+
+    this.getIkhtisarWithOption=function(option){
+        var url=this.route('ikhtisar',null,option);
         $rootScope.loading=true;
         return $http.get(url);
     }
@@ -205,17 +210,18 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
     }
 
     this.updateProfile=function(id,profile){
-        var url=this.route('employee',[id]);
-        profile._method='PUT';
-
-        return $http.post(url,E.param(profile),ajaxConfig2);
+        return that.updateUser([id],profile);
     }
 
     this.updatePassword=function(id,password){
-        var url=this.route('employee',[id,'password']);
-        password._method='PUT';
+        return that.updateUser([id,'password'],password);
+    }
 
-        return $http.post(url,E.param(password),ajaxConfig2);
+    this.updateUser=function(routeParams,params){
+        var url=this.route('employee',routeParams);
+        params._method='PUT';
+
+        return $http.post(url,E.param(params),ajaxConfig2);
     }
 
     this.setEndorsement=function(data){

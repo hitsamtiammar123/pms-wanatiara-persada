@@ -182,6 +182,7 @@ class JavascriptController extends Controller
             }
             $auth_user->employee->bawahan;
             $auth_user->employee->role;
+            $auth_user->employee->tags;
             $auth_user->employee->bawahan->each(function($d){
                 $d->load('role');
                 $d->load('tags');
