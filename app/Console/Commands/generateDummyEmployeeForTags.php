@@ -9,8 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Faker\Factory as Faker;
 
-class generateDummyEmployeeForTags extends Command
-{
+class generateDummyEmployeeForTags extends Command{
     /**
      * The name and signature of the console command.
      *

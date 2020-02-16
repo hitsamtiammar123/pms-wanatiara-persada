@@ -25,6 +25,7 @@ app.factory('errorResponse',['alertModal',function(alertModal){
     };
 
     var res=function(err){
+        //console.log('error,',err);
         var status=err.status;
         if(errorResponseDefault.hasOwnProperty(status)){
             var callback=errorResponseDefault[status];

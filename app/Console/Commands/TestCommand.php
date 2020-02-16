@@ -31,8 +31,6 @@ class TestCommand extends Command
         parent::__construct();
     }
 
-
-
     /**
      * Execute the console command.
      *
@@ -40,11 +38,6 @@ class TestCommand extends Command
      */
     public function handle()
     {
-        //$this->syncKPIHeader('2019-10-16');
-
-		$p=storage_path('test.txt');
-        file_put_contents($p,'Heheheheheheh');
-
-
+	echo 'Test';
     }
 }
