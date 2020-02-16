@@ -44,8 +44,8 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return p+p_u;
     }
 
-    this.getByGroupTag=function(tagID){
-        var url=this.route('kpitag',[tagID]);
+    this.getByGroupTag=function(tagID,month,year){
+        var url=this.route('kpitag',[tagID],{month:month,year:year});
 
         return $http.get(url);
     }
@@ -55,8 +55,9 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         var sentData={};
         sentData.dataChanged=JSON.stringify(dataChange);
         sentData.headerChanged=JSON.stringify(headerChanged);
+        sentData._method='PUT'
 
-        return $http.put(url,E.param(sentData),ajaxConfig2);
+        return $http.post(url,E.param(sentData),ajaxConfig2);
 
     }
 
@@ -94,19 +95,20 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
     }
 
 
-    this.getKPICompany=function(){
-        var url=this.route('kpicompany');
+    this.getKPICompany=function(month,year){
+        var url=this.route('kpicompany',[],{year:year,month:month});
+        $rootScope.loading=true;
         return $http.get(url);
     }
 
     this.getSearchResult=function(item){
-        var url=this.route('search.result',null,{search:item.item,type:item.type});
+        var url=this.route('search.result',null,{search:item.item,type:item.type,isAuto:item.isAuto?item.isAuto:false});
         return $http.get(url);
     }
 
     this.setEndorsementGroup=function(tagID){
         var url=this.route('kpitag',[tagID,'endorse']);
-        return $http.put(url,[]);
+        return $http.post(url,E.param({_method:'PUT'}));
     }
 
     this.getSearchList=function(query){
@@ -114,20 +116,27 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url);
     }
 
-    this.getIkhtisarWithEmployeeID=function(id){
-        var url=this.route('ikhtisar',null,{employee:id});
+    this.getIkhtisarWithEmployeeID=function(id,year){
+        return that.getIkhtisarWithOption({employee:id,year:year});
+    }
+
+    this.getIkhtisarWithTagID=function(id,year){
+        return that.getIkhtisarWithOption({tag:id,year:year});
+    }
+
+    this.getIkhtisar=function(page,year){
+        return that.getIkhtisarWithOption({page:page,year:year});
+    }
+
+    this.getIkhtisarWithOption=function(option){
+        var url=this.route('ikhtisar',null,option);
+        $rootScope.loading=true;
         return $http.get(url);
     }
 
+    this.getHeaders=function(id,month,year){
 
-    this.getIkhtisar=function(page){
-        var url=this.route('ikhtisar',null,{page:page});
-        return $http.get(url);
-    }
-
-    this.getHeaders=function(id,month){
-
-        var url=this.route('kpiheader',[id],{month:month});
+        var url=this.route('kpiheader',[id],{month:month,year:year});
         return $http.get(url);
     }
 
@@ -160,8 +169,9 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         sentData.weighting=JSON.stringify(
             body.weighting
         );
+        sentData._method='PUT';
 
-        return $http.put(url,E.param(sentData),ajaxConfig2);
+        return $http.post(url,E.param(sentData),ajaxConfig2);
     }
 
     this.fetchPMSPDF=function(id,option){
@@ -169,8 +179,8 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         return $http.get(url,{responseType:'blob'});
     }
 
-    this.fetchPMSGroupPDF=function(id){
-        var url=this.route('pdf-pms-group',[id]);
+    this.fetchPMSGroupPDF=function(id,option){
+        var url=this.route('pdf-pms-group',[id],option);
         return $http.get(url,{responseType:'blob'});
     }
 
@@ -185,7 +195,8 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
     this.uploadKPICompany=function(data){
         var form=new FormData();
-        form.append('file',data.file);
+        for(var i in data)
+            form.append(i,data[i]);
 
         var url=this.route('kpicompany.upload',[data.id]);
         return $http.post(url,form,ajaxConfig);
@@ -193,25 +204,30 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
 
     this.resetEndorsement=function(id,data){
         var url=this.route('kpiendorsement',[id,'reset']);
+        data._method='PUT';
 
-       return $http.put(url,E.param(data),ajaxConfig2);
+       return $http.post(url,E.param(data),ajaxConfig2);
     }
 
     this.updateProfile=function(id,profile){
-        var url=this.route('employee',[id]);
-
-        return $http.put(url,E.param(profile),ajaxConfig2);
+        return that.updateUser([id],profile);
     }
 
     this.updatePassword=function(id,password){
-        var url=this.route('employee',[id,'password']);
+        return that.updateUser([id,'password'],password);
+    }
 
-        return $http.put(url,E.param(password),ajaxConfig2);
+    this.updateUser=function(routeParams,params){
+        var url=this.route('employee',routeParams);
+        params._method='PUT';
+
+        return $http.post(url,E.param(params),ajaxConfig2);
     }
 
     this.setEndorsement=function(data){
         var url=this.route('kpiendorsement',[data.id]);
-        return $http.put(url,data);
+        data._method='PUT';
+        return $http.post(url,data);
     }
 
     this.route=function(name,param,param_url){

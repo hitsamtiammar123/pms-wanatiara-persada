@@ -38,7 +38,7 @@ if(!function_exists('put_log')){
         $filename=log_path($filename);
         $file=fopen($filename,'a+');
 
-        $message= date('Y-M-d h:i:s').' >>> '.$log."\n";
+        $message= date('Y-M-d H:i:s').' >>> '.$log."\n";
         fputs($file,$message);
         fclose($file);
     }

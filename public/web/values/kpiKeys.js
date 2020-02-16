@@ -15,7 +15,8 @@ app.constant('kpiKeys',{
         "real_t2",
         "real_k2",
         "kpia_1",
-        "kpia_2"
+        "kpia_2",
+        "hasNew"
     ],
     kpiprocess:[
         "id",

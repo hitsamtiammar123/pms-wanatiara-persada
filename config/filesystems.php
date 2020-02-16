@@ -55,6 +55,15 @@ return [
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
         ],
+        'pms-live'=>[
+            'driver'=>'sftp',
+            'host' => env('PMS_LIVE_HOST'),
+            'username' => env('PMS_LIVE_USER'),
+            'password' => env('PMS_LIVE_PASSWORD'),
+            'root' => env('PMS_LIVE_ROOT'),
+            'port'=>22,
+            'timeout'=>20
+        ],
         'public'=>[
             'driver'=>'local',
             'root'=>public_path(),
@@ -62,7 +71,7 @@ return [
         ],
         'web'=>[
             'driver'=>'local',
-            'root'=>base_path('../pms-wanatiara-persada-v1-angular/web'),
+            'root'=>public_path('web'),
             'visibility'=>'public'
         ],
         'angular_resource'=>[
@@ -75,7 +84,17 @@ return [
         ],
         'resource'=>[
             'driver'=>'local',
-            'root'=>resource_path()
+            'root'=>resource_path(),
+            'permissions' => [
+                'file' => [
+                    'public' => 0664,
+                    'private' => 0600,
+                ],
+                'dir' => [
+                    'public' => 0775,
+                    'private' => 0700,
+                ],
+            ],
         ]
 
     ],

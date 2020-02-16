@@ -1,5 +1,7 @@
-app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS','$route','confirmModal','$rootScope','months','errorResponse',
-function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,KPI_RESULT,KPI_PROCESS,$route,confirmModal,$rootScope,months,errorResponse){
+app.controller('RealisasiGroup',['$scope','loader','$routeParams','kpiService','notifier','dataService','alertModal','$parse','KPI_RESULT','KPI_PROCESS',
+'$route','confirmModal','$rootScope','months','errorResponse','$location','years',
+function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$parse,
+    KPI_RESULT,KPI_PROCESS,$route,confirmModal,$rootScope,months,errorResponse,$location,years){
 
     var tagID=$routeParams.tagID;
     var vw=this;
@@ -7,7 +9,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var keymap=[
         {
             key:'pt_t',
-            keyP:'pivot.pt',
+            keyP:'pt',
             keyfilter:'pt_filter',
             keySanitize:'pt_sanitize',
             keyContentEditable:'ptContentEditable'
@@ -15,7 +17,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         {
             key:'real_t',
             keyfilter:'real_filter',
-            keyP:'pivot.real',
+            keyP:'real',
             keySanitize:'real_sanitize',
             keyContentEditable:'realContentEditable'
         },
@@ -65,8 +67,12 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     vw.rPerTString='R/T (%)';
     vw.hasEndorse=true;
     vw.kpiendorsements={};
+    vw.months=months;
+    vw.years=years;
 
     $scope.isSaving=false;
+    $scope.currentMonth=months[currMonth];
+    $scope.currentYear=currYear;
 
     var initHeading2ByData=function(data,type){
         for(var i=0;i<data.length;i++){
@@ -156,39 +162,6 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         }
     }
 
-    var getKPIAIndex=function(i,unit){
-        var rt=0;
-        var i=parseFloat(i);
-        switch(unit){
-            case '规模 Skala':
-            case '规模 Scale':
-                if(i<=0)
-                    rt=70;
-                else if(i==1)
-                    rt=80;
-                else if(i==2)
-                    rt=90;
-                else if(i==3)
-                    rt=100;
-                else if(i>=4)
-                    rt=120;
-            break;
-            case 'MT':
-            case 'WMT':
-                if(i<=0.8)
-                    rt=80;
-                else if(i>0.8 && i<=0.9)
-                    rt=90;
-                else if(i>0.9 && i<1)
-                    rt=95;
-                else if(i>=1 && i<=1.025)
-                    rt=102;
-                else if(i>1.025)
-                    rt=110;
-
-        }
-        return rt;
-    }
 
     var getBColor=function(i){
         i/=100;
@@ -202,37 +175,6 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             return 'blue-column';
         else if(i>1.025)
             return 'gold-column';
-    }
-
-    var getKPIAResult=function(kpiresult,e_result){
-        var rC;
-        var tC;
-        var rt;
-
-        rC=e_result['real_t'];
-        tC=e_result['pt_t'];
-
-        switch(kpiresult.unit){
-            case 'MT':
-            case 'WMT':
-                rt=(parseFloat(rC)/parseFloat(tC));
-            break;
-            case '规模 Skala':
-            case '规模 Scale':
-                rt=rC;
-            break;
-        }
-
-        return getKPIAIndex(rt,kpiresult.unit);
-    }
-
-    var getKPIAProcess=function(kpiprocess,e_process){
-        var i;
-        var rt;
-
-        i=e_process.pivot.real;
-
-        return getKPIAIndex(i,kpiprocess.unit);
     }
 
     var setUnitFilter=function(d,type){
@@ -263,6 +205,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             var d=data[i];
             setUnitFilter(d,type);
         }
+
     }
 
     var setWeighting=function(){
@@ -296,28 +239,11 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
             setFilter(employee.kpiprocess,KPI_PROCESS);
             setContentEditable(employee.kpiresult,KPI_RESULT);
             setContentEditable(employee.kpiprocess,KPI_PROCESS);
-            setTotalAchievement(employee);
+            kpiService.setTotalAchievementKPITag(employee,vw.kpitag.weight_result,vw.kpitag.weight_process,{kpiresult:'kpiresult',kpiprocess:'kpiprocess'});
         }
         //console.log(vw.employees);
     }
 
-    var getTotalAchievement=function(data){
-        var sum=0;
-        var count=0;
-        for(var i in data){
-            var d=data[i];
-            sum+=d.kpia;
-            count++;
-        }
-        return sum/count;
-    }
-
-    var setTotalAchievement=function(employee){
-        var taR=getTotalAchievement(employee.kpiresult) * vw.kpitag.weight_result;
-        var taP=getTotalAchievement(employee.kpiprocess) * vw.kpitag.weight_process;
-        employee.ta=(taR+taP).toFixed(2);
-        employee.ia=kpiService.getAchievementIndex(employee.ta);
-    }
 
     var setKPIA=function(type){
         var data=(type===KPI_RESULT)?vw.kpiresultgroup:vw.kpiprocessgroup;
@@ -328,11 +254,11 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
                 var e_data;
                 if(type===KPI_RESULT){
                     e_data=employee.kpiresult[d.id];
-                    e_data.kpia=getKPIAResult(d,e_data);
+                    e_data.kpia=kpiService.getKPIAResultTag(d.unit,e_data,{real_t:'real_t',pt_t:'pt_t'});
                 }
                 else if(type===KPI_PROCESS){
                     e_data=employee.kpiprocess[d.id];
-                    e_data.kpia=getKPIAProcess(d,e_data);
+                    e_data.kpia=kpiService.getKPIAProcessTag(d.unit,e_data,{real:'real'});
                 }
                 e_data.kpiaBColor=getBColor(e_data.kpia);
             }
@@ -396,7 +322,6 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         setEmployeeData();
         setWeighting();
         setRealisasiTable();
-
 
         notifier.notifyGroup('rg.add-content');
         //console.log(vw.employees);
@@ -464,25 +389,29 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
     var onSuccess=function(result){
         alertModal.hide();
         var data=result.data;
-        $rootScope.kpitags[tagID][currMonth]=data;
+        $rootScope.kpitags[tagID][$scope.currentYear][currMonth]=data;
         fetchData(data);
     }
+
 
     var checkTag=function(){
         if(!$rootScope.kpitags.hasOwnProperty(tagID))
             $rootScope.kpitags[tagID]={}
     }
 
-    var loadData=function(currMonth){
+    var loadData=function(currMonth,currYear){
         var kpitag=$rootScope.kpitags[tagID];
+        kpitag[currYear]?kpitag[currYear]:kpitag[currYear]={};
 
-        if(kpitag.hasOwnProperty(currMonth)){
-            var data=kpitag[currMonth];
+
+        if(kpitag[currYear].hasOwnProperty(currMonth)){
+            var data=kpitag[currYear][currMonth];
             fetchData(data);
         }
         else{
-            alertModal.upstream('loading');
-            loader.getByGroupTag(tagID).then(onSuccess,errorResponse);
+            //alertModal.upstream('loading');
+            loader.getByGroupTag(tagID,currMonth+1,currYear).then(onSuccess,errorResponse).finally(kpiService.onDone);
+            $rootScope.loading=true;
         }
     }
 
@@ -576,7 +505,7 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
         if(isDownloading)
             return;
 
-       loader.fetchPMSGroupPDF(vw.kpitag.id).then(function(result){
+       loader.fetchPMSGroupPDF(vw.kpitag.id,{month:currMonth+1,year:currYear}).then(function(result){
             var filename='PMS Group - '+vw.kpitag.name+' - '+currentMonthObj.value+' - '+currYear+'.pdf';
             loader.download(result.data,filename);
        },function(){
@@ -586,9 +515,15 @@ function($scope,loader,$routeParams,kpiService,notifier,dataService,alertModal,$
        });
        isDownloading=true;
        alertModal.display('Berkas PMS Group sedang diunduh','Mohon Tunggu');
+    }
 
+    vw.changeDate=function(){
+        //console.log($scope.currentMonth);
+        var index=$scope.currentMonth.index;
+        var url=loader.angular_route('realisasi-group',[tagID,index,$scope.currentYear]);
+        $location.path(url);
     }
 
     checkTag();
-    loadData(currMonth);
+    loadData(currMonth,$scope.currentYear);
 }]);

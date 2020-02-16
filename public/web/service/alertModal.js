@@ -22,7 +22,7 @@ app.service('alertModal',['notifier','$rootScope','$compile','dataService',funct
         self.hide();
         setTimeout(function(){
             self.display(title,message,isShowButton,isStatic);
-        },500);
+        },250);
         hasHide=false;
     }
 

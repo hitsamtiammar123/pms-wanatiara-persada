@@ -13,7 +13,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/realisasi-group/:tagID/:month?',
+            url:'/realisasi-group/:tagID/:month?/:year?',
             config:{
                 templateUrl:'web/view/realisasi-group.html',
                 controller:'RealisasiGroup',
@@ -34,7 +34,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/ikhtisar/:id?',
+            url:'/ikhtisar/:id?/:year?/:tag?',
             config:{
                 templateUrl:'web/view/ikhtisar.html',
                 controller:'IkhtisarController',

@@ -22,6 +22,9 @@ app.constant('route',{
     },
     angular_route:{
         'notification-detail':'/pengesahan/detail/',
-        'realisasi':'/realisasi/'
+        'realisasi':'/realisasi/',
+        'realisasi-group':'/realisasi-group/',
+        'ikhtisar':'/ikhtisar/',
+        'realisasi-perusahaan':'/realisasi-perusahaan/'
     }
 });

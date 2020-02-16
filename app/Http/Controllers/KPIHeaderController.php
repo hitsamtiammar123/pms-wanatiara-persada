@@ -22,7 +22,7 @@ class KPIHeaderController extends Controller
         count(array_keys(@$kpiresults['updated']?@$kpiresults['updated']:[]))!==0 || count(array_keys(@$kpiresults['created']?@$kpiresults['created']:[]))!==0 ||
         count(array_keys(@$kpiprocesses['updated']?@$kpiprocesses['updated']:[]))!==0 || count(array_keys(@$kpiprocesses['created']?@$kpiprocesses['created']:[]))!==0 ||
         count($kpiresultdeletelist)!==0 || count($kpiprocessdeletelist)!==0
-        )
+    )
             return true;
         return false;
 
@@ -36,7 +36,7 @@ class KPIHeaderController extends Controller
     public function showGroup(Request $request,$id){
         $kpitag=KPITag::find($id);
         if(!$kpitag){
-            return send_404_error('Data tidak ditemukan');
+            return send_404_error('Data KPITag ditemukan');
         }
 
         $kpitag->representative;
@@ -53,6 +53,9 @@ class KPIHeaderController extends Controller
         $year=is_null($_year)?Carbon::now()->year:$_year;
         foreach($kpitag->groupemployee as $e){
             $header=$e->getHeader($month,$year);
+            if(is_null($header))
+                continue;
+
             $header->kpiresultheaders->each(function($d){
                 $d->kpiresult;
             });
@@ -60,16 +63,16 @@ class KPIHeaderController extends Controller
             $e_arr['id']=$e->id;
             $e_arr['name']=$e->name;
             $e_arr['role']=$e->role;
-            $e_arr['kpiresult']=$header->kpiresultheaders->sortBy('created_at')->keyBy('kpi_result_id');
-            $e_arr['kpiprocess']=$header->kpiprocesses->sortBy('created_at')->keyBy('id');
+            $e_arr['kpiresult']=$header->fetchFrontEndKPIResult()->sortBy('created_at')->keyBy('kpi_result_id');
+            $e_arr['kpiprocess']=$header->fetchFrontEndKPIProcess()->sortBy('created_at')->keyBy('id');
 
             $e->role;
             $employees[]=$e_arr;
         }
-        $curr_header=$kpitag->groupemployee[0]->getHeader($month,$year);
+        $curr_header=$kpitag->getHeader($month,$year);
+        if(!$curr_header)
+            return send_404_error('Data KPIHeader ditemukan');
         $kpitag->employees=$employees;
-        $kpitag->weight_result=$header->weight_result;
-        $kpitag->weight_process=$header->weight_process;
         $kpitag->period_end=$curr_header->cPeriod()->format('Y-m-d');
         $kpitag->period_start=$curr_header->cPrevPeriod()->format('Y-m-d');
         $kpitag->endorsements=$kpitag->fetchKPIEndorsement(KPIHeader::getDate($month,$year));
@@ -137,8 +140,9 @@ class KPIHeaderController extends Controller
         //
 
         $month=$request->input('month');
+        $year=$request->input('year');
         if($month){
-            $curr_date=KPIHeader::getDate($month);
+            $curr_date=KPIHeader::getDate($month,$year);
         }
         else{
             $curr_date=KPIHeader::getCurrentDate();
@@ -147,21 +151,30 @@ class KPIHeaderController extends Controller
         $prev_month=$nc->addMonth(-1);
 
         $kpiheader=KPIHeader::findForFrontEnd($id,$curr_date);
-        if(!$kpiheader){
+        if(!$kpiheader || ($header_prev=$kpiheader->getPrev())===null ){
             return send_404_error('Data tidak ditemukan');
         }
 
         $kpiheader->load('employee');
         $kpiheader_arr=$kpiheader->toArray();
         $kpiheader_arr['kpiresults']=$kpiheader->fetchFrontEndData('kpiresult');
+        if(is_null($kpiheader_arr['kpiresults']))
+            return send_404_error('Data pada bulan sebelumnya tidak ditemukan');
+
         $kpiheader_arr['kpiendorsements']=$kpiheader->fetchFrontEndData('kpiendorsement');
         $kpiheader_arr['kpiprocesses']=$kpiheader->fetchFrontEndData('kpiprocess');
         $kpiheader_arr['period_end']=$kpiheader_arr['period'];
         $kpiheader_arr['period_start']=$prev_month->format('Y-m-d') ;
+        $kpiheader_arr['hasTags']=$kpiheader->employee->hasTags();
+        $kpiheader_arr['hasTags']?$kpiheader_arr['tags']=$kpiheader->employee->tags:null;
+        $kpiheader_arr['weighing_prev']=[
+            'weight_result'=>$header_prev->weight_result,
+            'weight_process'=>$header_prev->weight_process
+        ];
 
         unset($kpiheader_arr['period']);
 
-        return $kpiheader_arr;
+        return  $kpiheader_arr;
     }
 
 
@@ -178,6 +191,13 @@ class KPIHeaderController extends Controller
         if(!$header_prev){
             return send_404_error('Data pada bulan sebelumnya Tidak ditemukan');
         }
+
+        $e=$header->employee;
+        if($e && $e->hasTags())
+            return [
+                'message'=>'Berhasil',
+                'code' =>4
+            ];
 
         $res_data=$request->all();
         $kpiresults=json_decode($res_data['kpiresult'],true);

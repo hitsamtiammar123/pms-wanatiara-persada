@@ -2,10 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Model\KPIResultHeader;
-use App\Model\KPITag;
-use App\Model\KPIHeader;
 use Illuminate\Console\Command;
+use Storage;
 
 class TestCommand extends Command
 {
@@ -33,16 +31,7 @@ class TestCommand extends Command
         parent::__construct();
     }
 
-    public function syncKPIHeader($period){
-        $headers=KPIHeader::where('period','2019-10-16')->get();
-        foreach($headers as $header){
-            $curr_header=$header->getPrev();
-            $header->makeKPIResult($curr_header);
-            $header->makeKPIProcess($curr_header);
-            printf("Header dari %s untuk period %s sudah dibuat KPInya\n",$header->employee->name,$period);
-            sleep(1);
-        }
-    }
+
 
     /**
      * Execute the console command.
@@ -52,5 +41,10 @@ class TestCommand extends Command
     public function handle()
     {
         //$this->syncKPIHeader('2019-10-16');
+
+		$p=storage_path('test.txt');
+        file_put_contents($p,'Heheheheheheh');
+
+
     }
 }

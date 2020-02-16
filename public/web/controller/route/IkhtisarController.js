@@ -1,11 +1,12 @@
 app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
-    notifier,alertModal,$routeParams,errorResponse){
+    notifier,alertModal,$routeParams,errorResponse,kpiService,years,$location){
 
     var totalData=[];
     var currMonth=$rootScope.month;
     var vm=this;
     var page=1;
     var employee_id=$routeParams.id;
+    var tag=$routeParams.tag;
 
 
     $scope.dIndex=$rootScope.dIndex!==undefined?$rootScope.dIndex:dIndex;
@@ -26,6 +27,8 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         'Nov 十一月',
         'Dec 十二月'
     ];
+    $scope.currentYear=$routeParams.year?parseInt($routeParams.year):$rootScope.year;
+    $scope.years=years;
     vm.ikhtisar=[];
 
     var sI=function(res){
@@ -39,35 +42,49 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         setHeader();
     }
 
-    var acumulateKPIResult=function(data){
+    var acumulateKPIResult=function(data,header){
         for(var i=0;i<data.length;i++){
             var curr=data[i];
             curr.kpiColor='';
             curr.unitColor='';
 
-            var real_key='real_t';
-            var pt_key='pt_t';
+            // var real_key='real_t';
+            // var pt_key='pt_t';
             var kpia_key='kpia';
+            var keys={};
+            keys.pt_t='pt_t';
+            keys.real_t='real_t';
+            keys.real_k='real_k';
+            keys.pt_k='pt_k';
             var aw_key='aw';
-            var rC=curr[real_key];
-            var tC=curr[pt_key];
             var rt;
 
-            rt=(parseFloat(rC)/parseFloat(tC))*100
+            if(!header.hasTags){
+                if(!kpiService.isPriviledgesKPIResult(curr,keys.pt_t,header))
+                    rt=kpiService.getKPIAKPIResult(curr,keys);
+                else
+                    rt=kpiService.getKPIAKPIResultByPriviledge(curr,kpia_key);
+            }
+            else{
+                rt=kpiService.getKPIAResultTag(curr.unit,curr,{real_t:'real_t',pt_t:'pt_t'});
+            }
+            curr[kpia_key]=rt+'%';
 
-            if(isNaN(rt)||!isFinite(rt)){
-                rt=0;
+            var pwqIndex='pw';
+            kpiService.setAW(curr,pwqIndex,aw_key,rt);
+
+        }
+    }
+
+    var accumulateKPIProcess=function(data,header){
+        for(var i=0;i<data.length;i++){
+            var curr=data[i];
+            if(!header.hasTags){
+                curr.kpia=kpiService.getKPIAKPIProcess(curr,{real:'real',pt:'pt'});
+                kpiService.setAW(curr,'pw','aw',curr.kpia);
             }
             else
-                rt=rt.toFixed(1);
-
-
-            curr[kpia_key]=rt+'%';
-            var pwqIndex='pw';
-            var pwq=curr[pwqIndex];
-            var calculate=rt*parseFloat(pwq)/100;
-            curr[aw_key]=(calculate.toFixed(1));
-
+                curr.kpia=kpiService.getKPIAProcessTag(curr.unit,curr,{real:'real'});
         }
     }
 
@@ -86,33 +103,54 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         }
     }
 
-    var getKPIAchivement=function(kpiresults,date){
-        var kpiAchievement;
-        var awIndex='aw';
+    var getKPIAchivement=function(header,kpiresults,kpiprocesses){
+        if(!header.hasTags){
+            var kpiAchievement={
+                totalAchieveMent:{},
+                IndexAchieveMent:{},
+                totalAchieveMentP:{},
+                IndexAchieveMentP:{},
+                finalAchievement:{}
+            };
+            var awIndex='aw';
+            var keys={};
+            keys.tr='ta_result';
+            keys.tp='ta_process';
+            keys.t_n='tn';
+            keys.t_i='ti';
+            keys.t_f='tf';
 
-            var aw_total=0;
-            var month=date.getMonth();
-            for(var j=0;j<kpiresults.length;j++){
-                var curr=kpiresults[j];
-                var currIndex=awIndex;
-                var aw=curr[currIndex];
-                var n=parseFloat(aw);
-                aw_total+=n;
+            kpiService.setTotalAchievement(kpiresults,kpiAchievement.totalAchieveMent,kpiAchievement.IndexAchieveMent,'ta_result',awIndex);
+            kpiService.setTotalAchievement(kpiprocesses,kpiAchievement.totalAchieveMentP,kpiAchievement.IndexAchieveMentP,'ta_process',awIndex);
+            kpiService.setFinalAchievement(kpiAchievement.totalAchieveMent,kpiAchievement.totalAchieveMentP,header,kpiAchievement.finalAchievement,keys);
+            return {
+                kpia:kpiAchievement.finalAchievement.tn?kpiAchievement.finalAchievement.tn:0,
+                bColor:getBColor(kpiAchievement.finalAchievement.tn)
+            };
+        }
+        else{
+            var obj={
+                kpiresult:kpiresults,
+                kpiprocess:kpiprocesses
             }
-            var color=getBColor(aw_total);
-            kpiAchievement={kpia:aw_total.toFixed(2),bColor:color};
-
-        return kpiAchievement;
+            kpiService.setTotalAchievementKPITag(obj,header.weight_result,header.weight_process,{kpiresult:'kpiresult',kpiprocess:'kpiprocess'});
+            return{
+                kpia:obj.ta?obj.ta:0,
+                bColor:getBColor(obj.ta)
+            }
+        }
     }
 
-    var setTotalAchivement=function(headers){
+    var fetchTotalAchievement=function(headers){
         var totalAchivements=new Array(12);
 
         for(var i=0;i<headers.length;i++){
             var header=headers[i];
             var date=new Date(header.period);
-            acumulateKPIResult(header.kpiresultheaders);
-            var currentTA=getKPIAchivement(header.kpiresultheaders,date);
+            var currentTA={};
+            acumulateKPIResult(header.kpiresultheaders,header);
+            accumulateKPIProcess(header.kpiprocesses,header);
+            currentTA=getKPIAchivement(header,header.kpiresultheaders,header.kpiprocesses);
             totalAchivements[date.getMonth()]=currentTA;
         }
         return totalAchivements;
@@ -138,7 +176,7 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
             var curr=result[i];
             employee.name=curr.name;
             employee.role=curr.role;
-            var totalAchivements=setTotalAchivement(curr.kpiheaders);
+            var totalAchivements=fetchTotalAchievement(curr.kpiheaders);
             employee.kpia=totalAchivements;
             employee.index=getIndex(employee.kpia);
             ikhtisars.push(employee);
@@ -163,18 +201,21 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
     }
 
     var loadIkhtisarData=function(){
-        if(isUndf(employee_id))
-            loader.getIkhtisar(page).then(onSuccess,e);
+        if(isUndf(employee_id) || employee_id==='year')
+            loader.getIkhtisar(page,$scope.currentYear).then(onSuccess,e).finally(kpiService.onDone);
         else{
-            loader.getIkhtisarWithEmployeeID(employee_id).then(onSuccess,e);
+            if(!isUndf(tag))
+                loader.getIkhtisarWithTagID(employee_id,$scope.currentYear).then(onSuccess,e).finally(kpiService.onDone);
+            else
+                loader.getIkhtisarWithEmployeeID(employee_id,$scope.currentYear).then(onSuccess,e).finally(kpiService.onDone);
             $scope.hide_load_btn=true;
         }
-        alertModal.upstream('loading');
+        //alertModal.upstream('loading');
         $scope.disable_load_btn=true;
     }
 
     $scope.loadMore=function(){
-        if(!employee_id)
+        if(isUndf(employee_id) || employee_id==='year')
             loadIkhtisarData();
     }
 
@@ -198,10 +239,15 @@ app.controller('IkhtisarController',function($scope,$rootScope,loader,dIndex,
         return color;
     }
 
+    $scope.changeDate=function(){
+        var routeParams=[employee_id?employee_id:'year',$scope.currentYear];
+        !isUndf(tag)?routeParams.push('tag'):null;
+        var url=loader.angular_route('ikhtisar',routeParams);
+        $location.path(url);
+    }
+
 
     notifier.setNotifier('changeMonth',setCurrentMonth);
-    //setHeader();
     loadIkhtisarData();
-    //setIkhtisar();
 
 });

@@ -13,7 +13,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/realisasi-group/:tagID/:month?',
+            url:'/realisasi-group/:tagID/:month?/:year?',
             config:{
                 templateUrl:'web/view/realisasi-group.html',
                 controller:'RealisasiGroup',
@@ -24,7 +24,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/realisasi/:index/:month?',
+            url:'/realisasi/:index/:month?/:year?',
             config:{
                 templateUrl:'web/view/realisasi.html',
                 controller:'RealisasiController',
@@ -34,7 +34,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/ikhtisar/:id?',
+            url:'/ikhtisar/:id?/:year?/:tag?',
             config:{
                 templateUrl:'web/view/ikhtisar.html',
                 controller:'IkhtisarController',
@@ -67,7 +67,7 @@ app.provider('routing',['resolveProvider',function(resolveProvider){
             }
         },
         {
-            url:'/realisasi-perusahaan',
+            url:'/realisasi-perusahaan/:month?/:year?',
             config:{
                 templateUrl:'web/view/realisasi-perusahaan.html',
                 controller:'RealisasiPerusahaanController',

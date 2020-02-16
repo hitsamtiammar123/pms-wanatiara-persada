@@ -83,6 +83,7 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,alertModalUpstreams){
     var initGlobalData=function(){
         $rootScope.employees={};
         $rootScope.kpitags={};
+        $rootScope.kpicompanydata={}
         var curr_date=new Date();
         $rootScope.month=curr_date.getMonth();
         $rootScope.year=curr_date.getFullYear();

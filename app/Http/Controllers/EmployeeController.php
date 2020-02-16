@@ -6,25 +6,53 @@ use Illuminate\Http\Request;
 use App\Model\Employee;
 use App\Model\Role;
 use App\Model\KPIHeader;
+use App\Model\KPITag;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Traits\ErrorMessages;
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
 
     use ErrorMessages;
 
-    private function fetchIkhtisar($item){
+    private function fetchIkhtisar($item,$currYear){
         $item->load('role');
         $item->load('kpiheaders');
         $item->makeHidden(Employee::HIDDEN_PROPERTY);
+        $hasTag=$item->hasTags();
         if($item->role!==null)
             $item->role->makeHidden(Role::HIDDEN_PROPERTY);
-        $item->kpiheaders->each(function($d){
-            $d->kpiresultheaders;
-            $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
+
+        $item->kpiheaders->each(function($d,$index)use($item,$currYear,$hasTag){
+            $carbon=Carbon::parse($d->period);
+            if($carbon->year==$currYear){
+                $d->kpiresultheaders;
+                $d->makeHidden(KPIHeader::HIDDEN_PROPERTY);
+                $d->fetchFrontEndKPIProcess();
+                $d->fetchFrontEndKPIResult();
+                $d->hasTags=$d->employee->hasTags();
+                if($hasTag){
+                    $tag=$item->tags[0];
+                    $d->weight_result=$tag->weight_result;
+                    $d->weight_process=$tag->weight_process;
+                }
+
+            }
+            else
+                $item->kpiheaders->forget($index);
         });
+        $values=$item->kpiheaders->values()->all();
+        unset($item->kpiheaders);
+        $item->kpiheaders=$values;
+
+    }
+
+    private function fetchGroup($items,$year){
+        foreach($items as $item){
+            $this->fetchIkhtisar($item,$year);
+        }
     }
 
 
@@ -56,6 +84,7 @@ class EmployeeController extends Controller
             $employee->bawahan=$employee->bawahan->makeHidden(Employee::HIDDEN_PROPERTY);
             $employee->bawahan->each(function($data,$key){
                 $data->role->makeHidden(Role::HIDDEN_PROPERTY);
+                $data->load('tags');
             });
         }
 
@@ -120,23 +149,32 @@ class EmployeeController extends Controller
 
     public function ikhtisar(Request $request){
         $employee_id=$request->input('employee');
+        $tag_id=$request->input('tag');
+        $year=$request->input('year',Carbon::now()->year);
 
-        if(!$employee_id){
-            $employees=Employee::where('role_id','!=','1915283263')->paginate(10);
-            $items=$employees->items();
-            foreach($items as $item){
-                $this->fetchIkhtisar($item);
-            }
-            return $employees;
-        }
-        else{
+        if($employee_id){
             $employee=Employee::find($employee_id);
             if(is_null($employee))
                 return send_404_error();
 
-            $this->fetchIkhtisar($employee);
+            $this->fetchIkhtisar($employee,$year);
 
             return ['data'=>[$employee]];
+        }
+        else if($tag_id){
+            $tag=KPITag::find($tag_id);
+            if(is_null($tag))
+                return send_404_error();
+            $employees=$tag->groupemployee;
+            $this->fetchGroup($employees,$year);
+            return ['data'=>$employees];
+
+        }
+        else{
+            $employees=Employee::where('role_id','!=','1915283263')->paginate(10);
+            $items=$employees->items();
+            $this->fetchGroup($items,$year);
+            return $employees;
         }
 
     }

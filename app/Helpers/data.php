@@ -1,5 +1,7 @@
 <?php
 
+use Carbon\Carbon;
+
 if(!function_exists('add_zero')){
 
     function add_zero($number,$count=2){
@@ -48,20 +50,22 @@ if(!function_exists('generate_id')){
 if(!function_exists('kpi_company')){
 
     function kpi_company($year=null,$month=null){
-        $disk=Storage::disk('local');
+        $disk=Storage::disk('resource');
 
         $_year=is_null($year)?date('Y'):$year;
-        $_month=is_null($month)?date('M'):$month;
-        $file="kpicompany/kpicompany_{$_year}_{$_month}";
+        $_month=is_null($month)?date('n'):$month;
+        $c=Carbon::now();
+        $c->year=$_year;
+        $c->month=$_month;
+        $file="kpicompany/kpicompany_{$c->year}_{$c->shortEnglishMonth}.json";
 
-        $real_path=$disk->getAdapter()->getPathPrefix().'/'.$file;
-
-        if(file_exists($real_path)){
-            $kpi_company=file_get_contents($real_path);
-            return json_decode($kpi_company,true);
+        if($disk->exists($file)){
+            $content=$disk->get($file);
+            return json_decode($content,true);
         }
         else
             return [];
+
     }
 }
 

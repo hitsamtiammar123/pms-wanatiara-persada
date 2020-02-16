@@ -43,7 +43,7 @@ class KPIProcess extends Model
 
     protected function getFromHeader($header){
         if($header){
-            $kpiprocess=$header->kpiprocesses->where('id',$this->id)->first();
+            $kpiprocess=$header->kpiprocesses()->find($this->id);
             return $kpiprocess;
         }
         else {
@@ -116,5 +116,18 @@ class KPIProcess extends Model
                $this->pivot->{$key}=$kpiprocess[$map];
         }
         $this->pivot->save();
+    }
+
+    public function currHeader(){
+        return $this->pivot?KPIHeader::find($this->pivot->kpi_header_id):null;
+    }
+
+    public function saveFromArray(array $mapping,$kpiprocess){
+        $curr_process_prev=$this->getPrev();
+        !is_null($curr_process_prev) && $curr_process_prev->getPrev()===null?$curr_process_prev->mapFromArr(static::KPIPROCESSPREVKEY,$kpiprocess):null;
+        if(!$this->currHeader()->employee->hasTags())
+            $this->unit=array_key_exists('unit',$kpiprocess)?$kpiprocess['unit']:$this->unit;
+        $this->mapFromArr($mapping,$kpiprocess);
+        $this->save();
     }
 }

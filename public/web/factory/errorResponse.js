@@ -17,6 +17,9 @@ app.factory('errorResponse',['alertModal',function(alertModal){
         },
         'default':function(){
             alertModal.upstream('something-wrong');
+        },
+        '-1':function(){
+            alertModal.upstream('connection-lost');
         }
 
     };

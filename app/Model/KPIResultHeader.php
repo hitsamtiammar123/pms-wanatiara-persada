@@ -118,9 +118,14 @@ class KPIResultHeader extends Model
         foreach($kpiresultdeletelist as $todelete){
             $curr_delete=self::find($todelete);
             $curr_delete_prev=$curr_delete->getPrev();
-            if($curr_delete){
+            if($curr_delete && !$curr_delete->kpiheader->employee->hasTags() ){
+                //is_null($curr_delete_prev)?:$curr_delete_prev->delete();
+
+                if(!is_null($curr_delete_prev) && $curr_delete_prev->getPrev()===null){
+                    $curr_delete_prev->delete();
+                }
+                $curr_delete->kpiresult->kpiresultheaders->count()!==0?:$curr_delete->kpiresult->delete();
                 $curr_delete->delete();
-                is_null($curr_delete_prev)?:$curr_delete_prev->delete();
             }
         }
     }
@@ -257,7 +262,7 @@ class KPIResultHeader extends Model
      * @param App\Model\KPIResultHeader $prev data dari kpiresult yang sebelumnya
      * @return array
      */
-    public function fetchFrontEndPriviledge(array $kpiresult,KPIResultHeader $prev){
+    public function fetchFrontEndPriviledge(array &$kpiresult,KPIResultHeader $prev){
         if($this->isPriviledge()){
             if(!is_null($this->priviledge) && !is_null($prev->priviledge)){
                 $kpiresult['kpia_1']=$prev->priviledge->value;
@@ -290,22 +295,28 @@ class KPIResultHeader extends Model
     public function saveFromArray($kpiresult, KPIResultHeader $_prev=null,$ids=[]){
         $result_prev=!is_null($_prev)?$_prev:$this->getPrev();
 
-        array_key_exists('name',$kpiresult)?$this->kpiresult->name=$kpiresult['name']:null;
-        array_key_exists('unit',$kpiresult)?$this->kpiresult->unit=$kpiresult['unit']:null;
+        if(!$this->kpiheader->employee->hasTags()){
+            array_key_exists('name',$kpiresult)?$this->kpiresult->name=$kpiresult['name']:null;
+            array_key_exists('unit',$kpiresult)?$this->kpiresult->unit=$kpiresult['unit']:null;
+        }
 
-        //$result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
+        if(array_key_exists('hasNew',$kpiresult) && array_key_exists('hasPrev',$kpiresult) &&
+        $kpiresult['hasNew']===true && $kpiresult['hasPrev']===false){
+            $result_prev->mapFromArr(KPIResultHeader::KPIRESULTPREVKEY,$kpiresult);
+            $result_prev->save();
+
+            $id=array_key_exists(0,$ids)?$ids[0]:null;
+            $kpia_1=array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null;
+            $result_prev->mapPriviledge($kpia_1,$id);
+        }
+
+
         $this->mapFromArr(KPIResultHeader::KPIRESULTCURRENTKEY,$kpiresult);
-
         $this->push();
-        //$result_prev->save();
 
-            // $id=array_key_exists(0,$ids)?$ids[0]:null;
-            // $kpia_1=array_key_exists('kpia_1',$kpiresult)?$kpiresult['kpia_1']:null;
-            // $result_prev->mapPriviledge($kpia_1,$id);
-
-            $id=array_key_exists(1,$ids)?$ids[1]:null;
-            $kpia_2=array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null;
-            $this->mapPriviledge($kpia_2,$id);
+        $id=array_key_exists(1,$ids)?$ids[1]:null;
+        $kpia_2=array_key_exists('kpia_2',$kpiresult)?$kpiresult['kpia_2']:null;
+        $this->mapPriviledge($kpia_2,$id);
 
     }
 
@@ -318,6 +329,7 @@ class KPIResultHeader extends Model
      */
 
     public function setUpdatedList($kpiresult, array &$updatedlist){
+
         $keys=array_merge(static::KPIRESULTDKEY,static::KPIRESULTFRONTKEY);
         $total=[];
         $char_set=['name','unit'];
@@ -352,7 +364,7 @@ class KPIResultHeader extends Model
         }
     }
 
-    public function setAsNewData(){
+    public function setAsNewData($flag=false){
         $unit=$this->kpiresult->unit;
         $prev=$this->getPrev();
 
@@ -371,12 +383,14 @@ class KPIResultHeader extends Model
                 $real_t2=$this->real_t;
 
                 $this->real_k=intval($real_k1)+intval($real_t2);
-                $this->pt_t=0;
-                $this->real_t=0;
+                $this->pt_t=$flag===true?$this->pt_t:0;
+                $this->real_t=$flag===true?$this->real_t:0;
 
                 break;
             }
             default:
+                if($flag===true)
+                    break;
 
                 $this->pt_t=0;
                 $this->pt_k=0;

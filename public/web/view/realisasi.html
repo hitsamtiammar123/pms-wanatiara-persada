@@ -3,28 +3,37 @@
 
         <div class="table-100 heading-content" >
                 <div class="row">
-                        <div class="col-sm-3">{{ employee.role.name}}</div>
-                        <div class="col-sm-2">: {{employee.name}}</div>
-                        <div class="col-sm-4">当月考核期 Periode bulan berjalan</div>
-                        <div class="col-sm-3">: {{ pb.start }} - {{ pb.end }}</div>
+                        <div class="col-xs-3">{{ employee.role.name}}</div>
+                        <div class="col-xs-2">: {{employee.name}}</div>
+                        <div class="col-xs-4">当月考核期 Periode bulan berjalan</div>
+                        <div class="col-xs-3">: {{ pb.start }} - {{ pb.end }}</div>
                 </div>
                 <div class="row" style="margin-top:10px;">
-                        <div class="col-sm-3">{{ atasan.role.name}}</div>
-                        <div class="col-sm-2">: {{ atasan.name}}</div>
-                        <div class="col-sm-4">当月累计考核期 Periode Kumulatif sampai bulan berjalan</div>
-                        <div class="col-sm-3">: {{ pb.startB }} - {{ pb.endB }}</div>
+                        <div class="col-xs-3">{{ atasan.role.name}}</div>
+                        <div class="col-xs-2">: {{ atasan.name}}</div>
+                        <div class="col-xs-4">当月累计考核期 Periode Kumulatif sampai bulan berjalan</div>
+                        <div class="col-xs-3">: {{ pb.startB }} - {{ pb.endB }}</div>
                 </div>
 
 
         </div>
         <div class="table-100" style="margin-top:30px;">
+                <div class="row" ng-if="hasTags">
+                    <div class="col-sm-8">
+                        <div class="bold undeline" style="font-style: italic;">PMS ini masuk di kelompok PMS Group {{tags[0].name}}. klik <a href="#!realisasi-group/{{tags[0].id}}">disini</a> untuk mengalihkan</div>
+                    </div>
+                </div>
                 <div class="row">
                         <div class="col-sm-4">
                                 <a ng-click="downloadPDF()"><span class="glyphicon glyphicon-download black-font"></span></a>
                                 Pilih Bulan:
-                               <select ng-change="changeMonth()" ng-options="m.value for m in months" ng-model="currentMonth"></select>
+                               <select ng-options="m.value for m in months" ng-model="currentMonth"></select>
+                               Pilih Tahun:
+                               <select ng-options="y for y in years" ng-model="currentYear"></select>
+                               <a ng-click="changeDate()"><span class="glyphicon glyphicon-chevron-right black-font"></span></a>
                         </div>
                 </div>
+
 
         </div>
     <div class="table-100">
@@ -237,7 +246,7 @@
                         <thead>
                             <tr>
                                 <th class="light-grey"></th>
-                                <th class="light-grey">{{index!==0?f[currentMonth.index-1]:f[11]}}</th>
+                                <th class="light-grey">{{currentMonth.index!==0?f[currentMonth.index-1]:f[11]}}</th>
                                 <th class="light-grey">{{f[currentMonth.index]}}</th>
                             </tr>
                             <tr>
@@ -266,26 +275,26 @@
                 <button class="btn btn-success save-change-btn" ng-hide="hasEndorse" ng-click="saveChanged()" ng-disabled="hasChanged || toogle_delete">Simpan Perubahan 保存更改</button>
         </div>
 
-        <div class="col-sm-12 footer-pengesahan">
+        <div class="col-xs-12 footer-pengesahan">
             <div class="row pengesahan-header">
-                    <div class="col-sm-6">
+                    <div class="col-xs-6">
                             <p class="bold">Pengesahan 批准</p>
                         </div>
-                    <div class="col-sm-6">
+                    <div class="col-xs-6">
                             <p ng-bind-html="aggrementStr" class="blue-font bold right-text"></p>
                     </div>
             </div>
 
 
-            <div class="col-sm-12">
-                <div ng-repeat="endorse in kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-sm-4">
+            <div class="col-xs-12">
+                <div ng-repeat="endorse in kpiendorsements" ng-class="$index===0?'pengesahan1':''" class="col-xs-4">
                     {{ endorse.role.name}}:
                     <input type="checkbox" ng-change="!isEndorseDisable(endorse)?setEndorse(endorse):null" ng-disabled="isEndorseDisable(endorse)" ng-model="aggrements[endorse.id]">
                 </div>
             </div>
-            <div class="col-sm-12 tanda-tangan"></div>
-            <div class="col-sm-12">
-                <div ng-repeat="endorse in kpiendorsements" ng-class="{'blue-check':aggrements[endorse.id],'pengesahan1':$index===0}" class="col-sm-4">
+            <div class="col-xs-12 tanda-tangan"></div>
+            <div class="col-xs-12">
+                <div ng-repeat="endorse in kpiendorsements" ng-class="{'blue-check':aggrements[endorse.id],'pengesahan1':$index===0}" class="col-xs-4">
                     {{ endorse.name}}
                 </div>
             </div>

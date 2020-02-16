@@ -90,12 +90,14 @@ class Employee extends Model
         return $result;
     }
 
-    public function getCurrentHeader(){
-        $headers=$this->kpiheaders;
-        $currDate=KPIHeader::getCurrentDate();
-        $curr_header=$headers->where('period',$currDate)->first();
+    public function getPreviousHeader(){
+        $currDate=Carbon::now()->subMonth();
+        return $this->getHeader($currDate->month,$currDate->year);
+    }
 
-        return $curr_header;
+    public function getCurrentHeader(){
+        $currDate=Carbon::now();
+        return $this->getHeader($currDate->month,$currDate->year);
     }
 
     public function getHeader($month,$year){
@@ -183,16 +185,30 @@ class Employee extends Model
         return $r;
     }
 
-    public function createHeader($year,$month){
+    public function createHeader($year,$month,KPITag $tag=null){
         $period=KPIHeader::getDate($month,$year);
 
         if($this->checkHeader($period))
             return -1;
 
-        if(!$this->role || $this->role->tier===0)
+        if($this->role && $this->role->tier==0)
             return 0;
 
-        $curr_header=$this->getCurrentHeader()->getPrev();
+        $currentDate=KPIHeader::getCurrentDate();
+        $curr_header=null;
+        $diff=KPIHeader::getDateDifferences($currentDate,$period);
+        if($diff===1)
+            $curr_header=$this->getCurrentHeader();
+        else if($diff===0)
+            $curr_header=$this->getPreviousHeader();
+        else{
+            $temp_h=$this->getHeader($year,$month);
+            $curr_header=$temp_h?$temp_h->getPrev():$this->getCurrentHeader();
+        }
+
+        if(is_null($curr_header))
+            return 0;
+
         $id=$this->id!='0'?$this->id:$this->getIDForTheFirstTime();
 
         $header_id=KPIHeader::generateID($id);
@@ -204,9 +220,10 @@ class Employee extends Model
             'weight_process'=>!is_null($curr_header)?$curr_header->weight_process:0.4
         ]);
 
-        $header->makeKPIResult($curr_header,$header_id);
+        $endorseable=is_null($tag)?$curr_header:$tag;
 
-        $header->makeKPIProcess($curr_header,$header_id);
+        $header->makeKPIResult($endorseable,$header_id);
+        $header->makeKPIProcess($endorseable,$header_id);
 
         return 1;
 
@@ -284,5 +301,9 @@ class Employee extends Model
 
     public function tags(){
         return $this->belongsToMany(KPITag::class,'groupingkpi','employee_id','tag_id')->withTimestamps();
+    }
+
+    public function hasTags(){
+        return count($this->tags)!==0;
     }
 }

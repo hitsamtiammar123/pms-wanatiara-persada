@@ -1,15 +1,42 @@
-app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader,alertModal,errorResponse){
+app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader,alertModal,errorResponse,kpiService,years
+    ,$routeParams,months,$location){
     $scope.headers=$rootScope.kpicompanyheaders?$rootScope.kpicompanyheaders:[];
-    $scope.kpicompanydata=$rootScope.kpicompanydata?$rootScope.kpicompanydata:[];
+    
     $scope.keys=$rootScope.kpicompanykeys?$rootScope.kpicompanykeys:[];
     $scope.kpi_company_file;
+    $scope.currentYear=$routeParams.year?parseInt($routeParams.year):$rootScope.year;
+    $scope.years=years;
+    $scope.months=months;
+
 
     var ol_regex=/^\d+\.\s+.+/;
     var curr_date=new Date();
+    var currMonth=$routeParams.month?parseInt($routeParams.month):$rootScope.month;
+
+    $scope.currentMonth=$scope.months[currMonth];
+    
+    var setCurrentDateData=function(data){
+        if(!$rootScope.kpicompanydata.hasOwnProperty($scope.currentYear))
+            $rootScope.kpicompanydata[$scope.currentYear]={};
+        
+        if(!$rootScope.kpicompanydata[$scope.currentYear][$scope.currentMonth.index])
+            $rootScope.kpicompanydata[$scope.currentYear][$scope.currentMonth.index]=data;
+    }
+
+    var isDataExists=function(){
+        if(!$rootScope.kpicompanydata.hasOwnProperty($scope.currentYear))
+            return false;
+        else{
+            if($rootScope.kpicompanydata[$scope.currentYear].hasOwnProperty($scope.currentMonth.index))
+                return true;
+            return false;
+        }
+    }
 
     var loadSuccess=function(result){
         if(result.data.hasOwnProperty('result')){
-            $scope.kpicompanydata=$rootScope.kpicompanydata=result.data.result;
+            setCurrentDateData(result.data.result);
+            $scope.kpicompanydata=$rootScope.kpicompanydata[$scope.currentYear][$scope.currentMonth.index];
             $scope.keys=$rootScope.kpicompanykeys=result.data.keys;
             $scope.headers=$rootScope.kpicompanyheaders=result.data.headers;
 
@@ -37,11 +64,12 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
     }
 
     var loadData=function(){
-        if($scope.kpicompanydata.length===0){
-            loader.getKPICompany().then(loadSuccess,loadFail);
-            alertModal.upstream('loading')
+        if(!isDataExists()){
+            loader.getKPICompany($scope.currentMonth.index+1,$scope.currentYear).then(loadSuccess,loadFail).finally(kpiService.onDone);
+            //alertModal.upstream('loading');
         }
         else{
+            $scope.kpicompanydata=$rootScope.kpicompanydata[$scope.currentYear][$scope.currentMonth.index]
             setFilter();
         }
     }
@@ -58,8 +86,9 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
             is_ol:false,
             ol_list:[]
         }
-        for(var i=0;i<$scope.kpicompanydata.length;i++){
-            var curr=$scope.kpicompanydata[i];
+        var currData=$scope.kpicompanydata;
+        for(var i=0;i<currData.length;i++){
+            var curr=currData[i];
             setDataFilter(curr,f_obj);
         }
         $scope.show_upload=true;
@@ -73,7 +102,9 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
     $scope.upload=function(){
         //console.log('upload ',$scope.kpi_company_file);
         var data={
-            file:$scope.kpi_company_file
+            file:$scope.kpi_company_file,
+            month:$scope.currentMonth.index+1,
+            year:$scope.currentYear
         };
         loader.uploadKPICompany(data).then(uploadSuccess,loadFail);
         alertModal.display('Peringatan','Mengunggah Berkas, mohon tunggu',false,true);
@@ -110,6 +141,11 @@ app.controller('RealisasiPerusahaanController',function($scope,$rootScope,loader
 
 
         return c;
+    }
+
+    $scope.changeDate=function(){
+        var url=loader.angular_route('realisasi-perusahaan',[$scope.currentMonth.index,$scope.currentYear]);
+        $location.path(url);
     }
 
     loadData();

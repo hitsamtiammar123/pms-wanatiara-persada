@@ -6,8 +6,8 @@
     $cNextPeriod=$curr_header->cNextPeriod();
     $cPrevPeriod=$curr_header->cPrevPeriod();
     $cCumPeriod=$curr_header->cCumStartPeriod();
-    $m=$curr_header->month;
-    $y=$curr_header->year;
+    $m=$cPeriod->month;
+    $y=$cPeriod->year;
     $kpiprocessgroup=$kpitag->groupkpiprocess;
     $kpiresultgroup=$kpitag->groupkpiresult;
 @endphp
@@ -48,14 +48,14 @@
                     <th rowspan="3">No</th>
                     <th rowspan="3" >Nama</th>
                     <th rowspan="3" >Penugasan</th>
-                    <th >{{$curr_header->weight_result*100}}%</th>
+                    <th >{{$kpitag->weight_result*100}}%</th>
                     <th colspan="{{$kpiresultgroup->count()*3-1}}" >Sasaran Hasil</th>
-                    <th >{{$curr_header->weight_process*100}}%</th>
+                    <th >{{$kpitag->weight_process*100}}%</th>
                     <th colspan="{{$kpiprocessgroup->count()*3-1}}">Sasaran Proses</th>
                     <th colspan="2">Total</th>
                 </tr>
                 <tr>
-                    @foreach ($kpiresultgroup as $kpiresult)
+                    @foreach ($kpiresultgroup->sortBy('kpiresult.name') as $kpiresult)
                         <th colspan="2">{{$kpiresult->name}}</th>
                         <th rowspan="2">R/T(%)</th>
                     @endforeach
@@ -78,9 +78,15 @@
                 <tr>
                     @php
                         $e_header=$employee->getHeader($m,$y);
+                        if(is_null($e_header))
+                            continue;
+                        $weighting=[
+                            'weight_result'=>$kpitag->weight_result,
+                            'weight_process'=>$kpitag->weight_process
+                        ];
                         $kpiresults=$e_header->fetchAccumulatedData('kpiresult',$kpiresultgroup);
                         $kpiprocesses=$e_header->fetchAccumulatedData('kpiprocess',$kpiprocessgroup);
-                        $finalAcievement=$e_header->getFinalAchivement($kpiresults,$kpiprocesses);
+                        $finalAcievement=$e_header->getFinalAchivement($kpiresults,$kpiprocesses,$weighting);
                     @endphp
                         <td class="index-content">{{$loop->index+1}}</td>
                         <td class="kpi-content">{{$employee->name}}</td>

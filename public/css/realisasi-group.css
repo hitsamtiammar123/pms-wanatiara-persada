@@ -10,9 +10,12 @@
 }
 
 
-.realisasi-table-group>tbody>tr>td.kpi-content,
-.realisasi-table-group>thead>tr>th.kpi-content{
+.realisasi-table-group>tbody>tr>td.kpi-content{
     width:80px;
+}
+
+.realisasi-table-group>thead>tr>th.kpi-content{
+    width: 80px;
 }
 
 .realisasi-table-group thead tr th{

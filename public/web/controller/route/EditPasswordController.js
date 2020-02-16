@@ -44,6 +44,8 @@ function($scope,alertModal,loader,user){
         //console.log(err);
         if(err.status===422)
             fetchErrors(err);
+        else if(err.status===403)
+        	alertModal.display('Peringatan','Anda tidak diperbolehkan mengubah data profile',false,true);
     }
 
     ep.submit=function(){
@@ -52,7 +54,7 @@ function($scope,alertModal,loader,user){
                 ep.disabledSubmit=false;
                 alertModal.hide();
             });
-            alertModal.display('Peringatan','Mengubah profile, mohon tunggu',false,true);
+            //alertModal.display('Peringatan','Mengubah profile, mohon tunggu',false,true);
             ep.disabledSubmit=true;
         }
     }
