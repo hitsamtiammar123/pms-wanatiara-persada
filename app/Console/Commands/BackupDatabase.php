@@ -32,7 +32,7 @@ class BackupDatabase extends Command
      *
      * @var string
      */
-    protected $storage='resource';
+    protected $storage='storage';
 
     /**
      * Menentukan nama folder dimana data backup akan disimpan

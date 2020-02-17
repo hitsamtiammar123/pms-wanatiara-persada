@@ -10,7 +10,7 @@ class PMSSeeder extends Seeder
      *
      * @var string
      */
-    protected $storage='resource';
+    protected $storage='storage';
 
     /**
      * Nama dari folder backup
