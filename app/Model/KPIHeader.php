@@ -141,8 +141,6 @@ class KPIHeader extends Model implements Endorseable
         $aw_key='aw_';
         $kpia_key='kpia_';
         for($i=0;$i<count($data);$i++){
-
-
             $d=$data[$i];
             $n=0;
             if(!$isgroup){
@@ -267,31 +265,31 @@ class KPIHeader extends Model implements Endorseable
             $curr['aw_2']=$curr['aw_2'].'%';
 
 
-                $unit=$curr['unit'];
+            $unit=$curr['unit'];
             $mapping=($type==='kpiresult')?KPIResultHeader::KPIRESULTDKEY:KPIProcess::KPIPROCESSCURRKEYREVERSE;
-                foreach($mapping as $key => $index){
-                    if(!array_key_exists($key,$curr))
-                        continue;
-                    switch($unit){
-                    case '$':
-                    case 'MT':
-                    case 'WMT':
+            foreach($mapping as $key => $index){
+                if(!array_key_exists($key,$curr))
+                    continue;
+                switch($unit){
+                case '$':
+                case 'MT':
+                case 'WMT':
+                    $curr[$key]=number_format($curr[$key]);
+                break;
+                case '%':
+                case 'MV':
+                    $curr[$key]=$curr[$key].'%';
+                break;
+                case 'kwh':
+                    switch($index){
+                        case 'pt_t':
+                        case 'pt_k':
+                            $curr[$key]='根据需要 Sesuai kebutuhan';
+                        break;
+                        default:
                             $curr[$key]=number_format($curr[$key]);
-                        break;
-                        case '%':
-                        case 'MV':
-                            $curr[$key]=$curr[$key].'%';
-                        break;
-                        case 'kwh':
-                            switch($index){
-                                case 'pt_t':
-                                case 'pt_k':
-                                    $curr[$key]='根据需要 Sesuai kebutuhan';
-                                break;
-                                default:
-                                    $curr[$key]=number_format($curr[$key]);
-                                break;
-                            }
+                            break;
+                        }
                         break;
                         case '规模 Skala':
                         case '规模 Scale':
@@ -312,12 +310,7 @@ class KPIHeader extends Model implements Endorseable
                         break;
                     }
                 }
-
-
-
         }
-
-
         return $result;
     }
 
@@ -332,7 +325,6 @@ class KPIHeader extends Model implements Endorseable
         $pt_k_key='pt_k'.($j+1);
         switch($unit){
             case '$':
-
                 $rC=$d[$real_k_key];
                 $tC=$d[$pt_k_key];
                 break;
@@ -526,23 +518,20 @@ class KPIHeader extends Model implements Endorseable
             case '$':
             case 'WMT':
             case 'MT':
-                //if(in_array(['pt_k1','pt_t2'],$keys)){
-                    $pt_k1=array_key_exists('pt_k1',$kpiresult)?$kpiresult['pt_k1']:
-                    !is_null($kpiresultheader_prev)?$kpiresultheader_prev->pt_k:0;
-                    $pt_t2=array_key_exists('pt_t2',$kpiresult)?$kpiresult['pt_t2']:$kpiresultheader->pt_t;
 
-                    $kpiresult['pt_k2']=intval($pt_k1+$pt_t2).'';
-                //}
+                $pt_k1=array_key_exists('pt_k1',$kpiresult)?$kpiresult['pt_k1']:
+                !is_null($kpiresultheader_prev)?$kpiresultheader_prev->pt_k:0;
 
-                //if(in_array(['real_k1','real_t2'],$keys)){
-                    // $real_k1=@$kpiresult['real_k1'];
-                    // $real_t2=@$kpiresult['real_t2'];
-                    $real_k1=array_key_exists('real_k1',$kpiresult)?$kpiresult['real_k1']:
-                    !is_null($kpiresultheader_prev)?$kpiresultheader_prev->real_k:0;
-                    $real_t2=array_key_exists('real_t2',$kpiresult)?$kpiresult['real_t2']:$kpiresultheader->real_t;
+                $pt_t2=array_key_exists('pt_t2',$kpiresult)?$kpiresult['pt_t2']:$kpiresultheader->pt_t;
+                $kpiresult['pt_k2']=intval($pt_k1+$pt_t2).'';
 
-                    $kpiresult['real_k2']=intval($real_k1+$real_t2).'';
-                //}
+
+                $real_k1=array_key_exists('real_k1',$kpiresult)?$kpiresult['real_k1']:
+                !is_null($kpiresultheader_prev)?$kpiresultheader_prev->real_k:0;
+
+                $real_t2=array_key_exists('real_t2',$kpiresult)?$kpiresult['real_t2']:$kpiresultheader->real_t;
+                $kpiresult['real_k2']=intval($real_k1+$real_t2).'';
+
             break;
             case '%':
             case 'MV':
@@ -661,8 +650,6 @@ class KPIHeader extends Model implements Endorseable
             !is_null($curr_process_prev) && $curr_process_prev->getPrev()===null ?$curr_process_prev->mapFromArr(KPIProcess::KPIPROCESSPREVKEY,$kpiprocess):null;
         }
 
-
-
     }
 
     public static function generateID($employeeID){
@@ -692,6 +679,29 @@ class KPIHeader extends Model implements Endorseable
      */
     public static function findForFrontEnd($id,$curr_date){
         return KPIHeader::where('employee_id',$id)->where('period',$curr_date)->first();
+    }
+
+    public static function getCurrentDate(){
+        $curr_date=self::getDate(Carbon::now()->month);
+        return $curr_date;
+    }
+
+    public static function getDate($month,$year=null){
+        $curr=Carbon::now();
+        $year=$year?$year:$curr->year;
+        $month=$month;
+        $date=16;
+        $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
+        return $curr_date;
+    }
+
+    public static function getDateDifferences($date1,$date2){
+        $date1=Carbon::parse($date1);
+        $date2=Carbon::parse($date2);
+
+        $result=$date1->diffInMonths($date2);
+
+        return $result;
     }
 
     public function getFinalAchivement(array $kpiresults,array $kpiproceses,array $weighting=[]){
@@ -804,29 +814,6 @@ class KPIHeader extends Model implements Endorseable
         }
 
         return $headings;
-    }
-
-    public static function getCurrentDate(){
-        $curr_date=self::getDate(Carbon::now()->month);
-        return $curr_date;
-    }
-
-    public static function getDate($month,$year=null){
-        $curr=Carbon::now();
-        $year=$year?$year:$curr->year;
-        $month=$month;
-        $date=16;
-        $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
-        return $curr_date;
-    }
-
-    public static function getDateDifferences($date1,$date2){
-        $date1=Carbon::parse($date1);
-        $date2=Carbon::parse($date2);
-
-        $result=$date1->diffInMonths($date2);
-
-        return $result;
     }
 
     /**
@@ -1037,7 +1024,7 @@ class KPIHeader extends Model implements Endorseable
                                 $pw=$kpiprocess->pivot->pw;
                             else if($curr_header instanceof KPITag)
                                 $pw=100/count($kpiproceses);
-                            $h->kpiprocesses()->attach([
+                                $h->kpiprocesses()->attach([
                                 $kpiprocess->id=>[
                                     'pw'=>$pw,
                                     'pt'=>0,
