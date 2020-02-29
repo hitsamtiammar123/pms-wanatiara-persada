@@ -689,7 +689,7 @@ class KPIHeader extends Model implements Endorseable
     public static function getDate($month,$year=null){
         $curr=Carbon::now();
         $year=$year?$year:$curr->year;
-        $month=$month;
+        $month=$month?$month:$curr->month;
         $date=16;
         $curr_date=Carbon::createFromDate($year,$month,$date)->format('Y-m-d');
         return $curr_date;
@@ -944,8 +944,9 @@ class KPIHeader extends Model implements Endorseable
 
             if(!is_null($curr_header)){
                 if($curr_header instanceof KPIHeader){
+                    $thiskpiresultheaders=$this->kpiresultheaders();
                     foreach($curr_header->kpiresultheaders as $resultheader){
-                        $check_result_header=$this->kpiresultheaders()->where('kpi_result_id',$resultheader->kpiresult->id)->first();
+                        $check_result_header=$thiskpiresultheaders->where('kpi_result_id',$resultheader->kpiresult->id)->first();
                         if($check_result_header)
                             continue;
 

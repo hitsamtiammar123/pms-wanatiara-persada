@@ -15,7 +15,7 @@ class generateDummyEmployeeForTags extends Command{
      *
      * @var string
      */
-    protected $signature = 'hitsam:for-grouping {tagID} {roleID} {--num=20} {--isUser}';
+    protected $signature = 'hitsam:for-grouping {tagID} {roleID} {--num=20} {--isUser} {--copymonth=default} {--copyyear=default}';
 
     /**
      * The console command description.
@@ -25,6 +25,7 @@ class generateDummyEmployeeForTags extends Command{
     protected $description = 'Perintah ini bertujuan untuk men-generate data dummy untuk groupingKPI';
 
     protected $faker;
+    protected $now;
 
     private function createUser($isUser,$employee){
         if($isUser){
@@ -43,7 +44,7 @@ class generateDummyEmployeeForTags extends Command{
         }
     }
 
-    private function makeEmployee($tag,$roleID,$isUser){
+    private function makeEmployee($tag,$roleID,$isUser,$cm,$cy){
         $employee=new Employee();
         $employee_id=Employee::generateID();
         $gender=rand(0,1)?'male':'female';
@@ -58,26 +59,24 @@ class generateDummyEmployeeForTags extends Command{
         $employee->id=$employee_id;
         $tag->groupemployee()->attach($employee_id);
 
-        $now=Carbon::now();
-        $m=$now->month;
-        $y=$now->year;
-        $employee->createHeader($y,$m,$tag);
+        $m=$this->now->month;
+        $y=$this->now->year;
+        $employee->createHeader($y,$m,$tag,$cm,$cy);
         $this->createUser($isUser,$employee);
 
         return $employee;
 
     }
 
-    private function makeDummy($tagID,$roleID,$num,$isUser){
+    private function makeDummy($tagID,$roleID,$num,$isUser,$cm,$cy){
         $tag=KPITag::find($tagID);
         if(!$tag){
             $this->error('Tag tidak ditemukan');
             return;
         }
         for($i=0;$i<$num;$i++){
-            $e=$this->makeEmployee($tag,$roleID,$isUser);
+            $e=$this->makeEmployee($tag,$roleID,$isUser,$cm,$cy);
             $this->info("Pegawai dengan nama \"{$e->name}\" dan id \"{$e->id}\" sudah dibuat dimasukan ke tag \"{$tag->name}\" ");
-            //sleep(1);
         }
 
 
@@ -92,6 +91,7 @@ class generateDummyEmployeeForTags extends Command{
     {
         parent::__construct();
         $this->faker=Faker::create('id_ID');
+        $this->now=Carbon::now();
 
     }
 
@@ -106,6 +106,11 @@ class generateDummyEmployeeForTags extends Command{
         $roleID=$this->argument('roleID');
         $isUser=$this->option('isUser');
         $num=intval($this->option('num'));
-        $this->makeDummy($tagID,$roleID,$num,$isUser);
+        $opt_copy_month=$this->option('copymonth');
+        $opt_copy_year=$this->option('copyyear');
+
+        $cm=$opt_copy_month==='default'?intval($this->now->month):$opt_month;
+        $cy=$opt_copy_year==='default'?$this->now->year:$opt_year;
+        $this->makeDummy($tagID,$roleID,$num,$isUser,$cm,$cy);
     }
 }

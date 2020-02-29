@@ -185,7 +185,7 @@ class Employee extends Model
         return $r;
     }
 
-    public function createHeader($year,$month,KPITag $tag=null){
+    public function createHeader($year,$month,KPITag $tag=null,$copy_month=null,$copy_year=null){
         $period=KPIHeader::getDate($month,$year);
 
         if($this->checkHeader($period))
@@ -196,15 +196,9 @@ class Employee extends Model
 
         $currentDate=KPIHeader::getCurrentDate();
         $curr_header=null;
-        $diff=KPIHeader::getDateDifferences($currentDate,$period);
-        if($diff===1)
-            $curr_header=$this->getCurrentHeader();
-        else if($diff===0)
-            $curr_header=$this->getPreviousHeader();
-        else{
-            $temp_h=$this->getHeader($year,$month);
-            $curr_header=$temp_h?$temp_h->getPrev():$this->getCurrentHeader();
-        }
+        $temp_h=$this->getHeader($copy_month,$copy_year);
+        $curr_header=$temp_h?$temp_h:$this->getCurrentHeader();
+
 
         if(is_null($curr_header))
             return 0;

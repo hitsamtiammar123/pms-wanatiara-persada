@@ -13,7 +13,7 @@ class CreateNewHeader extends Command
      *
      * @var string
      */
-    protected $signature = 'hitsam:endmonth:create-header {--month=default} {--year=default} {--employee=default}';
+    protected $signature = 'hitsam:endmonth:create-header {--month=default} {--year=default} {--employee=default} {--copymonth=default} {--copyyear=default}';
 
     /**
      * The console command description.
@@ -28,13 +28,15 @@ class CreateNewHeader extends Command
      * @return void
      */
 
-    protected function makeHeader($employee,$y,$m,$date){
-        $n=$employee->createHeader($y,$m);
+    protected function makeHeader($employee,$y,$m,$date,$opt_copy_month,$opt_copy_year){
+        $n=$employee->createHeader($y,$m,null,$opt_copy_month,$opt_copy_year);
         if($n===1)
-            printf("Header dari %s sudah berhasil dibuat\n",$employee->name);
+            printf("Header dari %s untuk periode %s sudah berhasil dibuat\n",$employee->name,$date->format('Y-m-d'));
         else if($n===-1)
             printf("Header dari %s pada periode %s sudah ada\n",$employee->name,$date->format('Y-m-d'));
-        //sleep(1);
+        else if($n===0)
+            printf("Header dari %s untuk periode %s sudah Gagal dibuat\n",$employee->name,$date->format('Y-m-d'));
+
     }
 
     public function __construct()
@@ -54,27 +56,28 @@ class CreateNewHeader extends Command
         $opt_month=$this->option('month');
         $opt_year=$this->option('year');
         $opt_employee=$this->option('employee');
+        $opt_copy_month=$this->option('copymonth');
+        $opt_copy_year=$this->option('copyyear');
 
         $m=$opt_month==='default'?intval($now->month)+1:$opt_month;
         $y=$opt_year==='default'?$now->year:$opt_year;
         $e=$opt_employee==='default'?null:$opt_employee;
-
-        // $e=Employee::find('1915284162');
-        // $e->createHeader($y,$m);
+        $cm=$opt_copy_month==='default'?intval($now->month):$opt_month;
+        $cy=$opt_copy_year==='default'?$now->year:$opt_year;
 
         if(!$e){
             $employees=Employee::all();
             $date=Carbon::create($y,$m,16);
 
             foreach($employees as $employee){
-                $this->makeHeader($employee,$y,$m,$date);
+                $this->makeHeader($employee,$y,$m,$date,$opt_copy_month,$opt_copy_year);
             }
         }
         else{
             $employee=Employee::find($e);
             $date=Carbon::create($y,$m,16);
             if($employee){
-                $this->makeHeader($employee,$y,$m,$date);
+                $this->makeHeader($employee,$y,$m,$date,$date,$opt_copy_month,$opt_copy_year);
             }
         }
     }
