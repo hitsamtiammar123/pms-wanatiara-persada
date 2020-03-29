@@ -70,7 +70,7 @@ class CreateNewHeader extends Command
             $date=Carbon::create($y,$m,16);
 
             foreach($employees as $employee){
-                $this->makeHeader($employee,$y,$m,$date,$opt_copy_month,$opt_copy_year);
+                $this->makeHeader($employee,$y,$m,$date,$cm,$cy);
             }
         }
         else{
