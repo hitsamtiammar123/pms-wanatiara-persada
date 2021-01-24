@@ -169,7 +169,7 @@ app.service('loader',function($rootScope,$http,DTIME,dataService,route,kpiKeys){
         sentData.weighting=JSON.stringify(
             body.weighting
         );
-        sentData._method='PUT';
+    sentData._method='PUT';
 
         return $http.post(url,E.param(sentData),ajaxConfig2);
     }

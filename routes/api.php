@@ -13,62 +13,56 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::apiResource('kpiheader','KPIHeaderController',[
+    'only'=>['index','show','update']
+]);
 
-Route::group(['prefix'=>'v1','middleware'=>['web']
-],function(){
+Route::apiResource('employee', 'EmployeeController',[
+    'only'=>['show','update']
+]);
 
-    Route::apiResource('kpiheader','KPIHeaderController',[
-        'only'=>['index','show','update']
-    ]);
+Route::apiResource('kpiprocess', 'KPIProcessController',[
+    'only'=>['index']
+]);
 
-    Route::apiResource('employee', 'EmployeeController',[
-        'only'=>['show','update']
-    ]);
+Route::apiResource('kpiendorsement', 'KPIEndorsementController',[
+    'only'=>['update']
+]);
 
-    Route::apiResource('kpiprocess', 'KPIProcessController',[
-        'only'=>['index']
-    ]);
-
-    Route::apiResource('kpiendorsement', 'KPIEndorsementController',[
-        'only'=>['update']
-    ]);
-
-    Route::get('/ikhtisar','EmployeeController@ikhtisar')
-    ->name('employee.ikhtisar');
-    Route::put('/employee/{id}/password','EmployeeController@updatePassword')
-    ->name('employee.update.password');
+Route::get('/ikhtisar','EmployeeController@ikhtisar')
+->name('employee.ikhtisar');
+Route::put('/employee/{id}/password','EmployeeController@updatePassword')
+->name('employee.update.password');
 
 
-    Route::get('/search/autocomplete','SearchController@autocomplete')
-    ->name('search.autocomplete');
-    Route::get('/search/result','SearchController@result')
-    ->name('search.result');
+Route::get('/search/autocomplete','SearchController@autocomplete')
+->name('search.autocomplete');
+Route::get('/search/result','SearchController@result')
+->name('search.result');
 
-    Route::get('/kpicompany','KPICompanyController@getCurrentKPICompany')
-    ->name('kpicompany.get');
-    Route::post('/kpicompany/upload','KPICompanyController@postKPICompany')
-    ->name('kpicompany.post');
+Route::get('/kpicompany','KPICompanyController@getCurrentKPICompany')
+->name('kpicompany.get');
+Route::post('/kpicompany/upload','KPICompanyController@postKPICompany')
+->name('kpicompany.post');
 
-    Route::get('/notification/get/{employeeID}','NotificationController@getNotifications')
-    ->name('notification.get');
-    Route::get('/notification/get/{employeeID}/{id}','NotificationController@getNotification')
-    ->name('notification.get-spesific');
-    Route::get('/notification/mark-as-read/{employeeID}/{id}','NotificationController@markAsRead')
-    ->name('notification.mark-as-read');
-    Route::get('/notification/requestableusers/{employeeID}','NotificationController@getRequestableUsers')
-    ->name('notification.requestable-user');
-    Route::post('/notification/request-change/{employeeID}','NotificationController@requestChange')
-    ->name('notification.request-change');
+Route::get('/notification/get/{employeeID}','NotificationController@getNotifications')
+->name('notification.get');
+Route::get('/notification/get/{employeeID}/{id}','NotificationController@getNotification')
+->name('notification.get-spesific');
+Route::get('/notification/mark-as-read/{employeeID}/{id}','NotificationController@markAsRead')
+->name('notification.mark-as-read');
+Route::get('/notification/requestableusers/{employeeID}','NotificationController@getRequestableUsers')
+->name('notification.requestable-user');
+Route::post('/notification/request-change/{employeeID}','NotificationController@requestChange')
+->name('notification.request-change');
 
-    Route::put('/kpiendorsement/{employeeID}/reset','KPIEndorsementController@reset')
-    ->name('kpiendorsement.reset');
+Route::put('/kpiendorsement/{employeeID}/reset','KPIEndorsementController@reset')
+->name('kpiendorsement.reset');
 
-    Route::get('/kpitag/{tagID}','KPIHeaderController@showGroup')->name('kpitag.show');
-    Route::put('/kpitag/{tagID}','KPIHeaderController@updateGroup')->name('kpitag.update');
-    Route::put('/kpitag/{tagID}/endorse','KPIEndorsementController@updateGroup')->name('kpiendorsement.update.tag');
+Route::get('/kpitag/{tagID}','KPIHeaderController@showGroup')->name('kpitag.show');
+Route::put('/kpitag/{tagID}','KPIHeaderController@updateGroup')->name('kpitag.update');
+Route::put('/kpitag/{tagID}/endorse','KPIEndorsementController@updateGroup')->name('kpiendorsement.update.tag');
 
-    Route::get('/log','NotificationController@getLogs')->name('log.show');
-
-});
+Route::get('/log','NotificationController@getLogs')->name('log.show');
 
 

@@ -14,7 +14,6 @@ class SetPriviledgeKpiResultForeign extends Migration
     public function up()
     {
         Schema::table('priviledgeresultskpia', function (Blueprint $table) {
-
             $table->foreign('kpi_header_result_id')->references('id')
             ->on('kpiresultsheader')->onDelete('cascade')->onUpdate('cascade');
         });

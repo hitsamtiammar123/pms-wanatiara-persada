@@ -85,8 +85,8 @@ app.run(function($rootScope,cP,$http,notifier,alertModal,alertModalUpstreams){
         $rootScope.kpitags={};
         $rootScope.kpicompanydata={}
         var curr_date=new Date();
-        $rootScope.month=curr_date.getMonth();
-        $rootScope.year=curr_date.getFullYear();
+        $rootScope.month=3;
+        $rootScope.year=2020;
     }
 
     var init=function(){
